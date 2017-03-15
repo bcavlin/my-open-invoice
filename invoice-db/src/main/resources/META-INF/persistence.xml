@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="invoice-db-persistence">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>com.bgh.myopeninvoice.db.model.AttachmentEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.CompaniesEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.InvoiceEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.InvoiceItemsEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.RatesEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.RolesEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.TaxEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.TimeSheetEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.UsersEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.UserRoleEntity</class>
+        <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
+        <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:h2:file:/home/bcavlin/IdeaProjects/myopeninvoice/invoice/invoiceDB;AUTO_SERVER=TRUE"/>
+            <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
+            <property name="hibernate.connection.username"/>
+            <property name="hibernate.connection.password"/>
+        </properties>
+    </persistence-unit>
+</persistence>

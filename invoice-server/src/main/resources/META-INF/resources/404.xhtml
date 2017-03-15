@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templates/MainTemplate.xhtml">
+    <ui:define name="center">
+        <div id="wrapper">
+            <h:form>
+                <h:panelGroup layout="block"
+                              style="text-align: center;
+                              margin-right: auto;
+                              margin-left: auto;
+                              width: 40%;
+                              ">
+                    <p:spacer height="300" width="1"/>
+                    <h:outputText value="Not Authorized - 404" style="font-size: 32px;"/>
+                    <br/>
+                    <h:outputText value="For login information please click on the following link to go to the login page: " style="font-size: 16px;"/>
+                    <p:commandLink value="login page" action="/Login.xhtml?redirect=true"/>
+                </h:panelGroup>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>
+
+

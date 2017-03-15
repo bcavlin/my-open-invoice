@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="templates/LoginFormTemplate.xhtml">
+    <ui:define name="center">
+        <sec:authorize access="isAuthenticated()">
+            <meta http-equiv="refresh" content="0;url=http://localhost:8080/secured/Main.xhtml"/>
+        </sec:authorize>
+        <div class="login-page">
+            <div class="form">
+                <p style="font-weight: bold; color: #414848;">Please login to the application</p>
+                <h:form id="login-form" prependId="false">
+                    <h:panelGroup>
+                        <p:focus/>
+                        <p:inputText id="username" styleClass="input username"
+                                     required="true" placeholder="username" maxlength="30"/>
+
+                        <p:password id="password" styleClass="input password"
+                                    required="true" placeholder="password" maxlength="30"/>
+
+                        <p:commandButton id="login" value="Login" styleClass="button" ajax="false"/>
+                        <p:defaultCommand target="login"/>
+
+                    </h:panelGroup>
+
+                    <div class="errors">
+                        <p:outputLabel value="#{param['message']}" style="font-weight: bold; color: #c03a1b;"
+                                       rendered="#{!empty request.getParameter('param')}">
+                        </p:outputLabel>
+                        <!--<p:messages id="messages" autoUpdate="true"/>-->
+                    </div>
+                </h:form>
+                <h:outputText value="#{session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION')}"/>
+                <h:outputText value="#{session.getAttribute('error')}"/>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>
+
+
