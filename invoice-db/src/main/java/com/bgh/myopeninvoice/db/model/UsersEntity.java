@@ -21,7 +21,7 @@ public class UsersEntity {
     private List<UserRoleEntity> userRoleEntities;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
     public List<UserRoleEntity> getUserRoleEntities() {
         return userRoleEntities;
     }
