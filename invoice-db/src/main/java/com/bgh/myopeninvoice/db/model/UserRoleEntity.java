@@ -16,7 +16,7 @@ public class UserRoleEntity {
     private RolesEntity rolesEntity;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "ROLE_ID")
+    @JoinColumn(name = "ROLE_ID", insertable = false, updatable = false)
     public RolesEntity getRolesEntity() {
         return rolesEntity;
     }

@@ -38,34 +38,34 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info(String.format("Verifying username: %s", username));
+        logger.info("Verifying username [{}]", username);
 
         UserDetails userDetails = null;
 
         final Optional<UsersEntity> user = usersRepository.findByUsername(username);
 
         if (!user.isPresent()) {
-            logger.error("Username {} not found!", username);
+            logger.error("Username [{}] not found!", username);
             throw new UsernameNotFoundException("Username or password have not been found");
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Username {} has been found", user.toString());
+                logger.debug("Username [{}] has been found", user.toString());
             }
 
             if (user.get().getEnabled() == 0) {
-                logger.error("Username {} has been disabled", username);
+                logger.error("Username [{}] has been disabled", username);
                 throw new DisabledException("Username has been disabled");
             }
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
 
             if (user.get().getUserRoleEntities().size() == 0) {
-                logger.error("Username {} does not have any roles assigned", username);
+                logger.error("Username [{}] does not have any roles assigned", username);
                 throw new AuthenticationServiceException("User does not have any roles assigned");
             } else {
                 for (UserRoleEntity userRoleEntity : user.get().getUserRoleEntities()) {
-                    logger.info(String.format("Authority %s added for user %s", userRoleEntity.getRolesEntity()
-                            .getRoleName(), username));
+                    logger.info("Authority [{}] added for user [{}]", userRoleEntity.getRolesEntity()
+                            .getRoleName(), username);
                     authorities.add(new SimpleGrantedAuthority(userRoleEntity.getRolesEntity().getRoleName()));
                 }
             }

@@ -1,9 +1,6 @@
 package com.bgh.myopeninvoice.db.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -14,7 +11,7 @@ public class RolesEntity {
     private Integer roleId;
     private String roleName;
 
-    @Basic
+    @Id
     @Column(name = "ROLE_ID", nullable = false)
     public Integer getRoleId() {
         return roleId;
@@ -52,5 +49,13 @@ public class RolesEntity {
         int result = roleId != null ? roleId.hashCode() : 0;
         result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "RolesEntity{" +
+                "roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                '}';
     }
 }
