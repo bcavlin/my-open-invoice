@@ -1,7 +1,7 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ public class UsersEntity {
     private String firstName;
     private String lastName;
     private String middleName;
-    private Timestamp lastLogged;
+    private Date lastLogged;
     private Integer enabled;
     private List<UserRoleEntity> userRoleEntities;
 
@@ -91,13 +91,13 @@ public class UsersEntity {
         this.middleName = middleName;
     }
 
-    @Basic
+    @Temporal(TemporalType.DATE)
     @Column(name = "LAST_LOGGED", nullable = false)
-    public Timestamp getLastLogged() {
+    public Date getLastLogged() {
         return lastLogged;
     }
 
-    public void setLastLogged(Timestamp lastLogged) {
+    public void setLastLogged(Date lastLogged) {
         this.lastLogged = lastLogged;
     }
 

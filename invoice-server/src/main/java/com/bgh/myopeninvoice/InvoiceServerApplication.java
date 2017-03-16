@@ -26,6 +26,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +63,19 @@ public class InvoiceServerApplication {
 
     }
 
+    @Configuration
+    public static class MyWebMvcConfig {
+        @Bean
+        public WebMvcConfigurerAdapter forwardToIndex() {
+            return new WebMvcConfigurerAdapter() {
+                @Override
+                public void addViewControllers(ViewControllerRegistry registry) {
+                    registry.addViewController("/").setViewName("forward:/Index.xhtml");
+                }
+            };
+        }
+    }
+
     @EnableWebSecurity
     @Configuration
     public static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -89,11 +105,12 @@ public class InvoiceServerApplication {
                     .and().formLogin().loginPage("/Index.xhtml").permitAll()
                     .failureHandler(authenticationFailureHandler())
                     .successHandler(authenticationSuccessHandler())
-                    .and().logout().logoutSuccessUrl("/Index.xhtml");
+                    .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/Index.xhtml");
             ;
             http.csrf().disable();
 
         }
+
 
 //        private AuthenticationEntryPoint authenticationEntryPoint() {
 //            return new AuthenticationEntryPoint() {

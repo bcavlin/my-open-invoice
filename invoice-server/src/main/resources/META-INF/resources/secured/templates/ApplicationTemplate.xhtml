@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+    <h:head>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/images/favicon.ico"/>
+        <f:facet name="first">
+            <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+            <title>#{msg['title']}</title>
+        </f:facet>
+    </h:head>
+    <h:body>
+        <f:facet name="last">
+            <h:outputStylesheet name="css/general-style.css"/>
+            <h:outputStylesheet name="css/override-style.css"/>
+        </f:facet>
+
+        <p:growl id="main-growl" autoUpdate="true"/>
+
+        <h:panelGroup layout="block" id="container" style="width: 100%;">
+
+            <h:form id="toolbar-form">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Invoices" icon="ui-icon-document"/>
+                        <p:commandButton value="Companies" icon="ui-icon-document"/>
+                        <p:commandButton value="Users" icon="ui-icon-document"/>
+                        <p:commandButton value="Tax" icon="ui-icon-document"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton value="Logout" icon="ui-icon-close" ajax="false" action="#{applicationBean.logout}"/>
+                    </f:facet>
+                </p:toolbar>
+            </h:form>
+
+            <h:panelGroup id="body" layout="block">
+
+                <h:form id="main-form" onkeypress="return event.keyCode != 13">
+                    <ui:insert name="center"/>
+                </h:form>
+
+                <div class="spacer-bottom"></div>
+            </h:panelGroup>
+
+            <h:panelGroup id="footer" styleClass="page-footer ui-widget" layout="block">
+                <span id="expander" style="cursor: pointer;"><ui:include src="/Footer.xhtml"/></span>
+            </h:panelGroup>
+
+        </h:panelGroup>
+
+        <!--<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>-->
+        <p:dialog modal="true" widgetVar="statusDialog" header="Status" resizable="false"
+                  draggable="false" closable="false" position="center center" appendTo="@(body)">
+            <div style="text-align: center;">
+                <p:graphicImage value="/images/ajaxloadingbar.gif"/>
+                <br/>
+                <h:outputText value="Processing, please wait..."/>
+            </div>
+        </p:dialog>
+
+        <h:outputScript>
+            jQuery(function ($) {
+                $('#expander').on('click', function () {
+                    $('#footer').toggleClass('active');
+                });
+            })
+        </h:outputScript>
+    </h:body>
+</f:view>
+</html>
