@@ -2,14 +2,19 @@
 <!DOCTYPE html
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
     <div style="width: 100%;">
-        &copy; Copyright 2014 BGHexagon Consulting Inc. All Rights Reserved.
+        &copy; Copyright
+        <h:outputText value="#{now}">
+            <f:convertDateTime pattern="yyyy" type="date" />
+        </h:outputText>
+        BGHexagon Consulting Inc. All Rights Reserved.
     </div>
     <div style="width: 100%; text-align: center; margin-bottom: 10px;">
         <h:form>

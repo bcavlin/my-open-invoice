@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Arrays;
  */
 @Entity
 @Table(name = "ATTACHMENT", schema = "INVOICE", catalog = "INVOICEDB")
-public class AttachmentEntity {
+public class AttachmentEntity implements Serializable {
     private Integer attachmentId;
     private Integer invoiceId;
     private byte[] file;

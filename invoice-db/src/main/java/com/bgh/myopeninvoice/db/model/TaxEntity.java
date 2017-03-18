@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "TAX", schema = "INVOICE", catalog = "INVOICEDB")
-public class TaxEntity {
+public class TaxEntity implements Serializable {
     private Integer taxId;
     private BigDecimal percent;
     private String identifier;
@@ -64,5 +65,14 @@ public class TaxEntity {
         result = 31 * result + (percent != null ? percent.hashCode() : 0);
         result = 31 * result + (identifier != null ? identifier.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TaxEntity{" +
+                "taxId=" + taxId +
+                ", percent=" + percent +
+                ", identifier='" + identifier + '\'' +
+                '}';
     }
 }

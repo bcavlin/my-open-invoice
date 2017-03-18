@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "USER_ROLE", schema = "INVOICE", catalog = "INVOICEDB")
-public class UserRoleEntity {
+public class UserRoleEntity implements Serializable {
     private Integer userRoleId;
     private Integer userId;
     private Integer roleId;

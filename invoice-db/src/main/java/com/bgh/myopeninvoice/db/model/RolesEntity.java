@@ -1,13 +1,14 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
 @Entity
 @Table(name = "ROLES", schema = "INVOICE", catalog = "INVOICEDB")
-public class RolesEntity {
+public class RolesEntity implements Serializable {
     private Integer roleId;
     private String roleName;
 

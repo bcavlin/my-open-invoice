@@ -23,15 +23,20 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <!--<navigation-case>-->
-            <!--<from-action>#{loginBean.logout}</from-action>-->
-            <!--<from-outcome>to-index-logout</from-outcome>-->
-            <!--<to-view-id>/Index.xhtml</to-view-id>-->
-            <!--<redirect/>-->
+        <!--<from-action>#{loginBean.logout}</from-action>-->
+        <!--<from-outcome>to-index-logout</from-outcome>-->
+        <!--<to-view-id>/Index.xhtml</to-view-id>-->
+        <!--<redirect/>-->
         <!--</navigation-case>-->
         <!--<navigation-case>-->
-            <!--<from-outcome>to-main</from-outcome>-->
-            <!--<to-view-id>/secured/Main.xhtml</to-view-id>-->
-            <!--<redirect/>-->
+        <!--<from-outcome>to-main</from-outcome>-->
+        <!--<to-view-id>/secured/Main.xhtml</to-view-id>-->
+        <!--<redirect/>-->
         <!--</navigation-case>-->
+        <navigation-case>
+            <from-outcome>to-tax-page</from-outcome>
+            <to-view-id>/secured/Tax.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

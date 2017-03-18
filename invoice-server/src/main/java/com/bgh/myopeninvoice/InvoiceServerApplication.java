@@ -106,39 +106,11 @@ public class InvoiceServerApplication {
                     .failureHandler(authenticationFailureHandler())
                     .successHandler(authenticationSuccessHandler())
                     .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/Index.xhtml");
-            ;
             http.csrf().disable();
 
         }
 
 
-//        private AuthenticationEntryPoint authenticationEntryPoint() {
-//            return new AuthenticationEntryPoint() {
-//                @Override
-//                public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-//                    ObjectMapper mapper = new ObjectMapper();
-//                    ReturnObject s = new ReturnObject(Constants.StatusCodes.ERROR, "Not authenticated");
-//                    s.getMessages().put("httpStatus", HttpServletResponse.SC_UNAUTHORIZED);
-//                    String string = mapper.writeValueAsString(s);
-//                    httpServletResponse.getWriter().append(string);
-//                    httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                }
-//            };
-//        }
-//
-//        private AccessDeniedHandler accessDeniedHandler() {
-//            return new AccessDeniedHandler() {
-//                @Override
-//                public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-//                    ObjectMapper mapper = new ObjectMapper();
-//                    ReturnObject s = new ReturnObject(Constants.StatusCodes.ERROR, "Access is denied");
-//                    s.getMessages().put("httpStatus", HttpServletResponse.SC_FORBIDDEN);
-//                    String string = mapper.writeValueAsString(s);
-//                    httpServletResponse.getWriter().append(string);
-//                    httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-//                }
-//            };
-//        }
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -157,6 +129,7 @@ public class InvoiceServerApplication {
 
                 @Override
                 public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+                    logger.warn("Authentication failed!");
                     HttpSession session = httpServletRequest.getSession(false);
                     if (session != null) {
                         session.setAttribute("error", e.getMessage());
@@ -172,6 +145,7 @@ public class InvoiceServerApplication {
 
                 @Override
                 public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                    logger.info("Authentication successful!");
                     HttpSession session = httpServletRequest.getSession(false);
                     if (session != null) {
                         session.removeAttribute("SPRING_SECURITY_LAST_EXCEPTION");

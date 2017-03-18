@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="templates/ApplicationTemplate.xhtml">
+    <ui:define name="center">
+        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+            <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
+                <p:commandButton value="New Tax Item" icon="ui-icon-extlink" style="margin-right: 15px;"
+                                 onclick="PF('tax-form-dialog').show();" actionListener="#{taxBean.newEntryListener}"
+                                 update="main-form, tax-form"/>
+                <p:commandButton value="Edit Tax Item (#{taxBean.selectedTaxEntity.taxId})" icon="ui-icon-pencil"
+                                 rendered="#{!empty taxBean.selectedTaxEntity and taxBean.selectedTaxEntity.taxId gt 0}"
+                                 style="margin-right: 15px;" onclick="PF('tax-form-dialog').show();"
+                                 update="main-form, tax-form"/>
+                <p:commandButton
+                        value="Delete Tax Item (#{taxBean.selectedTaxEntity.taxId})"
+                        icon="ui-icon-trash"
+                        rendered="#{!empty taxBean.selectedTaxEntity and taxBean.selectedTaxEntity.taxId gt 0}"
+                        style="margin-right: 15px;" onclick="PF('confirmation1').show();"/>
+
+                <p:confirmDialog message="Do you want to remove this tax item?"
+                                 showEffect="bounce"
+                                 header="Delete tax"
+                                 severity="alert"
+                                 widgetVar="confirmation1">
+                    <p:commandButton value="Yes" oncomplete="PF('confirmation1').hide()"
+                                     actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form"/>
+                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+
+            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+                <p:dataTable var="tax"
+                             lazy="true"
+                             value="#{taxBean.taxEntityList}"
+                             paginator="true"
+                             rows="#{taxBean.pageSize}"
+                             rowKey="#{tax.taxId}"
+                             selection="#{taxBean.selectedTaxEntity}"
+                             selectionMode="single"
+                             paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                    <p:ajax event="rowSelect" update="main-form:main-layout,main-form:buttons-layout"/>
+
+                    <p:column headerText="Id" style="text-align:right;" width="70">
+                        <h:outputText value="#{tax.taxId}">
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Percent" style="text-align:right;" width="100">
+                        <h:outputText value="#{tax.percent}">
+                            <f:convertNumber pattern="#,##0.00 %"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Identifier" style="text-align:left;">
+                        <h:outputText value="#{tax.identifier}">
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="tax-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="New Tax Item" rendered="#{empty taxBean.selectedTaxEntity.taxId}"/>
+                <h:outputText value="Edit Tax Item" rendered="#{!empty taxBean.selectedTaxEntity.taxId}"/>
+            </f:facet>
+            <h:form id="tax-form">
+                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
+                    <p:outputLabel value="ID: "/>
+                    <h:outputText value="#{taxBean.selectedTaxEntity.taxId}" style="margin-left: 5px;"/>
+                    <p:outputLabel value="Tax (%): "/>
+                    <p:inputNumber value="#{taxBean.selectedTaxEntity.percent}" id="input-tax"
+                                   style="margin-left: 5px;" decimalPlaces="0" minValue="0" maxValue="100"
+                                   emptyValue="0" required="true">
+                        <f:converter converterId="com.bgh.myopeninvoice.converters.PercentConverter"/>
+                    </p:inputNumber>
+                    <p:outputLabel value="Identifier: "/>
+                    <p:inputText value="#{taxBean.selectedTaxEntity.identifier}" id="input-identifier"
+                                 style="margin-left: 5px;" required="true"/>
+                </h:panelGrid>
+                <h:panelGroup id="dialog-layout" layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit" actionListener="#{taxBean.addEditTax}"
+                                     update="main-form:buttons-layout,main-form:main-layout,@parent"
+                                     oncomplete="PF('tax-form-dialog').hide();"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>
