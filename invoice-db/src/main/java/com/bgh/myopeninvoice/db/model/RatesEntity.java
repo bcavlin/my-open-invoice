@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "RATES", schema = "INVOICE", catalog = "INVOICEDB")
-public class RatesEntity {
+public class RatesEntity implements Serializable {
     private Integer rateId;
     private Integer companyId;
     private BigDecimal ratePerHour;

@@ -29,19 +29,22 @@
                         <p:commandButton value="Invoices" icon="ui-icon-document"/>
                         <p:commandButton value="Companies" icon="ui-icon-document"/>
                         <p:commandButton value="Users" icon="ui-icon-document"/>
-                        <p:commandButton value="Tax" icon="ui-icon-document"/>
+                        <p:commandButton value="Tax" icon="ui-icon-document" action="to-tax-page"/>
                     </f:facet>
                     <f:facet name="right">
-                        <p:commandButton value="Logout" icon="ui-icon-close" ajax="false" action="#{applicationBean.logout}"/>
+                        <p:commandButton value="Logout (#{p:userPrincipal().name})" icon="ui-icon-close" ajax="false" action="#{applicationBean.logout}"/>
                     </f:facet>
                 </p:toolbar>
             </h:form>
 
             <h:panelGroup id="body" layout="block">
 
-                <h:form id="main-form" onkeypress="return event.keyCode != 13">
-                    <ui:insert name="center"/>
-                </h:form>
+                <ui:insert name="center"/>
+
+                <ui:insert name="dialog"/>
+                <!--<h:form id="main-form" onkeypress="return event.keyCode != 13">-->
+                    <!--<ui:insert name="center"/>-->
+                <!--</h:form>-->
 
                 <div class="spacer-bottom"></div>
             </h:panelGroup>
