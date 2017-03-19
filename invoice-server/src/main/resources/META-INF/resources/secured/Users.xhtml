@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="templates/ApplicationTemplate.xhtml">
+    <ui:define name="center">
+        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+            <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
+                <p:commandButton value="New User" icon="ui-icon-extlink" style="margin-right: 15px;"
+                                 onclick="PF('users-form-dialog').show();" actionListener="#{usersBean.newEntryListener}"
+                                 update="main-form, users-form"/>
+                <p:commandButton value="Edit User (#{usersBean.selectedUsersEntity.userId})" icon="ui-icon-pencil"
+                                 rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
+                                 style="margin-right: 15px;" onclick="PF('users-form-dialog').show();"
+                                 update="main-form, users-form"/>
+                <p:commandButton
+                        value="Delete User (#{usersBean.selectedUsersEntity.userId})"
+                        icon="ui-icon-trash"
+                        rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
+                        style="margin-right: 15px;" onclick="PF('confirmation1').show();"/>
+
+                <p:confirmDialog message="Do you want to remove this User?"
+                                 showEffect="bounce"
+                                 header="Delete User"
+                                 severity="alert"
+                                 widgetVar="confirmation1">
+                    <p:commandButton value="Remove ID (#{usersBean.selectedUsersEntity.userId})"
+                                     oncomplete="PF('confirmation1').hide()"
+                                     actionListener="#{usersBean.deleteEntryListener}" update="main-form, users-form"/>
+                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+
+            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+                <p:dataTable id="users-table"
+                             var="user"
+                             widgetVar="users-table"
+                             lazy="true"
+                             value="#{usersBean.usersEntityList}"
+                             paginator="true"
+                             rows="#{usersBean.pageSize}"
+                             rowKey="#{user.userId}"
+                             selection="#{usersBean.selectedUsersEntity}"
+                             selectionMode="single"
+                             paginatorPosition="bottom"
+                             emptyMessage="No items found with given criteria"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                    <p:ajax event="rowSelect" update="main-form:main-layout,main-form:buttons-layout"/>
+
+                    <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="70">
+                        <h:outputText value="#{user.userId}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="users-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="New User" rendered="#{empty usersBean.selectedUsersEntity.userId}"/>
+                <h:outputText value="Edit User" rendered="#{!empty usersBean.selectedUsersEntity.userId}"/>
+            </f:facet>
+            <h:form id="users-form">
+                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
+                    <p:outputLabel value="ID: "/>
+                    <h:outputText value="#{usersBean.selectedUsersEntity.userId}" style="margin-left: 5px;"/>
+
+                </h:panelGrid>
+                <h:panelGroup id="dialog-layout" layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit" actionListener="#{usersBean.addOrEditEntryListener}"
+                                     update="main-form:buttons-layout,main-form:main-layout,@parent"
+                                     oncomplete="PF('users-form-dialog').hide();"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>

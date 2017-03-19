@@ -2,6 +2,7 @@ package com.bgh.myopeninvoice.jsfbeans;
 
 import com.bgh.myopeninvoice.db.dao.TaxRepository;
 import com.bgh.myopeninvoice.db.model.TaxEntity;
+import com.bgh.myopeninvoice.jsfbeans.model.TaxEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class TaxBean implements Serializable {
     public void refresh() {
         if (taxEntityList == null) {
             logger.info("Loading tax entries");
-            taxEntityList = new TaxExtityLazyModel(taxRepository);
+            taxEntityList = new TaxEntityLazyModel(taxRepository);
         }
     }
 
