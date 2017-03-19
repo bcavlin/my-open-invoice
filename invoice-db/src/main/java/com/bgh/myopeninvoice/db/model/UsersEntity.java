@@ -18,7 +18,7 @@ public class UsersEntity implements Serializable {
     private String lastName;
     private String middleName;
     private Date lastLogged;
-    private Integer enabled;
+    private Boolean enabled;
     private List<UserRoleEntity> userRoleEntities;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -104,11 +104,11 @@ public class UsersEntity implements Serializable {
 
     @Basic
     @Column(name = "ENABLED", nullable = false)
-    public Integer getEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Integer enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 

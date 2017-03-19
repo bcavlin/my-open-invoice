@@ -52,7 +52,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 logger.debug("Username [{}] has been found", user.toString());
             }
 
-            if (user.get().getEnabled() == 0) {
+            if (!user.get().getEnabled()) {
                 logger.error("Username [{}] has been disabled", username);
                 throw new DisabledException("Username has been disabled");
             }
@@ -72,7 +72,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
             userDetails = new User(user.get().getUsername(),
                     user.get().getPassword(),
-                    new Integer("1").equals(user.get().getEnabled()),
+                    user.get().getEnabled(),
                     true,
                     true,
                     true,
