@@ -107,11 +107,23 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>1.4.193</version>
-            </dependency><dependency>
-            <groupId>com.bgh.myopeninvoice</groupId>
-            <artifactId>invoice-db</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            </dependency>
+            <dependency>
+                <groupId>com.bgh.myopeninvoice</groupId>
+                <artifactId>invoice-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>4.1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>4.1.4</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
