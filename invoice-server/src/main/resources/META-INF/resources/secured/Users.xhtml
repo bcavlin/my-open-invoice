@@ -12,7 +12,8 @@
         <h:form id="main-form" onkeypress="return event.keyCode != 13">
             <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
                 <p:commandButton value="New User" icon="ui-icon-extlink" style="margin-right: 15px;"
-                                 onclick="PF('users-form-dialog').show();" actionListener="#{usersBean.newEntryListener}"
+                                 onclick="PF('users-form-dialog').show();"
+                                 actionListener="#{usersBean.newEntryListener}"
                                  update="main-form, users-form"/>
                 <p:commandButton value="Edit User (#{usersBean.selectedUsersEntity.userId})" icon="ui-icon-pencil"
                                  rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
@@ -37,6 +38,7 @@
             </h:panelGroup>
 
             <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+                <!--@elvariable id="user" type="com.bgh.myopeninvoice.db.model.UsersEntity"-->
                 <p:dataTable id="users-table"
                              var="user"
                              widgetVar="users-table"
@@ -48,16 +50,58 @@
                              selection="#{usersBean.selectedUsersEntity}"
                              selectionMode="single"
                              paginatorPosition="bottom"
+                             scrollable="true"
+                             scrollWidth="1280"
                              emptyMessage="No items found with given criteria"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form:main-layout,main-form:buttons-layout"/>
+                    <p:ajax event="rowSelect" update="main-form"/>
 
                     <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="70">
                         <h:outputText value="#{user.userId}"/>
                     </p:column>
+                    <p:column headerText="Username" sortBy="#{user.username}" style="text-align:left;" width="100">
+                        <h:outputText value="#{user.username}"/>
+                    </p:column>
+                    <p:column headerText="Enabled" sortBy="#{user.enabled}" style="text-align:center;" width="80">
+                        <h:outputText value="#{user.enabled?'Yes':'No'}"/>
+                    </p:column>
+                    <p:column headerText="Last Logged" sortBy="#{user.lastLogged}" style="text-align:center;"
+                              width="120">
+                        <h:outputText value="#{user.lastLogged}"/>
+                    </p:column>
+                    <p:column headerText="First" sortBy="#{user.firstName}" style="text-align:left;" width="100">
+                        <h:outputText value="#{user.firstName}"/>
+                    </p:column>
+                    <p:column headerText="Middle" sortBy="#{user.middleName}" style="text-align:left;" width="100">
+                        <h:outputText value="#{user.middleName}"/>
+                    </p:column>
+                    <p:column headerText="Last" sortBy="#{user.lastName}" style="text-align:left;" width="100">
+                        <h:outputText value="#{user.lastName}"/>
+                    </p:column>
+                    <p:column headerText="Password" sortBy="#{user.password}" style="text-align:left;">
+                        <h:outputText value="#{user.password}"/>
+                    </p:column>
                 </p:dataTable>
             </h:panelGroup>
+            <p:spacer height="15"/>
+            <!--@elvariable id="userRole" type="com.bgh.myopeninvoice.db.model.UserRoleEntity"-->
+            <p:dataTable id="user-roles-table"
+                         var="userRole"
+                         widgetVar="user-roles-table"
+                         value="#{usersBean.selectedUsersEntity.userRoleEntities}"
+                         emptyMessage="No items found with given criteria">
+                <p:column headerText="Id" sortBy="#{userRole.userRoleId}" style="text-align:right;" width="70">
+                    <h:outputText value="#{userRole.userRoleId}"/>
+                </p:column>
+                <p:column headerText="Assigned" sortBy="#{userRole.dateAssigned}" style="text-align:center;"
+                          width="120">
+                    <h:outputText value="#{userRole.dateAssigned}"/>
+                </p:column>
+                <p:column headerText="Role" sortBy="#{userRole.rolesEntity.roleName}" style="text-align:left;">
+                    <h:outputText value="#{userRole.rolesEntity.roleName}"/>
+                </p:column>
+            </p:dataTable>
         </h:form>
     </ui:define>
     <ui:define name="dialog">
@@ -71,7 +115,18 @@
                 <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{usersBean.selectedUsersEntity.userId}" style="margin-left: 5px;"/>
-
+                    <p:outputLabel value="Username: "/>
+                    <h:inputText value="#{usersBean.selectedUsersEntity.username}" style="margin-left: 5px;"/>
+                    <p:outputLabel value="Enabled: "/>
+                    <p:selectBooleanButton value="#{usersBean.selectedUsersEntity.enabled}" style="margin-left: 5px;" offLabel="No" onLabel="Yes"/>
+                    <p:outputLabel value="Last Logged: "/>
+                    <p:calendar value="#{usersBean.selectedUsersEntity.lastLogged}" style="margin-left: 5px;"/>
+                    <p:outputLabel value="First: "/>
+                    <h:inputText value="#{usersBean.selectedUsersEntity.firstName}" style="margin-left: 5px;"/>
+                    <p:outputLabel value="Middle: "/>
+                    <h:inputText value="#{usersBean.selectedUsersEntity.middleName}" style="margin-left: 5px;"/>
+                    <p:outputLabel value="Last: "/>
+                    <h:inputText value="#{usersBean.selectedUsersEntity.lastName}" style="margin-left: 5px;"/>
                 </h:panelGrid>
                 <h:panelGroup id="dialog-layout" layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>

@@ -37,6 +37,7 @@
             </h:panelGroup>
 
             <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+                <!--@elvariable id="tax" type="com.bgh.myopeninvoice.db.model.TaxEntity"-->
                 <p:dataTable id="tax-table"
                              var="tax"
                              widgetVar="tax-table"
@@ -51,7 +52,7 @@
                              emptyMessage="No items found with given criteria"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form:main-layout,main-form:buttons-layout"/>
+                    <p:ajax event="rowSelect" update="main-form"/>
 
                     <p:column headerText="Id" sortBy="#{tax.taxId}" style="text-align:right;" width="70">
                         <h:outputText value="#{tax.taxId}"/>
