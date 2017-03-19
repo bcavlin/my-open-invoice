@@ -29,14 +29,17 @@
                                  header="Delete tax"
                                  severity="alert"
                                  widgetVar="confirmation1">
-                    <p:commandButton value="Yes" oncomplete="PF('confirmation1').hide()"
+                    <p:commandButton value="Remove ID (#{taxBean.selectedTaxEntity.taxId})"
+                                     oncomplete="PF('confirmation1').hide()"
                                      actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form"/>
                     <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
                 </p:confirmDialog>
             </h:panelGroup>
 
             <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
-                <p:dataTable var="tax"
+                <p:dataTable id="tax-table"
+                             var="tax"
+                             widgetVar="tax-table"
                              lazy="true"
                              value="#{taxBean.taxEntityList}"
                              paginator="true"
@@ -45,22 +48,28 @@
                              selection="#{taxBean.selectedTaxEntity}"
                              selectionMode="single"
                              paginatorPosition="bottom"
+                             emptyMessage="No items found with given criteria"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
                     <p:ajax event="rowSelect" update="main-form:main-layout,main-form:buttons-layout"/>
 
-                    <p:column headerText="Id" style="text-align:right;" width="70">
-                        <h:outputText value="#{tax.taxId}">
-                        </h:outputText>
+                    <p:column headerText="Id" sortBy="#{tax.taxId}" style="text-align:right;" width="70">
+                        <h:outputText value="#{tax.taxId}"/>
                     </p:column>
-                    <p:column headerText="Percent" style="text-align:right;" width="100">
+                    <p:column headerText="Percent" sortBy="#{tax.percent}" style="text-align:right;" width="100">
                         <h:outputText value="#{tax.percent}">
                             <f:convertNumber pattern="#,##0.00 %"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Identifier" style="text-align:left;">
-                        <h:outputText value="#{tax.identifier}">
-                        </h:outputText>
+                    <p:column headerText="Identifier" sortBy="#{tax.identifier}" filterBy="#{tax.identifier}"
+                              style="text-align:left;" id="identifier">
+                        <f:facet name="filter">
+                            <p:inputText id="filter-text" placeholder="Search"
+                                         style="width: 99%">
+                                <p:ajax event="keyup" oncomplete="PF('tax-table').filter()" delay="600"/>
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{tax.identifier}"/>
                     </p:column>
                 </p:dataTable>
             </h:panelGroup>
@@ -89,7 +98,7 @@
                 </h:panelGrid>
                 <h:panelGroup id="dialog-layout" layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
-                    <p:commandButton value="Submit" type="submit" actionListener="#{taxBean.addEditTax}"
+                    <p:commandButton value="Submit" type="submit" actionListener="#{taxBean.addOrEditEntryListener}"
                                      update="main-form:buttons-layout,main-form:main-layout,@parent"
                                      oncomplete="PF('tax-form-dialog').hide();"/>
                 </h:panelGroup>

@@ -1,15 +1,6 @@
-#main-form\:symbol-complete_input {
-    height: 30px;
-    width: 100%;
-    font-size: 20px;
-}
+/*#main-form\:tax-table\:identifier\:filter {*/
+    /*width: 99%;*/
+/*}*/
 
-#main-form\:search-button {
-    height: 36px;
-}
-
-#main-form\:symbol-complete .ui-autocomplete-multiple-container {
-    width: 700px;
-}
 
 

@@ -45,6 +45,10 @@
             <groupId>com.bgh.myopeninvoice</groupId>
             <artifactId>invoice-db</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

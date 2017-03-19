@@ -47,7 +47,7 @@ public class TaxBean implements Serializable {
         selectedTaxEntity = new TaxEntity();
     }
 
-    public void addEditTax(ActionEvent event) {
+    public void addOrEditEntryListener(ActionEvent event) {
         if (selectedTaxEntity != null) {
             logger.info("Adding/editing entity {}", selectedTaxEntity.toString());
             selectedTaxEntity = taxRepository.save(selectedTaxEntity);

@@ -2,6 +2,7 @@ package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -20,6 +21,7 @@ public class InvoiceEntity implements Serializable {
     private String title;
     private Date dueDate;
     private Integer taxId;
+    private BigDecimal taxPercent;
     private String note;
     private Date paidDate;
 
@@ -125,6 +127,16 @@ public class InvoiceEntity implements Serializable {
     }
 
     @Basic
+    @Column(name = "TAX_PERCENT", nullable = false)
+    public BigDecimal getTaxPercent() {
+        return taxPercent;
+    }
+
+    public void setTaxPercent(BigDecimal taxPercent) {
+        this.taxPercent = taxPercent;
+    }
+
+    @Basic
     @Column(name = "NOTE", nullable = true, length = 2000)
     public String getNote() {
         return note;
@@ -161,6 +173,7 @@ public class InvoiceEntity implements Serializable {
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (dueDate != null ? !dueDate.equals(that.dueDate) : that.dueDate != null) return false;
         if (taxId != null ? !taxId.equals(that.taxId) : that.taxId != null) return false;
+        if (taxPercent != null ? !taxPercent.equals(that.taxPercent) : that.taxPercent != null) return false;
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (paidDate != null ? !paidDate.equals(that.paidDate) : that.paidDate != null) return false;
 
@@ -179,6 +192,7 @@ public class InvoiceEntity implements Serializable {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (dueDate != null ? dueDate.hashCode() : 0);
         result = 31 * result + (taxId != null ? taxId.hashCode() : 0);
+        result = 31 * result + (taxPercent != null ? taxPercent.hashCode() : 0);
         result = 31 * result + (note != null ? note.hashCode() : 0);
         result = 31 * result + (paidDate != null ? paidDate.hashCode() : 0);
         return result;
@@ -197,6 +211,7 @@ public class InvoiceEntity implements Serializable {
                 ", title='" + title + '\'' +
                 ", dueDate=" + dueDate +
                 ", taxId=" + taxId +
+                ", taxPercent=" + taxPercent +
                 ", note='" + note + '\'' +
                 ", paidDate=" + paidDate +
                 '}';
