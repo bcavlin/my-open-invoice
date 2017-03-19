@@ -28,7 +28,7 @@
                     <f:facet name="left">
                         <p:commandButton value="Invoices" icon="ui-icon-document"/>
                         <p:commandButton value="Companies" icon="ui-icon-document"/>
-                        <p:commandButton value="Users" icon="ui-icon-document"/>
+                        <p:commandButton value="Users" icon="ui-icon-document" action="to-users-page"/>
                         <p:commandButton value="Tax" icon="ui-icon-document" action="to-tax-page"/>
                     </f:facet>
                     <f:facet name="right">
@@ -55,8 +55,8 @@
 
         </h:panelGroup>
 
-        <!--<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>-->
-        <p:dialog modal="true" widgetVar="statusDialog" header="Status" resizable="false"
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+        <p:dialog modal="false" widgetVar="statusDialog" header="Status" resizable="false"
                   draggable="false" closable="false" position="center center" appendTo="@(body)">
             <div style="text-align: center;">
                 <p:graphicImage value="/images/ajaxloadingbar.gif"/>

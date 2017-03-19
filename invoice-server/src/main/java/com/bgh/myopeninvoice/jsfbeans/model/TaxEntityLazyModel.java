@@ -1,4 +1,4 @@
-package com.bgh.myopeninvoice.jsfbeans;
+package com.bgh.myopeninvoice.jsfbeans.model;
 
 import com.bgh.myopeninvoice.db.dao.TaxRepository;
 import com.bgh.myopeninvoice.db.model.QTaxEntity;
@@ -19,15 +19,15 @@ import java.util.Map;
 /**
  * Created by bcavlin on 17/03/17.
  */
-public class TaxExtityLazyModel extends LazyDataModel<TaxEntity> {
+public class TaxEntityLazyModel extends LazyDataModel<TaxEntity> {
 
-    private static Logger logger = LoggerFactory.getLogger(TaxExtityLazyModel.class);
+    private static Logger logger = LoggerFactory.getLogger(TaxEntityLazyModel.class);
 
     private List<TaxEntity> taxEntityList;
 
     private TaxRepository taxRepository;
 
-    public TaxExtityLazyModel(TaxRepository taxRepository) {
+    public TaxEntityLazyModel(TaxRepository taxRepository) {
         this.taxRepository = taxRepository;
     }
 
