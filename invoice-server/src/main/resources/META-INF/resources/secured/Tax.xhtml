@@ -22,7 +22,7 @@
                         value="Delete Tax Item (#{taxBean.selectedTaxEntity.taxId})"
                         icon="ui-icon-trash"
                         rendered="#{!empty taxBean.selectedTaxEntity and taxBean.selectedTaxEntity.taxId gt 0}"
-                        style="margin-right: 15px;" onclick="PF('confirmation1').show();"/>
+                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
 
                 <p:confirmDialog message="Do you want to remove this tax item?"
                                  showEffect="bounce"
@@ -31,7 +31,8 @@
                                  widgetVar="confirmation1">
                     <p:commandButton value="Remove ID (#{taxBean.selectedTaxEntity.taxId})"
                                      oncomplete="PF('confirmation1').hide()"
-                                     actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form"/>
+                                     actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form" style="color: brown;"/>
+
                     <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
                 </p:confirmDialog>
             </h:panelGroup>
@@ -80,11 +81,10 @@
         <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
                   widgetVar="tax-form-dialog" width="500" modal="true" resizable="false">
             <f:facet name="header">
-                <h:outputText value="New Tax Item" rendered="#{empty taxBean.selectedTaxEntity.taxId}"/>
-                <h:outputText value="Edit Tax Item" rendered="#{!empty taxBean.selectedTaxEntity.taxId}"/>
+                <h:outputText value="Add/Edit Tax"/>
             </f:facet>
             <h:form id="tax-form">
-                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
+                <h:panelGrid id="tax-form-grid1" columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{taxBean.selectedTaxEntity.taxId}" style="margin-left: 5px;"/>
                     <p:outputLabel value="Tax (%): "/>

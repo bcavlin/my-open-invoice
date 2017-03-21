@@ -21,16 +21,6 @@ public class UsersEntity implements Serializable {
     private Boolean enabled;
     private List<UserRoleEntity> userRoleEntities;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
-    public List<UserRoleEntity> getUserRoleEntities() {
-        return userRoleEntities;
-    }
-
-    public void setUserRoleEntities(List<UserRoleEntity> userRoleEntities) {
-        this.userRoleEntities = userRoleEntities;
-    }
-
     @Id
     @GeneratedValue
     @Column(name = "USER_ID", nullable = false)
@@ -111,6 +101,16 @@ public class UsersEntity implements Serializable {
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+
+    @OneToMany(mappedBy = "usersEntity", fetch = FetchType.EAGER)
+    public List<UserRoleEntity> getUserRoleEntities() {
+        return userRoleEntities;
+    }
+
+    public void setUserRoleEntities(List<UserRoleEntity> userRoleEntities) {
+        this.userRoleEntities = userRoleEntities;
+    }
+
 
     @Override
     public boolean equals(Object o) {
