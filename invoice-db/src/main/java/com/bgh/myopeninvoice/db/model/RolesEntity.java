@@ -2,6 +2,7 @@ package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -11,6 +12,7 @@ import java.io.Serializable;
 public class RolesEntity implements Serializable {
     private Integer roleId;
     private String roleName;
+    private List<UserRoleEntity> userRoleEntity;
 
     @Id
     @Column(name = "ROLE_ID", nullable = false)
@@ -30,6 +32,15 @@ public class RolesEntity implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    @OneToMany(mappedBy = "rolesEntity", fetch = FetchType.LAZY)
+    public List<UserRoleEntity> getUserRoleEntity() {
+        return userRoleEntity;
+    }
+
+    public void setUserRoleEntity(List<UserRoleEntity> userRoleEntity) {
+        this.userRoleEntity = userRoleEntity;
     }
 
     @Override

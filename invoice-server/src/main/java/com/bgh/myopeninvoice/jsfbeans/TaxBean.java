@@ -53,7 +53,7 @@ public class TaxBean implements Serializable {
             logger.info("Adding/editing entity {}", selectedTaxEntity.toString());
             selectedTaxEntity = taxRepository.save(selectedTaxEntity);
             refresh();
-            FacesUtils.addSuccessMessage("New entity created");
+            FacesUtils.addSuccessMessage("Entity record updated");
         } else {
             FacesUtils.addErrorMessage("Selected tax entity is null");
         }

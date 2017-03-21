@@ -2,5 +2,10 @@
     /*width: 99%;*/
 /*}*/
 
+#tax-form\:tax-form-grid1 td {
+    padding: 0 0 10px 5px;
+}
 
-
+#users-form\:users-form-grid1 td {
+    padding: 0 0 10px 5px;
+}
