@@ -8,4 +8,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface RolesRepository extends CrudRepository<RolesEntity, Integer> {
 
+    RolesEntity findByRoleName(String roleName);
+
 }

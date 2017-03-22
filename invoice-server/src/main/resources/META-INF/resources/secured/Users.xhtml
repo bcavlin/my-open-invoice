@@ -61,7 +61,7 @@
                              emptyMessage="No items found with given criteria"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form" listener="#{usersBean.ajaxChangeRowListener}"/>
+                    <p:ajax event="rowSelect" update="main-form,roles-form" listener="#{usersBean.ajaxChangeRowListener}"/>
 
                     <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="70">
                         <h:outputText value="#{user.userId}"/>
@@ -126,7 +126,7 @@
                          value="#{usersBean.selectedUsersEntity.userRoleEntities}"
                          emptyMessage="No items found with given criteria">
 
-                <p:ajax event="rowSelect" update="main-form" listener="#{usersBean.ajaxChangeRowListener}"/>
+                <p:ajax event="rowSelect" update="main-form,roles-form"/>
 
                 <p:column headerText="Id" sortBy="#{userRole.userRoleId}" style="text-align:right;" width="70">
                     <h:outputText value="#{userRole.userRoleId}"/>
@@ -188,15 +188,24 @@
                 <h:outputText value="Add/Edit Roles"/>
             </f:facet>
             <h:form id="roles-form">
-                <h:panelGrid id="roles-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                <h:panelGroup id="roles-form-grid1"
                              style="padding-top: 3px;">
+                    <!--@elvariable id="roledl" type="com.bgh.myopeninvoice.db.model.RolesEntity"-->
+                    <p:pickList id="roles-pick-list" value="#{usersBean.rolesDualListModel}" var="roledl"
+                        itemValue="#{roledl}" converter="#{rolesEntityConverter}">
+                        <f:facet name="sourceCaption">Available</f:facet>
+                        <f:facet name="targetCaption">Assigned</f:facet>
 
-                </h:panelGrid>
+                        <p:column>
+                            <h:outputText value="#{roledl.roleName}"/>
+                        </p:column>
+                    </p:pickList>
+                </h:panelGroup>
                 <h:panelGroup id="dialog-layout-2" layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
-                    <p:commandButton value="Submit" type="submit" actionListener="#{usersBean.addOrEditEntryListener}"
-                                     update="main-form,@parent"
-                                     oncomplete="PF('users-form-dialog').hide();"/>
+                    <p:commandButton value="Submit" type="submit" actionListener="#{usersBean.addOrEditEntryListener2}"
+                                     update="main-form,@parent,roles-form"
+                                     oncomplete="PF('roles-form-dialog').hide();"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>
