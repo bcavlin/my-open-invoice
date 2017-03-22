@@ -68,7 +68,7 @@ public class UserRoleEntity implements Serializable {
         this.dateAssigned = dateAssigned;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
     public RolesEntity getRolesEntity() {
         return rolesEntity;
@@ -78,7 +78,7 @@ public class UserRoleEntity implements Serializable {
         this.rolesEntity = rolesEntity;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     public UsersEntity getUsersEntity() {
         return usersEntity;

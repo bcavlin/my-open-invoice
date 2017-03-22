@@ -1,6 +1,6 @@
 package com.bgh.myopeninvoice.jsfbeans.model;
 
-import com.bgh.myopeninvoice.db.dao.TaxRepository;
+import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.QTaxEntity;
 import com.bgh.myopeninvoice.db.model.TaxEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -25,10 +25,10 @@ public class TaxEntityLazyModel extends LazyDataModel<TaxEntity> {
 
     private List<TaxEntity> taxEntityList;
 
-    private TaxRepository taxRepository;
+    private InvoiceDAO invoiceDAO;
 
-    public TaxEntityLazyModel(TaxRepository taxRepository) {
-        this.taxRepository = taxRepository;
+    public TaxEntityLazyModel(InvoiceDAO invoiceDAO) {
+        this.invoiceDAO = invoiceDAO;
     }
 
     @Override
@@ -58,7 +58,6 @@ public class TaxEntityLazyModel extends LazyDataModel<TaxEntity> {
         BooleanExpression predicate = null;
 
         if (filters != null && !filters.isEmpty()) {
-//            logger.info("filtering...");
             for (Map.Entry<String, Object> stringObjectEntry : filters.entrySet()) {
                 BooleanExpression temp = null;
 
@@ -79,9 +78,9 @@ public class TaxEntityLazyModel extends LazyDataModel<TaxEntity> {
         Page<TaxEntity> taxEntityPage = null;
 
         if (predicate == null) {
-            taxEntityPage = taxRepository.findAll(pageRequest);
+            taxEntityPage = invoiceDAO.getTaxRepository().findAll(pageRequest);
         } else {
-            taxEntityPage = taxRepository.findAll(predicate, pageRequest);
+            taxEntityPage = invoiceDAO.getTaxRepository().findAll(predicate, pageRequest);
         }
 
         setRowCount((int) taxEntityPage.getTotalElements());

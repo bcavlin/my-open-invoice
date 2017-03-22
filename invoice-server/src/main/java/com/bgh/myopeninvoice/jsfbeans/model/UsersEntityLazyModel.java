@@ -1,6 +1,6 @@
 package com.bgh.myopeninvoice.jsfbeans.model;
 
-import com.bgh.myopeninvoice.db.dao.UsersRepository;
+import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.UsersEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
@@ -24,10 +24,10 @@ public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
 
     private List<UsersEntity> UsersEntityList;
 
-    private UsersRepository usersRepository;
+    private InvoiceDAO invoiceDAO;
 
-    public UsersEntityLazyModel(UsersRepository UsersRepository) {
-        this.usersRepository = UsersRepository;
+    public UsersEntityLazyModel(InvoiceDAO invoiceDAO) {
+        this.invoiceDAO = invoiceDAO;
     }
 
     @Override
@@ -77,9 +77,9 @@ public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
         Page<UsersEntity> usersEntityPage = null;
 
         if (predicate == null) {
-            usersEntityPage = usersRepository.findAll(pageRequest);
+            usersEntityPage = invoiceDAO.getUsersRepository().findAll(pageRequest);
         } else {
-            usersEntityPage = usersRepository.findAll(predicate, pageRequest);
+            usersEntityPage = invoiceDAO.getUsersRepository().findAll(predicate, pageRequest);
         }
 
         setRowCount((int) usersEntityPage.getTotalElements());
