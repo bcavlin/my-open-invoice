@@ -40,21 +40,23 @@ public class UsersBean implements Serializable {
 
     private UsersEntity selectedUsersEntity;
 
-    private UserRoleEntity selectedUserRoleEntity;
-
     private int pageSize = 20;
 
     @PostConstruct
-    public void refresh() {
-        if (usersEntityList == null) {
-            logger.info("Loading users entries");
-            usersEntityList = new UsersEntityLazyModel(invoiceDAO);
-            selectedUsersEntity = null;
-            selectedUserRoleEntity = null;
+    private void init() {
+        logger.info("Initializing users entries");
+        usersEntityList = new UsersEntityLazyModel(invoiceDAO);
+        selectedUsersEntity = null;
+    }
+
+    private void refresh() {
+        logger.info("Loading users entries");
+        if (selectedUsersEntity != null) {
+            selectedUsersEntity = invoiceDAO.getUsersRepository().findOne(selectedUsersEntity.getUserId());
         }
     }
 
-    private void fillDualList(){
+    private void fillDualList() {
         final Iterable<RolesEntity> allRolesEntity = invoiceDAO.getRolesRepository().findAll();
         final List<UserRoleEntity> assignedRolesEntity = selectedUsersEntity.getUserRoleEntities();
 
@@ -72,7 +74,7 @@ public class UsersBean implements Serializable {
         rolesDualListModel.setTarget(targetList);
     }
 
-    public void ajaxChangeRowListener(){
+    public void ajaxChangeRowListener() {
         logger.info("Filling dual list");
         fillDualList();
     }
@@ -96,8 +98,8 @@ public class UsersBean implements Serializable {
     }
 
     public void addOrEditEntryListener2(ActionEvent event) {
-        if (selectedUsersEntity != null && rolesDualListModel!=null) {
-            logger.info("Adding/editing entity {}", rolesDualListModel.toString());
+        if (selectedUsersEntity != null && rolesDualListModel != null) {
+            logger.info("Adding/editing entity {}", rolesDualListModel.getTarget().toString());
             invoiceDAO.saveUserRolesEntity(selectedUsersEntity, rolesDualListModel.getTarget());
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -140,14 +142,6 @@ public class UsersBean implements Serializable {
 
     public void setSelectedUsersEntity(UsersEntity selectedUsersEntity) {
         this.selectedUsersEntity = selectedUsersEntity;
-    }
-
-    public UserRoleEntity getSelectedUserRoleEntity() {
-        return selectedUserRoleEntity;
-    }
-
-    public void setSelectedUserRoleEntity(UserRoleEntity selectedUserRoleEntity) {
-        this.selectedUserRoleEntity = selectedUserRoleEntity;
     }
 
     public DualListModel<RolesEntity> getRolesDualListModel() {

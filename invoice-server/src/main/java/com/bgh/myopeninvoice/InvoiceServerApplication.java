@@ -100,6 +100,7 @@ public class InvoiceServerApplication {
 
             http.authorizeRequests()
                     .antMatchers("/secured/**").hasAnyRole("ADMIN", "USER")
+                    .antMatchers("/secured/admin/**").hasRole("ADMIN")
                     .antMatchers("/**").permitAll()
                     .anyRequest().authenticated()
                     .and().formLogin().loginPage("/Index.xhtml").permitAll()
