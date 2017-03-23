@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>invoice-server</module>
-        <module>invoice-db</module>
+        <module>invoice-data</module>
     </modules>
 
     <parent>
@@ -110,7 +110,7 @@
             </dependency>
             <dependency>
                 <groupId>com.bgh.myopeninvoice</groupId>
-                <artifactId>invoice-db</artifactId>
+                <artifactId>invoice-data</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
