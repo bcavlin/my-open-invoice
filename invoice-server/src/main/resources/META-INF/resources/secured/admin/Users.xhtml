@@ -10,7 +10,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:o="http://omnifaces.org/ui"
       xmlns:of="http://omnifaces.org/functions">
-<ui:composition template="templates/ApplicationTemplate.xhtml">
+<ui:composition template="../templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
         <h:form id="main-form" onkeypress="return event.keyCode != 13">
 
@@ -66,7 +66,7 @@
                     <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="70">
                         <h:outputText value="#{user.userId}"/>
                     </p:column>
-                    <p:column headerText="Username" sortBy="#{user.username}" style="text-align:left;" width="100">
+                    <p:column headerText="Username" sortBy="#{user.username}" style="text-align:left;" width="150">
                         <h:outputText value="#{user.username}"/>
                     </p:column>
                     <p:column headerText="Enabled" sortBy="#{user.enabled}" style="text-align:center;" width="80">
@@ -92,41 +92,19 @@
             </h:panelGroup>
 
             <h:panelGroup id="role-buttons-layout" layout="block" style="margin: 15px 0 15px 0">
-                <p:commandButton value="Add Role To User (#{usersBean.selectedUsersEntity.username})" icon="ui-icon-pencil"
+                <p:commandButton value="Edit Roles For User (#{usersBean.selectedUsersEntity.username})" icon="ui-icon-pencil"
                                  rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
                                  style="margin-right: 15px;" onclick="PF('roles-form-dialog').show();"
                                  update="main-form, users-form, roles-form"/>
-                <p:commandButton
-                        value="Remove Role From User (#{usersBean.selectedUsersEntity.username})"
-                        icon="ui-icon-trash"
-                        rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0
-                        and !empty usersBean.selectedUserRoleEntity and usersBean.selectedUserRoleEntity.userRoleId gt 0}"
-                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation2').show();"/>
-
-                <p:confirmDialog message="Do you want to remove this Role?"
-                                 showEffect="bounce"
-                                 header="Remove Role"
-                                 severity="alert"
-                                 widgetVar="confirmation2">
-                    <p:commandButton value="Remove Role (#{usersBean.selectedUserRoleEntity.rolesEntity.roleName}) from (#{usersBean.selectedUsersEntity.username})"
-                                     oncomplete="PF('confirmation2').hide()"
-                                     actionListener="#{usersBean.deleteEntryListener}" update="main-form, users-form, roles-form"
-                                     style="color: brown;"/>
-                    <p:commandButton value="No" onclick="PF('confirmation2').hide()" type="button"/>
-                </p:confirmDialog>
             </h:panelGroup>
 
             <!--@elvariable id="userRole" type="com.bgh.myopeninvoice.db.model.UserRoleEntity"-->
             <p:dataTable id="user-roles-table"
                          var="userRole"
                          rowKey="#{userRole.userRoleId}"
-                         selection="#{usersBean.selectedUserRoleEntity}"
-                         selectionMode="single"
                          widgetVar="user-roles-table"
                          value="#{usersBean.selectedUsersEntity.userRoleEntities}"
                          emptyMessage="No items found with given criteria">
-
-                <p:ajax event="rowSelect" update="main-form,roles-form"/>
 
                 <p:column headerText="Id" sortBy="#{userRole.userRoleId}" style="text-align:right;" width="70">
                     <h:outputText value="#{userRole.userRoleId}"/>
@@ -177,7 +155,7 @@
                 <h:panelGroup id="dialog-layout-1" layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit" actionListener="#{usersBean.addOrEditEntryListener}"
-                                     update="main-form,@parent"
+                                     update="@parent,@this,main-form"
                                      oncomplete="PF('users-form-dialog').hide();"/>
                 </h:panelGroup>
             </h:form>
@@ -204,7 +182,7 @@
                 <h:panelGroup id="dialog-layout-2" layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit" actionListener="#{usersBean.addOrEditEntryListener2}"
-                                     update="main-form,@parent,roles-form"
+                                     update="@parent,@this,main-form"
                                      oncomplete="PF('roles-form-dialog').hide();"/>
                 </h:panelGroup>
             </h:form>

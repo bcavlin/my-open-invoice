@@ -36,10 +36,15 @@ public class TaxBean implements Serializable {
     private int pageSize = 20;
 
     @PostConstruct
-    public void refresh() {
-        if (taxEntityList == null) {
-            logger.info("Loading tax entries");
-            taxEntityList = new TaxEntityLazyModel(invoiceDAO);
+    private void init() {
+        logger.info("Initializing tax entries");
+        taxEntityList = new TaxEntityLazyModel(invoiceDAO);
+    }
+
+    private void refresh() {
+        logger.info("Loading tax entries");
+        if (selectedTaxEntity != null) {
+            selectedTaxEntity = invoiceDAO.getTaxRepository().findOne(selectedTaxEntity.getTaxId());
         }
     }
 
