@@ -43,7 +43,7 @@
         </dependency>
         <dependency>
             <groupId>com.bgh.myopeninvoice</groupId>
-            <artifactId>invoice-db</artifactId>
+            <artifactId>invoice-data</artifactId>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>

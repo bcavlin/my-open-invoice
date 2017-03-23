@@ -15,13 +15,10 @@
         <class>com.bgh.myopeninvoice.db.model.UserRoleEntity</class>
         <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
         <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
-        <class>com.bgh.myopeninvoice.db.model2.RolesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.UsersEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.UserRoleEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.connection.url"
-                      value="jdbc:h2:file:/home/bcavlin/IdeaProjects/myopeninvoice/invoice/invoiceDB;AUTO_SERVER=TRUE"/>
+                      value="jdbc:h2:file:/home/bcavlin/IdeaProjects/myopeninvoice/invoice-db/invoiceDB;AUTO_SERVER=TRUE"/>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
             <property name="hibernate.connection.username"/>
             <property name="hibernate.connection.password"/>
