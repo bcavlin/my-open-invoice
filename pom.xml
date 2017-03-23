@@ -16,7 +16,7 @@
     </parent>
 
     <groupId>com.bgh.myopeninvoice</groupId>
-    <artifactId>myopeninvoice-main</artifactId>
+    <artifactId>my-open-invoice-main</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
