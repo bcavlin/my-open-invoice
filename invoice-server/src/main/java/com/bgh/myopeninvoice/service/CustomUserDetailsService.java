@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -80,6 +81,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         return userDetails;
+    }
+
+    public void updateLastLoginDate(User user){
+        final Optional<UsersEntity> byUsername = usersRepository.findByUsername(user.getUsername());
+        if(byUsername.isPresent()) {
+            byUsername.get().setLastLogged(new Date());
+            usersRepository.save(byUsername.get());
+        }
+
     }
 }
 

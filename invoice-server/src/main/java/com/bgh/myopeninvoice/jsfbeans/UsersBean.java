@@ -5,7 +5,10 @@ import com.bgh.myopeninvoice.db.model.RolesEntity;
 import com.bgh.myopeninvoice.db.model.UserRoleEntity;
 import com.bgh.myopeninvoice.db.model.UsersEntity;
 import com.bgh.myopeninvoice.jsfbeans.model.UsersEntityLazyModel;
+import com.bgh.myopeninvoice.utils.CustomUtils;
 import com.bgh.myopeninvoice.utils.FacesUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
@@ -40,6 +43,9 @@ public class UsersBean implements Serializable {
 
     private UsersEntity selectedUsersEntity;
 
+    private String password;
+    private String passwordRepeat;
+
     private int pageSize = 20;
 
     @PostConstruct
@@ -47,6 +53,9 @@ public class UsersBean implements Serializable {
         logger.info("Initializing users entries");
         usersEntityList = new UsersEntityLazyModel(invoiceDAO);
         selectedUsersEntity = null;
+        setPassword(null);
+        setPasswordRepeat(null);
+
     }
 
     private void refresh() {
@@ -54,6 +63,20 @@ public class UsersBean implements Serializable {
         if (selectedUsersEntity != null) {
             selectedUsersEntity = invoiceDAO.getUsersRepository().findOne(selectedUsersEntity.getUserId());
         }
+        setPassword(null);
+        setPasswordRepeat(null);
+
+    }
+
+    public boolean hasRole(UsersEntity user, String roleName) {
+        if (user != null) {
+            for (UserRoleEntity userRoleEntity : user.getUserRoleEntities()) {
+                if (roleName.equalsIgnoreCase(userRoleEntity.getRolesEntity().getRoleName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void fillDualList() {
@@ -77,6 +100,9 @@ public class UsersBean implements Serializable {
     public void ajaxChangeRowListener() {
         logger.info("Filling dual list");
         fillDualList();
+        setPassword(null);
+        setPasswordRepeat(null);
+
     }
 
     public void newEntryListener(ActionEvent event) {
@@ -84,21 +110,48 @@ public class UsersBean implements Serializable {
         selectedUsersEntity = new UsersEntity();
         selectedUsersEntity.setUserRoleEntities(new ArrayList<>()); //cannot be null
         fillDualList();
+        setPassword(null);
+        setPasswordRepeat(null);
+
     }
 
     public void addOrEditEntryListener(ActionEvent event) throws Exception {
         if (selectedUsersEntity != null) {
-            logger.info("Adding/editing entity {}", selectedUsersEntity.toString());
-            selectedUsersEntity = invoiceDAO.saveUsersEntity(selectedUsersEntity);
-            refresh();
-            FacesUtils.addSuccessMessage("Entity record updated");
+            boolean success = true;
+
+            if (StringUtils.isNotBlank(password) && password.length() > 5) {
+                selectedUsersEntity.setPassword(CustomUtils.encodePassword(password));
+            }
+
+            if (StringUtils.isNotBlank(password) && password.length() <= 5) {
+                FacesUtils.addErrorMessage("Password has to be greater than 5 in length");
+                success = false;
+            }
+
+            if (selectedUsersEntity.getEnabled() && selectedUsersEntity.getPassword() == null) {
+                FacesUtils.addErrorMessage("You cannot enable user without a password");
+                success = false;
+            }
+
+            if (success) {
+                logger.info("Adding/editing entity {}", selectedUsersEntity.toString());
+                RequestContext.getCurrentInstance().execute("PF('users-form-dialog').hide()");
+                selectedUsersEntity = invoiceDAO.saveUsersEntity(selectedUsersEntity);
+                refresh();
+                FacesUtils.addSuccessMessage("Entity record updated");
+                setPassword(null);
+                setPasswordRepeat(null);
+            }
         } else {
             FacesUtils.addErrorMessage("Selected users entity is null");
         }
+
     }
 
     public void addOrEditEntryListener2(ActionEvent event) {
         if (selectedUsersEntity != null && rolesDualListModel != null) {
+            RequestContext.getCurrentInstance().execute("PF('roles-form-dialog').hide()");
+
             logger.info("Adding/editing entity {}", rolesDualListModel.getTarget().toString());
             invoiceDAO.saveUserRolesEntity(selectedUsersEntity, rolesDualListModel.getTarget());
             refresh();
@@ -118,6 +171,8 @@ public class UsersBean implements Serializable {
         } else {
             FacesUtils.addErrorMessage("Selected users entity is null");
         }
+        setPassword(null);
+        setPasswordRepeat(null);
     }
 
     public int getPageSize() {
@@ -150,5 +205,21 @@ public class UsersBean implements Serializable {
 
     public void setRolesDualListModel(DualListModel<RolesEntity> rolesDualListModel) {
         this.rolesDualListModel = rolesDualListModel;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPasswordRepeat() {
+        return passwordRepeat;
+    }
+
+    public void setPasswordRepeat(String passwordRepeat) {
+        this.passwordRepeat = passwordRepeat;
     }
 }
