@@ -82,24 +82,24 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         //first add new roles if not already there
         for (RolesEntity targetRole : targetRoles) {
             boolean found = false;
-            for (UserRoleEntity currentRole : usersEntity.getUserRoleEntities()) {
-                if(currentRole.getRolesEntity().getRoleId().equals(targetRole.getRoleId())){
+            for (UserRoleEntity currentRole : usersEntity.getUserRolesByUserId()) {
+                if(currentRole.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())){
                     found = true;
                 }
             }
             if(!found){
                 UserRoleEntity newRole = new UserRoleEntity();
                 newRole.setDateAssigned(new Date());
-                newRole.setUsersEntity(usersEntity);
-                newRole.setRolesEntity(targetRole);
+                newRole.setUsersByUserId(usersEntity);
+                newRole.setRolesByRoleId(targetRole);
                 add.add(newRole);
             }
         }
         //then delete those that are extra
-        for (UserRoleEntity currentRole : usersEntity.getUserRoleEntities()) {
+        for (UserRoleEntity currentRole : usersEntity.getUserRolesByUserId()) {
             boolean found = false;
             for (RolesEntity targetRole : targetRoles) {
-                if(currentRole.getRolesEntity().getRoleId().equals(targetRole.getRoleId())){
+                if(currentRole.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())){
                     found = true;
                 }
             }

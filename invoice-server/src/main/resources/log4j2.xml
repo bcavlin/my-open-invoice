@@ -16,7 +16,7 @@
         <Console name="Console"
                  target="SYSTEM_OUT">
             <PatternLayout>
-                <Pattern>%highlight{[%d][%-5p][%t][%X{userName}][%c.%M] - %m%n}{FATAL=red blink, ERROR=red, WARN=cyan, DEBUG=yellow}</Pattern>
+                <Pattern>%highlight{[%d][%-5p][%t][%X{userName}][%c.%M] - %m%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=white, TRACE=blue}</Pattern>
             </PatternLayout>
         </Console>
     </Appenders>

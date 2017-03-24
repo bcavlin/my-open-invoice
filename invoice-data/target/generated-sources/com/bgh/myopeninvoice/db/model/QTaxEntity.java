@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -20,6 +21,8 @@ public class QTaxEntity extends EntityPathBase<TaxEntity> {
     public static final QTaxEntity taxEntity = new QTaxEntity("taxEntity");
 
     public final StringPath identifier = createString("identifier");
+
+    public final CollectionPath<InvoiceEntity, QInvoiceEntity> invoicesByTaxId = this.<InvoiceEntity, QInvoiceEntity>createCollection("invoicesByTaxId", InvoiceEntity.class, QInvoiceEntity.class, PathInits.DIRECT2);
 
     public final NumberPath<java.math.BigDecimal> percent = createNumber("percent", java.math.BigDecimal.class);
 

@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.db.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -24,6 +25,12 @@ public class InvoiceEntity implements Serializable {
     private BigDecimal taxPercent;
     private String note;
     private Date paidDate;
+    private Collection<AttachmentEntity> attachmentsByInvoiceId;
+    private CompaniesEntity companiesByCompanyFrom;
+    private CompaniesEntity companiesByCompanyTo;
+    private RatesEntity ratesByRate;
+    private TaxEntity taxByTaxId;
+    private Collection<InvoiceItemsEntity> invoiceItemsesByInvoiceId;
 
     @Id
     @GeneratedValue
@@ -198,10 +205,69 @@ public class InvoiceEntity implements Serializable {
         return result;
     }
 
+    @OneToMany(mappedBy = "invoiceByInvoiceId")
+    public Collection<AttachmentEntity> getAttachmentsByInvoiceId() {
+        return attachmentsByInvoiceId;
+    }
+
+    public void setAttachmentsByInvoiceId(Collection<AttachmentEntity> attachmentsByInvoiceId) {
+        this.attachmentsByInvoiceId = attachmentsByInvoiceId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_FROM", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
+    public CompaniesEntity getCompaniesByCompanyFrom() {
+        return companiesByCompanyFrom;
+    }
+
+    public void setCompaniesByCompanyFrom(CompaniesEntity companiesByCompanyFrom) {
+        this.companiesByCompanyFrom = companiesByCompanyFrom;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_TO", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
+    public CompaniesEntity getCompaniesByCompanyTo() {
+        return companiesByCompanyTo;
+    }
+
+    public void setCompaniesByCompanyTo(CompaniesEntity companiesByCompanyTo) {
+        this.companiesByCompanyTo = companiesByCompanyTo;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "RATE", referencedColumnName = "RATE_ID", nullable = false, insertable = false, updatable = false)
+    public RatesEntity getRatesByRate() {
+        return ratesByRate;
+    }
+
+    public void setRatesByRate(RatesEntity ratesByRate) {
+        this.ratesByRate = ratesByRate;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "TAX_ID", referencedColumnName = "TAX_ID", nullable = false, insertable = false, updatable = false)
+    public TaxEntity getTaxByTaxId() {
+        return taxByTaxId;
+    }
+
+    public void setTaxByTaxId(TaxEntity taxByTaxId) {
+        this.taxByTaxId = taxByTaxId;
+    }
+
+    @OneToMany(mappedBy = "invoiceByInvoiceId")
+    public Collection<InvoiceItemsEntity> getInvoiceItemsesByInvoiceId() {
+        return invoiceItemsesByInvoiceId;
+    }
+
+    public void setInvoiceItemsesByInvoiceId(Collection<InvoiceItemsEntity> invoiceItemsesByInvoiceId) {
+        this.invoiceItemsesByInvoiceId = invoiceItemsesByInvoiceId;
+    }
+
     @Override
     public String toString() {
         return "InvoiceEntity{" +
-                "invoiceId=" + invoiceId +
+                "paidDate=" + paidDate +
+                ", invoiceId=" + invoiceId +
                 ", companyFrom=" + companyFrom +
                 ", companyTo=" + companyTo +
                 ", rate=" + rate +
@@ -213,7 +279,6 @@ public class InvoiceEntity implements Serializable {
                 ", taxId=" + taxId +
                 ", taxPercent=" + taxPercent +
                 ", note='" + note + '\'' +
-                ", paidDate=" + paidDate +
                 '}';
     }
 }

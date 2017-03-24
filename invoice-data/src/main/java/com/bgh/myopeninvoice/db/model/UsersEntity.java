@@ -2,8 +2,8 @@ package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -14,12 +14,11 @@ public class UsersEntity implements Serializable {
     private Integer userId;
     private String username;
     private String password;
-    private String firstName;
-    private String lastName;
-    private String middleName;
     private Date lastLogged;
     private Boolean enabled;
-    private List<UserRoleEntity> userRoleEntities;
+    private Collection<ContactsEntity> contactsesByUserId;
+    private Collection<RatesEntity> ratesByUserId;
+    private Collection<UserRoleEntity> userRolesByUserId;
 
     @Id
     @GeneratedValue
@@ -52,36 +51,6 @@ public class UsersEntity implements Serializable {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "FIRST_NAME", nullable = true, length = 100)
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Basic
-    @Column(name = "LAST_NAME", nullable = true, length = 100)
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Basic
-    @Column(name = "MIDDLE_NAME", nullable = true, length = 100)
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
     @Temporal(TemporalType.DATE)
     @Column(name = "LAST_LOGGED", nullable = false)
     public Date getLastLogged() {
@@ -102,16 +71,6 @@ public class UsersEntity implements Serializable {
         this.enabled = enabled;
     }
 
-    @OneToMany(mappedBy = "usersEntity", fetch = FetchType.EAGER)
-    public List<UserRoleEntity> getUserRoleEntities() {
-        return userRoleEntities;
-    }
-
-    public void setUserRoleEntities(List<UserRoleEntity> userRoleEntities) {
-        this.userRoleEntities = userRoleEntities;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,9 +81,6 @@ public class UsersEntity implements Serializable {
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (middleName != null ? !middleName.equals(that.middleName) : that.middleName != null) return false;
         if (lastLogged != null ? !lastLogged.equals(that.lastLogged) : that.lastLogged != null) return false;
         if (enabled != null ? !enabled.equals(that.enabled) : that.enabled != null) return false;
 
@@ -132,30 +88,49 @@ public class UsersEntity implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "UsersEntity{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", lastLogged=" + lastLogged +
-                ", enabled=" + enabled +
-                ", userRoleEntities=" + userRoleEntities +
-                '}';
-    }
-
-    @Override
     public int hashCode() {
         int result = userId != null ? userId.hashCode() : 0;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
         result = 31 * result + (lastLogged != null ? lastLogged.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "usersByUserId")
+    public Collection<ContactsEntity> getContactsesByUserId() {
+        return contactsesByUserId;
+    }
+
+    public void setContactsesByUserId(Collection<ContactsEntity> contactsesByUserId) {
+        this.contactsesByUserId = contactsesByUserId;
+    }
+
+    @OneToMany(mappedBy = "usersByRateForUser")
+    public Collection<RatesEntity> getRatesByUserId() {
+        return ratesByUserId;
+    }
+
+    public void setRatesByUserId(Collection<RatesEntity> ratesByUserId) {
+        this.ratesByUserId = ratesByUserId;
+    }
+
+    @OneToMany(mappedBy = "usersByUserId", fetch = FetchType.EAGER)
+    public Collection<UserRoleEntity> getUserRolesByUserId() {
+        return userRolesByUserId;
+    }
+
+    public void setUserRolesByUserId(Collection<UserRoleEntity> userRolesByUserId) {
+        this.userRolesByUserId = userRolesByUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "UsersEntity{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", lastLogged=" + lastLogged +
+                ", enabled=" + enabled +
+                '}';
     }
 }

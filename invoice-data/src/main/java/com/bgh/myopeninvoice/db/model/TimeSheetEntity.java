@@ -15,6 +15,7 @@ public class TimeSheetEntity implements Serializable {
     private Integer invoiceItemId;
     private Date itemDate;
     private BigDecimal hoursWorked;
+    private InvoiceItemsEntity invoiceItemsByInvoiceItemId;
 
     @Id
     @GeneratedValue
@@ -80,6 +81,16 @@ public class TimeSheetEntity implements Serializable {
         result = 31 * result + (itemDate != null ? itemDate.hashCode() : 0);
         result = 31 * result + (hoursWorked != null ? hoursWorked.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "INVOICE_ITEM_ID", referencedColumnName = "INVOICE_ITEM_ID", nullable = false, insertable = false, updatable = false)
+    public InvoiceItemsEntity getInvoiceItemsByInvoiceItemId() {
+        return invoiceItemsByInvoiceItemId;
+    }
+
+    public void setInvoiceItemsByInvoiceItemId(InvoiceItemsEntity invoiceItemsByInvoiceItemId) {
+        this.invoiceItemsByInvoiceItemId = invoiceItemsByInvoiceItemId;
     }
 
     @Override

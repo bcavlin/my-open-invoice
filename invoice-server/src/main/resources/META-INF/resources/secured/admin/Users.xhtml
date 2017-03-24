@@ -80,15 +80,6 @@
                               width="120">
                         <h:outputText value="#{user.lastLogged}"/>
                     </p:column>
-                    <p:column headerText="First" sortBy="#{user.firstName}" style="text-align:left;" width="100">
-                        <h:outputText value="#{user.firstName}"/>
-                    </p:column>
-                    <p:column headerText="Middle" sortBy="#{user.middleName}" style="text-align:left;" width="100">
-                        <h:outputText value="#{user.middleName}"/>
-                    </p:column>
-                    <p:column headerText="Last" sortBy="#{user.lastName}" style="text-align:left;" width="100">
-                        <h:outputText value="#{user.lastName}"/>
-                    </p:column>
                     <p:column headerText="Password" sortBy="#{user.password}" style="text-align:left;" width="600">
                         <h:outputText value="#{user.password}"/>
                     </p:column>
@@ -108,7 +99,7 @@
                          var="userRole"
                          rowKey="#{userRole.userRoleId}"
                          widgetVar="user-roles-table"
-                         value="#{usersBean.selectedUsersEntity.userRoleEntities}"
+                         value="#{usersBean.selectedUsersEntity.userRolesByUserId}"
                          emptyMessage="No items found with given criteria">
 
                 <p:column headerText="Id" sortBy="#{userRole.userRoleId}" style="text-align:right;" width="70">
@@ -118,8 +109,8 @@
                           width="120">
                     <h:outputText value="#{userRole.dateAssigned}"/>
                 </p:column>
-                <p:column headerText="Role" sortBy="#{userRole.rolesEntity.roleName}" style="text-align:left;">
-                    <h:outputText value="#{userRole.rolesEntity.roleName}"/>
+                <p:column headerText="Role" sortBy="#{userRole.rolesByRoleId.roleName}" style="text-align:left;">
+                    <h:outputText value="#{userRole.rolesByRoleId.roleName}"/>
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -159,19 +150,10 @@
                     <p:outputLabel value="Last Logged: "/>
                     <p:calendar value="#{usersBean.selectedUsersEntity.lastLogged}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10"/>
-                    <p:outputLabel value="First: "/>
-                    <p:inputText value="#{usersBean.selectedUsersEntity.firstName}" style="margin-left: 5px;"
-                                 maxlength="100"/>
-                    <p:outputLabel value="Middle: "/>
-                    <p:inputText value="#{usersBean.selectedUsersEntity.middleName}" style="margin-left: 5px;"
-                                 maxlength="100"/>
-                    <p:outputLabel value="Last: "/>
-                    <p:inputText value="#{usersBean.selectedUsersEntity.lastName}" style="margin-left: 5px;"
-                                 maxlength="100"/>
                     <p:outputLabel value="Roles: "/>
                     <h:panelGroup>
-                        <ui:repeat value="#{usersBean.selectedUsersEntity.userRoleEntities}" var="role">
-                            <dl>#{role.rolesEntity.roleName}</dl>
+                        <ui:repeat value="#{usersBean.selectedUsersEntity.userRolesByUserId}" var="role">
+                            <dl>#{role.rolesByRoleId.roleName}</dl>
                         </ui:repeat>
                     </h:panelGroup>
                 </h:panelGrid>

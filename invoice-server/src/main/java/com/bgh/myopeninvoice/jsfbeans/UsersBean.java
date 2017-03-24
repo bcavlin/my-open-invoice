@@ -22,6 +22,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -70,8 +71,8 @@ public class UsersBean implements Serializable {
 
     public boolean hasRole(UsersEntity user, String roleName) {
         if (user != null) {
-            for (UserRoleEntity userRoleEntity : user.getUserRoleEntities()) {
-                if (roleName.equalsIgnoreCase(userRoleEntity.getRolesEntity().getRoleName())) {
+            for (UserRoleEntity userRoleEntity : user.getUserRolesByUserId()) {
+                if (roleName.equalsIgnoreCase(userRoleEntity.getRolesByRoleId().getRoleName())) {
                     return true;
                 }
             }
@@ -81,7 +82,7 @@ public class UsersBean implements Serializable {
 
     private void fillDualList() {
         final Iterable<RolesEntity> allRolesEntity = invoiceDAO.getRolesRepository().findAll();
-        final List<UserRoleEntity> assignedRolesEntity = selectedUsersEntity.getUserRoleEntities();
+        final Collection<UserRoleEntity> assignedRolesEntity = selectedUsersEntity.getUserRolesByUserId();
 
         List<RolesEntity> sourceList = new ArrayList<>();
         List<RolesEntity> targetList = new ArrayList<>();
@@ -89,7 +90,7 @@ public class UsersBean implements Serializable {
         rolesDualListModel = new DualListModel<>();
 
         allRolesEntity.forEach(sourceList::add);
-        assignedRolesEntity.forEach(r -> targetList.add(r.getRolesEntity()));
+        assignedRolesEntity.forEach(r -> targetList.add(r.getRolesByRoleId()));
 
         sourceList.removeAll(targetList);
 
@@ -108,7 +109,7 @@ public class UsersBean implements Serializable {
     public void newEntryListener(ActionEvent event) {
         logger.info("Creating new entity");
         selectedUsersEntity = new UsersEntity();
-        selectedUsersEntity.setUserRoleEntities(new ArrayList<>()); //cannot be null
+        selectedUsersEntity.setUserRolesByUserId(new ArrayList<>()); //cannot be null
         fillDualList();
         setPassword(null);
         setPasswordRepeat(null);

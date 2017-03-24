@@ -2,9 +2,12 @@ com/bgh/myopeninvoice/db/model/QUserRoleEntity.class
 com/bgh/myopeninvoice/db/model/AttachmentEntity.class
 com/bgh/myopeninvoice/db/dao/InvoiceDAOImpl.class
 com/bgh/myopeninvoice/db/model/QAttachmentEntity.class
+com/bgh/myopeninvoice/db/model/CompanyContactEntity.class
 com/bgh/myopeninvoice/db/model/UsersEntity.class
 com/bgh/myopeninvoice/db/model/QTaxEntity.class
 com/bgh/myopeninvoice/db/model/CompaniesEntity.class
+com/bgh/myopeninvoice/db/model/QCompanyContactEntity.class
+com/bgh/myopeninvoice/db/model/QContactsEntity.class
 com/bgh/myopeninvoice/db/dao/InvoiceDAO.class
 com/bgh/myopeninvoice/db/model/QInvoiceItemsEntity.class
 com/bgh/myopeninvoice/db/dao/UserRoleRepository.class
@@ -17,6 +20,7 @@ com/bgh/myopeninvoice/db/model/RatesEntity.class
 com/bgh/myopeninvoice/db/model/QUsersEntity.class
 com/bgh/myopeninvoice/db/model/QCompaniesEntity.class
 com/bgh/myopeninvoice/db/model/QRatesEntity.class
+com/bgh/myopeninvoice/db/model/ContactsEntity.class
 com/bgh/myopeninvoice/db/dao/TaxRepository.class
 com/bgh/myopeninvoice/db/model/InvoiceItemsEntity.class
 com/bgh/myopeninvoice/db/model/TimeSheetEntity.class

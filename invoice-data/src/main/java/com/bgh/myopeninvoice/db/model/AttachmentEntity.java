@@ -14,6 +14,7 @@ public class AttachmentEntity implements Serializable {
     private Integer invoiceId;
     private byte[] file;
     private String filename;
+    private InvoiceEntity invoiceByInvoiceId;
 
     @Id
     @GeneratedValue
@@ -78,5 +79,24 @@ public class AttachmentEntity implements Serializable {
         result = 31 * result + Arrays.hashCode(file);
         result = 31 * result + (filename != null ? filename.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "INVOICE_ID", referencedColumnName = "INVOICE_ID", nullable = false, insertable = false, updatable = false)
+    public InvoiceEntity getInvoiceByInvoiceId() {
+        return invoiceByInvoiceId;
+    }
+
+    public void setInvoiceByInvoiceId(InvoiceEntity invoiceByInvoiceId) {
+        this.invoiceByInvoiceId = invoiceByInvoiceId;
+    }
+
+    @Override
+    public String toString() {
+        return "AttachmentEntity{" +
+                "attachmentId=" + attachmentId +
+                ", invoiceId=" + invoiceId +
+                ", filename='" + filename + '\'' +
+                '}';
     }
 }

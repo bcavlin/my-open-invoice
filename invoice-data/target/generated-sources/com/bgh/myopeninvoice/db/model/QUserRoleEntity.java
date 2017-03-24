@@ -24,11 +24,11 @@ public class QUserRoleEntity extends EntityPathBase<UserRoleEntity> {
 
     public final DatePath<java.util.Date> dateAssigned = createDate("dateAssigned", java.util.Date.class);
 
-    public final QRolesEntity rolesEntity;
+    public final QRolesEntity rolesByRoleId;
 
     public final NumberPath<Integer> userRoleId = createNumber("userRoleId", Integer.class);
 
-    public final QUsersEntity usersEntity;
+    public final QUsersEntity usersByUserId;
 
     public QUserRoleEntity(String variable) {
         this(UserRoleEntity.class, forVariable(variable), INITS);
@@ -48,8 +48,8 @@ public class QUserRoleEntity extends EntityPathBase<UserRoleEntity> {
 
     public QUserRoleEntity(Class<? extends UserRoleEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.rolesEntity = inits.isInitialized("rolesEntity") ? new QRolesEntity(forProperty("rolesEntity")) : null;
-        this.usersEntity = inits.isInitialized("usersEntity") ? new QUsersEntity(forProperty("usersEntity")) : null;
+        this.rolesByRoleId = inits.isInitialized("rolesByRoleId") ? new QRolesEntity(forProperty("rolesByRoleId")) : null;
+        this.usersByUserId = inits.isInitialized("usersByUserId") ? new QUsersEntity(forProperty("usersByUserId")) : null;
     }
 
 }

@@ -11,11 +11,9 @@ import java.util.Date;
 @Table(name = "USER_ROLE", schema = "INVOICE", catalog = "INVOICEDB")
 public class UserRoleEntity implements Serializable {
     private Integer userRoleId;
-//    private Integer userId;
-//    private Integer roleId;
     private Date dateAssigned;
-    private RolesEntity rolesEntity;
-    private UsersEntity usersEntity;
+    private RolesEntity rolesByRoleId;
+    private UsersEntity usersByUserId;
     private boolean addOrKeep;
 
     @Transient
@@ -38,26 +36,6 @@ public class UserRoleEntity implements Serializable {
         this.userRoleId = userRoleId;
     }
 
-//    @Basic
-//    @Column(name = "USER_ID", nullable = false)
-//    public Integer getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(Integer userId) {
-//        this.userId = userId;
-//    }
-//
-//    @Basic
-//    @Column(name = "ROLE_ID", nullable = false)
-//    public Integer getRoleId() {
-//        return roleId;
-//    }
-//
-//    public void setRoleId(Integer roleId) {
-//        this.roleId = roleId;
-//    }
-
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_ASSIGNED", nullable = false)
     public Date getDateAssigned() {
@@ -68,26 +46,6 @@ public class UserRoleEntity implements Serializable {
         this.dateAssigned = dateAssigned;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
-    public RolesEntity getRolesEntity() {
-        return rolesEntity;
-    }
-
-    public void setRolesEntity(RolesEntity rolesEntity) {
-        this.rolesEntity = rolesEntity;
-    }
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
-    public UsersEntity getUsersEntity() {
-        return usersEntity;
-    }
-
-    public void setUsersEntity(UsersEntity usersEntity) {
-        this.usersEntity = usersEntity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -95,11 +53,11 @@ public class UserRoleEntity implements Serializable {
 
         UserRoleEntity that = (UserRoleEntity) o;
 
-        if (addOrKeep != that.addOrKeep) return false;
         if (userRoleId != null ? !userRoleId.equals(that.userRoleId) : that.userRoleId != null) return false;
         if (dateAssigned != null ? !dateAssigned.equals(that.dateAssigned) : that.dateAssigned != null) return false;
-        if (rolesEntity != null ? !rolesEntity.equals(that.rolesEntity) : that.rolesEntity != null) return false;
-        return usersEntity != null ? usersEntity.equals(that.usersEntity) : that.usersEntity == null;
+        if (rolesByRoleId != null ? !rolesByRoleId.equals(that.rolesByRoleId) : that.rolesByRoleId != null)
+            return false;
+        return usersByUserId != null ? usersByUserId.equals(that.usersByUserId) : that.usersByUserId == null;
 
     }
 
@@ -107,10 +65,29 @@ public class UserRoleEntity implements Serializable {
     public int hashCode() {
         int result = userRoleId != null ? userRoleId.hashCode() : 0;
         result = 31 * result + (dateAssigned != null ? dateAssigned.hashCode() : 0);
-        result = 31 * result + (rolesEntity != null ? rolesEntity.hashCode() : 0);
-        result = 31 * result + (usersEntity != null ? usersEntity.hashCode() : 0);
-        result = 31 * result + (addOrKeep ? 1 : 0);
+        result = 31 * result + (rolesByRoleId != null ? rolesByRoleId.hashCode() : 0);
+        result = 31 * result + (usersByUserId != null ? usersByUserId.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID", nullable = false)
+    public RolesEntity getRolesByRoleId() {
+        return rolesByRoleId;
+    }
+
+    public void setRolesByRoleId(RolesEntity rolesByRoleId) {
+        this.rolesByRoleId = rolesByRoleId;
+    }
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false)
+    public UsersEntity getUsersByUserId() {
+        return usersByUserId;
+    }
+
+    public void setUsersByUserId(UsersEntity usersByUserId) {
+        this.usersByUserId = usersByUserId;
     }
 
     @Override
@@ -118,8 +95,8 @@ public class UserRoleEntity implements Serializable {
         return "UserRoleEntity{" +
                 "userRoleId=" + userRoleId +
                 ", dateAssigned=" + dateAssigned +
-                ", rolesEntity=" + rolesEntity.getRoleId() +
-                ", usersEntity=" + usersEntity.getUserId() +
+                ", rolesByRoleId=" + rolesByRoleId +
+                ", usersByUserId=" + usersByUserId +
                 ", addOrKeep=" + addOrKeep +
                 '}';
     }

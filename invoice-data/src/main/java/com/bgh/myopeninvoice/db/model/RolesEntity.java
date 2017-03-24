@@ -2,7 +2,7 @@ package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -12,7 +12,7 @@ import java.util.List;
 public class RolesEntity implements Serializable {
     private Integer roleId;
     private String roleName;
-    private List<UserRoleEntity> userRoleEntity;
+    private Collection<UserRoleEntity> userRolesByRoleId;
 
     @Id
     @Column(name = "ROLE_ID", nullable = false)
@@ -34,15 +34,6 @@ public class RolesEntity implements Serializable {
         this.roleName = roleName;
     }
 
-    @OneToMany(mappedBy = "rolesEntity", fetch = FetchType.LAZY)
-    public List<UserRoleEntity> getUserRoleEntity() {
-        return userRoleEntity;
-    }
-
-    public void setUserRoleEntity(List<UserRoleEntity> userRoleEntity) {
-        this.userRoleEntity = userRoleEntity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,6 +52,15 @@ public class RolesEntity implements Serializable {
         int result = roleId != null ? roleId.hashCode() : 0;
         result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "rolesByRoleId", fetch = FetchType.LAZY)
+    public Collection<UserRoleEntity> getUserRolesByRoleId() {
+        return userRolesByRoleId;
+    }
+
+    public void setUserRolesByRoleId(Collection<UserRoleEntity> userRolesByRoleId) {
+        this.userRolesByRoleId = userRolesByRoleId;
     }
 
     @Override
