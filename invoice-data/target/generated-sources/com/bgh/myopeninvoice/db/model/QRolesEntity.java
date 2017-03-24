@@ -24,7 +24,7 @@ public class QRolesEntity extends EntityPathBase<RolesEntity> {
 
     public final StringPath roleName = createString("roleName");
 
-    public final ListPath<UserRoleEntity, QUserRoleEntity> userRoleEntity = this.<UserRoleEntity, QUserRoleEntity>createList("userRoleEntity", UserRoleEntity.class, QUserRoleEntity.class, PathInits.DIRECT2);
+    public final CollectionPath<UserRoleEntity, QUserRoleEntity> userRolesByRoleId = this.<UserRoleEntity, QUserRoleEntity>createCollection("userRolesByRoleId", UserRoleEntity.class, QUserRoleEntity.class, PathInits.DIRECT2);
 
     public QRolesEntity(String variable) {
         super(RolesEntity.class, forVariable(variable));

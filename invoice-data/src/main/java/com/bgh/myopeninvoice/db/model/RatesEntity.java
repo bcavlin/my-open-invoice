@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.db.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -18,6 +19,9 @@ public class RatesEntity implements Serializable {
     private Integer rateForUser;
     private Date validFrom;
     private Date validTo;
+    private Collection<InvoiceEntity> invoicesByRateId;
+    private CompaniesEntity companiesByCompanyId;
+    private UsersEntity usersByRateForUser;
 
     @Id
     @GeneratedValue
@@ -118,6 +122,35 @@ public class RatesEntity implements Serializable {
         result = 31 * result + (validFrom != null ? validFrom.hashCode() : 0);
         result = 31 * result + (validTo != null ? validTo.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "ratesByRate")
+    public Collection<InvoiceEntity> getInvoicesByRateId() {
+        return invoicesByRateId;
+    }
+
+    public void setInvoicesByRateId(Collection<InvoiceEntity> invoicesByRateId) {
+        this.invoicesByRateId = invoicesByRateId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
+    public CompaniesEntity getCompaniesByCompanyId() {
+        return companiesByCompanyId;
+    }
+
+    public void setCompaniesByCompanyId(CompaniesEntity companiesByCompanyId) {
+        this.companiesByCompanyId = companiesByCompanyId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "RATE_FOR_USER", referencedColumnName = "USER_ID", insertable = false, updatable = false)
+    public UsersEntity getUsersByRateForUser() {
+        return usersByRateForUser;
+    }
+
+    public void setUsersByRateForUser(UsersEntity usersByRateForUser) {
+        this.usersByRateForUser = usersByRateForUser;
     }
 
     @Override

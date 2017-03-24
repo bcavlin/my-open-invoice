@@ -20,23 +20,21 @@ public class QUsersEntity extends EntityPathBase<UsersEntity> {
 
     public static final QUsersEntity usersEntity = new QUsersEntity("usersEntity");
 
-    public final BooleanPath enabled = createBoolean("enabled");
+    public final CollectionPath<ContactsEntity, QContactsEntity> contactsesByUserId = this.<ContactsEntity, QContactsEntity>createCollection("contactsesByUserId", ContactsEntity.class, QContactsEntity.class, PathInits.DIRECT2);
 
-    public final StringPath firstName = createString("firstName");
+    public final BooleanPath enabled = createBoolean("enabled");
 
     public final DatePath<java.util.Date> lastLogged = createDate("lastLogged", java.util.Date.class);
 
-    public final StringPath lastName = createString("lastName");
-
-    public final StringPath middleName = createString("middleName");
-
     public final StringPath password = createString("password");
+
+    public final CollectionPath<RatesEntity, QRatesEntity> ratesByUserId = this.<RatesEntity, QRatesEntity>createCollection("ratesByUserId", RatesEntity.class, QRatesEntity.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> userId = createNumber("userId", Integer.class);
 
     public final StringPath username = createString("username");
 
-    public final ListPath<UserRoleEntity, QUserRoleEntity> userRoleEntities = this.<UserRoleEntity, QUserRoleEntity>createList("userRoleEntities", UserRoleEntity.class, QUserRoleEntity.class, PathInits.DIRECT2);
+    public final CollectionPath<UserRoleEntity, QUserRoleEntity> userRolesByUserId = this.<UserRoleEntity, QUserRoleEntity>createCollection("userRolesByUserId", UserRoleEntity.class, QUserRoleEntity.class, PathInits.DIRECT2);
 
     public QUsersEntity(String variable) {
         super(UsersEntity.class, forVariable(variable));

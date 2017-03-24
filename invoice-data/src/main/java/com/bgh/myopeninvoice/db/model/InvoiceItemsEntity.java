@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.db.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -16,6 +17,8 @@ public class InvoiceItemsEntity implements Serializable {
     private String code;
     private BigDecimal hoursTotal;
     private BigDecimal value;
+    private InvoiceEntity invoiceByInvoiceId;
+    private Collection<TimeSheetEntity> timeSheetsByInvoiceItemId;
 
     @Id
     @GeneratedValue
@@ -105,6 +108,25 @@ public class InvoiceItemsEntity implements Serializable {
         result = 31 * result + (hoursTotal != null ? hoursTotal.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "INVOICE_ID", referencedColumnName = "INVOICE_ID", nullable = false, insertable = false, updatable = false)
+    public InvoiceEntity getInvoiceByInvoiceId() {
+        return invoiceByInvoiceId;
+    }
+
+    public void setInvoiceByInvoiceId(InvoiceEntity invoiceByInvoiceId) {
+        this.invoiceByInvoiceId = invoiceByInvoiceId;
+    }
+
+    @OneToMany(mappedBy = "invoiceItemsByInvoiceItemId")
+    public Collection<TimeSheetEntity> getTimeSheetsByInvoiceItemId() {
+        return timeSheetsByInvoiceItemId;
+    }
+
+    public void setTimeSheetsByInvoiceItemId(Collection<TimeSheetEntity> timeSheetsByInvoiceItemId) {
+        this.timeSheetsByInvoiceItemId = timeSheetsByInvoiceItemId;
     }
 
     @Override

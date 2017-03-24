@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.db.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -19,6 +20,10 @@ public class CompaniesEntity implements Serializable {
     private Integer ownedByMe;
     private String businessNumber;
     private byte[] companyLogo;
+    private Collection<CompanyContactEntity> companyContactsByCompanyId;
+    private Collection<InvoiceEntity> invoicesByCompanyId;
+    private Collection<InvoiceEntity> invoicesByCompanyId_0;
+    private Collection<RatesEntity> ratesByCompanyId;
 
     @Id
     @GeneratedValue
@@ -39,16 +44,6 @@ public class CompaniesEntity implements Serializable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    @Basic
-    @Column(name = "BUSINESS_NAME", nullable = true, length = 255)
-    public String getBusinessName() {
-        return businessName;
-    }
-
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
     }
 
     @Basic
@@ -120,7 +115,6 @@ public class CompaniesEntity implements Serializable {
 
         if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
         if (companyName != null ? !companyName.equals(that.companyName) : that.companyName != null) return false;
-        if (businessName != null ? !businessName.equals(that.businessName) : that.businessName != null) return false;
         if (addressLine1 != null ? !addressLine1.equals(that.addressLine1) : that.addressLine1 != null) return false;
         if (addressLine2 != null ? !addressLine2.equals(that.addressLine2) : that.addressLine2 != null) return false;
         if (phone1 != null ? !phone1.equals(that.phone1) : that.phone1 != null) return false;
@@ -136,7 +130,6 @@ public class CompaniesEntity implements Serializable {
     public int hashCode() {
         int result = companyId != null ? companyId.hashCode() : 0;
         result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
-        result = 31 * result + (businessName != null ? businessName.hashCode() : 0);
         result = 31 * result + (addressLine1 != null ? addressLine1.hashCode() : 0);
         result = 31 * result + (addressLine2 != null ? addressLine2.hashCode() : 0);
         result = 31 * result + (phone1 != null ? phone1.hashCode() : 0);
@@ -146,18 +139,39 @@ public class CompaniesEntity implements Serializable {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "CompaniesEntity{" +
-                "companyId=" + companyId +
-                ", companyName='" + companyName + '\'' +
-                ", businessName='" + businessName + '\'' +
-                ", addressLine1='" + addressLine1 + '\'' +
-                ", addressLine2='" + addressLine2 + '\'' +
-                ", phone1='" + phone1 + '\'' +
-                ", ownedByMe=" + ownedByMe +
-                ", businessNumber='" + businessNumber + '\'' +
-                ", companyLogo=" + Arrays.toString(companyLogo) +
-                '}';
+    @OneToMany(mappedBy = "companiesByCompanyId")
+    public Collection<CompanyContactEntity> getCompanyContactsByCompanyId() {
+        return companyContactsByCompanyId;
+    }
+
+    public void setCompanyContactsByCompanyId(Collection<CompanyContactEntity> companyContactsByCompanyId) {
+        this.companyContactsByCompanyId = companyContactsByCompanyId;
+    }
+
+    @OneToMany(mappedBy = "companiesByCompanyFrom")
+    public Collection<InvoiceEntity> getInvoicesByCompanyId() {
+        return invoicesByCompanyId;
+    }
+
+    public void setInvoicesByCompanyId(Collection<InvoiceEntity> invoicesByCompanyId) {
+        this.invoicesByCompanyId = invoicesByCompanyId;
+    }
+
+    @OneToMany(mappedBy = "companiesByCompanyTo")
+    public Collection<InvoiceEntity> getInvoicesByCompanyId_0() {
+        return invoicesByCompanyId_0;
+    }
+
+    public void setInvoicesByCompanyId_0(Collection<InvoiceEntity> invoicesByCompanyId_0) {
+        this.invoicesByCompanyId_0 = invoicesByCompanyId_0;
+    }
+
+    @OneToMany(mappedBy = "companiesByCompanyId")
+    public Collection<RatesEntity> getRatesByCompanyId() {
+        return ratesByCompanyId;
+    }
+
+    public void setRatesByCompanyId(Collection<RatesEntity> ratesByCompanyId) {
+        this.ratesByCompanyId = ratesByCompanyId;
     }
 }

@@ -60,14 +60,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-            if (user.get().getUserRoleEntities().size() == 0) {
+            if (user.get().getUserRolesByUserId().size() == 0) {
                 logger.error("Username [{}] does not have any roles assigned", username);
                 throw new AuthenticationServiceException("User does not have any roles assigned");
             } else {
-                for (UserRoleEntity userRoleEntity : user.get().getUserRoleEntities()) {
-                    logger.info("Authority [{}] added for user [{}]", userRoleEntity.getRolesEntity()
+                for (UserRoleEntity userRoleEntity : user.get().getUserRolesByUserId()) {
+                    logger.info("Authority [{}] added for user [{}]", userRoleEntity.getRolesByRoleId()
                             .getRoleName(), username);
-                    authorities.add(new SimpleGrantedAuthority(userRoleEntity.getRolesEntity().getRoleName()));
+                    authorities.add(new SimpleGrantedAuthority(userRoleEntity.getRolesByRoleId().getRoleName()));
                 }
             }
 

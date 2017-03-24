@@ -2,9 +2,11 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
 
     <persistence-unit name="invoice-db-persistence">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>com.bgh.myopeninvoice.db.model.AttachmentEntity</class>
         <class>com.bgh.myopeninvoice.db.model.CompaniesEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.ContactsEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.CompanyContactEntity</class>
         <class>com.bgh.myopeninvoice.db.model.InvoiceEntity</class>
         <class>com.bgh.myopeninvoice.db.model.InvoiceItemsEntity</class>
         <class>com.bgh.myopeninvoice.db.model.RatesEntity</class>
@@ -18,10 +20,11 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.connection.url"
-                      value="jdbc:h2:file:/home/bcavlin/IdeaProjects/myopeninvoice/invoice-db/invoiceDB;AUTO_SERVER=TRUE"/>
+                      value="jdbc:h2:file:/home/bcavlin/IdeaProjects/my-open-invoice/invoice-db/invoiceDB;AUTO_SERVER=TRUE"/>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
             <property name="hibernate.connection.username"/>
             <property name="hibernate.connection.password"/>
+            <property name="hibernate.default_schema" value="INVOICE"/>
         </properties>
     </persistence-unit>
 </persistence>
