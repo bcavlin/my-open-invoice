@@ -43,5 +43,10 @@
             <to-view-id>/secured/admin/Users.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>to-contacts-page</from-outcome>
+            <to-view-id>/secured/Contacts.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

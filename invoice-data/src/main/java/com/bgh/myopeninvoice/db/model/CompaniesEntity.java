@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -13,7 +16,6 @@ import java.util.Collection;
 public class CompaniesEntity implements Serializable {
     private Integer companyId;
     private String companyName;
-    private String businessName;
     private String addressLine1;
     private String addressLine2;
     private String phone1;
@@ -139,6 +141,7 @@ public class CompaniesEntity implements Serializable {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "companiesByCompanyId")
     public Collection<CompanyContactEntity> getCompanyContactsByCompanyId() {
         return companyContactsByCompanyId;

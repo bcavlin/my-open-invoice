@@ -137,7 +137,7 @@ public class UsersBean implements Serializable {
             if (success) {
                 logger.info("Adding/editing entity {}", selectedUsersEntity.toString());
                 RequestContext.getCurrentInstance().execute("PF('users-form-dialog').hide()");
-                selectedUsersEntity = invoiceDAO.saveUsersEntity(selectedUsersEntity);
+                selectedUsersEntity = invoiceDAO.getUsersRepository().save(selectedUsersEntity);
                 refresh();
                 FacesUtils.addSuccessMessage("Entity record updated");
                 setPassword(null);
@@ -165,7 +165,7 @@ public class UsersBean implements Serializable {
     public void deleteEntryListener(ActionEvent event) {
         if (selectedUsersEntity != null) {
             logger.info("Deleting entity {}", selectedUsersEntity.toString());
-            invoiceDAO.deleteUsersEntity(selectedUsersEntity.getUserId());
+            invoiceDAO.getUsersRepository().delete(selectedUsersEntity.getUserId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
             selectedUsersEntity = null;

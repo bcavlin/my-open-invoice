@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,8 +13,6 @@ import java.io.Serializable;
 @Table(name = "COMPANY_CONTACT", schema = "INVOICE", catalog = "INVOICEDB")
 public class CompanyContactEntity implements Serializable{
     private Integer companyContactId;
-    private Integer contactId;
-    private Integer companyId;
     private CompaniesEntity companiesByCompanyId;
     private ContactsEntity contactsByContactId;
 
@@ -26,46 +27,26 @@ public class CompanyContactEntity implements Serializable{
         this.companyContactId = companyContactId;
     }
 
-    @Basic
-    @Column(name = "CONTACT_ID", nullable = false)
-    public Integer getContactId() {
-        return contactId;
-    }
-
-    public void setContactId(Integer contactId) {
-        this.contactId = contactId;
-    }
-
-    @Basic
-    @Column(name = "COMPANY_ID", nullable = false)
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof CompanyContactEntity)) return false;
 
         CompanyContactEntity that = (CompanyContactEntity) o;
 
         if (companyContactId != null ? !companyContactId.equals(that.companyContactId) : that.companyContactId != null)
             return false;
-        if (contactId != null ? !contactId.equals(that.contactId) : that.contactId != null) return false;
-        if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
+        if (companiesByCompanyId != null ? !companiesByCompanyId.equals(that.companiesByCompanyId) : that.companiesByCompanyId != null)
+            return false;
+        return contactsByContactId != null ? contactsByContactId.equals(that.contactsByContactId) : that.contactsByContactId == null;
 
-        return true;
     }
 
     @Override
     public int hashCode() {
         int result = companyContactId != null ? companyContactId.hashCode() : 0;
-        result = 31 * result + (contactId != null ? contactId.hashCode() : 0);
-        result = 31 * result + (companyId != null ? companyId.hashCode() : 0);
+        result = 31 * result + (companiesByCompanyId != null ? companiesByCompanyId.hashCode() : 0);
+        result = 31 * result + (contactsByContactId != null ? contactsByContactId.hashCode() : 0);
         return result;
     }
 
@@ -79,6 +60,7 @@ public class CompanyContactEntity implements Serializable{
         this.companiesByCompanyId = companiesByCompanyId;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CONTACT_ID", referencedColumnName = "CONTACT_ID", nullable = false, insertable = false, updatable = false)
     public ContactsEntity getContactsByContactId() {
@@ -93,8 +75,6 @@ public class CompanyContactEntity implements Serializable{
     public String toString() {
         return "CompanyContactEntity{" +
                 "companyContactId=" + companyContactId +
-                ", contactId=" + contactId +
-                ", companyId=" + companyId +
                 '}';
     }
 }

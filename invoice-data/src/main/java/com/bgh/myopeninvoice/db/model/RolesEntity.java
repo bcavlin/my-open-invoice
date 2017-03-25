@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -54,7 +57,8 @@ public class RolesEntity implements Serializable {
         return result;
     }
 
-    @OneToMany(mappedBy = "rolesByRoleId", fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.TRUE)
+    @OneToMany(mappedBy = "rolesByRoleId")
     public Collection<UserRoleEntity> getUserRolesByRoleId() {
         return userRolesByRoleId;
     }

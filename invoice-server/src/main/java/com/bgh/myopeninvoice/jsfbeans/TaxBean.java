@@ -56,7 +56,7 @@ public class TaxBean implements Serializable {
     public void addOrEditEntryListener(ActionEvent event) {
         if (selectedTaxEntity != null) {
             logger.info("Adding/editing entity {}", selectedTaxEntity.toString());
-            selectedTaxEntity = invoiceDAO.saveTaxEntity(selectedTaxEntity);
+            selectedTaxEntity = invoiceDAO.getTaxRepository().save(selectedTaxEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
         } else {
@@ -67,7 +67,7 @@ public class TaxBean implements Serializable {
     public void deleteEntryListener(ActionEvent event) {
         if (selectedTaxEntity != null) {
             logger.info("Deleting entity {}", selectedTaxEntity.toString());
-            invoiceDAO.deleteTaxEntity(selectedTaxEntity.getTaxId());
+            invoiceDAO.getTaxRepository().delete(selectedTaxEntity.getTaxId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
             selectedTaxEntity = null;

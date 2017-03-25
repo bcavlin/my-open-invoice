@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="templates/ApplicationTemplate.xhtml">
+    <ui:define name="center">
+        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+            <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
+                <p:commandButton value="New Contact" icon="ui-icon-extlink" style="margin-right: 15px;"
+                                 onclick="PF('contacts-form-dialog').show();"
+                                 actionListener="#{contactsBean.newEntryListener}"
+                                 update="main-form, contacts-form"/>
+                <p:commandButton value="Edit Contact (#{contactsBean.selectedContactsEntity.email})"
+                                 icon="ui-icon-pencil"
+                                 rendered="#{!empty contactsBean.selectedContactsEntity and contactsBean.selectedContactsEntity.contactId gt 0}"
+                                 style="margin-right: 15px;" onclick="PF('contacts-form-dialog').show();"
+                                 update="main-form, contacts-form"/>
+                <p:commandButton
+                        value="Delete Contact (#{contactsBean.selectedContactsEntity.email})"
+                        icon="ui-icon-trash"
+                        rendered="#{!empty contactsBean.selectedContactsEntity and contactsBean.selectedContactsEntity.contactId gt 0}"
+                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
+
+                <p:confirmDialog message="Do you want to remove this contact item?"
+                                 showEffect="bounce"
+                                 header="Delete contact"
+                                 severity="alert"
+                                 widgetVar="confirmation1">
+                    <p:commandButton value="Remove (#{contactsBean.selectedContactsEntity.email})"
+                                     oncomplete="PF('confirmation1').hide()"
+                                     actionListener="#{contactsBean.deleteEntryListener}"
+                                     update="main-form, contacts-form" style="color: brown;"/>
+
+                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+
+            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+                <!--@elvariable id="contacts" type="com.bgh.myopeninvoice.db.model.ContactsEntity"-->
+                <p:dataTable id="contacts-table"
+                             var="contact"
+                             widgetVar="contacts-table"
+                             lazy="true"
+                             value="#{contactsBean.contactsEntityList}"
+                             paginator="true"
+                             rows="#{contactsBean.pageSize}"
+                             rowKey="#{contacts.contactId}"
+                             selection="#{contactsBean.selectedContactsEntity}"
+                             selectionMode="single"
+                             paginatorPosition="bottom"
+                             emptyMessage="No items found with given criteria"
+                             style="width: 2000px;"
+                             scrollable="true"
+                             scrollWidth="1280"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                    <p:ajax event="rowSelect" update="main-form"/>
+
+                    <p:column headerText="Id" sortBy="#{contact.contactId}" style="text-align:right;" width="50">
+                        <h:outputText value="#{contact.contactId}"/>
+                    </p:column>
+                    <p:column headerText="First name" sortBy="#{contact.firstName}" style="text-align:start;" width="221">
+                        <h:outputText value="#{contact.firstName}"/>
+                    </p:column>
+                    <p:column headerText="Middle n." sortBy="#{contact.middleName}" style="text-align:start;" width="90">
+                        <h:outputText value="#{contact.middleName}"/>
+                    </p:column>
+                    <p:column headerText="Last name" sortBy="#{contact.lastName}" style="text-align:start;" width="120">
+                        <h:outputText value="#{contact.lastName}"/>
+                    </p:column>
+                    <p:column headerText="Email" sortBy="#{contact.email}" style="text-align:start;" width="330">
+                        <f:facet name="filter">
+                            <p:inputText id="filter-text" placeholder="Search"
+                                         style="width: 99%">
+                                <p:ajax event="keyup" oncomplete="PF('contacts-table').filter()" delay="600"/>
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{contact.email}"/>
+                    </p:column>
+                    <p:column headerText="Phone 1" sortBy="#{contact.phone1}" style="text-align:left;" width="150">
+                        <h:outputText value="#{contact.phone1}"/>
+                    </p:column>
+                    <p:column headerText="Address 1" sortBy="#{contact.addressLine1}" style="text-align:left;" width="350">
+                        <h:outputText value="#{contact.addressLine1}"/>
+                    </p:column>
+                    <p:column headerText="Address 2" sortBy="#{contact.addressLine2}" style="text-align:left;">
+                        <h:outputText value="#{contact.addressLine2}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="contacts-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="Add/Edit Contact"/>
+            </f:facet>
+            <h:form id="contacts-form">
+                <h:panelGrid id="contacts-form-grid1" columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
+                    <p:outputLabel value="ID: "/>
+                    <h:outputText value="#{contactsBean.selectedContactsEntity.contactId}" style="margin-left: 5px;"/>
+
+                </h:panelGrid>
+                <h:panelGroup id="dialog-layout" layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit" actionListener="#{contactsBean.addOrEditEntryListener}"
+                                     update="main-form,@parent"
+                                     oncomplete="PF('contacts-form-dialog').hide();"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>
