@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -70,7 +73,8 @@ public class UserRoleEntity implements Serializable {
         return result;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID", nullable = false)
     public RolesEntity getRolesByRoleId() {
         return rolesByRoleId;

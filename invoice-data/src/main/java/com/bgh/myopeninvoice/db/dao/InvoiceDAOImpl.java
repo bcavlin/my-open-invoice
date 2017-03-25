@@ -1,9 +1,6 @@
 package com.bgh.myopeninvoice.db.dao;
 
-import com.bgh.myopeninvoice.db.model.RolesEntity;
-import com.bgh.myopeninvoice.db.model.TaxEntity;
-import com.bgh.myopeninvoice.db.model.UserRoleEntity;
-import com.bgh.myopeninvoice.db.model.UsersEntity;
+import com.bgh.myopeninvoice.db.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,21 +27,12 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
-    @Transactional
-    @Override
-    public UserRoleEntity storeUserRoleEntity(List<UserRoleEntity> existingRoles, List<String> newRoles) {
-        return null;
-    }
-
-    @Transactional
-    @Override
-    public TaxEntity saveTaxEntity(TaxEntity taxEntity) {
-        return taxRepository.save(taxEntity);
-    }
+    @Autowired
+    private ContactsRepository contactsEntity;
 
     @Override
-    public void deleteTaxEntity(Integer id) {
-        taxRepository.delete(id);
+    public ContactsRepository getContactsRepository() {
+        return contactsEntity;
     }
 
     @Override
@@ -60,18 +48,6 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Override
     public RolesRepository getRolesRepository() {
         return rolesRepository;
-    }
-
-    @Transactional
-    @Override
-    public UsersEntity saveUsersEntity(UsersEntity usersEntity) {
-        return usersRepository.save(usersEntity);
-    }
-
-    @Transactional
-    @Override
-    public void deleteUsersEntity(Integer id) {
-        usersRepository.delete(id);
     }
 
     @Transactional

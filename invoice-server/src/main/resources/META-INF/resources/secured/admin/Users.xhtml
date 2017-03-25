@@ -58,13 +58,16 @@
                              paginatorPosition="bottom"
                              scrollable="true"
                              scrollWidth="1280"
+                             style="width: 2000px;"
                              emptyMessage="No items found with given criteria"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
                     <p:ajax event="rowSelect" update="main-form,roles-form"
                             listener="#{usersBean.ajaxChangeRowListener}"/>
-
-                    <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="70">
+                    <p:column width="10">
+                        <p:rowToggler/>
+                    </p:column>
+                    <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="50">
                         <h:outputText value="#{user.userId}"/>
                     </p:column>
                     <p:column headerText="Username" sortBy="#{user.username}" style="text-align:left;" width="150">
@@ -80,9 +83,36 @@
                               width="120">
                         <h:outputText value="#{user.lastLogged}"/>
                     </p:column>
-                    <p:column headerText="Password" sortBy="#{user.password}" style="text-align:left;" width="600">
+                    <p:column headerText="Password" sortBy="#{user.password}" style="text-align:left;">
                         <h:outputText value="#{user.password}"/>
                     </p:column>
+
+                    <p:rowExpansion id="expand">
+                        <p:dataTable id="contacts" value="#{user.contactsesByUserId}" var="contact" paginator="false" style="margin-left: 20px;">
+                            <p:column headerText="First name" style="text-align:start;" width="221">
+                                <h:outputText value="#{contact.firstName}"/>
+                            </p:column>
+                            <p:column headerText="Middle n." style="text-align:start;" width="80">
+                                <h:outputText value="#{contact.middleName}"/>
+                            </p:column>
+                            <p:column headerText="Last name" style="text-align:start;" width="120">
+                                <h:outputText value="#{contact.lastName}"/>
+                            </p:column>
+                            <p:column headerText="Email" style="text-align:start;" width="330">
+                                <h:outputText value="#{contact.email}"/>
+                            </p:column>
+                            <p:column headerText="Phone 1" style="text-align:left;" width="150">
+                                <h:outputText value="#{contact.phone1}"/>
+                            </p:column>
+                            <p:column headerText="Address 1" style="text-align:left;" width="350">
+                                <h:outputText value="#{contact.addressLine1}"/>
+                            </p:column>
+                            <p:column headerText="Address 2" style="text-align:left;">
+                                <h:outputText value="#{contact.addressLine2}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:rowExpansion>
                 </p:dataTable>
             </h:panelGroup>
 
@@ -136,10 +166,10 @@
 
                     <p:outputLabel value="Password: "/>
                     <p:password id="password1" value="#{usersBean.password}" maxlength="30"
-                                style="margin-left: 5px;"/>
+                                style="margin-left: 5px;" feedback="true"/>
                     <p:outputLabel value="Password Repeat: "/>
                     <p:password id="password2" value="#{usersBean.passwordRepeat}" maxlength="30"
-                                style="margin-left: 5px;" validatorMessage="Passwords must match">
+                                style="margin-left: 5px;" validatorMessage="Passwords must match" feedback="true">
                         <f:validator validatorId="duplicateFieldValidator"/>
                         <f:attribute name="attribute1" value="#{component.parent.parent.clientId}:password1"/>
                     </p:password>

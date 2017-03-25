@@ -1,8 +1,6 @@
 package com.bgh.myopeninvoice.db.dao;
 
 import com.bgh.myopeninvoice.db.model.RolesEntity;
-import com.bgh.myopeninvoice.db.model.TaxEntity;
-import com.bgh.myopeninvoice.db.model.UserRoleEntity;
 import com.bgh.myopeninvoice.db.model.UsersEntity;
 
 import java.util.List;
@@ -18,15 +16,7 @@ public interface InvoiceDAO {
 
     RolesRepository getRolesRepository();
 
-    UserRoleEntity storeUserRoleEntity(List<UserRoleEntity> existingRoles, List<String> newRoles);
-
-    TaxEntity saveTaxEntity(TaxEntity taxEntity);
-
-    void deleteTaxEntity(Integer id);
-
-    UsersEntity saveUsersEntity(UsersEntity usersEntity);
-
-    void deleteUsersEntity(Integer id);
+    ContactsRepository getContactsRepository();
 
     void saveUserRolesEntity(UsersEntity user, List<RolesEntity> targetRoles);
 

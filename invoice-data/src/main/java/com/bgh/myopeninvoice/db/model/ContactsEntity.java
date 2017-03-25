@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -33,7 +36,7 @@ public class ContactsEntity {
     }
 
     @Basic
-    @Column(name = "FIRST_NAME", nullable = true, length = 100)
+    @Column(name = "FIRST_NAME", nullable = false, length = 100)
     public String getFirstName() {
         return firstName;
     }
@@ -63,7 +66,7 @@ public class ContactsEntity {
     }
 
     @Basic
-    @Column(name = "EMAIL", nullable = true, length = 255)
+    @Column(name = "EMAIL", nullable = false, length = 255)
     public String getEmail() {
         return email;
     }
@@ -73,7 +76,7 @@ public class ContactsEntity {
     }
 
     @Basic
-    @Column(name = "ADDRESS_LINE1", nullable = false, length = 500)
+    @Column(name = "ADDRESS_LINE1", nullable = true, length = 500)
     public String getAddressLine1() {
         return addressLine1;
     }
@@ -146,6 +149,7 @@ public class ContactsEntity {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "contactsByContactId")
     public Collection<CompanyContactEntity> getCompanyContactsByContactId() {
         return companyContactsByContactId;

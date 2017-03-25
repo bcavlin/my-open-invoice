@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -97,6 +100,7 @@ public class UsersEntity implements Serializable {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "usersByUserId")
     public Collection<ContactsEntity> getContactsesByUserId() {
         return contactsesByUserId;
@@ -115,7 +119,8 @@ public class UsersEntity implements Serializable {
         this.ratesByUserId = ratesByUserId;
     }
 
-    @OneToMany(mappedBy = "usersByUserId", fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "usersByUserId")
     public Collection<UserRoleEntity> getUserRolesByUserId() {
         return userRolesByUserId;
     }
