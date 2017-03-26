@@ -153,7 +153,10 @@
                 <h:outputText value="Add/Edit User"/>
             </f:facet>
             <h:form id="users-form">
+
+                <p:focus for="username"/>
                 <p:messages autoUpdate="true"/>
+
                 <h:panelGrid id="users-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
                              style="padding-top: 3px;">
                     <p:outputLabel value="ID: "/>
@@ -162,7 +165,7 @@
                     <p:inputText value="#{usersBean.selectedUsersEntity.username}" style="margin-left: 5px;"
                                  required="true"
                                  maxlength="50"
-                                 immediate="true"/>
+                                 immediate="true" id="username"/>
 
                     <p:outputLabel value="Password: "/>
                     <p:password id="password1" value="#{usersBean.password}" maxlength="30"
@@ -187,6 +190,7 @@
                         </ui:repeat>
                     </h:panelGroup>
                 </h:panelGrid>
+
                 <h:panelGroup id="dialog-layout-1" layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit"

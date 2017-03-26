@@ -4,6 +4,7 @@ import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.TaxEntity;
 import com.bgh.myopeninvoice.jsfbeans.model.TaxEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,8 @@ public class TaxBean implements Serializable {
 
     public void addOrEditEntryListener(ActionEvent event) {
         if (selectedTaxEntity != null) {
+            RequestContext.getCurrentInstance().execute("PF('tax-form-dialog').hide()");
+
             logger.info("Adding/editing entity {}", selectedTaxEntity.toString());
             selectedTaxEntity = invoiceDAO.getTaxRepository().save(selectedTaxEntity);
             refresh();

@@ -14,6 +14,7 @@ com/bgh/myopeninvoice/db/dao/UserRoleRepository.class
 com/bgh/myopeninvoice/db/model/RolesEntity.class
 com/bgh/myopeninvoice/db/model/TaxEntity.class
 com/bgh/myopeninvoice/db/dao/RolesRepository.class
+com/bgh/myopeninvoice/db/dao/ContactsRepository.class
 com/bgh/myopeninvoice/db/model/InvoiceEntity.class
 com/bgh/myopeninvoice/db/model/QRolesEntity.class
 com/bgh/myopeninvoice/db/model/RatesEntity.class

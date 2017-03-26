@@ -49,6 +49,11 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>rome</groupId>
+            <artifactId>rome</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -59,6 +64,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

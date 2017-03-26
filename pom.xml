@@ -124,6 +124,12 @@
                 <artifactId>querydsl-apt</artifactId>
                 <version>4.1.4</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/rome/rome -->
+            <dependency>
+                <groupId>rome</groupId>
+                <artifactId>rome</artifactId>
+                <version>1.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

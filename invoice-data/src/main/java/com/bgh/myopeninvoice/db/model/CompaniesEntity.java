@@ -16,10 +16,11 @@ import java.util.Collection;
 public class CompaniesEntity implements Serializable {
     private Integer companyId;
     private String companyName;
+    private String shortName;
     private String addressLine1;
     private String addressLine2;
     private String phone1;
-    private Integer ownedByMe;
+    private Boolean ownedByMe;
     private String businessNumber;
     private byte[] companyLogo;
     private Collection<CompanyContactEntity> companyContactsByCompanyId;
@@ -39,13 +40,23 @@ public class CompaniesEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "COMPANY_NAME", nullable = false, length = 255)
+    @Column(name = "COMPANY_NAME", nullable = false, length = 255, unique = true)
     public String getCompanyName() {
         return companyName;
     }
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    @Basic
+    @Column(name = "SHORT_NAME", nullable = false, length = 10, unique = true)
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     @Basic
@@ -80,11 +91,11 @@ public class CompaniesEntity implements Serializable {
 
     @Basic
     @Column(name = "OWNED_BY_ME", nullable = false)
-    public Integer getOwnedByMe() {
+    public Boolean getOwnedByMe() {
         return ownedByMe;
     }
 
-    public void setOwnedByMe(Integer ownedByMe) {
+    public void setOwnedByMe(Boolean ownedByMe) {
         this.ownedByMe = ownedByMe;
     }
 
@@ -117,6 +128,7 @@ public class CompaniesEntity implements Serializable {
 
         if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
         if (companyName != null ? !companyName.equals(that.companyName) : that.companyName != null) return false;
+        if (shortName != null ? !shortName.equals(that.shortName) : that.shortName != null) return false;
         if (addressLine1 != null ? !addressLine1.equals(that.addressLine1) : that.addressLine1 != null) return false;
         if (addressLine2 != null ? !addressLine2.equals(that.addressLine2) : that.addressLine2 != null) return false;
         if (phone1 != null ? !phone1.equals(that.phone1) : that.phone1 != null) return false;
@@ -132,6 +144,7 @@ public class CompaniesEntity implements Serializable {
     public int hashCode() {
         int result = companyId != null ? companyId.hashCode() : 0;
         result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
+        result = 31 * result + (shortName != null ? shortName.hashCode() : 0);
         result = 31 * result + (addressLine1 != null ? addressLine1.hashCode() : 0);
         result = 31 * result + (addressLine2 != null ? addressLine2.hashCode() : 0);
         result = 31 * result + (phone1 != null ? phone1.hashCode() : 0);
@@ -176,5 +189,19 @@ public class CompaniesEntity implements Serializable {
 
     public void setRatesByCompanyId(Collection<RatesEntity> ratesByCompanyId) {
         this.ratesByCompanyId = ratesByCompanyId;
+    }
+
+    @Override
+    public String toString() {
+        return "CompaniesEntity{" +
+                "companyId=" + companyId +
+                ", companyName='" + companyName + '\'' +
+                ", shortName='" + shortName + '\'' +
+                ", addressLine1='" + addressLine1 + '\'' +
+                ", addressLine2='" + addressLine2 + '\'' +
+                ", phone1='" + phone1 + '\'' +
+                ", ownedByMe=" + ownedByMe +
+                ", businessNumber='" + businessNumber + '\'' +
+                '}';
     }
 }

@@ -18,6 +18,8 @@ public interface InvoiceDAO {
 
     ContactsRepository getContactsRepository();
 
+    CompaniesRepository getCompaniesRepository();
+
     void saveUserRolesEntity(UsersEntity user, List<RolesEntity> targetRoles);
 
 }

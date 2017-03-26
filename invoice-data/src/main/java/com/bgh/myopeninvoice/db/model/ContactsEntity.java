@@ -5,6 +5,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Created by bcavlin on 23/03/17.
@@ -147,6 +148,16 @@ public class ContactsEntity {
         result = 31 * result + (phone1 != null ? phone1.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         return result;
+    }
+
+    @Transient
+    public String getCompaniesList(){
+        if(companyContactsByContactId!=null) {
+            return companyContactsByContactId.stream().map(
+                    CompanyContactEntity::getCompaniesByCompanyId).
+                    map(CompaniesEntity::getCompanyName).collect(Collectors.joining(", "));
+        }
+        return null;
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)

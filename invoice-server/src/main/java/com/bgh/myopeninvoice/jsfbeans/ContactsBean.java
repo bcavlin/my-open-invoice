@@ -4,6 +4,7 @@ import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.ContactsEntity;
 import com.bgh.myopeninvoice.jsfbeans.model.ContactsEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,8 @@ public class ContactsBean implements Serializable {
 
     public void addOrEditEntryListener(ActionEvent event) {
         if (selectedContactsEntity != null) {
+            RequestContext.getCurrentInstance().execute("PF('contacts-form-dialog').hide()");
+
             logger.info("Adding/editing entity {}", selectedContactsEntity.toString());
             selectedContactsEntity = invoiceDAO.getContactsRepository().save(selectedContactsEntity);
             refresh();
