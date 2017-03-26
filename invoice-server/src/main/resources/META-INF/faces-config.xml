@@ -48,5 +48,15 @@
             <to-view-id>/secured/Contacts.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>to-companies-page</from-outcome>
+            <to-view-id>/secured/Companies.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>to-invoice-page</from-outcome>
+            <to-view-id>/secured/Invoice.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

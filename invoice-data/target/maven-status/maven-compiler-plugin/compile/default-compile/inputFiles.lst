@@ -25,6 +25,7 @@
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/dao/InvoiceDAOImpl.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/model/CompaniesEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/target/generated-sources/com/bgh/myopeninvoice/db/model/QUsersEntity.java
+/home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/dao/ContactsRepository.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/target/generated-sources/com/bgh/myopeninvoice/db/model/QCompaniesEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/model/TimeSheetEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/model/InvoiceEntity.java

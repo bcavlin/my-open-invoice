@@ -28,7 +28,7 @@ public class TaxEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "PERCENT", nullable = false, precision = 0)
+    @Column(name = "PERCENT", nullable = false, precision = 4)
     public BigDecimal getPercent() {
         return percent;
     }

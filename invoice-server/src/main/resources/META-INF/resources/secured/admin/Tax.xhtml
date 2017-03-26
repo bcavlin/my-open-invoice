@@ -31,7 +31,8 @@
                                  widgetVar="confirmation1">
                     <p:commandButton value="Remove ID (#{taxBean.selectedTaxEntity.taxId})"
                                      oncomplete="PF('confirmation1').hide()"
-                                     actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form" style="color: brown;"/>
+                                     actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form"
+                                     style="color: brown;"/>
 
                     <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
                 </p:confirmDialog>
@@ -55,24 +56,39 @@
 
                     <p:ajax event="rowSelect" update="main-form"/>
 
-                    <p:column headerText="Id" sortBy="#{tax.taxId}" style="text-align:right;" width="50">
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column headerText="Id" sortBy="#{tax.taxId}" style="text-align:right;" width="50"/>
+                            <p:column headerText="Percent" sortBy="#{tax.percent}" style="text-align:right;"
+                                      width="100"/>
+                            <p:column headerText="Identifier" sortBy="#{tax.identifier}" style="text-align:left;"/>
+                        </p:row>
+                        <p:row>
+                            <p:column/>
+                            <p:column/>
+                            <p:column filterBy="#{tax.identifier}">
+                                <f:facet name="filter">
+                                    <p:inputText placeholder="Type to search (500ms delay)"
+                                                 style="width: 99%" maxlength="20">
+                                        <p:ajax event="keyup" oncomplete="PF('tax-table').filter()" delay="600"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:column>
+                        </p:row>
+                    </p:columnGroup>
+
+                    <p:column style="text-align:right;" width="50">
                         <h:outputText value="#{tax.taxId}"/>
                     </p:column>
-                    <p:column headerText="Percent" sortBy="#{tax.percent}" style="text-align:right;" width="100">
+                    <p:column style="text-align:right;" width="100">
                         <h:outputText value="#{tax.percent}">
                             <f:convertNumber pattern="#,##0.00 %"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Identifier" sortBy="#{tax.identifier}" filterBy="#{tax.identifier}"
-                              style="text-align:left;" id="identifier">
-                        <f:facet name="filter">
-                            <p:inputText id="filter-text" placeholder="Search"
-                                         style="width: 99%">
-                                <p:ajax event="keyup" oncomplete="PF('tax-table').filter()" delay="600"/>
-                            </p:inputText>
-                        </f:facet>
+                    <p:column headerText="Identifier" style="text-align:left;">
                         <h:outputText value="#{tax.identifier}"/>
                     </p:column>
+
                 </p:dataTable>
             </h:panelGroup>
         </h:form>
@@ -84,12 +100,15 @@
                 <h:outputText value="Add/Edit Tax"/>
             </f:facet>
             <h:form id="tax-form">
-                <h:panelGrid id="tax-form-grid1" columns="2" columnClasses="two-column-1 two-column-2" style="padding-top: 3px;">
+                <p:focus for="input-tax"/>
+                <p:messages autoUpdate="true"/>
+                <h:panelGrid id="tax-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                             style="padding-top: 3px;">
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{taxBean.selectedTaxEntity.taxId}" style="margin-left: 5px;"/>
                     <p:outputLabel value="Tax (%): "/>
                     <p:inputNumber value="#{taxBean.selectedTaxEntity.percent}" id="input-tax"
-                                   style="margin-left: 5px;" decimalPlaces="0" minValue="0" maxValue="100"
+                                   style="margin-left: 5px;" decimalPlaces="2" minValue="0" maxValue="100"
                                    emptyValue="0" required="true">
                         <f:converter converterId="com.bgh.myopeninvoice.converters.PercentConverter"/>
                     </p:inputNumber>
@@ -106,5 +125,14 @@
             </h:form>
         </p:dialog>
     </ui:define>
+    <!--<ui:define name="feed">-->
+        <!--&lt;!&ndash;@elvariable id="feed" type="com.sun.syndication.feed.synd.SyndEntry"&ndash;&gt;-->
+        <!--<p:feedReader value="http://www.cra-arc.gc.ca/esrvc-srvce/rss/bsnsss-eng.xml" var="feed" size="10">-->
+            <!--<h:outputText value="#{feed.title}" style="font-weight: bold;display:block"/>-->
+            <!--<h:link value="#{feed.link}"/>-->
+            <!--<h:outputText value="#{feed}" escape="false"/>-->
+            <!--<p:separator style="margin-top: 5px;"/>-->
+        <!--</p:feedReader>-->
+    <!--</ui:define>-->
 </ui:composition>
 </html>

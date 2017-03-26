@@ -135,8 +135,9 @@ public class UsersBean implements Serializable {
             }
 
             if (success) {
-                logger.info("Adding/editing entity {}", selectedUsersEntity.toString());
                 RequestContext.getCurrentInstance().execute("PF('users-form-dialog').hide()");
+
+                logger.info("Adding/editing entity {}", selectedUsersEntity.toString());
                 selectedUsersEntity = invoiceDAO.getUsersRepository().save(selectedUsersEntity);
                 refresh();
                 FacesUtils.addSuccessMessage("Entity record updated");

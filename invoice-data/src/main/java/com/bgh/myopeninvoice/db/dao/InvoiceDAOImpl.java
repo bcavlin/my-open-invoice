@@ -30,9 +30,17 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Autowired
     private ContactsRepository contactsEntity;
 
+    @Autowired
+    private CompaniesRepository companiesRepository;
+
     @Override
     public ContactsRepository getContactsRepository() {
         return contactsEntity;
+    }
+
+    @Override
+    public CompaniesRepository getCompaniesRepository() {
+        return companiesRepository;
     }
 
     @Override

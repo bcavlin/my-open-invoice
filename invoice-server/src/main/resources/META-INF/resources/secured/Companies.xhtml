@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://java.sun.com/jsf/html">
+<ui:composition template="templates/ApplicationTemplate.xhtml">
+    <ui:define name="center">
+        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+            <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
+                <p:commandButton value="New Company" icon="ui-icon-extlink" style="margin-right: 15px;"
+                                 onclick="PF('companies-form-dialog').show();"
+                                 actionListener="#{companiesBean.newEntryListener}"
+                                 update="main-form, companies-form"/>
+                <p:commandButton value="Edit Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                                 icon="ui-icon-pencil"
+                                 rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 style="margin-right: 15px;" onclick="PF('companies-form-dialog').show();"
+                                 update="main-form,companies-form"/>
+                <p:commandButton
+                        value="Delete Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                        icon="ui-icon-trash"
+                        rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
+
+                <p:confirmDialog message="Do you want to remove this company item?"
+                                 showEffect="bounce"
+                                 header="Delete company"
+                                 severity="alert"
+                                 widgetVar="confirmation1">
+                    <p:commandButton value="Remove (#{companiesBean.selectedCompaniesEntity.shortName})"
+                                     oncomplete="PF('confirmation1').hide()"
+                                     actionListener="#{companiesBean.deleteEntryListener}"
+                                     update="main-form, companies-form" style="color: brown;"/>
+
+                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+
+            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+                <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.model.CompaniesEntity"-->
+                <p:dataTable id="companies-table"
+                             var="company"
+                             widgetVar="companies-table"
+                             lazy="true"
+                             value="#{companiesBean.companiesEntityList}"
+                             paginator="true"
+                             rows="#{companiesBean.pageSize}"
+                             rowKey="#{company.companyId}"
+                             selection="#{companiesBean.selectedCompaniesEntity}"
+                             selectionMode="single"
+                             paginatorPosition="bottom"
+                             emptyMessage="No items found with given criteria"
+                             style="width: 2000px;"
+                             scrollable="true"
+                             scrollWidth="1280"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                    <p:ajax event="rowSelect" update="main-form"/>
+
+                    <p:column headerText="Id" sortBy="#{company.companyId}" style="text-align:right;" width="50">
+                        <h:outputText value="#{company.companyId}"/>
+                    </p:column>
+
+                    <p:column headerText="Short" sortBy="#{company.shortName}" style="text-align:start;" width="70">
+                        <h:outputText value="#{company.shortName}"/>
+                    </p:column>
+
+                    <p:column headerText="Name" sortBy="#{company.companyName}" style="text-align:start;" width="300">
+                        <h:outputText value="#{company.companyName}"/>
+                    </p:column>
+
+                    <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="100">
+                        <h:outputText value="#{company.phone1}"/>
+                    </p:column>
+
+                    <p:column headerText="BIN" sortBy="#{company.businessNumber}" style="text-align:start;" width="100">
+                        <h:outputText value="#{company.businessNumber}"/>
+                    </p:column>
+
+                    <p:column headerText="Address 1" sortBy="#{company.addressLine1}" style="text-align:start;"
+                              width="300">
+                        <h:outputText value="#{company.addressLine1}"/>
+                    </p:column>
+
+                    <p:column headerText="Address 2" sortBy="#{company.addressLine2}" style="text-align:start;"
+                              width="300">
+                        <h:outputText value="#{company.addressLine2}"/>
+                    </p:column>
+
+                    <p:column headerText="Owned" sortBy="#{company.ownedByMe}" style="text-align:center;" width="70">
+                        <h:outputText value="#{company.ownedByMe?'Yes':'No'}"/>
+                    </p:column>
+
+                    <p:column headerText="Logo" style="text-align:start;">
+                        <o:graphicImage value="#{company.companyLogo}" dataURI="true" lastModified="#{startup.time}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="companies-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="Add/Edit Company"/>
+            </f:facet>
+            <h:form id="companies-form">
+
+                <!--<p:focus for="email"/>-->
+                <p:messages autoUpdate="true"/>
+
+                <h:panelGrid id="companies-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                             style="padding-top: 3px;">
+                    <p:outputLabel value="ID: "/>
+                    <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
+                                  style="margin-left: 5px;"/>
+
+                    <p:outputLabel value="Short name: "/>
+                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
+                                 maxlength="10"
+                                 size="20"
+                                 style="margin-left: 5px; text-transform: uppercase;"/>
+
+                    <p:outputLabel value="Company name: "/>
+                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
+                                 maxlength="255"
+                                 style="margin-left: 5px; text-transform: capitalize;"/>
+
+                    <p:outputLabel value="Phone 1: "/>
+                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
+                                 maxlength="20"
+                                 style="margin-left: 5px;"/>
+
+                    <p:outputLabel value="BIN: "/>
+                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.businessNumber}"
+                                 maxlength="30"
+                                 style="margin-left: 5px;"/>
+
+                    <p:outputLabel value="Address 1: "/>
+                    <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
+                                     style="margin-left: 5px;"
+                                     size="300" maxlength="500"/>
+
+                    <p:outputLabel value="Address 2: "/>
+                    <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine2}"
+                                     style="margin-left: 5px;"
+                                     size="300" maxlength="500"/>
+
+                    <p:outputLabel value="Owned: "/>
+                    <p:selectBooleanButton value="#{companiesBean.selectedCompaniesEntity.ownedByMe}"
+                                           style="margin-left: 5px;"
+                                           offLabel="No" onLabel="Yes"/>
+
+                    <!--<p:outputLabel value="Logo: "/>-->
+                    <!--<p:inputText value="#{companiesBean.selectedCompaniesEntity.companyLogo}"-->
+                                 <!--style="margin-left: 5px;"/>-->
+
+                </h:panelGrid>
+
+                <h:panelGroup id="dialog-layout" layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit"
+                                     actionListener="#{companiesBean.addOrEditEntryListener}"
+                                     update="main-form,@parent"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>
