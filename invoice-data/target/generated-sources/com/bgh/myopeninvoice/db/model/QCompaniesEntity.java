@@ -38,11 +38,13 @@ public class QCompaniesEntity extends EntityPathBase<CompaniesEntity> {
 
     public final CollectionPath<InvoiceEntity, QInvoiceEntity> invoicesByCompanyId_0 = this.<InvoiceEntity, QInvoiceEntity>createCollection("invoicesByCompanyId_0", InvoiceEntity.class, QInvoiceEntity.class, PathInits.DIRECT2);
 
-    public final NumberPath<Integer> ownedByMe = createNumber("ownedByMe", Integer.class);
+    public final BooleanPath ownedByMe = createBoolean("ownedByMe");
 
     public final StringPath phone1 = createString("phone1");
 
     public final CollectionPath<RatesEntity, QRatesEntity> ratesByCompanyId = this.<RatesEntity, QRatesEntity>createCollection("ratesByCompanyId", RatesEntity.class, QRatesEntity.class, PathInits.DIRECT2);
+
+    public final StringPath shortName = createString("shortName");
 
     public QCompaniesEntity(String variable) {
         super(CompaniesEntity.class, forVariable(variable));

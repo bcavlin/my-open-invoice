@@ -5,6 +5,7 @@
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/target/generated-sources/com/bgh/myopeninvoice/db/model/QRatesEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/model/ContactsEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/dao/InvoiceDAO.java
+/home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/dao/CompaniesRepository.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/target/generated-sources/com/bgh/myopeninvoice/db/model/QTaxEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/target/generated-sources/com/bgh/myopeninvoice/db/model/QContactsEntity.java
 /home/bcavlin/IdeaProjects/my-open-invoice/invoice-data/src/main/java/com/bgh/myopeninvoice/db/model/UsersEntity.java

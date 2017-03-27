@@ -6,8 +6,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:o="http://java.sun.com/jsf/html">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
         <h:form id="main-form" onkeypress="return event.keyCode != 13">
@@ -26,6 +26,12 @@
                         icon="ui-icon-trash"
                         rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
                         style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
+
+                <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompaniesEntity.shortName})"
+                                 icon="ui-icon-pencil"
+                                 rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 style="margin-right: 15px;" onclick="PF('companies-contacts-form-dialog').show();"
+                                 update="main-form,companies-contacts-form"/>
 
                 <p:confirmDialog message="Do you want to remove this company item?"
                                  showEffect="bounce"
@@ -97,7 +103,13 @@
                     </p:column>
 
                     <p:column headerText="Logo" style="text-align:start;">
-                        <o:graphicImage value="#{company.companyLogo}" dataURI="true" lastModified="#{startup.time}"/>
+                        <h:graphicImage id="logoIcon" value="/images/image.png"
+                                        rendered="#{not empty  company.companyLogo}"/>
+                        <p:overlayPanel id="imgPanel" for="logoIcon" showEvent="mouseover" hideEvent="mouseleave"
+                                        rendered="#{not empty company.companyLogo}">
+                            <h:graphicImage value="#{companiesBean.getImageLogo(company)}" alt="logo"
+                                            style="border: 1px;"/>
+                        </p:overlayPanel>
                     </p:column>
 
                 </p:dataTable>
@@ -112,8 +124,9 @@
             </f:facet>
             <h:form id="companies-form">
 
-                <!--<p:focus for="email"/>-->
-                <p:messages autoUpdate="true"/>
+                <o:highlight/>
+                <p:focus for="shortName"/>
+                <p:messages autoUpdate="true" id="messages"/>
 
                 <h:panelGrid id="companies-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
                              style="padding-top: 3px;">
@@ -125,11 +138,18 @@
                     <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
                                  maxlength="10"
                                  size="20"
-                                 style="margin-left: 5px; text-transform: uppercase;"/>
+                                 required="true"
+                                 id="shortName"
+                                 requiredMessage="Short name is required"
+                                 style="margin-left: 5px; text-transform: uppercase;"
+                                 converter="upperCaseConverter"/>
 
                     <p:outputLabel value="Company name: "/>
                     <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
+                                 converter="capitalizeConverter"
                                  maxlength="255"
+                                 requiredMessage="Company name is required"
+                                 required="true"
                                  style="margin-left: 5px; text-transform: capitalize;"/>
 
                     <p:outputLabel value="Phone 1: "/>
@@ -145,6 +165,8 @@
                     <p:outputLabel value="Address 1: "/>
                     <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
                                      style="margin-left: 5px;"
+                                     required="true"
+                                     requiredMessage="Address line 1 is required"
                                      size="300" maxlength="500"/>
 
                     <p:outputLabel value="Address 2: "/>
@@ -157,10 +179,14 @@
                                            style="margin-left: 5px;"
                                            offLabel="No" onLabel="Yes"/>
 
-                    <!--<p:outputLabel value="Logo: "/>-->
-                    <!--<p:inputText value="#{companiesBean.selectedCompaniesEntity.companyLogo}"-->
-                                 <!--style="margin-left: 5px;"/>-->
+                    <p:outputLabel value="Logo: "/>
+                    <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"
+                                    alt="logo" style="border: 1px;"/>
 
+                    <p:outputLabel value="Upload: "/>
+                    <p:fileUpload fileUploadListener="#{companiesBean.handleFileUpload}" mode="advanced"
+                                  dragDropSupport="false"
+                                  update="@parent" sizeLimit="20480" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                 </h:panelGrid>
 
                 <h:panelGroup id="dialog-layout" layout="block">
@@ -169,6 +195,15 @@
                                      actionListener="#{companiesBean.addOrEditEntryListener}"
                                      update="main-form,@parent"/>
                 </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="edit-2-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="companies-contacts-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="Add/Edit Contacts"/>
+            </f:facet>
+            <h:form id="companies-contacts-form">
             </h:form>
         </p:dialog>
     </ui:define>

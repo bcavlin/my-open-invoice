@@ -2,6 +2,7 @@ com/bgh/myopeninvoice/db/model/QUserRoleEntity.class
 com/bgh/myopeninvoice/db/model/AttachmentEntity.class
 com/bgh/myopeninvoice/db/dao/InvoiceDAOImpl.class
 com/bgh/myopeninvoice/db/model/QAttachmentEntity.class
+com/bgh/myopeninvoice/db/dao/CompaniesRepository.class
 com/bgh/myopeninvoice/db/model/CompanyContactEntity.class
 com/bgh/myopeninvoice/db/model/UsersEntity.class
 com/bgh/myopeninvoice/db/model/QTaxEntity.class

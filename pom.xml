@@ -130,6 +130,17 @@
                 <artifactId>rome</artifactId>
                 <version>1.0</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sanselan</groupId>
+                <artifactId>sanselan</artifactId>
+                <version>0.97-incubator</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -189,13 +200,13 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>prime-repo</id>
-            <name>PrimeFaces Maven Repository</name>
-            <url>http://repository.primefaces.org</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>prime-repo</id>-->
+            <!--<name>PrimeFaces Maven Repository</name>-->
+            <!--<url>http://repository.primefaces.org</url>-->
+            <!--<layout>default</layout>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
 </project>
