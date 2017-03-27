@@ -4,7 +4,12 @@ import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.CompaniesEntity;
 import com.bgh.myopeninvoice.jsfbeans.model.CompaniesEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.sanselan.ImageFormat;
+import org.apache.sanselan.ImageReadException;
+import org.apache.sanselan.Sanselan;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -77,6 +83,23 @@ public class CompaniesBean implements Serializable {
             selectedCompaniesEntity = null;
         } else {
             FacesUtils.addErrorMessage("Selected companies entity is null");
+        }
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        if (selectedCompaniesEntity != null) {
+            selectedCompaniesEntity.setCompanyLogo(event.getFile().getContents());
+        }
+    }
+
+    public String getImageLogo(CompaniesEntity companiesEntity) throws IOException, ImageReadException {
+        if (companiesEntity != null && companiesEntity.getCompanyLogo() != null) {
+            ImageFormat mimeType = Sanselan.guessFormat(companiesEntity.getCompanyLogo());
+
+            return "data:image/" + mimeType.extension.toLowerCase() + ";base64," +
+                    Base64.encodeBase64String(companiesEntity.getCompanyLogo());
+        } else {
+            return null;
         }
     }
 
