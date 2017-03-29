@@ -154,6 +154,16 @@ public class CompaniesEntity implements Serializable {
         return result;
     }
 
+    @Transient
+    public String getContactsToList(){
+        StringBuilder sb = new StringBuilder();
+        for (CompanyContactEntity companyContactEntity : companyContactsByCompanyId) {
+            if(sb.length()>0) sb.append(",");
+            sb.append(companyContactEntity.getContactsByContactId().getContactId());
+        }
+        return sb.toString();
+    }
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "companiesByCompanyId")
     public Collection<CompanyContactEntity> getCompanyContactsByCompanyId() {

@@ -2,6 +2,8 @@ package com.bgh.myopeninvoice.jsfbeans;
 
 import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.CompaniesEntity;
+import com.bgh.myopeninvoice.db.model.CompanyContactEntity;
+import com.bgh.myopeninvoice.db.model.ContactsEntity;
 import com.bgh.myopeninvoice.jsfbeans.model.CompaniesEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import org.apache.commons.codec.binary.Base64;
@@ -10,6 +12,7 @@ import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by bcavlin on 17/03/17.
@@ -37,6 +43,8 @@ public class CompaniesBean implements Serializable {
     private InvoiceDAO invoiceDAO;
 
     private LazyDataModel<CompaniesEntity> companiesEntityList;
+
+    private DualListModel<ContactsEntity> contactsDualListModel;
 
     private CompaniesEntity selectedCompaniesEntity;
 
@@ -59,6 +67,30 @@ public class CompaniesBean implements Serializable {
         logger.info("Creating new entity");
         selectedCompaniesEntity = new CompaniesEntity();
         selectedCompaniesEntity.setOwnedByMe(true);
+        fillDualList();
+    }
+
+    public void ajaxChangeRowListener() {
+        logger.info("Filling dual list");
+        fillDualList();
+    }
+
+    private void fillDualList() {
+        final Iterable<ContactsEntity> allContactsEntity = invoiceDAO.getContactsRepository().findAll();
+        final Collection<CompanyContactEntity> assignedContactsEntity = selectedCompaniesEntity.getCompanyContactsByCompanyId();
+
+        List<ContactsEntity> sourceList = new ArrayList<>();
+        List<ContactsEntity> targetList = new ArrayList<>();
+
+        contactsDualListModel = new DualListModel<>();
+
+        allContactsEntity.forEach(sourceList::add);
+        assignedContactsEntity.forEach(r -> targetList.add(r.getContactsByContactId()));
+
+        sourceList.removeAll(targetList);
+
+        contactsDualListModel.setSource(sourceList);
+        contactsDualListModel.setTarget(targetList);
     }
 
     public void addOrEditEntryListener(ActionEvent event) {
@@ -71,6 +103,19 @@ public class CompaniesBean implements Serializable {
             FacesUtils.addSuccessMessage("Entity record updated");
         } else {
             FacesUtils.addErrorMessage("Selected companies entity is null");
+        }
+    }
+
+    public void addOrEditEntryListener2(ActionEvent event) {
+        if (selectedCompaniesEntity != null && contactsDualListModel != null) {
+            RequestContext.getCurrentInstance().execute("PF('companies-contacts-form-dialog').hide()");
+
+            logger.info("Adding/editing entity {}", contactsDualListModel.getTarget().toString());
+            invoiceDAO.saveCompanyContactEntity(selectedCompaniesEntity, contactsDualListModel.getTarget());
+            refresh();
+            FacesUtils.addSuccessMessage("Entity record updated");
+        } else {
+            FacesUtils.addErrorMessage("Selected users entity is null");
         }
     }
 
@@ -127,4 +172,11 @@ public class CompaniesBean implements Serializable {
         this.selectedCompaniesEntity = selectedCompaniesEntity;
     }
 
+    public DualListModel<ContactsEntity> getContactsDualListModel() {
+        return contactsDualListModel;
+    }
+
+    public void setContactsDualListModel(DualListModel<ContactsEntity> contactsDualListModel) {
+        this.contactsDualListModel = contactsDualListModel;
+    }
 }

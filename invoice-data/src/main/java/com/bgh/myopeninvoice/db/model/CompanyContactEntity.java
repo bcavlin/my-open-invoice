@@ -50,8 +50,8 @@ public class CompanyContactEntity implements Serializable{
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID", nullable = false)
     public CompaniesEntity getCompaniesByCompanyId() {
         return companiesByCompanyId;
     }
@@ -61,8 +61,8 @@ public class CompanyContactEntity implements Serializable{
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne
-    @JoinColumn(name = "CONTACT_ID", referencedColumnName = "CONTACT_ID", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "CONTACT_ID", referencedColumnName = "CONTACT_ID", nullable = false)
     public ContactsEntity getContactsByContactId() {
         return contactsByContactId;
     }
