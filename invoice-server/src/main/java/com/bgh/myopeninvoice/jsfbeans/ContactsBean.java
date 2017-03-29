@@ -10,10 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 
@@ -37,9 +39,12 @@ public class ContactsBean implements Serializable {
     private int pageSize = 20;
 
     @PostConstruct
-    private void init() {
-        logger.info("Initializing contacts entries");
-        contactsEntityList = new ContactsEntityLazyModel(invoiceDAO);
+    public void init() {
+        if (contactsEntityList == null) {
+            final String parameter1 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("parameter1");
+            logger.info("Initializing contacts entries");
+            contactsEntityList = new ContactsEntityLazyModel(invoiceDAO, StringUtils.commaDelimitedListToSet(parameter1));
+        }
     }
 
     private void refresh() {
@@ -102,5 +107,6 @@ public class ContactsBean implements Serializable {
     public void setSelectedContactsEntity(ContactsEntity selectedContactsEntity) {
         this.selectedContactsEntity = selectedContactsEntity;
     }
+
 
 }

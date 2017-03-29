@@ -2,6 +2,7 @@ package com.bgh.myopeninvoice.jsfbeans.model;
 
 import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.ContactsEntity;
+import com.bgh.myopeninvoice.db.model.QContactsEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by bcavlin on 17/03/17.
@@ -26,8 +28,11 @@ public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
 
     private InvoiceDAO invoiceDAO;
 
-    public ContactsEntityLazyModel(InvoiceDAO invoiceDAO) {
+    private Set<String> contactsFilter;
+
+    public ContactsEntityLazyModel(InvoiceDAO invoiceDAO, Set<String> contactsFilter) {
         this.invoiceDAO = invoiceDAO;
+        this.contactsFilter = contactsFilter;
     }
 
     @Override
@@ -56,19 +61,15 @@ public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
 
         BooleanExpression predicate = null;
 
-//        if (filters != null && !filters.isEmpty()) {
-//            for (Map.Entry<String, Object> stringObjectEntry : filters.entrySet()) {
-//                BooleanExpression temp = null;
-//
-//                if (temp != null) {
-//                    if (predicate == null) {
-//                        predicate = temp;
-//                    } else {
-//                        predicate.and(temp);
-//                    }
-//                }
-//            }
-//        }
+        if (contactsFilter != null &&  contactsFilter.size() > 0){
+            for (String contactId : contactsFilter) {
+                if (predicate == null) {
+                    predicate = QContactsEntity.contactsEntity.contactId.eq(Integer.valueOf(contactId));
+                } else {
+                    predicate = predicate.or(QContactsEntity.contactsEntity.contactId.eq(Integer.valueOf(contactId)));
+                }
+            }
+        }
 
         Page<ContactsEntity> contactsEntityPage = null;
 

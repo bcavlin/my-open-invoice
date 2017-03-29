@@ -33,6 +33,9 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Autowired
     private CompaniesRepository companiesRepository;
 
+    @Autowired
+    private CompanyContactRepository companyContactRepository;
+
     @Override
     public ContactsRepository getContactsRepository() {
         return contactsEntity;
@@ -64,39 +67,79 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         List<UserRoleEntity> add = new ArrayList<>();
         List<UserRoleEntity> remove = new ArrayList<>();
         //first add new roles if not already there
-        for (RolesEntity targetRole : targetRoles) {
+        for (RolesEntity target : targetRoles) {
             boolean found = false;
             for (UserRoleEntity currentRole : usersEntity.getUserRolesByUserId()) {
-                if(currentRole.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())){
+                if(currentRole.getRolesByRoleId().getRoleId().equals(target.getRoleId())){
                     found = true;
                 }
             }
             if(!found){
-                UserRoleEntity newRole = new UserRoleEntity();
-                newRole.setDateAssigned(new Date());
-                newRole.setUsersByUserId(usersEntity);
-                newRole.setRolesByRoleId(targetRole);
-                add.add(newRole);
+                UserRoleEntity _new = new UserRoleEntity();
+                _new.setDateAssigned(new Date());
+                _new.setUsersByUserId(usersEntity);
+                _new.setRolesByRoleId(target);
+                add.add(_new);
             }
         }
         //then delete those that are extra
-        for (UserRoleEntity currentRole : usersEntity.getUserRolesByUserId()) {
+        for (UserRoleEntity current : usersEntity.getUserRolesByUserId()) {
             boolean found = false;
             for (RolesEntity targetRole : targetRoles) {
-                if(currentRole.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())){
+                if(current.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())){
                     found = true;
                 }
             }
             if(!found){
-                remove.add(currentRole);
+                remove.add(current);
             }
         }
 
-        for (UserRoleEntity userRoleEntity : remove) {
-            userRoleRepository.delete(userRoleEntity.getUserRoleId());
+        for (UserRoleEntity entity : remove) {
+            userRoleRepository.delete(entity.getUserRoleId());
         }
-        for (UserRoleEntity userRoleEntity : add) {
-            userRoleRepository.save(userRoleEntity);
+        for (UserRoleEntity entity : add) {
+            userRoleRepository.save(entity);
+        }
+    }
+
+    @Override
+    public void saveCompanyContactEntity(CompaniesEntity selectedCompaniesEntity, List<ContactsEntity> targetContacts) {
+        List<CompanyContactEntity> add = new ArrayList<>();
+        List<CompanyContactEntity> remove = new ArrayList<>();
+
+        for (ContactsEntity target : targetContacts) {
+            boolean found = false;
+            for (CompanyContactEntity current : selectedCompaniesEntity.getCompanyContactsByCompanyId()) {
+                if(current.getContactsByContactId().getContactId().equals(target.getContactId())){
+                    found = true;
+                }
+            }
+            if(!found){
+                CompanyContactEntity _new = new CompanyContactEntity();
+                _new.setCompaniesByCompanyId(selectedCompaniesEntity);
+                _new.setContactsByContactId(target);
+                add.add(_new);
+            }
+        }
+        //then delete those that are extra
+        for (CompanyContactEntity current : selectedCompaniesEntity.getCompanyContactsByCompanyId()) {
+            boolean found = false;
+            for (ContactsEntity target : targetContacts) {
+                if(current.getContactsByContactId().getContactId().equals(target.getContactId())){
+                    found = true;
+                }
+            }
+            if(!found){
+                remove.add(current);
+            }
+        }
+
+        for (CompanyContactEntity entity : remove) {
+            companyContactRepository.delete(entity.getCompanyContactId());
+        }
+        for (CompanyContactEntity entity : add) {
+            companyContactRepository.save(entity);
         }
     }
 }

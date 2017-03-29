@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:o="http://omnifaces.org/ui">
+      xmlns:o="http://omnifaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
         <h:form id="main-form" onkeypress="return event.keyCode != 13">
@@ -28,7 +28,7 @@
                         style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
 
                 <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompaniesEntity.shortName})"
-                                 icon="ui-icon-pencil"
+                                 icon="ui-icon-contact"
                                  rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
                                  style="margin-right: 15px;" onclick="PF('companies-contacts-form-dialog').show();"
                                  update="main-form,companies-contacts-form"/>
@@ -66,7 +66,7 @@
                              scrollWidth="1280"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form"/>
+                    <p:ajax event="rowSelect" update="main-form" listener="#{companiesBean.ajaxChangeRowListener}"/>
 
                     <p:column headerText="Id" sortBy="#{company.companyId}" style="text-align:right;" width="50">
                         <h:outputText value="#{company.companyId}"/>
@@ -78,6 +78,16 @@
 
                     <p:column headerText="Name" sortBy="#{company.companyName}" style="text-align:start;" width="300">
                         <h:outputText value="#{company.companyName}"/>
+                        <h:outputText value=" [#{fn:length(company.companyContactsByCompanyId)}]"
+                                      style="float: right; font-weight: bold;"
+                                      rendered="#{not empty company.companyContactsByCompanyId}"/>
+                        <h:link outcome="to-contacts-page"
+                                       rendered="#{not empty company.companyContactsByCompanyId}">
+                            <f:param name="parameter1" value="#{company.contactsToList}"/>
+                            <p:graphicImage value="/images/address-book.png"
+                                            style="float: right; opacity: 0.7;"
+                                            title="contacts: #{company.companyContactsByCompanyId}"/>
+                        </h:link>
                     </p:column>
 
                     <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="100">
@@ -204,6 +214,29 @@
                 <h:outputText value="Add/Edit Contacts"/>
             </f:facet>
             <h:form id="companies-contacts-form">
+                <h:panelGroup id="companies-contacts-form-grid1"
+                              style="padding-top: 3px;">
+                    <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactsEntity"-->
+                    <p:pickList id="contacts-pick-list"
+                                value="#{companiesBean.contactsDualListModel}"
+                                var="contact"
+                                itemValue="#{contact}"
+                                converter="#{contactsEntityConverter}"
+                                showSourceFilter="true" showTargetFilter="true">
+                        <f:facet name="sourceCaption">Available</f:facet>
+                        <f:facet name="targetCaption">Assigned</f:facet>
+
+                        <p:column>
+                            <h:outputText value="#{contact.lastName}#{empty contact.middleName?'':' '+contact.middleName}, #{contact.firstName}"/>
+                        </p:column>
+                    </p:pickList>
+                </h:panelGroup>
+                <h:panelGroup id="dialog-layout-2" layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit"
+                                     actionListener="#{companiesBean.addOrEditEntryListener2}"
+                                     update="companies-contacts-form,main-form"/>
+                </h:panelGroup>
             </h:form>
         </p:dialog>
     </ui:define>
