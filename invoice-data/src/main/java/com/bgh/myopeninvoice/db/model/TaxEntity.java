@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.db.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -14,7 +13,6 @@ public class TaxEntity implements Serializable {
     private Integer taxId;
     private BigDecimal percent;
     private String identifier;
-    private Collection<InvoiceEntity> invoicesByTaxId;
 
     @Id
     @GeneratedValue
@@ -67,15 +65,6 @@ public class TaxEntity implements Serializable {
         result = 31 * result + (percent != null ? percent.hashCode() : 0);
         result = 31 * result + (identifier != null ? identifier.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "taxByTaxId")
-    public Collection<InvoiceEntity> getInvoicesByTaxId() {
-        return invoicesByTaxId;
-    }
-
-    public void setInvoicesByTaxId(Collection<InvoiceEntity> invoicesByTaxId) {
-        this.invoicesByTaxId = invoicesByTaxId;
     }
 
     @Override

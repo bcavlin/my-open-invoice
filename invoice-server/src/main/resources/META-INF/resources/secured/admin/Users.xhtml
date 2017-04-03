@@ -12,22 +12,22 @@
       xmlns:of="http://omnifaces.org/functions" xmlns:sec="http://www.springframework.org/security/tags">
 <ui:composition template="../templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
-        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+        <h:form id="main-form" onkeypress="return event.keyCode !== 13">
 
             <h:panelGroup id="user-buttons-layout" layout="block" style="margin: 15px 0 15px 0">
                 <p:commandButton value="New User" icon="ui-icon-extlink" style="margin-right: 15px;"
-                                 onclick="PF('users-form-dialog').show();"
+                                 oncomplete="PF('users-form-dialog').show();"
                                  actionListener="#{usersBean.newEntryListener}"
                                  update="main-form, users-form"/>
                 <p:commandButton value="Edit User (#{usersBean.selectedUsersEntity.username})" icon="ui-icon-pencil"
                                  rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
-                                 style="margin-right: 15px;" onclick="PF('users-form-dialog').show();"
+                                 style="margin-right: 15px;" oncomplete="PF('users-form-dialog').show();"
                                  update="main-form, users-form"/>
                 <p:commandButton
                         value="Delete User (#{usersBean.selectedUsersEntity.username})"
                         icon="ui-icon-trash"
                         rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
-                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
+                        style="margin-right: 15px; color: brown;" oncomplete="PF('confirmation1').show();"/>
 
                 <p:confirmDialog message="Do you want to remove this User?"
                                  showEffect="bounce"
@@ -39,88 +39,90 @@
                                      actionListener="#{usersBean.deleteEntryListener}"
                                      update="main-form, users-form"
                                      style="color: brown;"/>
-                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                    <p:commandButton value="No" oncomplete="PF('confirmation1').hide()" type="button"/>
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
-                <!--@elvariable id="user" type="com.bgh.myopeninvoice.db.model.UsersEntity"-->
-                <p:dataTable id="users-table"
-                             var="user"
-                             widgetVar="users-table"
-                             lazy="true"
-                             value="#{usersBean.usersEntityList}"
-                             paginator="true"
-                             rows="#{usersBean.pageSize}"
-                             rowKey="#{user.userId}"
-                             selection="#{usersBean.selectedUsersEntity}"
-                             selectionMode="single"
-                             paginatorPosition="bottom"
-                             scrollable="true"
-                             scrollWidth="1280"
-                             style="width: 2000px;"
-                             emptyMessage="No items found with given criteria"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+            <!--@elvariable id="user" type="com.bgh.myopeninvoice.db.model.UsersEntity"-->
+            <p:dataTable id="users-table"
+                         var="user"
+                         widgetVar="users-table"
+                         lazy="true"
+                         value="#{usersBean.usersEntityList}"
+                         paginator="true"
+                         rows="#{usersBean.pageSize}"
+                         rowKey="#{user.userId}"
+                         selection="#{usersBean.selectedUsersEntity}"
+                         selectionMode="single"
+                         paginatorPosition="bottom"
+                         scrollable="true"
+                         scrollWidth="1280"
+                         emptyMessage="No items found with given criteria"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form,roles-form"
-                            listener="#{usersBean.ajaxChangeRowListener}"/>
-                    <p:column width="10">
-                        <p:rowToggler/>
-                    </p:column>
-                    <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="50">
-                        <h:outputText value="#{user.userId}"/>
-                    </p:column>
-                    <p:column headerText="Username" sortBy="#{user.username}" style="text-align:left;" width="150">
-                        <h:outputText value="#{user.username}"/>
-                        <p:graphicImage value="/images/medal.png"
-                                        style="float: right; opacity: 0.7;" title="Admin"
-                                        rendered="#{usersBean.hasRole(user, 'ROLE_ADMIN')}"/>
-                    </p:column>
-                    <p:column headerText="Enabled" sortBy="#{user.enabled}" style="text-align:center;" width="80">
-                        <h:outputText value="#{user.enabled?'Yes':'No'}"/>
-                    </p:column>
-                    <p:column headerText="Last Logged" sortBy="#{user.lastLogged}" style="text-align:center;"
-                              width="120">
-                        <h:outputText value="#{user.lastLogged}"/>
-                    </p:column>
-                    <p:column headerText="Password" sortBy="#{user.password}" style="text-align:left;">
-                        <h:outputText value="#{user.password}"/>
-                    </p:column>
+                <p:ajax event="rowSelect" update="main-form,roles-form"
+                        listener="#{usersBean.ajaxChangeRowListener}"/>
 
-                    <p:rowExpansion id="expand">
-                        <p:dataTable id="contacts" value="#{user.contactsesByUserId}" var="contact" paginator="false" style="margin-left: 20px;">
-                            <p:column headerText="First name" style="text-align:start;" width="221">
-                                <h:outputText value="#{contact.firstName}"/>
-                            </p:column>
-                            <p:column headerText="Middle n." style="text-align:start;" width="80">
-                                <h:outputText value="#{contact.middleName}"/>
-                            </p:column>
-                            <p:column headerText="Last name" style="text-align:start;" width="120">
-                                <h:outputText value="#{contact.lastName}"/>
-                            </p:column>
-                            <p:column headerText="Email" style="text-align:start;" width="330">
-                                <h:outputText value="#{contact.email}"/>
-                            </p:column>
-                            <p:column headerText="Phone 1" style="text-align:left;" width="150">
-                                <h:outputText value="#{contact.phone1}"/>
-                            </p:column>
-                            <p:column headerText="Address 1" style="text-align:left;" width="350">
-                                <h:outputText value="#{contact.addressLine1}"/>
-                            </p:column>
-                            <p:column headerText="Address 2" style="text-align:left;">
-                                <h:outputText value="#{contact.addressLine2}"/>
-                            </p:column>
-                        </p:dataTable>
+                <p:column width="10">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column headerText="Id" sortBy="#{user.userId}" style="text-align:right;" width="50">
+                    <h:outputText value="#{user.userId}"/>
+                </p:column>
+                <p:column headerText="Username" sortBy="#{user.username}" style="text-align:left;" width="150">
+                    <h:outputText value="#{user.username}"/>
+                    <p:graphicImage value="/images/medal.png"
+                                    style="float: right; opacity: 0.7;" title="Admin"
+                                    rendered="#{usersBean.hasRole(user, 'ROLE_ADMIN')}"/>
+                    <p:graphicImage value="/images/medal-bronze.png"
+                                    style="float: right; opacity: 0.7;" title="User"
+                                    rendered="#{usersBean.hasRole(user, 'ROLE_USER')}"/>
+                </p:column>
+                <p:column headerText="Enabled" sortBy="#{user.enabled}" style="text-align:center;" width="80">
+                    <h:outputText value="#{user.enabled?'Yes':'No'}"/>
+                </p:column>
+                <p:column headerText="Last Logged" sortBy="#{user.lastLogged}" style="text-align:center;"
+                          width="120">
+                    <h:outputText value="#{user.lastLogged}"/>
+                </p:column>
+                <p:column headerText="Password" sortBy="#{user.password}" style="text-align:left;">
+                    <h:outputText value="#{user.password}"/>
+                </p:column>
 
-                    </p:rowExpansion>
-                </p:dataTable>
-            </h:panelGroup>
+                <p:rowExpansion id="expand">
+                    <p:dataTable id="contacts" value="#{user.contactsByUserId}" var="contact" paginator="false"
+                                 style="margin-left: 20px;">
+                        <p:column headerText="First name" style="text-align:start;" width="221">
+                            <h:outputText value="#{contact.firstName}"/>
+                        </p:column>
+                        <p:column headerText="Middle n." style="text-align:start;" width="80">
+                            <h:outputText value="#{contact.middleName}"/>
+                        </p:column>
+                        <p:column headerText="Last name" style="text-align:start;" width="120">
+                            <h:outputText value="#{contact.lastName}"/>
+                        </p:column>
+                        <p:column headerText="Email" style="text-align:start;" width="330">
+                            <h:outputText value="#{contact.email}"/>
+                        </p:column>
+                        <p:column headerText="Phone 1" style="text-align:left;" width="150">
+                            <h:outputText value="#{contact.phone1}"/>
+                        </p:column>
+                        <p:column headerText="Address 1" style="text-align:left;" width="350">
+                            <h:outputText value="#{contact.addressLine1}"/>
+                        </p:column>
+                        <p:column headerText="Address 2" style="text-align:left;" width="350">
+                            <h:outputText value="#{contact.addressLine2}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                </p:rowExpansion>
+            </p:dataTable>
 
             <h:panelGroup id="role-buttons-layout" layout="block" style="margin: 15px 0 15px 0">
                 <p:commandButton value="Edit Roles For User (#{usersBean.selectedUsersEntity.username})"
                                  icon="ui-icon-pencil"
                                  rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
-                                 style="margin-right: 15px;" onclick="PF('roles-form-dialog').show();"
+                                 style="margin-right: 15px;" oncomplete="PF('roles-form-dialog').show();"
                                  update="main-form, users-form, roles-form"/>
             </h:panelGroup>
 

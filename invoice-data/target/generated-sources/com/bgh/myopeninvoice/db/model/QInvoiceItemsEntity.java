@@ -26,15 +26,17 @@ public class QInvoiceItemsEntity extends EntityPathBase<InvoiceItemsEntity> {
 
     public final StringPath description = createString("description");
 
-    public final NumberPath<java.math.BigDecimal> hoursTotal = createNumber("hoursTotal", java.math.BigDecimal.class);
-
     public final QInvoiceEntity invoiceByInvoiceId;
 
     public final NumberPath<Integer> invoiceId = createNumber("invoiceId", Integer.class);
 
     public final NumberPath<Integer> invoiceItemId = createNumber("invoiceItemId", Integer.class);
 
+    public final NumberPath<java.math.BigDecimal> quantity = createNumber("quantity", java.math.BigDecimal.class);
+
     public final CollectionPath<TimeSheetEntity, QTimeSheetEntity> timeSheetsByInvoiceItemId = this.<TimeSheetEntity, QTimeSheetEntity>createCollection("timeSheetsByInvoiceItemId", TimeSheetEntity.class, QTimeSheetEntity.class, PathInits.DIRECT2);
+
+    public final StringPath unit = createString("unit");
 
     public final NumberPath<java.math.BigDecimal> value = createNumber("value", java.math.BigDecimal.class);
 

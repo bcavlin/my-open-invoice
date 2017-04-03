@@ -6,10 +6,10 @@
         <class>com.bgh.myopeninvoice.db.model.AttachmentEntity</class>
         <class>com.bgh.myopeninvoice.db.model.CompaniesEntity</class>
         <class>com.bgh.myopeninvoice.db.model.ContactsEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.ContractsEntity</class>
         <class>com.bgh.myopeninvoice.db.model.CompanyContactEntity</class>
         <class>com.bgh.myopeninvoice.db.model.InvoiceEntity</class>
         <class>com.bgh.myopeninvoice.db.model.InvoiceItemsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.RatesEntity</class>
         <class>com.bgh.myopeninvoice.db.model.RolesEntity</class>
         <class>com.bgh.myopeninvoice.db.model.TaxEntity</class>
         <class>com.bgh.myopeninvoice.db.model.TimeSheetEntity</class>
@@ -17,7 +17,6 @@
         <class>com.bgh.myopeninvoice.db.model.UserRoleEntity</class>
         <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
         <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
-        <class>com.bgh.myopeninvoice.db.model2.CompaniesEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.connection.url"

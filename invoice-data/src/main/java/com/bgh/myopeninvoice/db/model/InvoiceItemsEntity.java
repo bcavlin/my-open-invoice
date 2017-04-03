@@ -15,7 +15,8 @@ public class InvoiceItemsEntity implements Serializable {
     private Integer invoiceId;
     private String description;
     private String code;
-    private BigDecimal hoursTotal;
+    private BigDecimal quantity;
+    private String unit;
     private BigDecimal value;
     private InvoiceEntity invoiceByInvoiceId;
     private Collection<TimeSheetEntity> timeSheetsByInvoiceItemId;
@@ -62,13 +63,23 @@ public class InvoiceItemsEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "HOURS_TOTAL", nullable = true, precision = 32767)
-    public BigDecimal getHoursTotal() {
-        return hoursTotal;
+    @Column(name = "QUANTITY", nullable = false, precision = 32767)
+    public BigDecimal getQuantity() {
+        return quantity;
     }
 
-    public void setHoursTotal(BigDecimal hoursTotal) {
-        this.hoursTotal = hoursTotal;
+    public void setQuantity(BigDecimal quantity) {
+        this.quantity = quantity;
+    }
+
+    @Basic
+    @Column(name = "UNIT", nullable = false, length = 10)
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     @Basic
@@ -93,7 +104,8 @@ public class InvoiceItemsEntity implements Serializable {
         if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
-        if (hoursTotal != null ? !hoursTotal.equals(that.hoursTotal) : that.hoursTotal != null) return false;
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
+        if (unit != null ? !unit.equals(that.unit) : that.unit != null) return false;
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
 
         return true;
@@ -105,7 +117,8 @@ public class InvoiceItemsEntity implements Serializable {
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (code != null ? code.hashCode() : 0);
-        result = 31 * result + (hoursTotal != null ? hoursTotal.hashCode() : 0);
+        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (unit != null ? unit.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
@@ -136,7 +149,8 @@ public class InvoiceItemsEntity implements Serializable {
                 ", invoiceId=" + invoiceId +
                 ", description='" + description + '\'' +
                 ", code='" + code + '\'' +
-                ", hoursTotal=" + hoursTotal +
+                ", quantity=" + quantity +
+                ", unit='" + unit + '\'' +
                 ", value=" + value +
                 '}';
     }

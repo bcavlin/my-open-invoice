@@ -10,27 +10,34 @@
       xmlns:o="http://omnifaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
-        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+        <h:form id="main-form" onkeypress="return event.keyCode !== 13">
             <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
-                <p:commandButton value="New Company" icon="ui-icon-extlink" style="margin-right: 15px;"
-                                 onclick="PF('companies-form-dialog').show();"
-                                 actionListener="#{companiesBean.newEntryListener}"
+                <p:commandButton value="New Company"
+                                 icon="ui-icon-extlink"
+                                 style="margin-right: 15px;"
+                                 oncomplete="PF('companies-form-dialog').show();"
+                                 actionListener="#{companiesBean.newEntryListenerForCompany}"
                                  update="main-form, companies-form"/>
+
                 <p:commandButton value="Edit Company (#{companiesBean.selectedCompaniesEntity.shortName})"
                                  icon="ui-icon-pencil"
                                  rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
-                                 style="margin-right: 15px;" onclick="PF('companies-form-dialog').show();"
+                                 style="margin-right: 15px;"
+                                 oncomplete="PF('companies-form-dialog').show();"
                                  update="main-form,companies-form"/>
+
                 <p:commandButton
                         value="Delete Company (#{companiesBean.selectedCompaniesEntity.shortName})"
                         icon="ui-icon-trash"
                         rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
-                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
+                        style="margin-right: 15px; color: brown;"
+                        oncomplete="PF('confirmation1').show();"/>
 
                 <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompaniesEntity.shortName})"
                                  icon="ui-icon-contact"
                                  rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
-                                 style="margin-right: 15px;" onclick="PF('companies-contacts-form-dialog').show();"
+                                 style="margin-right: 15px;"
+                                 oncomplete="PF('companies-contacts-form-dialog').show();"
                                  update="main-form,companies-contacts-form"/>
 
                 <p:confirmDialog message="Do you want to remove this company item?"
@@ -43,91 +50,161 @@
                                      actionListener="#{companiesBean.deleteEntryListener}"
                                      update="main-form, companies-form" style="color: brown;"/>
 
-                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                    <p:commandButton value="No" oncomplete="PF('confirmation1').hide()" type="button"/>
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
-                <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.model.CompaniesEntity"-->
-                <p:dataTable id="companies-table"
-                             var="company"
-                             widgetVar="companies-table"
-                             lazy="true"
-                             value="#{companiesBean.companiesEntityList}"
-                             paginator="true"
-                             rows="#{companiesBean.pageSize}"
-                             rowKey="#{company.companyId}"
-                             selection="#{companiesBean.selectedCompaniesEntity}"
-                             selectionMode="single"
-                             paginatorPosition="bottom"
-                             emptyMessage="No items found with given criteria"
-                             style="width: 2000px;"
-                             scrollable="true"
-                             scrollWidth="1280"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+            <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.model.CompaniesEntity"-->
+            <p:dataTable id="companies-table"
+                         var="company"
+                         widgetVar="companies-table"
+                         value="#{companiesBean.companiesEntityLazyDataModel}"
+                         rows="#{companiesBean.pageSize}"
+                         rowKey="#{company.companyId}"
+                         selection="#{companiesBean.selectedCompaniesEntity}"
+                         selectionMode="single"
+                         emptyMessage="No items found with given criteria"
+                         scrollable="true"
+                         scrollWidth="1280"
+                         lazy="true"
+                         paginatorPosition="bottom"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form" listener="#{companiesBean.ajaxChangeRowListener}"/>
+                <p:ajax event="rowSelect" update="main-form,edit-3-dialog"
+                        listener="#{companiesBean.ajaxChangeRowListenerForCompany}"/>
 
-                    <p:column headerText="Id" sortBy="#{company.companyId}" style="text-align:right;" width="50">
-                        <h:outputText value="#{company.companyId}"/>
-                    </p:column>
+                <p:column headerText="Id" sortBy="#{company.companyId}" style="text-align:right;" width="50">
+                    <h:outputText value="#{company.companyId}"/>
+                </p:column>
 
-                    <p:column headerText="Short" sortBy="#{company.shortName}" style="text-align:start;" width="70">
-                        <h:outputText value="#{company.shortName}"/>
-                    </p:column>
+                <p:column headerText="Owned" sortBy="#{company.ownedByMe}" style="text-align:center;" width="70">
+                    <h:outputText value="#{company.ownedByMe?'Yes':'No'}"/>
+                </p:column>
 
-                    <p:column headerText="Name" sortBy="#{company.companyName}" style="text-align:start;" width="300">
-                        <h:outputText value="#{company.companyName}"/>
-                        <h:outputText value=" [#{fn:length(company.companyContactsByCompanyId)}]"
-                                      style="float: right; font-weight: bold;"
-                                      rendered="#{not empty company.companyContactsByCompanyId}"/>
-                        <h:link outcome="to-contacts-page"
-                                       rendered="#{not empty company.companyContactsByCompanyId}">
-                            <f:param name="parameter1" value="#{company.contactsToList}"/>
-                            <p:graphicImage value="/images/address-book.png"
-                                            style="float: right; opacity: 0.7;"
-                                            title="contacts: #{company.companyContactsByCompanyId}"/>
-                        </h:link>
-                    </p:column>
+                <p:column headerText="Short" sortBy="#{company.shortName}" style="text-align:start;" width="70">
+                    <h:outputText value="#{company.shortName}"/>
+                </p:column>
 
-                    <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="100">
-                        <h:outputText value="#{company.phone1}"/>
-                    </p:column>
+                <p:column headerText="Name" sortBy="#{company.companyName}" style="text-align:start;" width="300">
+                    <h:outputText value="#{company.companyName}"/>
+                    <h:outputText value=" [#{fn:length(company.companyContactsByCompanyId)}]"
+                                  style="float: right; font-weight: bold;"
+                                  rendered="#{not empty company.companyContactsByCompanyId}"/>
+                    <h:link outcome="to-contacts-page"
+                            rendered="#{not empty company.companyContactsByCompanyId}">
+                        <f:param name="parameter1" value="#{company.contactsToList}"/>
+                        <p:graphicImage value="/images/address-book.png"
+                                        style="float: right; opacity: 0.7;"
+                                        title="contacts: #{company.companyContactsByCompanyId}"/>
+                    </h:link>
+                </p:column>
 
-                    <p:column headerText="BIN" sortBy="#{company.businessNumber}" style="text-align:start;" width="100">
-                        <h:outputText value="#{company.businessNumber}"/>
-                    </p:column>
+                <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="100">
+                    <h:outputText value="#{company.phone1}"/>
+                </p:column>
 
-                    <p:column headerText="Address 1" sortBy="#{company.addressLine1}" style="text-align:start;"
-                              width="300">
-                        <h:outputText value="#{company.addressLine1}"/>
-                    </p:column>
+                <p:column headerText="BIN" sortBy="#{company.businessNumber}" style="text-align:start;" width="100">
+                    <h:outputText value="#{company.businessNumber}"/>
+                </p:column>
 
-                    <p:column headerText="Address 2" sortBy="#{company.addressLine2}" style="text-align:start;"
-                              width="300">
-                        <h:outputText value="#{company.addressLine2}"/>
-                    </p:column>
+                <p:column headerText="Address 1" sortBy="#{company.addressLine1}" style="text-align:start;"
+                          width="300">
+                    <h:outputText value="#{company.addressLine1}"/>
+                </p:column>
 
-                    <p:column headerText="Owned" sortBy="#{company.ownedByMe}" style="text-align:center;" width="70">
-                        <h:outputText value="#{company.ownedByMe?'Yes':'No'}"/>
-                    </p:column>
+                <p:column headerText="Address 2" sortBy="#{company.addressLine2}" style="text-align:start;"
+                          width="300">
+                    <h:outputText value="#{company.addressLine2}"/>
+                </p:column>
 
-                    <p:column headerText="Logo" style="text-align:start;">
-                        <h:graphicImage id="logoIcon" value="/images/image.png"
-                                        rendered="#{not empty  company.companyLogo}"/>
-                        <p:overlayPanel id="imgPanel" for="logoIcon" showEvent="mouseover" hideEvent="mouseleave"
-                                        rendered="#{not empty company.companyLogo}">
-                            <h:graphicImage value="#{companiesBean.getImageLogo(company)}" alt="logo"
-                                            style="border: 1px;"/>
-                        </p:overlayPanel>
-                    </p:column>
+                <p:column headerText="Logo" style="text-align:center;" width="70">
+                    <h:graphicImage id="logoIcon" value="/images/image.png"
+                                    rendered="#{not empty  company.companyLogo}"/>
+                    <p:overlayPanel id="imgPanel" for="logoIcon" showEvent="mouseover" hideEvent="mouseleave"
+                                    rendered="#{not empty company.companyLogo}" my="right top" at="right bottom">
+                        <h:graphicImage value="#{companiesBean.getImageLogo(company)}" alt="logo"
+                                        style="border: 1px;"/>
+                    </p:overlayPanel>
+                </p:column>
+            </p:dataTable>
 
-                </p:dataTable>
+            <h:panelGroup id="contracts-buttons-layout" layout="block" style="margin: 15px 0 0 0"
+                          rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.ownedByMe eq false}">
+                <p:commandButton value="New Contract"
+                                 icon="ui-icon-extlink"
+                                 style="margin-right: 15px;"
+                                 oncomplete="PF('contracts-form-dialog').show();"
+                                 rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 actionListener="#{companiesBean.newEntryListenerForContract}"
+                                 update="main-form,contracts-form"/>
+
+                <p:commandButton value="Edit Contract For Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                                 icon="ui-icon-script"
+                                 rendered="#{!empty companiesBean.selectedContractsEntity and companiesBean.selectedContractsEntity.contractId gt 0
+                                 and !empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 style="margin-right: 15px;"
+                                 oncomplete="PF('contracts-form-dialog').show();"
+                                 update="main-form,contracts-form"/>
             </h:panelGroup>
+
+            <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractsEntity"-->
+            <p:dataTable id="company-contracts-table"
+                         var="companyContract"
+                         rowKey="#{companyContract.contractId}"
+                         widgetVar="company-contract-table"
+                         value="#{companiesBean.contractsEntityLazyDataModel}"
+                         selection="#{companiesBean.selectedContractsEntity}"
+                         selectionMode="single"
+                         scrollable="true"
+                         scrollWidth="1280"
+                         emptyMessage="No items found with given criteria"
+                         style="margin-top: 15px;"
+                         rows="#{companiesBean.pageSize}"
+                         lazy="true"
+                         paginatorPosition="bottom"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                <p:ajax event="rowSelect" update="main-form" listener="#{companiesBean.ajaxChangeRowListenerForContract}"/>
+
+                <p:column headerText="Id" sortBy="#{companyContract.contractId}" style="text-align:right;" width="70">
+                    <h:outputText value="#{companyContract.contractId}"/>
+                </p:column>
+                <p:column headerText="Signed with" sortBy="#{companyContract.companiesByContractSignedWith.shortName}"
+                          style="text-align:start;" width="150">
+                    <h:outputText value="#{companyContract.companiesByContractSignedWith.shortName}"/>
+                </p:column>
+                <p:column headerText="Contract For"
+                          sortBy="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"
+                          style="text-align:start;" width="200">
+                    <h:outputText value="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"/>
+                </p:column>
+                <p:column headerText="Rate" sortBy="#{companyContract.rate}" style="text-align:right;" width="100">
+                    <h:outputText value="#{companyContract.rate}"/>
+                </p:column>
+                <p:column headerText="Unit" sortBy="#{companyContract.rateUnit}" style="text-align:start;" width="100">
+                    <h:outputText value="#{companyContract.rateUnit}"/>
+                </p:column>
+                <p:column headerText="Valid From" sortBy="#{companyContract.validFrom}" style="text-align:center;"
+                          width="150">
+                    <h:outputText value="#{companyContract.validFrom}"/>
+                </p:column>
+                <p:column headerText="Valid To" sortBy="#{companyContract.validTo}" style="text-align:center;"
+                          width="150">
+                    <h:outputText value="#{companyContract.validTo}"/>
+                </p:column>
+                <p:column headerText="Description" sortBy="#{companyContract.description}" style="text-align:start;"
+                          width="500">
+                    <h:outputText value="#{companyContract.description}"/>
+                </p:column>
+
+            </p:dataTable>
+
         </h:form>
     </ui:define>
     <ui:define name="dialog">
-        <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+        <p:dialog id="edit-1-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
                   widgetVar="companies-form-dialog" width="500" modal="true" resizable="false">
             <f:facet name="header">
                 <h:outputText value="Add/Edit Company"/>
@@ -138,7 +215,7 @@
                 <p:focus for="shortName"/>
                 <p:messages autoUpdate="true" id="messages"/>
 
-                <h:panelGrid id="companies-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2"
                              style="padding-top: 3px;">
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
@@ -199,7 +276,7 @@
                                   update="@parent" sizeLimit="20480" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                 </h:panelGrid>
 
-                <h:panelGroup id="dialog-layout" layout="block">
+                <h:panelGroup layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit"
                                      actionListener="#{companiesBean.addOrEditEntryListener}"
@@ -213,30 +290,105 @@
             <f:facet name="header">
                 <h:outputText value="Add/Edit Contacts"/>
             </f:facet>
+
             <h:form id="companies-contacts-form">
-                <h:panelGroup id="companies-contacts-form-grid1"
-                              style="padding-top: 3px;">
+                <h:panelGroup
+                        style="padding-top: 3px; align-content: center;" layout="block">
                     <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactsEntity"-->
                     <p:pickList id="contacts-pick-list"
-                                value="#{companiesBean.contactsDualListModel}"
+                                value="#{companiesBean.contactsEntityDualListModel}"
                                 var="contact"
                                 itemValue="#{contact}"
                                 converter="#{contactsEntityConverter}"
-                                showSourceFilter="true" showTargetFilter="true">
+                                showSourceFilter="true"
+                                showTargetFilter="true"
+                                filterMatchMode="contains"
+                                responsive="true">
                         <f:facet name="sourceCaption">Available</f:facet>
                         <f:facet name="targetCaption">Assigned</f:facet>
 
                         <p:column>
-                            <h:outputText value="#{contact.lastName}#{empty contact.middleName?'':' '+contact.middleName}, #{contact.firstName}"/>
+                            <h:outputText
+                                    value="C:[#{fn:length(contact.companyContactsByContactId)}] #{contact.lastName}#{empty contact.middleName?'':' '+contact.middleName}, #{contact.firstName}"/>
                         </p:column>
                     </p:pickList>
                 </h:panelGroup>
-                <h:panelGroup id="dialog-layout-2" layout="block">
+
+                <h:panelGroup layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit"
                                      actionListener="#{companiesBean.addOrEditEntryListener2}"
                                      update="companies-contacts-form,main-form"/>
                 </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="edit-3-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="contracts-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="Add/Edit Contracts"/>
+            </f:facet>
+
+            <p:outputLabel value="Contract Signed With: " for="cmpn1"/>
+            <h:outputText id="cmpn1" value="#{companiesBean.selectedCompaniesEntity.companyName}"
+                          style="font-weight: bold;"/>
+            <p:separator style="margin-top: 10px; margin-bottom: 10px;"/>
+
+            <h:form id="contracts-form">
+                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2"
+                             style="padding-top: 3px;">
+
+
+                    <p:outputLabel value="ID: "/>
+                    <h:outputText value="#{companiesBean.selectedContractsEntity.contractId}"
+                                  style="margin-left: 5px;"/>
+
+                    <p:outputLabel value="Contract is For: "/>
+                    <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractsEntity.contractIsFor}">
+                        <f:selectItem itemLabel="---Select a Person---" itemValue=""/>
+                        <f:selectItems var="selection1"
+                                       value="#{companiesBean.companyContactEntityCollectionForSelection}"
+                                       itemLabel="#{selection1.contactsByContactId.email}"
+                                       itemValue="#{selection1.companyContactId}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Rate: "/>
+                    <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
+                                   maxlength="10"
+                                   size="20"
+                                   required="true"
+                                   id="rate"
+                                   requiredMessage="Rate is required"/>
+
+                    <p:outputLabel value="Rate Unit: "/>
+                    <p:selectOneMenu value="#{companiesBean.selectedContractsEntity.rateUnit}">
+                        <f:selectItem itemLabel="HOUR" itemValue="HOUR"/>
+                        <f:selectItem itemLabel="DAY" itemValue="DAY"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Valid From: "/>
+                    <p:calendar value="#{companiesBean.selectedContractsEntity.validFrom}" style="margin-left: 5px;"
+                                pattern="yyyy-MM-dd" maxlength="10" id="valid-from-edit"/>
+
+                    <p:outputLabel value="Valid To: "/>
+                    <p:calendar value="#{companiesBean.selectedContractsEntity.validTo}" style="margin-left: 5px;"
+                                pattern="yyyy-MM-dd" maxlength="10" id="valid-to-edit" />
+
+                    <p:outputLabel value="Description: "/>
+                    <p:inputTextarea value="#{companiesBean.selectedContractsEntity.description}"
+                                     style="margin-left: 5px;"
+                                     size="300" maxlength="100"/>
+
+                </h:panelGrid>
+                <o:validateOrder components="valid-from-edit valid-to-edit"/>
+
+                <h:panelGroup layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit"
+                                     actionListener="#{companiesBean.addOrEditEntryListener3}"
+                                     update="contracts-form,main-form"/>
+                </h:panelGroup>
+
             </h:form>
         </p:dialog>
     </ui:define>

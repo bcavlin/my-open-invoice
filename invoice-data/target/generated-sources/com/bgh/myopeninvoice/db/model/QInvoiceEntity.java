@@ -24,11 +24,11 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
 
     public final CollectionPath<AttachmentEntity, QAttachmentEntity> attachmentsByInvoiceId = this.<AttachmentEntity, QAttachmentEntity>createCollection("attachmentsByInvoiceId", AttachmentEntity.class, QAttachmentEntity.class, PathInits.DIRECT2);
 
-    public final QCompaniesEntity companiesByCompanyFrom;
-
     public final QCompaniesEntity companiesByCompanyTo;
 
-    public final NumberPath<Integer> companyFrom = createNumber("companyFrom", Integer.class);
+    public final QCompanyContactEntity companyContactByCompanyContactFrom;
+
+    public final NumberPath<Integer> companyContactFrom = createNumber("companyContactFrom", Integer.class);
 
     public final NumberPath<Integer> companyTo = createNumber("companyTo", Integer.class);
 
@@ -40,19 +40,15 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
 
     public final NumberPath<Integer> invoiceId = createNumber("invoiceId", Integer.class);
 
-    public final CollectionPath<InvoiceItemsEntity, QInvoiceItemsEntity> invoiceItemsesByInvoiceId = this.<InvoiceItemsEntity, QInvoiceItemsEntity>createCollection("invoiceItemsesByInvoiceId", InvoiceItemsEntity.class, QInvoiceItemsEntity.class, PathInits.DIRECT2);
+    public final CollectionPath<InvoiceItemsEntity, QInvoiceItemsEntity> invoiceItemsByInvoiceId = this.<InvoiceItemsEntity, QInvoiceItemsEntity>createCollection("invoiceItemsByInvoiceId", InvoiceItemsEntity.class, QInvoiceItemsEntity.class, PathInits.DIRECT2);
 
     public final StringPath note = createString("note");
 
     public final DatePath<java.util.Date> paidDate = createDate("paidDate", java.util.Date.class);
 
-    public final NumberPath<Integer> rate = createNumber("rate", Integer.class);
+    public final NumberPath<java.math.BigDecimal> rate = createNumber("rate", java.math.BigDecimal.class);
 
-    public final QRatesEntity ratesByRate;
-
-    public final QTaxEntity taxByTaxId;
-
-    public final NumberPath<Integer> taxId = createNumber("taxId", Integer.class);
+    public final StringPath rateUnit = createString("rateUnit");
 
     public final NumberPath<java.math.BigDecimal> taxPercent = createNumber("taxPercent", java.math.BigDecimal.class);
 
@@ -78,10 +74,8 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
 
     public QInvoiceEntity(Class<? extends InvoiceEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.companiesByCompanyFrom = inits.isInitialized("companiesByCompanyFrom") ? new QCompaniesEntity(forProperty("companiesByCompanyFrom")) : null;
         this.companiesByCompanyTo = inits.isInitialized("companiesByCompanyTo") ? new QCompaniesEntity(forProperty("companiesByCompanyTo")) : null;
-        this.ratesByRate = inits.isInitialized("ratesByRate") ? new QRatesEntity(forProperty("ratesByRate"), inits.get("ratesByRate")) : null;
-        this.taxByTaxId = inits.isInitialized("taxByTaxId") ? new QTaxEntity(forProperty("taxByTaxId")) : null;
+        this.companyContactByCompanyContactFrom = inits.isInitialized("companyContactByCompanyContactFrom") ? new QCompanyContactEntity(forProperty("companyContactByCompanyContactFrom"), inits.get("companyContactByCompanyContactFrom")) : null;
     }
 
 }

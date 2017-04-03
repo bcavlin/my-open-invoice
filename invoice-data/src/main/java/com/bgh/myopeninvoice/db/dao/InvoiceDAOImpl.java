@@ -36,6 +36,9 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Autowired
     private CompanyContactRepository companyContactRepository;
 
+    @Autowired
+    private ContractsRepository contractsRepository;
+
     @Override
     public ContactsRepository getContactsRepository() {
         return contactsEntity;
@@ -98,9 +101,7 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (UserRoleEntity entity : remove) {
             userRoleRepository.delete(entity.getUserRoleId());
         }
-        for (UserRoleEntity entity : add) {
-            userRoleRepository.save(entity);
-        }
+        userRoleRepository.save(add);
     }
 
     @Override
@@ -138,8 +139,16 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (CompanyContactEntity entity : remove) {
             companyContactRepository.delete(entity.getCompanyContactId());
         }
-        for (CompanyContactEntity entity : add) {
-            companyContactRepository.save(entity);
-        }
+        companyContactRepository.save(add);
+    }
+
+    @Override
+    public ContractsRepository getContractsRepository() {
+        return contractsRepository;
+    }
+
+    @Override
+    public CompanyContactRepository getCompanyContactRepository() {
+        return companyContactRepository;
     }
 }
