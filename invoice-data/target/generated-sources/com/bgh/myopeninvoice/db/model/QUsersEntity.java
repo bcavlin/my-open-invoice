@@ -20,15 +20,13 @@ public class QUsersEntity extends EntityPathBase<UsersEntity> {
 
     public static final QUsersEntity usersEntity = new QUsersEntity("usersEntity");
 
-    public final CollectionPath<ContactsEntity, QContactsEntity> contactsesByUserId = this.<ContactsEntity, QContactsEntity>createCollection("contactsesByUserId", ContactsEntity.class, QContactsEntity.class, PathInits.DIRECT2);
+    public final CollectionPath<ContactsEntity, QContactsEntity> contactsByUserId = this.<ContactsEntity, QContactsEntity>createCollection("contactsByUserId", ContactsEntity.class, QContactsEntity.class, PathInits.DIRECT2);
 
     public final BooleanPath enabled = createBoolean("enabled");
 
     public final DatePath<java.util.Date> lastLogged = createDate("lastLogged", java.util.Date.class);
 
     public final StringPath password = createString("password");
-
-    public final CollectionPath<RatesEntity, QRatesEntity> ratesByUserId = this.<RatesEntity, QRatesEntity>createCollection("ratesByUserId", RatesEntity.class, QRatesEntity.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> userId = createNumber("userId", Integer.class);
 

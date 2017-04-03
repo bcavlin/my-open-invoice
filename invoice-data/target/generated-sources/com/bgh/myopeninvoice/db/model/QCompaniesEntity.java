@@ -34,15 +34,13 @@ public class QCompaniesEntity extends EntityPathBase<CompaniesEntity> {
 
     public final StringPath companyName = createString("companyName");
 
-    public final CollectionPath<InvoiceEntity, QInvoiceEntity> invoicesByCompanyId = this.<InvoiceEntity, QInvoiceEntity>createCollection("invoicesByCompanyId", InvoiceEntity.class, QInvoiceEntity.class, PathInits.DIRECT2);
+    public final CollectionPath<ContractsEntity, QContractsEntity> contractsByCompanyId = this.<ContractsEntity, QContractsEntity>createCollection("contractsByCompanyId", ContractsEntity.class, QContractsEntity.class, PathInits.DIRECT2);
 
-    public final CollectionPath<InvoiceEntity, QInvoiceEntity> invoicesByCompanyId_0 = this.<InvoiceEntity, QInvoiceEntity>createCollection("invoicesByCompanyId_0", InvoiceEntity.class, QInvoiceEntity.class, PathInits.DIRECT2);
+    public final CollectionPath<InvoiceEntity, QInvoiceEntity> invoicesByCompanyId = this.<InvoiceEntity, QInvoiceEntity>createCollection("invoicesByCompanyId", InvoiceEntity.class, QInvoiceEntity.class, PathInits.DIRECT2);
 
     public final BooleanPath ownedByMe = createBoolean("ownedByMe");
 
     public final StringPath phone1 = createString("phone1");
-
-    public final CollectionPath<RatesEntity, QRatesEntity> ratesByCompanyId = this.<RatesEntity, QRatesEntity>createCollection("ratesByCompanyId", RatesEntity.class, QRatesEntity.class, PathInits.DIRECT2);
 
     public final StringPath shortName = createString("shortName");
 

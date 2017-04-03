@@ -19,8 +19,7 @@ public class UsersEntity implements Serializable {
     private String password;
     private Date lastLogged;
     private Boolean enabled;
-    private Collection<ContactsEntity> contactsesByUserId;
-    private Collection<RatesEntity> ratesByUserId;
+    private Collection<ContactsEntity> contactsByUserId;
     private Collection<UserRoleEntity> userRolesByUserId;
 
     @Id
@@ -102,21 +101,12 @@ public class UsersEntity implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "usersByUserId")
-    public Collection<ContactsEntity> getContactsesByUserId() {
-        return contactsesByUserId;
+    public Collection<ContactsEntity> getContactsByUserId() {
+        return contactsByUserId;
     }
 
-    public void setContactsesByUserId(Collection<ContactsEntity> contactsesByUserId) {
-        this.contactsesByUserId = contactsesByUserId;
-    }
-
-    @OneToMany(mappedBy = "usersByRateForUser")
-    public Collection<RatesEntity> getRatesByUserId() {
-        return ratesByUserId;
-    }
-
-    public void setRatesByUserId(Collection<RatesEntity> ratesByUserId) {
-        this.ratesByUserId = ratesByUserId;
+    public void setContactsByUserId(Collection<ContactsEntity> contactsByUserId) {
+        this.contactsByUserId = contactsByUserId;
     }
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -134,6 +124,7 @@ public class UsersEntity implements Serializable {
         return "UsersEntity{" +
                 "userId=" + userId +
                 ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", lastLogged=" + lastLogged +
                 ", enabled=" + enabled +
                 '}';

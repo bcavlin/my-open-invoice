@@ -4,6 +4,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Table(name = "CONTACTS", schema = "INVOICE", catalog = "INVOICEDB")
-public class ContactsEntity {
+public class ContactsEntity implements Serializable{
     private Integer contactId;
     private String firstName;
     private String lastName;

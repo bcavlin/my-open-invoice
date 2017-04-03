@@ -13,24 +13,22 @@ import java.util.Date;
 @Table(name = "INVOICE", schema = "INVOICE", catalog = "INVOICEDB")
 public class InvoiceEntity implements Serializable {
     private Integer invoiceId;
-    private Integer companyFrom;
     private Integer companyTo;
-    private Integer rate;
+    private Integer companyContactFrom;
     private Date fromDate;
     private Date toDate;
     private Date createdDate;
     private String title;
     private Date dueDate;
-    private Integer taxId;
     private BigDecimal taxPercent;
     private String note;
     private Date paidDate;
+    private BigDecimal rate;
+    private String rateUnit;
     private Collection<AttachmentEntity> attachmentsByInvoiceId;
-    private CompaniesEntity companiesByCompanyFrom;
     private CompaniesEntity companiesByCompanyTo;
-    private RatesEntity ratesByRate;
-    private TaxEntity taxByTaxId;
-    private Collection<InvoiceItemsEntity> invoiceItemsesByInvoiceId;
+    private CompanyContactEntity companyContactByCompanyContactFrom;
+    private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
 
     @Id
     @GeneratedValue
@@ -44,16 +42,6 @@ public class InvoiceEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "COMPANY_FROM", nullable = false)
-    public Integer getCompanyFrom() {
-        return companyFrom;
-    }
-
-    public void setCompanyFrom(Integer companyFrom) {
-        this.companyFrom = companyFrom;
-    }
-
-    @Basic
     @Column(name = "COMPANY_TO", nullable = false)
     public Integer getCompanyTo() {
         return companyTo;
@@ -64,13 +52,13 @@ public class InvoiceEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "RATE", nullable = false)
-    public Integer getRate() {
-        return rate;
+    @Column(name = "COMPANY_CONTACT_FROM", nullable = false)
+    public Integer getCompanyContactFrom() {
+        return companyContactFrom;
     }
 
-    public void setRate(Integer rate) {
-        this.rate = rate;
+    public void setCompanyContactFrom(Integer companyContactFrom) {
+        this.companyContactFrom = companyContactFrom;
     }
 
     @Temporal(TemporalType.DATE)
@@ -124,17 +112,7 @@ public class InvoiceEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "TAX_ID", nullable = false)
-    public Integer getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(Integer taxId) {
-        this.taxId = taxId;
-    }
-
-    @Basic
-    @Column(name = "TAX_PERCENT", nullable = false)
+    @Column(name = "TAX_PERCENT", nullable = false, precision = 32767)
     public BigDecimal getTaxPercent() {
         return taxPercent;
     }
@@ -163,6 +141,26 @@ public class InvoiceEntity implements Serializable {
         this.paidDate = paidDate;
     }
 
+    @Basic
+    @Column(name = "RATE", nullable = true, precision = 32767)
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
+    @Basic
+    @Column(name = "RATE_UNIT", nullable = true, length = 10)
+    public String getRateUnit() {
+        return rateUnit;
+    }
+
+    public void setRateUnit(String rateUnit) {
+        this.rateUnit = rateUnit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -171,18 +169,19 @@ public class InvoiceEntity implements Serializable {
         InvoiceEntity that = (InvoiceEntity) o;
 
         if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
-        if (companyFrom != null ? !companyFrom.equals(that.companyFrom) : that.companyFrom != null) return false;
         if (companyTo != null ? !companyTo.equals(that.companyTo) : that.companyTo != null) return false;
-        if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
+        if (companyContactFrom != null ? !companyContactFrom.equals(that.companyContactFrom) : that.companyContactFrom != null)
+            return false;
         if (fromDate != null ? !fromDate.equals(that.fromDate) : that.fromDate != null) return false;
         if (toDate != null ? !toDate.equals(that.toDate) : that.toDate != null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (dueDate != null ? !dueDate.equals(that.dueDate) : that.dueDate != null) return false;
-        if (taxId != null ? !taxId.equals(that.taxId) : that.taxId != null) return false;
         if (taxPercent != null ? !taxPercent.equals(that.taxPercent) : that.taxPercent != null) return false;
         if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (paidDate != null ? !paidDate.equals(that.paidDate) : that.paidDate != null) return false;
+        if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
+        if (rateUnit != null ? !rateUnit.equals(that.rateUnit) : that.rateUnit != null) return false;
 
         return true;
     }
@@ -190,18 +189,18 @@ public class InvoiceEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = invoiceId != null ? invoiceId.hashCode() : 0;
-        result = 31 * result + (companyFrom != null ? companyFrom.hashCode() : 0);
         result = 31 * result + (companyTo != null ? companyTo.hashCode() : 0);
-        result = 31 * result + (rate != null ? rate.hashCode() : 0);
+        result = 31 * result + (companyContactFrom != null ? companyContactFrom.hashCode() : 0);
         result = 31 * result + (fromDate != null ? fromDate.hashCode() : 0);
         result = 31 * result + (toDate != null ? toDate.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (dueDate != null ? dueDate.hashCode() : 0);
-        result = 31 * result + (taxId != null ? taxId.hashCode() : 0);
         result = 31 * result + (taxPercent != null ? taxPercent.hashCode() : 0);
         result = 31 * result + (note != null ? note.hashCode() : 0);
         result = 31 * result + (paidDate != null ? paidDate.hashCode() : 0);
+        result = 31 * result + (rate != null ? rate.hashCode() : 0);
+        result = 31 * result + (rateUnit != null ? rateUnit.hashCode() : 0);
         return result;
     }
 
@@ -215,16 +214,6 @@ public class InvoiceEntity implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "COMPANY_FROM", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
-    public CompaniesEntity getCompaniesByCompanyFrom() {
-        return companiesByCompanyFrom;
-    }
-
-    public void setCompaniesByCompanyFrom(CompaniesEntity companiesByCompanyFrom) {
-        this.companiesByCompanyFrom = companiesByCompanyFrom;
-    }
-
-    @ManyToOne
     @JoinColumn(name = "COMPANY_TO", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
     public CompaniesEntity getCompaniesByCompanyTo() {
         return companiesByCompanyTo;
@@ -235,50 +224,21 @@ public class InvoiceEntity implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "RATE", referencedColumnName = "RATE_ID", nullable = false, insertable = false, updatable = false)
-    public RatesEntity getRatesByRate() {
-        return ratesByRate;
+    @JoinColumn(name = "COMPANY_CONTACT_FROM", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false, insertable = false, updatable = false)
+    public CompanyContactEntity getCompanyContactByCompanyContactFrom() {
+        return companyContactByCompanyContactFrom;
     }
 
-    public void setRatesByRate(RatesEntity ratesByRate) {
-        this.ratesByRate = ratesByRate;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "TAX_ID", referencedColumnName = "TAX_ID", nullable = false, insertable = false, updatable = false)
-    public TaxEntity getTaxByTaxId() {
-        return taxByTaxId;
-    }
-
-    public void setTaxByTaxId(TaxEntity taxByTaxId) {
-        this.taxByTaxId = taxByTaxId;
+    public void setCompanyContactByCompanyContactFrom(CompanyContactEntity companyContactByCompanyContactFrom) {
+        this.companyContactByCompanyContactFrom = companyContactByCompanyContactFrom;
     }
 
     @OneToMany(mappedBy = "invoiceByInvoiceId")
-    public Collection<InvoiceItemsEntity> getInvoiceItemsesByInvoiceId() {
-        return invoiceItemsesByInvoiceId;
+    public Collection<InvoiceItemsEntity> getInvoiceItemsByInvoiceId() {
+        return invoiceItemsByInvoiceId;
     }
 
-    public void setInvoiceItemsesByInvoiceId(Collection<InvoiceItemsEntity> invoiceItemsesByInvoiceId) {
-        this.invoiceItemsesByInvoiceId = invoiceItemsesByInvoiceId;
-    }
-
-    @Override
-    public String toString() {
-        return "InvoiceEntity{" +
-                "paidDate=" + paidDate +
-                ", invoiceId=" + invoiceId +
-                ", companyFrom=" + companyFrom +
-                ", companyTo=" + companyTo +
-                ", rate=" + rate +
-                ", fromDate=" + fromDate +
-                ", toDate=" + toDate +
-                ", createdDate=" + createdDate +
-                ", title='" + title + '\'' +
-                ", dueDate=" + dueDate +
-                ", taxId=" + taxId +
-                ", taxPercent=" + taxPercent +
-                ", note='" + note + '\'' +
-                '}';
+    public void setInvoiceItemsByInvoiceId(Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId) {
+        this.invoiceItemsByInvoiceId = invoiceItemsByInvoiceId;
     }
 }

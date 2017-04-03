@@ -24,9 +24,8 @@ public class CompaniesEntity implements Serializable {
     private String businessNumber;
     private byte[] companyLogo;
     private Collection<CompanyContactEntity> companyContactsByCompanyId;
+    private Collection<ContractsEntity> contractsByCompanyId;
     private Collection<InvoiceEntity> invoicesByCompanyId;
-    private Collection<InvoiceEntity> invoicesByCompanyId_0;
-    private Collection<RatesEntity> ratesByCompanyId;
 
     @Id
     @GeneratedValue
@@ -174,31 +173,23 @@ public class CompaniesEntity implements Serializable {
         this.companyContactsByCompanyId = companyContactsByCompanyId;
     }
 
-    @OneToMany(mappedBy = "companiesByCompanyFrom")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "companiesByContractSignedWith")
+    public Collection<ContractsEntity> getContractsByCompanyId() {
+        return contractsByCompanyId;
+    }
+
+    public void setContractsByCompanyId(Collection<ContractsEntity> contractsByCompanyId) {
+        this.contractsByCompanyId = contractsByCompanyId;
+    }
+
+    @OneToMany(mappedBy = "companiesByCompanyTo")
     public Collection<InvoiceEntity> getInvoicesByCompanyId() {
         return invoicesByCompanyId;
     }
 
     public void setInvoicesByCompanyId(Collection<InvoiceEntity> invoicesByCompanyId) {
         this.invoicesByCompanyId = invoicesByCompanyId;
-    }
-
-    @OneToMany(mappedBy = "companiesByCompanyTo")
-    public Collection<InvoiceEntity> getInvoicesByCompanyId_0() {
-        return invoicesByCompanyId_0;
-    }
-
-    public void setInvoicesByCompanyId_0(Collection<InvoiceEntity> invoicesByCompanyId_0) {
-        this.invoicesByCompanyId_0 = invoicesByCompanyId_0;
-    }
-
-    @OneToMany(mappedBy = "companiesByCompanyId")
-    public Collection<RatesEntity> getRatesByCompanyId() {
-        return ratesByCompanyId;
-    }
-
-    public void setRatesByCompanyId(Collection<RatesEntity> ratesByCompanyId) {
-        this.ratesByCompanyId = ratesByCompanyId;
     }
 
     @Override

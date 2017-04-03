@@ -1,10 +1,9 @@
 package com.bgh.myopeninvoice.jsfbeans;
 
 import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.CompaniesEntity;
-import com.bgh.myopeninvoice.db.model.CompanyContactEntity;
-import com.bgh.myopeninvoice.db.model.ContactsEntity;
+import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.CompaniesEntityLazyModel;
+import com.bgh.myopeninvoice.jsfbeans.model.ContractsEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.sanselan.ImageFormat;
@@ -42,18 +41,24 @@ public class CompaniesBean implements Serializable {
     @Autowired
     private InvoiceDAO invoiceDAO;
 
-    private LazyDataModel<CompaniesEntity> companiesEntityList;
+    private LazyDataModel<CompaniesEntity> companiesEntityLazyDataModel;
 
-    private DualListModel<ContactsEntity> contactsDualListModel;
+    private LazyDataModel<ContractsEntity> contractsEntityLazyDataModel;
+
+    private DualListModel<ContactsEntity> contactsEntityDualListModel;
 
     private CompaniesEntity selectedCompaniesEntity;
+
+    private ContractsEntity selectedContractsEntity;
+
+    private Collection<CompanyContactEntity> companyContactEntityCollectionForSelection;
 
     private int pageSize = 20;
 
     @PostConstruct
     private void init() {
         logger.info("Initializing companies entries");
-        companiesEntityList = new CompaniesEntityLazyModel(invoiceDAO);
+        companiesEntityLazyDataModel = new CompaniesEntityLazyModel(invoiceDAO);
     }
 
     private void refresh() {
@@ -63,34 +68,56 @@ public class CompaniesBean implements Serializable {
         }
     }
 
-    public void newEntryListener(ActionEvent event) {
+    public void newEntryListenerForCompany(ActionEvent event) {
         logger.info("Creating new entity");
         selectedCompaniesEntity = new CompaniesEntity();
         selectedCompaniesEntity.setOwnedByMe(true);
         fillDualList();
     }
 
-    public void ajaxChangeRowListener() {
+    public void newEntryListenerForContract(ActionEvent event) {
+        logger.info("newEntryListenerForContract");
+        selectedContractsEntity = new ContractsEntity();
+        selectedContractsEntity.setCompaniesByContractSignedWith(selectedCompaniesEntity);
+        selectedContractsEntity.setContractSignedWith(selectedCompaniesEntity.getCompanyId());
+        if(companyContactEntityCollectionForSelection==null){
+            companyContactEntityCollectionForSelection = new ArrayList<>();
+            final Iterable<CompanyContactEntity> all = invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true));
+            if(all!=null){
+                all.forEach(companyContactEntityCollectionForSelection::add);
+            }
+        }
+    }
+
+    public void ajaxChangeRowListenerForCompany() {
         logger.info("Filling dual list");
+        contractsEntityLazyDataModel = new ContractsEntityLazyModel(invoiceDAO, selectedCompaniesEntity);
         fillDualList();
+    }
+
+    public void ajaxChangeRowListenerForContract() {
     }
 
     private void fillDualList() {
         final Iterable<ContactsEntity> allContactsEntity = invoiceDAO.getContactsRepository().findAll();
-        final Collection<CompanyContactEntity> assignedContactsEntity = selectedCompaniesEntity.getCompanyContactsByCompanyId();
+        Collection<CompanyContactEntity> assignedContactsEntity = selectedCompaniesEntity.getCompanyContactsByCompanyId();
+
+        if (assignedContactsEntity == null) {
+            assignedContactsEntity = new ArrayList<>();
+        }
 
         List<ContactsEntity> sourceList = new ArrayList<>();
         List<ContactsEntity> targetList = new ArrayList<>();
 
-        contactsDualListModel = new DualListModel<>();
+        contactsEntityDualListModel = new DualListModel<>();
 
         allContactsEntity.forEach(sourceList::add);
         assignedContactsEntity.forEach(r -> targetList.add(r.getContactsByContactId()));
 
         sourceList.removeAll(targetList);
 
-        contactsDualListModel.setSource(sourceList);
-        contactsDualListModel.setTarget(targetList);
+        contactsEntityDualListModel.setSource(sourceList);
+        contactsEntityDualListModel.setTarget(targetList);
     }
 
     public void addOrEditEntryListener(ActionEvent event) {
@@ -107,11 +134,24 @@ public class CompaniesBean implements Serializable {
     }
 
     public void addOrEditEntryListener2(ActionEvent event) {
-        if (selectedCompaniesEntity != null && contactsDualListModel != null) {
+        if (selectedCompaniesEntity != null && contactsEntityDualListModel != null) {
             RequestContext.getCurrentInstance().execute("PF('companies-contacts-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", contactsDualListModel.getTarget().toString());
-            invoiceDAO.saveCompanyContactEntity(selectedCompaniesEntity, contactsDualListModel.getTarget());
+            logger.info("Adding/editing entity {}", contactsEntityDualListModel.getTarget().toString());
+            invoiceDAO.saveCompanyContactEntity(selectedCompaniesEntity, contactsEntityDualListModel.getTarget());
+            refresh();
+            FacesUtils.addSuccessMessage("Entity record updated");
+        } else {
+            FacesUtils.addErrorMessage("Selected users entity is null");
+        }
+    }
+
+    public void addOrEditEntryListener3(ActionEvent event) {
+        if (selectedCompaniesEntity != null && selectedContractsEntity != null) {
+            RequestContext.getCurrentInstance().execute("PF('contracts-form-dialog').hide()");
+
+            logger.info("Adding/editing entity {}", selectedContractsEntity.toString());
+            invoiceDAO.getContractsRepository().save(selectedContractsEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
         } else {
@@ -156,12 +196,12 @@ public class CompaniesBean implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public LazyDataModel<CompaniesEntity> getCompaniesEntityList() {
-        return companiesEntityList;
+    public LazyDataModel<CompaniesEntity> getCompaniesEntityLazyDataModel() {
+        return companiesEntityLazyDataModel;
     }
 
-    public void setCompaniesEntityList(LazyDataModel<CompaniesEntity> companiesEntityList) {
-        this.companiesEntityList = companiesEntityList;
+    public void setCompaniesEntityLazyDataModel(LazyDataModel<CompaniesEntity> companiesEntityLazyDataModel) {
+        this.companiesEntityLazyDataModel = companiesEntityLazyDataModel;
     }
 
     public CompaniesEntity getSelectedCompaniesEntity() {
@@ -172,11 +212,35 @@ public class CompaniesBean implements Serializable {
         this.selectedCompaniesEntity = selectedCompaniesEntity;
     }
 
-    public DualListModel<ContactsEntity> getContactsDualListModel() {
-        return contactsDualListModel;
+    public DualListModel<ContactsEntity> getContactsEntityDualListModel() {
+        return contactsEntityDualListModel;
     }
 
-    public void setContactsDualListModel(DualListModel<ContactsEntity> contactsDualListModel) {
-        this.contactsDualListModel = contactsDualListModel;
+    public void setContactsEntityDualListModel(DualListModel<ContactsEntity> contactsEntityDualListModel) {
+        this.contactsEntityDualListModel = contactsEntityDualListModel;
+    }
+
+    public ContractsEntity getSelectedContractsEntity() {
+        return selectedContractsEntity;
+    }
+
+    public void setSelectedContractsEntity(ContractsEntity selectedContractsEntity) {
+        this.selectedContractsEntity = selectedContractsEntity;
+    }
+
+    public Collection<CompanyContactEntity> getCompanyContactEntityCollectionForSelection() {
+        return companyContactEntityCollectionForSelection;
+    }
+
+    public void setCompanyContactEntityCollectionForSelection(Collection<CompanyContactEntity> companyContactEntityCollectionForSelection) {
+        this.companyContactEntityCollectionForSelection = companyContactEntityCollectionForSelection;
+    }
+
+    public LazyDataModel<ContractsEntity> getContractsEntityLazyDataModel() {
+        return contractsEntityLazyDataModel;
+    }
+
+    public void setContractsEntityLazyDataModel(LazyDataModel<ContractsEntity> contractsEntityLazyDataModel) {
+        this.contractsEntityLazyDataModel = contractsEntityLazyDataModel;
     }
 }

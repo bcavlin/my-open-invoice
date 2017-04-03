@@ -24,17 +24,6 @@ body {
     min-height: 100%;
 }
 
-.page-header {
-    background-color: steelblue;
-    height: 50px;
-    border-bottom: 2px solid #414848;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 100;
-}
-
 .page-footer {
     position: fixed;
     left: 0;
@@ -67,40 +56,6 @@ body {
 .main-layout {
     margin: 0 auto;
     text-align: center;
-    /*align-items: center;*/
-    /*justify-content: center;*/
-}
-
-.main-layout td {
-    /*vertical-align: top;*/
-}
-
-.search-panel-col1 {
-    width: 600px;
-    text-align: right;
-}
-
-.search-panel-col2 {
-    width: 100px;
-    text-align: left;
-}
-
-.search-tab-result-left {
-    width: 70%;
-    text-align: left;
-}
-
-.search-tab-result-right {
-    width: 30%;
-    text-align: right;
-}
-
-.symbol-complete-style {
-    width: 700px !important;
-}
-
-.search-panel-style {
-
 }
 
 .two-column-1 {

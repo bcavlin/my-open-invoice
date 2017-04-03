@@ -9,20 +9,20 @@
       xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="../templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
-        <h:form id="main-form" onkeypress="return event.keyCode != 13">
+        <h:form id="main-form" onkeypress="return event.keyCode !== 13">
             <h:panelGroup id="buttons-layout" layout="block" style="margin: 15px 0 15px 0">
                 <p:commandButton value="New Tax Item" icon="ui-icon-extlink" style="margin-right: 15px;"
-                                 onclick="PF('tax-form-dialog').show();" actionListener="#{taxBean.newEntryListener}"
+                                 oncomplete="PF('tax-form-dialog').show();" actionListener="#{taxBean.newEntryListener}"
                                  update="main-form, tax-form"/>
                 <p:commandButton value="Edit Tax Item (#{taxBean.selectedTaxEntity.taxId})" icon="ui-icon-pencil"
                                  rendered="#{!empty taxBean.selectedTaxEntity and taxBean.selectedTaxEntity.taxId gt 0}"
-                                 style="margin-right: 15px;" onclick="PF('tax-form-dialog').show();"
+                                 style="margin-right: 15px;" oncomplete="PF('tax-form-dialog').show();"
                                  update="main-form, tax-form"/>
                 <p:commandButton
                         value="Delete Tax Item (#{taxBean.selectedTaxEntity.taxId})"
                         icon="ui-icon-trash"
                         rendered="#{!empty taxBean.selectedTaxEntity and taxBean.selectedTaxEntity.taxId gt 0}"
-                        style="margin-right: 15px; color: brown;" onclick="PF('confirmation1').show();"/>
+                        style="margin-right: 15px; color: brown;" oncomplete="PF('confirmation1').show();"/>
 
                 <p:confirmDialog message="Do you want to remove this tax item?"
                                  showEffect="bounce"
@@ -34,65 +34,64 @@
                                      actionListener="#{taxBean.deleteEntryListener}" update="main-form, tax-form"
                                      style="color: brown;"/>
 
-                    <p:commandButton value="No" onclick="PF('confirmation1').hide()" type="button"/>
+                    <p:commandButton value="No" oncomplete="PF('confirmation1').hide()" type="button"/>
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
-                <!--@elvariable id="tax" type="com.bgh.myopeninvoice.db.model.TaxEntity"-->
-                <p:dataTable id="tax-table"
-                             var="tax"
-                             widgetVar="tax-table"
-                             lazy="true"
-                             value="#{taxBean.taxEntityList}"
-                             paginator="true"
-                             rows="#{taxBean.pageSize}"
-                             rowKey="#{tax.taxId}"
-                             selection="#{taxBean.selectedTaxEntity}"
-                             selectionMode="single"
-                             paginatorPosition="bottom"
-                             emptyMessage="No items found with given criteria"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+            <!--@elvariable id="tax" type="com.bgh.myopeninvoice.db.model.TaxEntity"-->
+            <p:dataTable id="tax-table"
+                         var="tax"
+                         widgetVar="tax-table"
+                         lazy="true"
+                         value="#{taxBean.taxEntityList}"
+                         paginator="true"
+                         rows="#{taxBean.pageSize}"
+                         rowKey="#{tax.taxId}"
+                         selection="#{taxBean.selectedTaxEntity}"
+                         selectionMode="single"
+                         paginatorPosition="bottom"
+                         emptyMessage="No items found with given criteria"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                    <p:ajax event="rowSelect" update="main-form"/>
+                <p:ajax event="rowSelect" update="main-form"/>
 
-                    <p:columnGroup type="header">
-                        <p:row>
-                            <p:column headerText="Id" sortBy="#{tax.taxId}" style="text-align:right;" width="50"/>
-                            <p:column headerText="Percent" sortBy="#{tax.percent}" style="text-align:right;"
-                                      width="100"/>
-                            <p:column headerText="Identifier" sortBy="#{tax.identifier}" style="text-align:left;"/>
-                        </p:row>
-                        <p:row>
-                            <p:column/>
-                            <p:column/>
-                            <p:column filterBy="#{tax.identifier}">
-                                <f:facet name="filter">
-                                    <p:inputText placeholder="Type to search (500ms delay)"
-                                                 style="width: 99%" maxlength="20">
-                                        <p:ajax event="keyup" oncomplete="PF('tax-table').filter()" delay="600"/>
-                                    </p:inputText>
-                                </f:facet>
-                            </p:column>
-                        </p:row>
-                    </p:columnGroup>
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column headerText="Id" sortBy="#{tax.taxId}" style="text-align:right;" width="50"/>
+                        <p:column headerText="Percent" sortBy="#{tax.percent}" style="text-align:right;"
+                                  width="100"/>
+                        <p:column headerText="Identifier" sortBy="#{tax.identifier}" style="text-align:left;"/>
+                    </p:row>
+                    <p:row>
+                        <p:column/>
+                        <p:column/>
+                        <p:column filterBy="#{tax.identifier}">
+                            <f:facet name="filter">
+                                <p:inputText placeholder="Type to search (500ms delay)"
+                                             style="width: 99%" maxlength="20">
+                                    <p:ajax event="keyup" oncomplete="PF('tax-table').filter()" delay="600"/>
+                                </p:inputText>
+                            </f:facet>
+                        </p:column>
+                    </p:row>
+                </p:columnGroup>
 
-                    <p:column style="text-align:right;" width="50">
-                        <h:outputText value="#{tax.taxId}"/>
-                    </p:column>
-                    <p:column style="text-align:right;" width="100">
-                        <h:outputText value="#{tax.percent}">
-                            <f:convertNumber pattern="#,##0.00 %"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Identifier" style="text-align:left;">
-                        <h:outputText value="#{tax.identifier}"/>
-                    </p:column>
+                <p:column style="text-align:right;" width="50">
+                    <h:outputText value="#{tax.taxId}"/>
+                </p:column>
+                <p:column style="text-align:right;" width="100">
+                    <h:outputText value="#{tax.percent}">
+                        <f:convertNumber pattern="#,##0.00 %"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Identifier" style="text-align:left;">
+                    <h:outputText value="#{tax.identifier}"/>
+                </p:column>
 
-                </p:dataTable>
-            </h:panelGroup>
+            </p:dataTable>
         </h:form>
     </ui:define>
+
     <ui:define name="dialog">
         <p:dialog id="edit-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
                   widgetVar="tax-form-dialog" width="500" modal="true" resizable="false">
@@ -126,13 +125,13 @@
         </p:dialog>
     </ui:define>
     <!--<ui:define name="feed">-->
-        <!--&lt;!&ndash;@elvariable id="feed" type="com.sun.syndication.feed.synd.SyndEntry"&ndash;&gt;-->
-        <!--<p:feedReader value="http://www.cra-arc.gc.ca/esrvc-srvce/rss/bsnsss-eng.xml" var="feed" size="10">-->
-            <!--<h:outputText value="#{feed.title}" style="font-weight: bold;display:block"/>-->
-            <!--<h:link value="#{feed.link}"/>-->
-            <!--<h:outputText value="#{feed}" escape="false"/>-->
-            <!--<p:separator style="margin-top: 5px;"/>-->
-        <!--</p:feedReader>-->
+    <!--&lt;!&ndash;@elvariable id="feed" type="com.sun.syndication.feed.synd.SyndEntry"&ndash;&gt;-->
+    <!--<p:feedReader value="http://www.cra-arc.gc.ca/esrvc-srvce/rss/bsnsss-eng.xml" var="feed" size="10">-->
+    <!--<h:outputText value="#{feed.title}" style="font-weight: bold;display:block"/>-->
+    <!--<h:link value="#{feed.link}"/>-->
+    <!--<h:outputText value="#{feed}" escape="false"/>-->
+    <!--<p:separator style="margin-top: 5px;"/>-->
+    <!--</p:feedReader>-->
     <!--</ui:define>-->
 </ui:composition>
 </html>
