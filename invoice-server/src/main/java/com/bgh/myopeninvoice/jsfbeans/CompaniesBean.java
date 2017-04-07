@@ -93,6 +93,13 @@ public class CompaniesBean implements Serializable {
         logger.info("Filling dual list");
         contractsEntityLazyDataModel = new ContractsEntityLazyModel(invoiceDAO, selectedCompaniesEntity);
         fillDualList();
+        if(companyContactEntityCollectionForSelection==null){
+            companyContactEntityCollectionForSelection = new ArrayList<>();
+            final Iterable<CompanyContactEntity> all = invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true));
+            if(all!=null){
+                all.forEach(companyContactEntityCollectionForSelection::add);
+            }
+        }
     }
 
     public void ajaxChangeRowListenerForContract() {
