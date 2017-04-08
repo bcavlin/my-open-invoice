@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,17 +10,19 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "CONTRACTS", schema = "INVOICE", catalog = "INVOICEDB")
-public class ContractsEntity {
+public class ContractsEntity implements Serializable{
     private Integer contractId;
     private Integer contractIsFor;
     private Integer contractSignedWith;
     private BigDecimal rate;
     private String rateUnit;
+    private Integer ccy;
     private Date validFrom;
     private Date validTo;
     private String description;
-    private CompaniesEntity companiesByContractSignedWith;
     private CompanyContactEntity companyContactByContractIsFor;
+    private CompaniesEntity companiesByContractSignedWith;
+    private CurrencyEntity currencyByCcy;
 
     @GeneratedValue
     @Id
@@ -72,6 +75,16 @@ public class ContractsEntity {
         this.rateUnit = rateUnit;
     }
 
+    @Basic
+    @Column(name = "CCY", nullable = false)
+    public Integer getCcy() {
+        return ccy;
+    }
+
+    public void setCcy(Integer ccy) {
+        this.ccy = ccy;
+    }
+
     @Temporal(TemporalType.DATE)
     @Basic
     @Column(name = "VALID_FROM", nullable = false)
@@ -118,6 +131,7 @@ public class ContractsEntity {
             return false;
         if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
         if (rateUnit != null ? !rateUnit.equals(that.rateUnit) : that.rateUnit != null) return false;
+        if (ccy != null ? !ccy.equals(that.ccy) : that.ccy != null) return false;
         if (validFrom != null ? !validFrom.equals(that.validFrom) : that.validFrom != null) return false;
         if (validTo != null ? !validTo.equals(that.validTo) : that.validTo != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
@@ -132,6 +146,7 @@ public class ContractsEntity {
         result = 31 * result + (contractSignedWith != null ? contractSignedWith.hashCode() : 0);
         result = 31 * result + (rate != null ? rate.hashCode() : 0);
         result = 31 * result + (rateUnit != null ? rateUnit.hashCode() : 0);
+        result = 31 * result + (ccy != null ? ccy.hashCode() : 0);
         result = 31 * result + (validFrom != null ? validFrom.hashCode() : 0);
         result = 31 * result + (validTo != null ? validTo.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
@@ -156,6 +171,16 @@ public class ContractsEntity {
 
     public void setCompanyContactByContractIsFor(CompanyContactEntity companyContactByContractIsFor) {
         this.companyContactByContractIsFor = companyContactByContractIsFor;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "CCY", referencedColumnName = "CCY", nullable = false)
+    public CurrencyEntity getCurrencyByCcy() {
+        return currencyByCcy;
+    }
+
+    public void setCurrencyByCcy(CurrencyEntity currencyByCcy) {
+        this.currencyByCcy = currencyByCcy;
     }
 
     @Override

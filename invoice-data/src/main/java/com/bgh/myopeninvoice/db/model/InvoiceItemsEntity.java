@@ -18,7 +18,9 @@ public class InvoiceItemsEntity implements Serializable {
     private BigDecimal quantity;
     private String unit;
     private BigDecimal value;
+    private Integer ccy;
     private InvoiceEntity invoiceByInvoiceId;
+    private CurrencyEntity currencyByCcy;
     private Collection<TimeSheetEntity> timeSheetsByInvoiceItemId;
 
     @Id
@@ -92,6 +94,16 @@ public class InvoiceItemsEntity implements Serializable {
         this.value = value;
     }
 
+    @Basic
+    @Column(name = "CCY", nullable = false)
+    public Integer getCcy() {
+        return ccy;
+    }
+
+    public void setCcy(Integer ccy) {
+        this.ccy = ccy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,6 +119,7 @@ public class InvoiceItemsEntity implements Serializable {
         if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
         if (unit != null ? !unit.equals(that.unit) : that.unit != null) return false;
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        if (ccy != null ? !ccy.equals(that.ccy) : that.ccy != null) return false;
 
         return true;
     }
@@ -120,6 +133,7 @@ public class InvoiceItemsEntity implements Serializable {
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
         result = 31 * result + (unit != null ? unit.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (ccy != null ? ccy.hashCode() : 0);
         return result;
     }
 
@@ -131,6 +145,16 @@ public class InvoiceItemsEntity implements Serializable {
 
     public void setInvoiceByInvoiceId(InvoiceEntity invoiceByInvoiceId) {
         this.invoiceByInvoiceId = invoiceByInvoiceId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "CCY", referencedColumnName = "CCY", nullable = false)
+    public CurrencyEntity getCurrencyByCcy() {
+        return currencyByCcy;
+    }
+
+    public void setCurrencyByCcy(CurrencyEntity currencyByCcy) {
+        this.currencyByCcy = currencyByCcy;
     }
 
     @OneToMany(mappedBy = "invoiceItemsByInvoiceItemId")
