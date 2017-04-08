@@ -17,6 +17,7 @@ body {
     width: 1280px;
     margin-left: auto;
     margin-right: auto;
+    background-color: rgba(13, 159, 29, 0.25);
 }
 
 .page-wrapper {

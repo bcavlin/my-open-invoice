@@ -76,7 +76,7 @@ public class ContractsEntity implements Serializable{
     }
 
     @Basic
-    @Column(name = "CCY", nullable = false)
+    @Column(name = "CCY_ID", nullable = false)
     public Integer getCcy() {
         return ccy;
     }
@@ -174,7 +174,7 @@ public class ContractsEntity implements Serializable{
     }
 
     @ManyToOne
-    @JoinColumn(name = "CCY", referencedColumnName = "CCY", nullable = false)
+    @JoinColumn(name = "CCY_ID", referencedColumnName = "CCY_ID", nullable = false, insertable = false, updatable = false)
     public CurrencyEntity getCurrencyByCcy() {
         return currencyByCcy;
     }

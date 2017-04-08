@@ -5,10 +5,12 @@ import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.CompaniesEntityLazyModel;
 import com.bgh.myopeninvoice.jsfbeans.model.ContractsEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
+import com.google.common.collect.Lists;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DualListModel;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,12 +56,15 @@ public class CompaniesBean implements Serializable {
 
     private Collection<CompanyContactEntity> companyContactEntityCollectionForSelection;
 
+    private Collection<CurrencyEntity> currencyEntityCollectionForSelection;
+
     private int pageSize = 20;
 
     @PostConstruct
     private void init() {
         logger.info("Initializing companies entries");
         companiesEntityLazyDataModel = new CompaniesEntityLazyModel(invoiceDAO);
+        currencyEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCurrencyRepository().findAll());
     }
 
     private void refresh() {
@@ -66,12 +72,13 @@ public class CompaniesBean implements Serializable {
         if (selectedCompaniesEntity != null) {
             selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().findOne(selectedCompaniesEntity.getCompanyId());
         }
+        companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
     }
 
     public void newEntryListenerForCompany(ActionEvent event) {
         logger.info("Creating new entity");
         selectedCompaniesEntity = new CompaniesEntity();
-        selectedCompaniesEntity.setOwnedByMe(true);
+        selectedCompaniesEntity.setOwnedByMe(false);
         fillDualList();
     }
 
@@ -80,12 +87,10 @@ public class CompaniesBean implements Serializable {
         selectedContractsEntity = new ContractsEntity();
         selectedContractsEntity.setCompaniesByContractSignedWith(selectedCompaniesEntity);
         selectedContractsEntity.setContractSignedWith(selectedCompaniesEntity.getCompanyId());
-        if(companyContactEntityCollectionForSelection==null){
-            companyContactEntityCollectionForSelection = new ArrayList<>();
-            final Iterable<CompanyContactEntity> all = invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true));
-            if(all!=null){
-                all.forEach(companyContactEntityCollectionForSelection::add);
-            }
+        selectedContractsEntity.setValidFrom(new Date());
+        selectedContractsEntity.setValidTo(new DateTime().plusYears(2).toDate());
+        if (companyContactEntityCollectionForSelection == null) {
+            companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
         }
     }
 
@@ -93,12 +98,8 @@ public class CompaniesBean implements Serializable {
         logger.info("Filling dual list");
         contractsEntityLazyDataModel = new ContractsEntityLazyModel(invoiceDAO, selectedCompaniesEntity);
         fillDualList();
-        if(companyContactEntityCollectionForSelection==null){
-            companyContactEntityCollectionForSelection = new ArrayList<>();
-            final Iterable<CompanyContactEntity> all = invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true));
-            if(all!=null){
-                all.forEach(companyContactEntityCollectionForSelection::add);
-            }
+        if (companyContactEntityCollectionForSelection == null) {
+            companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
         }
     }
 
@@ -249,5 +250,13 @@ public class CompaniesBean implements Serializable {
 
     public void setContractsEntityLazyDataModel(LazyDataModel<ContractsEntity> contractsEntityLazyDataModel) {
         this.contractsEntityLazyDataModel = contractsEntityLazyDataModel;
+    }
+
+    public Collection<CurrencyEntity> getCurrencyEntityCollectionForSelection() {
+        return currencyEntityCollectionForSelection;
+    }
+
+    public void setCurrencyEntityCollectionForSelection(Collection<CurrencyEntity> currencyEntityCollectionForSelection) {
+        this.currencyEntityCollectionForSelection = currencyEntityCollectionForSelection;
     }
 }

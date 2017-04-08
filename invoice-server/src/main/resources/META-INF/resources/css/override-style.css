@@ -9,3 +9,17 @@
 #users-form\:users-form-grid1 td {
     padding: 0 0 10px 5px;
 }
+
+#tax-form\:input-tax_input {
+    width: 70px;
+    text-align: right;
+}
+
+#contracts-form\:rate_input {
+    width: 70px;
+    text-align: right;
+}
+
+#companies-form\:company-name {
+    width: 300px;
+}

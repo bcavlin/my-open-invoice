@@ -161,8 +161,10 @@
 
                 <h:panelGrid id="users-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
                              style="padding-top: 3px;">
+
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{usersBean.selectedUsersEntity.userId}" style="margin-left: 5px;"/>
+
                     <p:outputLabel value="Username: "/>
                     <p:inputText value="#{usersBean.selectedUsersEntity.username}" style="margin-left: 5px;"
                                  required="true"
@@ -172,6 +174,7 @@
                     <p:outputLabel value="Password: "/>
                     <p:password id="password1" value="#{usersBean.password}" maxlength="30"
                                 style="margin-left: 5px;" feedback="true"/>
+
                     <p:outputLabel value="Password Repeat: "/>
                     <p:password id="password2" value="#{usersBean.passwordRepeat}" maxlength="30"
                                 style="margin-left: 5px;" validatorMessage="Passwords must match" feedback="true">
@@ -182,15 +185,18 @@
                     <p:outputLabel value="Enabled: "/>
                     <p:selectBooleanButton value="#{usersBean.selectedUsersEntity.enabled}" style="margin-left: 5px;"
                                            offLabel="No" onLabel="Yes"/>
+
                     <p:outputLabel value="Last Logged: "/>
                     <p:calendar value="#{usersBean.selectedUsersEntity.lastLogged}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10"/>
+
                     <p:outputLabel value="Roles: "/>
-                    <h:panelGroup>
+                    <h:panelGroup style="margin-left: 5px;">
                         <ui:repeat value="#{usersBean.selectedUsersEntity.userRolesByUserId}" var="role">
                             <dl>#{role.rolesByRoleId.roleName}</dl>
                         </ui:repeat>
                     </h:panelGroup>
+
                 </h:panelGrid>
 
                 <h:panelGroup id="dialog-layout-1" layout="block">

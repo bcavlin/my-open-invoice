@@ -19,7 +19,7 @@ public class CurrencyEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "CCY", nullable = false)
+    @Column(name = "CCY_ID", nullable = false)
     public Integer getCcy() {
         return ccy;
     }

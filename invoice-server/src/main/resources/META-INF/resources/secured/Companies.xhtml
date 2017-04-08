@@ -122,7 +122,8 @@
                     <h:graphicImage id="logoIcon" value="/images/image.png"
                                     rendered="#{not empty  company.companyLogo}"/>
                     <p:overlayPanel id="imgPanel" for="logoIcon" showEvent="mouseover" hideEvent="mouseleave"
-                                    rendered="#{not empty company.companyLogo}" my="right top" at="right bottom" style="left: 100px;">
+                                    rendered="#{not empty company.companyLogo}" my="right top" at="right bottom"
+                                    style="left: 100px;">
                         <h:graphicImage value="#{companiesBean.getImageLogo(company)}" alt="logo"
                                         style="border: 1px;"/>
                     </p:overlayPanel>
@@ -166,7 +167,8 @@
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                <p:ajax event="rowSelect" update="main-form" listener="#{companiesBean.ajaxChangeRowListenerForContract}"/>
+                <p:ajax event="rowSelect" update="main-form"
+                        listener="#{companiesBean.ajaxChangeRowListenerForContract}"/>
 
                 <p:column headerText="Id" sortBy="#{companyContract.contractId}" style="text-align:right;" width="70">
                     <h:outputText value="#{companyContract.contractId}"/>
@@ -181,10 +183,16 @@
                     <h:outputText value="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"/>
                 </p:column>
                 <p:column headerText="Rate" sortBy="#{companyContract.rate}" style="text-align:right;" width="100">
-                    <h:outputText value="#{companyContract.rate}"/>
+                    <h:outputText value="#{companyContract.rate}">
+                        <f:convertNumber pattern="#,##0.00"/>
+                    </h:outputText>
                 </p:column>
-                <p:column headerText="Unit" sortBy="#{companyContract.rateUnit}" style="text-align:start;" width="100">
+                <p:column headerText="Unit" sortBy="#{companyContract.rateUnit}" style="text-align:center;" width="70">
                     <h:outputText value="#{companyContract.rateUnit}"/>
+                </p:column>
+                <p:column headerText="CCY" sortBy="#{companyContract.currencyByCcy.name}" style="text-align:center;"
+                          width="70">
+                    <h:outputText value="#{companyContract.currencyByCcy.name}"/>
                 </p:column>
                 <p:column headerText="Valid From" sortBy="#{companyContract.validFrom}" style="text-align:center;"
                           width="150">
@@ -235,6 +243,7 @@
                     <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
                                  converter="capitalizeConverter"
                                  maxlength="255"
+                                 id="company-name"
                                  requiredMessage="Company name is required"
                                  required="true"
                                  style="margin-left: 5px; text-transform: capitalize;"/>
@@ -242,7 +251,10 @@
                     <p:outputLabel value="Phone 1: "/>
                     <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
                                  maxlength="20"
-                                 style="margin-left: 5px;"/>
+                                 style="margin-left: 5px;" validatorMessage="Phone number is not in correct format">
+                        <f:validateRegex
+                                pattern="^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$"/>
+                    </p:inputText>
 
                     <p:outputLabel value="BIN: "/>
                     <p:inputText value="#{companiesBean.selectedCompaniesEntity.businessNumber}"
@@ -281,7 +293,7 @@
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit"
                                      actionListener="#{companiesBean.addOrEditEntryListener}"
-                                     update="main-form,@parent"/>
+                                     update="main-form,companies-form"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>
@@ -345,7 +357,9 @@
                                   style="margin-left: 5px;"/>
 
                     <p:outputLabel value="Contract is For: "/>
-                    <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractsEntity.contractIsFor}" style="margin-left: 5px;">
+                    <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractsEntity.contractIsFor}"
+                                     style="margin-left: 5px;" required="true"
+                                     requiredMessage="A person is needed for the contract">
                         <f:selectItem itemLabel="---Select a Person---" itemValue=""/>
                         <f:selectItems var="selection1"
                                        value="#{companiesBean.companyContactEntityCollectionForSelection}"
@@ -354,27 +368,36 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Rate: "/>
-                    <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
-                                   maxlength="10"
-                                   size="20"
-                                   required="true"
-                                   id="rate"
-                                   style="margin-left: 5px; text-align: right;"
-                                   requiredMessage="Rate is required"/>
+                    <h:panelGrid columns="2" style="margin-left: 3px;">
+                        <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
+                                       maxlength="10"
+                                       size="20"
+                                       required="true"
+                                       id="rate"
+                                       requiredMessage="Rate is required"/>
+                        <p:selectOneMenu id="currency" value="#{companiesBean.selectedContractsEntity.ccy}"
+                                         required="true" style="margin-left: 5px;">
+                            <f:selectItems var="selection2"
+                                           value="#{companiesBean.currencyEntityCollectionForSelection}"
+                                           itemLabel="#{selection2.name}"
+                                           itemValue="#{selection2.ccy}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
 
                     <p:outputLabel value="Rate Unit: "/>
-                    <p:selectOneMenu value="#{companiesBean.selectedContractsEntity.rateUnit}" style="margin-left: 5px;">
+                    <p:selectOneMenu value="#{companiesBean.selectedContractsEntity.rateUnit}"
+                                     style="margin-left: 5px;" required="true">
                         <f:selectItem itemLabel="HOUR" itemValue="HOUR"/>
                         <f:selectItem itemLabel="DAY" itemValue="DAY"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Valid From: "/>
                     <p:calendar value="#{companiesBean.selectedContractsEntity.validFrom}" style="margin-left: 5px;"
-                                pattern="yyyy-MM-dd" maxlength="10" id="valid-from-edit"/>
+                                pattern="yyyy-MM-dd" maxlength="10" id="valid-from-edit" required="true"/>
 
                     <p:outputLabel value="Valid To: "/>
                     <p:calendar value="#{companiesBean.selectedContractsEntity.validTo}" style="margin-left: 5px;"
-                                pattern="yyyy-MM-dd" maxlength="10" id="valid-to-edit" />
+                                pattern="yyyy-MM-dd" maxlength="10" id="valid-to-edit"/>
 
                     <p:outputLabel value="Description: "/>
                     <p:inputTextarea value="#{companiesBean.selectedContractsEntity.description}"
@@ -382,7 +405,9 @@
                                      size="300" maxlength="100"/>
 
                 </h:panelGrid>
+
                 <o:validateOrder components="valid-from-edit valid-to-edit"/>
+                <p:watermark value="0.00" for="rate"/>
 
                 <h:panelGroup layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>

@@ -15,33 +15,77 @@ import java.util.List;
 @Repository("invoiceDAO")
 public class InvoiceDAOImpl implements InvoiceDAO {
 
-    @Autowired
     private RolesRepository rolesRepository;
 
-    @Autowired
     private TaxRepository taxRepository;
 
-    @Autowired
     private UsersRepository usersRepository;
 
-    @Autowired
     private UserRoleRepository userRoleRepository;
 
-    @Autowired
-    private ContactsRepository contactsEntity;
+    private ContactsRepository contactsRepository;
 
-    @Autowired
     private CompaniesRepository companiesRepository;
 
-    @Autowired
     private CompanyContactRepository companyContactRepository;
 
-    @Autowired
     private ContractsRepository contractsRepository;
+
+    private CurrencyRepository currencyRepository;
+
+    @Autowired
+    public void setCurrencyRepository(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
+
+    @Autowired
+    public void setContactsRepository(ContactsRepository contactsRepository) {
+        this.contactsRepository = contactsRepository;
+    }
+
+    @Override
+    public CurrencyRepository getCurrencyRepository() {
+        return currencyRepository;
+    }
+
+    @Autowired
+    public void setRolesRepository(RolesRepository rolesRepository) {
+        this.rolesRepository = rolesRepository;
+    }
+
+    @Autowired
+    public void setCompaniesRepository(CompaniesRepository companiesRepository) {
+        this.companiesRepository = companiesRepository;
+    }
+
+    @Autowired
+    public void setCompanyContactRepository(CompanyContactRepository companyContactRepository) {
+        this.companyContactRepository = companyContactRepository;
+    }
+
+    @Autowired
+    public void setContractsRepository(ContractsRepository contractsRepository) {
+        this.contractsRepository = contractsRepository;
+    }
+
+    @Autowired
+    public void setTaxRepository(TaxRepository taxRepository) {
+        this.taxRepository = taxRepository;
+    }
+
+    @Autowired
+    public void setUsersRepository(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
+
+    @Autowired
+    public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
+        this.userRoleRepository = userRoleRepository;
+    }
 
     @Override
     public ContactsRepository getContactsRepository() {
-        return contactsEntity;
+        return contactsRepository;
     }
 
     @Override
@@ -73,11 +117,11 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (RolesEntity target : targetRoles) {
             boolean found = false;
             for (UserRoleEntity currentRole : usersEntity.getUserRolesByUserId()) {
-                if(currentRole.getRolesByRoleId().getRoleId().equals(target.getRoleId())){
+                if (currentRole.getRolesByRoleId().getRoleId().equals(target.getRoleId())) {
                     found = true;
                 }
             }
-            if(!found){
+            if (!found) {
                 UserRoleEntity _new = new UserRoleEntity();
                 _new.setDateAssigned(new Date());
                 _new.setUsersByUserId(usersEntity);
@@ -89,11 +133,11 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (UserRoleEntity current : usersEntity.getUserRolesByUserId()) {
             boolean found = false;
             for (RolesEntity targetRole : targetRoles) {
-                if(current.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())){
+                if (current.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())) {
                     found = true;
                 }
             }
-            if(!found){
+            if (!found) {
                 remove.add(current);
             }
         }
@@ -112,11 +156,11 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (ContactsEntity target : targetContacts) {
             boolean found = false;
             for (CompanyContactEntity current : selectedCompaniesEntity.getCompanyContactsByCompanyId()) {
-                if(current.getContactsByContactId().getContactId().equals(target.getContactId())){
+                if (current.getContactsByContactId().getContactId().equals(target.getContactId())) {
                     found = true;
                 }
             }
-            if(!found){
+            if (!found) {
                 CompanyContactEntity _new = new CompanyContactEntity();
                 _new.setCompaniesByCompanyId(selectedCompaniesEntity);
                 _new.setContactsByContactId(target);
@@ -127,11 +171,11 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (CompanyContactEntity current : selectedCompaniesEntity.getCompanyContactsByCompanyId()) {
             boolean found = false;
             for (ContactsEntity target : targetContacts) {
-                if(current.getContactsByContactId().getContactId().equals(target.getContactId())){
+                if (current.getContactsByContactId().getContactId().equals(target.getContactId())) {
                     found = true;
                 }
             }
-            if(!found){
+            if (!found) {
                 remove.add(current);
             }
         }
