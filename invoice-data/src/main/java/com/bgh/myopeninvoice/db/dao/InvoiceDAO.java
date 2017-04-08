@@ -22,6 +22,8 @@ public interface InvoiceDAO {
 
     CompaniesRepository getCompaniesRepository();
 
+    CurrencyRepository getCurrencyRepository();
+
     void saveUserRolesEntity(UsersEntity user, List<RolesEntity> targetRoles);
 
     void saveCompanyContactEntity(CompaniesEntity selectedCompaniesEntity, List<ContactsEntity> target);

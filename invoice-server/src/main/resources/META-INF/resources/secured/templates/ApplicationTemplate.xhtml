@@ -26,6 +26,8 @@
 
         <h:panelGroup layout="block" id="container" style="width: 100%;">
 
+            <ui:include src="/Header.xhtml"/>
+
             <h:form id="toolbar-form">
                 <p:toolbar>
                     <f:facet name="left">
@@ -56,7 +58,9 @@
             </h:panelGroup>
 
             <h:panelGroup id="footer" styleClass="page-footer ui-widget" layout="block">
-                <span id="expander" style="cursor: pointer;"><ui:include src="/Footer.xhtml"/></span>
+                <span id="expander" style="cursor: pointer;">
+                    <ui:include src="/Footer.xhtml"/>
+                </span>
             </h:panelGroup>
 
         </h:panelGroup>

@@ -24,6 +24,8 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
 
     public final CollectionPath<AttachmentEntity, QAttachmentEntity> attachmentsByInvoiceId = this.<AttachmentEntity, QAttachmentEntity>createCollection("attachmentsByInvoiceId", AttachmentEntity.class, QAttachmentEntity.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> ccy = createNumber("ccy", Integer.class);
+
     public final QCompaniesEntity companiesByCompanyTo;
 
     public final QCompanyContactEntity companyContactByCompanyContactFrom;
@@ -33,6 +35,8 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
     public final NumberPath<Integer> companyTo = createNumber("companyTo", Integer.class);
 
     public final DatePath<java.util.Date> createdDate = createDate("createdDate", java.util.Date.class);
+
+    public final QCurrencyEntity currencyByCcy;
 
     public final DatePath<java.util.Date> dueDate = createDate("dueDate", java.util.Date.class);
 
@@ -76,6 +80,7 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
         super(type, metadata, inits);
         this.companiesByCompanyTo = inits.isInitialized("companiesByCompanyTo") ? new QCompaniesEntity(forProperty("companiesByCompanyTo")) : null;
         this.companyContactByCompanyContactFrom = inits.isInitialized("companyContactByCompanyContactFrom") ? new QCompanyContactEntity(forProperty("companyContactByCompanyContactFrom"), inits.get("companyContactByCompanyContactFrom")) : null;
+        this.currencyByCcy = inits.isInitialized("currencyByCcy") ? new QCurrencyEntity(forProperty("currencyByCcy")) : null;
     }
 
 }
