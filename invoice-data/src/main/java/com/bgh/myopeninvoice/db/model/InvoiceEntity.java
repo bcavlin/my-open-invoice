@@ -25,9 +25,11 @@ public class InvoiceEntity implements Serializable {
     private Date paidDate;
     private BigDecimal rate;
     private String rateUnit;
+    private Integer ccy;
     private Collection<AttachmentEntity> attachmentsByInvoiceId;
     private CompaniesEntity companiesByCompanyTo;
     private CompanyContactEntity companyContactByCompanyContactFrom;
+    private CurrencyEntity currencyByCcy;
     private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
 
     @Id
@@ -161,6 +163,16 @@ public class InvoiceEntity implements Serializable {
         this.rateUnit = rateUnit;
     }
 
+    @Basic
+    @Column(name = "CCY", nullable = false)
+    public Integer getCcy() {
+        return ccy;
+    }
+
+    public void setCcy(Integer ccy) {
+        this.ccy = ccy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -182,6 +194,7 @@ public class InvoiceEntity implements Serializable {
         if (paidDate != null ? !paidDate.equals(that.paidDate) : that.paidDate != null) return false;
         if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
         if (rateUnit != null ? !rateUnit.equals(that.rateUnit) : that.rateUnit != null) return false;
+        if (ccy != null ? !ccy.equals(that.ccy) : that.ccy != null) return false;
 
         return true;
     }
@@ -201,6 +214,7 @@ public class InvoiceEntity implements Serializable {
         result = 31 * result + (paidDate != null ? paidDate.hashCode() : 0);
         result = 31 * result + (rate != null ? rate.hashCode() : 0);
         result = 31 * result + (rateUnit != null ? rateUnit.hashCode() : 0);
+        result = 31 * result + (ccy != null ? ccy.hashCode() : 0);
         return result;
     }
 
@@ -233,6 +247,16 @@ public class InvoiceEntity implements Serializable {
         this.companyContactByCompanyContactFrom = companyContactByCompanyContactFrom;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "CCY", referencedColumnName = "CCY", nullable = false)
+    public CurrencyEntity getCurrencyByCcy() {
+        return currencyByCcy;
+    }
+
+    public void setCurrencyByCcy(CurrencyEntity currencyByCcy) {
+        this.currencyByCcy = currencyByCcy;
+    }
+
     @OneToMany(mappedBy = "invoiceByInvoiceId")
     public Collection<InvoiceItemsEntity> getInvoiceItemsByInvoiceId() {
         return invoiceItemsByInvoiceId;
@@ -240,5 +264,25 @@ public class InvoiceEntity implements Serializable {
 
     public void setInvoiceItemsByInvoiceId(Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId) {
         this.invoiceItemsByInvoiceId = invoiceItemsByInvoiceId;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceEntity{" +
+                "invoiceId=" + invoiceId +
+                ", companyTo=" + companyTo +
+                ", companyContactFrom=" + companyContactFrom +
+                ", fromDate=" + fromDate +
+                ", toDate=" + toDate +
+                ", createdDate=" + createdDate +
+                ", title='" + title + '\'' +
+                ", dueDate=" + dueDate +
+                ", taxPercent=" + taxPercent +
+                ", note='" + note + '\'' +
+                ", paidDate=" + paidDate +
+                ", rate=" + rate +
+                ", rateUnit='" + rateUnit + '\'' +
+                ", ccy=" + ccy +
+                '}';
     }
 }
