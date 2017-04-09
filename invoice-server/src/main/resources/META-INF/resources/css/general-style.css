@@ -84,3 +84,11 @@ body {
 .two-column-2 {
     text-align: right;
 }
+
+.invoice-column-1 {
+    width: 50%;
+}
+
+.invoice-column-2 {
+    width: 50%;
+}

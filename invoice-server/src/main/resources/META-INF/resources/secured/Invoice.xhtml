@@ -25,9 +25,137 @@
       xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
-        <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+        <h:panelGroup id="main-layout" styleClass="main-layout" layout="block" style="margin: 15px 0 15px 0">
+            <h:form id="main-form" onkeypress="return event.keyCode !== 13">
+                <h:panelGrid columns="2" columnClasses="invoice-column-1 invoice-column-2" style="width: 100%;">
+                    <h:panelGroup id="invoice-panel" style="text-align: left;">
 
+                        <h:panelGroup id="buttons-1-group" layout="block" style="margin-bottom: 15px;">
+                            <p:commandButton value="New Invoice" icon="ui-icon-extlink" style="margin-right: 15px;"
+                                             oncomplete="PF('invoice-form-dialog').show();"
+                                             actionListener="#{invoiceBean.newEntryListener}"
+                                             update="main-form,invoice-form"/>
+                            <p:commandButton value="Edit Invoice (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
+                                             icon="ui-icon-pencil"
+                                             rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
+                                             style="margin-right: 15px;" oncomplete="PF('invoice-form-dialog').show();"
+                                             update="main-form,invoice-form"/>
+                            <p:commandButton
+                                    value="Delete Invoice (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
+                                    icon="ui-icon-trash"
+                                    rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
+                                    style="margin-right: 15px; color: brown;" oncomplete="PF('confirmation1').show();"/>
+
+                            <p:confirmDialog message="Do you want to remove this Invoice?"
+                                             showEffect="bounce"
+                                             header="Delete Invoice"
+                                             severity="alert"
+                                             widgetVar="confirmation1">
+                                <p:commandButton value="Remove ID (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
+                                                 oncomplete="PF('confirmation1').hide()"
+                                                 actionListener="#{invoiceBean.deleteEntryListener}"
+                                                 update="main-form,invoice-form"
+                                                 style="color: brown;"/>
+                                <p:commandButton value="No" oncomplete="PF('confirmation1').hide()" type="button"/>
+                            </p:confirmDialog>
+                        </h:panelGroup>
+
+                        <!--@elvariable id="invoice" type="com.bgh.myopeninvoice.db.model.InvoiceEntity"-->
+                        <p:dataTable id="invoice-table"
+                                     var="invoice"
+                                     widgetVar="invoice-table"
+                                     value="#{invoiceBean.invoiceEntityLazyDataModel}"
+                                     rows="#{invoiceBean.pageSize}"
+                                     rowKey="#{invoice.invoiceId}"
+                                     selection="#{invoiceBean.selectedInvoiceEntity}"
+                                     selectionMode="single"
+                                     emptyMessage="No items found with given criteria"
+                                     scrollable="true"
+                                     scrollWidth="638"
+                                     lazy="true"
+                                     paginatorPosition="bottom"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                            <p:ajax event="rowSelect" update="main-form"
+                                    listener="#{invoiceBean.ajaxChangeRowListener}"/>
+
+                            <p:column headerText="Id" sortBy="#{invoice.invoiceId}" style="text-align:right;"
+                                      width="50">
+                                <h:outputText value="#{invoice.invoiceId}"/>
+                            </p:column>
+                            <p:column headerText="From"
+                                      sortBy="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"
+                                      style="text-align:start;" width="150">
+                                <h:outputText
+                                        value="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"/>
+                            </p:column>
+                            <p:column headerText="To" sortBy="#{invoice.companiesByCompanyTo.companyName}"
+                                      style="text-align:start;" width="150">
+                                <h:outputText value="#{invoice.companiesByCompanyTo.companyName}"/>
+                            </p:column>
+                            <p:column headerText="Title" sortBy="#{invoice.title}" style="text-align:start;"
+                                      width="100">
+                                <h:outputText value="#{invoice.title}"/>
+                            </p:column>
+                            <p:column headerText="Created" sortBy="#{invoice.createdDate}" style="text-align:center;"
+                                      width="120">
+                                <h:outputText value="#{invoice.createdDate}"/>
+                            </p:column>
+                            <p:column headerText="Due" sortBy="#{invoice.dueDate}" style="text-align:center;"
+                                      width="120">
+                                <h:outputText value="#{invoice.dueDate}"/>
+                            </p:column>
+                            <p:column headerText="Rate" sortBy="#{invoice.rate}" style="text-align:right;" width="70">
+                                <h:outputText value="#{invoice.rate}"/>
+                            </p:column>
+                            <p:column headerText="Unit" sortBy="#{invoice.rateUnit}" style="text-align:center;"
+                                      width="70">
+                                <h:outputText value="#{invoice.rateUnit}"/>
+                            </p:column>
+                            <p:column headerText="CCY" sortBy="#{invoice.currencyByCcy.name}" style="text-align:center;"
+                                      width="70">
+                                <h:outputText value="#{invoice.currencyByCcy.name}"/>
+                            </p:column>
+                            <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
+                                      width="120">
+                                <h:outputText value="#{invoice.paidDate}"/>
+                            </p:column>
+                            <p:column headerText="Tax" sortBy="#{invoice.taxPercent}" style="text-align:right;"
+                                      width="70">
+                                <h:outputText value="#{invoice.taxPercent}"/>
+                            </p:column>
+                            <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;" width="500">
+                                <h:outputText value="#{invoice.note}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="invoice-items-panel">
+                        Items
+                    </h:panelGroup>
+
+                    <h:panelGroup id="attachments-panel">
+                        Attachments
+                    </h:panelGroup>
+
+                    <h:panelGroup id="timesheet-panel">
+                        Timesheet
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:form>
         </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="dialog">
+        <p:dialog id="invoice-form-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+                  widgetVar="invoice-form-dialog" width="500" modal="true" resizable="false">
+            <f:facet name="header">
+                <h:outputText value="Add/Edit Invoice"/>
+            </f:facet>
+            <h:form id="invoice-form">
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>
 </html>
