@@ -40,6 +40,8 @@ public interface InvoiceDAO {
 
     CurrencyRepository getCurrencyRepository();
 
+    InvoiceRepository getInvoiceRepository();
+
     void saveUserRolesEntity(UsersEntity user, List<RolesEntity> targetRoles);
 
     void saveCompanyContactEntity(CompaniesEntity selectedCompaniesEntity, List<ContactsEntity> target);

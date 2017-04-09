@@ -49,6 +49,18 @@ public class InvoiceDAOImpl implements InvoiceDAO {
 
     private CurrencyRepository currencyRepository;
 
+    private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    public void setInvoiceRepository(InvoiceRepository invoiceRepository) {
+        this.invoiceRepository = invoiceRepository;
+    }
+
+    @Override
+    public InvoiceRepository getInvoiceRepository() {
+        return invoiceRepository;
+    }
+
     @Autowired
     public void setCurrencyRepository(CurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
