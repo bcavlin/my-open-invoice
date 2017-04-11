@@ -26,11 +26,7 @@
         xmlns:p="http://primefaces.org/ui"
         xmlns:f="http://xmlns.jcp.org/jsf/core">
     <div style="width: 100%;">
-        &copy; Copyright
-        <h:outputText value="#{now}">
-            <f:convertDateTime pattern="yyyy" type="date" />
-        </h:outputText>
-        BGHexagon Consulting Inc. All Rights Reserved.
+        <h:outputText value="#{msg['license.and.copyright']}" style="margin-left: 5px;"/>
     </div>
     <div style="width: 100%; text-align: center; margin-bottom: 10px;">
         <h:form>
