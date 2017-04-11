@@ -115,6 +115,16 @@ public class CompanyContactEntity implements Serializable{
         this.invoicesByCompanyContactId = invoicesByCompanyContactId;
     }
 
+    @Transient
+    public ContractsEntity findValidContract(CompaniesEntity company){
+        for (ContractsEntity contractsEntity : contractsByCompanyContactId) {
+            if(contractsEntity.getCompaniesByContractSignedWith().equals(company)){
+                return contractsEntity;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "CompanyContactEntity{" +

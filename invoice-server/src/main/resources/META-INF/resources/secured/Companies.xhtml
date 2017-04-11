@@ -379,7 +379,7 @@
                         <f:selectItem itemLabel="---Select a Person---" itemValue=""/>
                         <f:selectItems var="selection1"
                                        value="#{companiesBean.companyContactEntityCollectionForSelection}"
-                                       itemLabel="#{selection1.contactsByContactId.email}"
+                                       itemLabel="#{selection1.contactsByContactId.email} from #{selection1.companiesByCompanyId.shortName}"
                                        itemValue="#{selection1.companyContactId}"/>
                     </p:selectOneMenu>
 

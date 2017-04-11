@@ -16,6 +16,9 @@
 
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -189,6 +192,7 @@ public class ContractsEntity implements Serializable{
         this.companyContactByContractIsFor = companyContactByContractIsFor;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CCY_ID", referencedColumnName = "CCY_ID", nullable = false, insertable = false, updatable = false)
     public CurrencyEntity getCurrencyByCcy() {

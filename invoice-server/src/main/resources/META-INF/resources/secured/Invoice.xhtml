@@ -22,7 +22,10 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:fmt="http://omnifaces.org/functions">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
         <h:panelGroup id="main-layout" styleClass="main-layout" layout="block" style="margin: 15px 0 15px 0">
@@ -154,6 +157,73 @@
                 <h:outputText value="Add/Edit Invoice"/>
             </f:facet>
             <h:form id="invoice-form">
+                <p:focus for="from"/>
+                <p:messages autoUpdate="true"/>
+
+                <h:panelGrid id="invoice-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                             style="padding-top: 3px;">
+
+                    <p:outputLabel value="ID:"/>
+                    <h:outputText value="#{invoiceBean.selectedInvoiceEntity.invoiceId}" style="margin-left: 5px;"/>
+
+                    <p:outputLabel value="From:"/>
+                    <p:selectOneMenu id="from" value="#{invoiceBean.selectedInvoiceEntity.companyContactFrom}"
+                                     required="true" style="margin-left: 5px;">
+                        <f:selectItem itemLabel="---Select Company Owned By You---" itemValue=""/>
+                        <f:selectItems var="selection1"
+                                       value="#{invoiceBean.companyContactEntityCollectionForSelection}"
+                                       itemLabel="#{selection1.companiesByCompanyId.companyName}"
+                                       itemValue="#{selection1.companyContactId}"/>
+                        <p:ajax event="change" update="@form" listener="#{invoiceBean.updateSelectionFromTo}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="To:"/>
+                    <p:selectOneMenu id="to" value="#{invoiceBean.selectedInvoiceEntity.companyTo}"
+                                     required="true" style="margin-left: 5px;"
+                                     valueChangeListener="#{invoiceBean.updateSelectionFromTo}">
+                        <f:selectItem itemLabel="---Select Company NOT Owned By You---" itemValue=""/>
+                        <f:selectItems var="selection2"
+                                       value="#{invoiceBean.companiesEntityCollectionForSelection}"
+                                       itemLabel="#{selection2.companyName}, contracts (#{fn:length(selection2.contractsByCompanyId)})"
+                                       itemValue="#{selection2.companyId}"/>
+                        <p:ajax event="change" update="@form" listener="#{invoiceBean.updateSelectionFromTo}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Tax %:"/>
+                    <p:selectOneMenu id="tax" value="#{invoiceBean.selectedInvoiceEntity.taxPercent}"
+                                     required="true" style="margin-left: 5px;">
+                        <f:selectItems var="selection3"
+                                       value="#{invoiceBean.taxEntityCollectionForSelection}"
+                                       itemLabel="#{fmt:formatNumber(selection3.percent * 100.00, '0.00')} - #{selection3.identifier}"
+                                       itemValue="#{selection3.percent}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Created:"/>
+                    <p:calendar value="#{invoiceBean.selectedInvoiceEntity.createdDate}" style="margin-left: 5px;"
+                                pattern="yyyy-MM-dd" maxlength="10" id="created-date" required="true"/>
+
+                    <p:outputLabel value="Due:"/>
+                    <p:calendar value="#{invoiceBean.selectedInvoiceEntity.dueDate}" style="margin-left: 5px;"
+                                pattern="yyyy-MM-dd" maxlength="10" id="due-date" required="true"/>
+
+                    <p:outputLabel value="Rate:" rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
+                    <h:panelGroup id="rate-grp" style="font-weight: bold;" rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}">
+                        <h:outputText value="${invoiceBean.selectedInvoiceEntity.rate}" style="margin-left: 5px;">
+                            <f:convertNumber pattern="0.00"/>
+                        </h:outputText>
+                        <h:outputText value="${invoiceBean.selectedInvoiceEntity.currencyByCcy.name}"
+                                      style="margin-left: 5px;"/>
+                        <h:outputText value="per ${invoiceBean.selectedInvoiceEntity.rateUnit}" style="margin-left: 5px;"/>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+
+                <h:panelGroup layout="block">
+                    <p:separator style="margin: 10px 0 10px 0"/>
+                    <p:commandButton value="Submit" type="submit"
+                                     actionListener="#{invoiceBean.addOrEditEntryListener}"
+                                     update="invoice-form,main-form"/>
+                </h:panelGroup>
             </h:form>
         </p:dialog>
     </ui:define>
