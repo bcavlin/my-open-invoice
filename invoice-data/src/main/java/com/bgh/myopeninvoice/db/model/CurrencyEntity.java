@@ -104,15 +104,6 @@ public class CurrencyEntity implements Serializable {
         this.invoicesByCcy = invoicesByCcy;
     }
 
-    @OneToMany(mappedBy = "currencyByCcy")
-    public Collection<InvoiceItemsEntity> getInvoiceItemsByCcy() {
-        return invoiceItemsByCcy;
-    }
-
-    public void setInvoiceItemsByCcy(Collection<InvoiceItemsEntity> invoiceItemsByCcy) {
-        this.invoiceItemsByCcy = invoiceItemsByCcy;
-    }
-
     @Override
     public String toString() {
         return "CurrencyEntity{" +

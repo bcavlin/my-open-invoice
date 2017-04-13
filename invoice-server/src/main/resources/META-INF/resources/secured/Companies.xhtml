@@ -95,7 +95,7 @@
                 </p:column>
 
                 <p:column headerText="Owned" sortBy="#{company.ownedByMe}" style="text-align:center;" width="70">
-                    <h:outputText value="#{company.ownedByMe?'Yes':'No'}"/>
+                    <h:outputText value="#{company.ownedByMe?'Yes':'No'}" style="color: #{company.ownedByMe?'green':'red'};"/>
                 </p:column>
 
                 <p:column headerText="Short" sortBy="#{company.shortName}" style="text-align:start;" width="70">
@@ -239,7 +239,7 @@
                 <p:focus for="shortName"/>
                 <p:messages autoUpdate="true" id="messages"/>
 
-                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2"
+                <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2"
                              style="padding-top: 3px;">
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
@@ -364,8 +364,8 @@
             <p:separator style="margin-top: 10px; margin-bottom: 10px;"/>
 
             <h:form id="contracts-form">
-                <h:panelGrid columns="2" columnClasses="two-column-1 two-column-2"
-                             style="padding-top: 3px;">
+                <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2"
+                             style="padding-top: 3px;" id="panel-grid-1">
 
 
                     <p:outputLabel value="ID: "/>
@@ -384,7 +384,7 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Rate: "/>
-                    <h:panelGrid columns="2" style="margin-left: 3px;">
+                    <h:panelGrid columns="2" style="margin-left: 3px;" id="rate-grid">
                         <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
                                        maxlength="10"
                                        size="20"

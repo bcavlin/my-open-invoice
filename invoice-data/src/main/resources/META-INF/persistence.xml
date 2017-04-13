@@ -18,46 +18,7 @@
         <class>com.bgh.myopeninvoice.db.model.CurrencyEntity</class>
         <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
         <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
-        <class>com.bgh.myopeninvoice.db.model2.CatalogsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.CollationsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ColumnsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ColumnPrivilegesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ConstantsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ConstraintsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.CrossReferencesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.DomainsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.FunctionAliasesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.FunctionColumnsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.HelpEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.IndexesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.InDoubtEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.LocksEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.QueryStatisticsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.RightsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.SchemataEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.SequencesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.SessionsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.SessionStateEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.SettingsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TablesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TablePrivilegesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TableTypesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TriggersEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TypeInfoEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ViewsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.AttachmentEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.CompaniesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.CompanyContactEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ContactsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.ContractsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.CurrencyEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.InvoiceEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.InvoiceItemsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.RolesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TaxEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.TimeSheetEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.UsersEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.UserRoleEntity</class>
+
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

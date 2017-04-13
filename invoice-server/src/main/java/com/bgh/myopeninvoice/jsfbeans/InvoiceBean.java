@@ -19,8 +19,12 @@ package com.bgh.myopeninvoice.jsfbeans;
 import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.InvoiceEntityLazyModel;
+import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDate;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +36,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -47,6 +52,8 @@ public class InvoiceBean implements Serializable {
 
     private InvoiceDAO invoiceDAO;
 
+
+    //Invoice data
     private LazyDataModel<InvoiceEntity> invoiceEntityLazyDataModel;
 
     private Collection<CompanyContactEntity> companyContactEntityCollectionForSelection;
@@ -56,6 +63,9 @@ public class InvoiceBean implements Serializable {
     private Collection<TaxEntity> taxEntityCollectionForSelection;
 
     private InvoiceEntity selectedInvoiceEntity;
+
+    //Invoice Items data
+    private InvoiceItemsEntity selectedInvoiceItemsEntity;
 
     private int pageSize = 20;
 
@@ -84,6 +94,10 @@ public class InvoiceBean implements Serializable {
         logger.info("Creating new entity");
         selectedInvoiceEntity = new InvoiceEntity();
         selectedInvoiceEntity.setCreatedDate(new Date());
+        selectedInvoiceEntity.setFromDate(new LocalDate().withDayOfMonth(1).toDate());
+        selectedInvoiceEntity.setToDate(new LocalDate().dayOfMonth().withMaximumValue().toDate());
+        selectedInvoiceEntity.setDueDate(new LocalDate().plusMonths(1).withDayOfMonth(15).toDate());
+        selectedInvoiceEntity.setInvoiceItemsByInvoiceId(new ArrayList<>()); //for value calculation
     }
 
     public void ajaxChangeRowListener() {
@@ -91,11 +105,28 @@ public class InvoiceBean implements Serializable {
     }
 
     public void addOrEditEntryListener(ActionEvent event) {
+        if (selectedInvoiceEntity != null && selectedInvoiceEntity.getTitle() == null) {
+            RequestContext.getCurrentInstance().execute("PF('invoice-form-dialog').hide()");
 
+            logger.info("Adding/editing entity {}", selectedInvoiceEntity.toString());
+            selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().save(selectedInvoiceEntity);
+            refresh();
+            FacesUtils.addSuccessMessage("Entity record updated");
+        } else {
+            FacesUtils.addErrorMessage("Selected entity is null or title not set");
+        }
     }
 
     public void deleteEntryListener(ActionEvent event) {
-
+        if (selectedInvoiceEntity != null) {
+            logger.info("Deleting entity {}", selectedInvoiceEntity.toString());
+            invoiceDAO.getTaxRepository().delete(selectedInvoiceEntity.getInvoiceId());
+            refresh();
+            FacesUtils.addSuccessMessage("Entity deleted");
+            selectedInvoiceEntity = null;
+        } else {
+            FacesUtils.addErrorMessage("Selected entity is null");
+        }
     }
 
     public void updateSelectionFromTo() {
@@ -103,7 +134,7 @@ public class InvoiceBean implements Serializable {
                 && selectedInvoiceEntity.getCompanyContactFrom() != null
                 && selectedInvoiceEntity.getCompanyTo() != null
                 ) {
-            if(selectedInvoiceEntity.getCompanyContactByCompanyContactFrom()==null || selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().getCompanyContactId()!=selectedInvoiceEntity.getCompanyContactFrom()) {
+            if (selectedInvoiceEntity.getCompanyContactByCompanyContactFrom() == null || selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().getCompanyContactId() != selectedInvoiceEntity.getCompanyContactFrom()) {
                 selectedInvoiceEntity.setCompanyContactByCompanyContactFrom(invoiceDAO.getCompanyContactRepository().findOne(selectedInvoiceEntity.getCompanyContactFrom()));
                 selectedInvoiceEntity.setCompaniesByCompanyTo(invoiceDAO.getCompaniesRepository().findOne(selectedInvoiceEntity.getCompanyTo()));
                 final ContractsEntity validContract = selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().findValidContract(selectedInvoiceEntity.getCompaniesByCompanyTo());
@@ -112,6 +143,11 @@ public class InvoiceBean implements Serializable {
                     selectedInvoiceEntity.setRateUnit(validContract.getRateUnit());
                     selectedInvoiceEntity.setCcy(validContract.getCcy());
                     selectedInvoiceEntity.setCurrencyByCcy(validContract.getCurrencyByCcy());
+
+                    if (StringUtils.isBlank(selectedInvoiceEntity.getTitle())) {
+                        selectedInvoiceEntity.setTitle(selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().getCompaniesByCompanyId().getShortName() +
+                                "-" + LocalDate.now().getYear() + "-" + invoiceDAO.getInvoiceCounterSeq());
+                    }
                 }
             }
         }
@@ -163,5 +199,13 @@ public class InvoiceBean implements Serializable {
 
     public void setTaxEntityCollectionForSelection(Collection<TaxEntity> taxEntityCollectionForSelection) {
         this.taxEntityCollectionForSelection = taxEntityCollectionForSelection;
+    }
+
+    public InvoiceItemsEntity getSelectedInvoiceItemsEntity() {
+        return selectedInvoiceItemsEntity;
+    }
+
+    public void setSelectedInvoiceItemsEntity(InvoiceItemsEntity selectedInvoiceItemsEntity) {
+        this.selectedInvoiceItemsEntity = selectedInvoiceItemsEntity;
     }
 }
