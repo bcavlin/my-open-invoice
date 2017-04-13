@@ -26,6 +26,14 @@
     padding: 0 0 10px 5px;
 }
 
+#invoice-form\:invoice-form-grid1 td {
+    padding: 0 0 10px 5px;
+}
+
+#invoice-form\:updates td {
+    padding: 0 0 10px 5px;
+}
+
 #tax-form\:input-tax_input {
     width: 70px;
     text-align: right;
@@ -39,3 +47,16 @@
 #companies-form\:company-name {
     width: 300px;
 }
+
+#companies-form td {
+    padding: 0 0 10px 5px;
+}
+
+#contracts-form td {
+    padding: 0 0 10px 5px;
+}
+
+#contracts-form\:rate-grid {
+    padding: 0;
+}
+

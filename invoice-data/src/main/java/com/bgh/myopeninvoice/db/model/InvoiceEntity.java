@@ -16,6 +16,10 @@
 
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -273,6 +277,7 @@ public class InvoiceEntity implements Serializable {
         this.currencyByCcy = currencyByCcy;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "invoiceByInvoiceId")
     public Collection<InvoiceItemsEntity> getInvoiceItemsByInvoiceId() {
         return invoiceItemsByInvoiceId;
@@ -281,6 +286,43 @@ public class InvoiceEntity implements Serializable {
     public void setInvoiceItemsByInvoiceId(Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId) {
         this.invoiceItemsByInvoiceId = invoiceItemsByInvoiceId;
     }
+
+
+    private BigDecimal totalValue;
+
+    @Formula("(select sum(e.total) from invoice.invoice_items e where e.invoice_id = invoice_id)")
+    public BigDecimal getTotalValue() {
+        return totalValue == null ? new BigDecimal(0) : totalValue;
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    private BigDecimal totalValueWithTax;
+
+    @Formula("(select sum(e.total) * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
+    public BigDecimal getTotalValueWithTax() {
+        return totalValueWithTax == null ? new BigDecimal(0) : totalValueWithTax;
+
+    }
+
+    public void setTotalValueWithTax(BigDecimal totalValueWithTax) {
+        this.totalValueWithTax = totalValueWithTax;
+    }
+
+    //    @Transient
+//    public BigDecimal getTotalValue() {
+//        return getInvoiceItemsByInvoiceId().stream().map(InvoiceItemsEntity::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
+//
+//    @Transient
+//    public BigDecimal getTotalValueWithTax() {
+//        return getInvoiceItemsByInvoiceId().stream().map(i -> i.getTotal()
+//                .multiply(i.getInvoiceByInvoiceId().getTaxPercent()
+//                        .add(new BigDecimal(1.0))))
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//    }
 
     @Override
     public String toString() {

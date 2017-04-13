@@ -18,6 +18,7 @@ package com.bgh.myopeninvoice.db.dao;
 
 import com.bgh.myopeninvoice.db.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,17 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     private CurrencyRepository currencyRepository;
 
     private InvoiceRepository invoiceRepository;
+
+    private JdbcTemplate jdbcTemplate;
+
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Autowired
     public void setInvoiceRepository(InvoiceRepository invoiceRepository) {
@@ -222,5 +234,10 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Override
     public CompanyContactRepository getCompanyContactRepository() {
         return companyContactRepository;
+    }
+
+    @Override
+    public Integer getInvoiceCounterSeq() {
+        return jdbcTemplate.queryForObject("SELECT PUBLIC.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", Integer.class);
     }
 }

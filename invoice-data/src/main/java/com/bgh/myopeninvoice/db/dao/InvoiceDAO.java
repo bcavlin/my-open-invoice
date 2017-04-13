@@ -49,4 +49,6 @@ public interface InvoiceDAO {
     ContractsRepository getContractsRepository();
 
     CompanyContactRepository getCompanyContactRepository();
+
+    Integer getInvoiceCounterSeq();
 }

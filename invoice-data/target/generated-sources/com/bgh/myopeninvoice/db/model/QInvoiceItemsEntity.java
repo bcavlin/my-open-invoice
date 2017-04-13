@@ -22,11 +22,7 @@ public class QInvoiceItemsEntity extends EntityPathBase<InvoiceItemsEntity> {
 
     public static final QInvoiceItemsEntity invoiceItemsEntity = new QInvoiceItemsEntity("invoiceItemsEntity");
 
-    public final NumberPath<Integer> ccy = createNumber("ccy", Integer.class);
-
     public final StringPath code = createString("code");
-
-    public final QCurrencyEntity currencyByCcy;
 
     public final StringPath description = createString("description");
 
@@ -36,13 +32,9 @@ public class QInvoiceItemsEntity extends EntityPathBase<InvoiceItemsEntity> {
 
     public final NumberPath<Integer> invoiceItemId = createNumber("invoiceItemId", Integer.class);
 
-    public final NumberPath<java.math.BigDecimal> quantity = createNumber("quantity", java.math.BigDecimal.class);
-
     public final CollectionPath<TimeSheetEntity, QTimeSheetEntity> timeSheetsByInvoiceItemId = this.<TimeSheetEntity, QTimeSheetEntity>createCollection("timeSheetsByInvoiceItemId", TimeSheetEntity.class, QTimeSheetEntity.class, PathInits.DIRECT2);
 
-    public final StringPath unit = createString("unit");
-
-    public final NumberPath<java.math.BigDecimal> value = createNumber("value", java.math.BigDecimal.class);
+    public final NumberPath<java.math.BigDecimal> total = createNumber("total", java.math.BigDecimal.class);
 
     public QInvoiceItemsEntity(String variable) {
         this(InvoiceItemsEntity.class, forVariable(variable), INITS);
@@ -62,7 +54,6 @@ public class QInvoiceItemsEntity extends EntityPathBase<InvoiceItemsEntity> {
 
     public QInvoiceItemsEntity(Class<? extends InvoiceItemsEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.currencyByCcy = inits.isInitialized("currencyByCcy") ? new QCurrencyEntity(forProperty("currencyByCcy")) : null;
         this.invoiceByInvoiceId = inits.isInitialized("invoiceByInvoiceId") ? new QInvoiceEntity(forProperty("invoiceByInvoiceId"), inits.get("invoiceByInvoiceId")) : null;
     }
 

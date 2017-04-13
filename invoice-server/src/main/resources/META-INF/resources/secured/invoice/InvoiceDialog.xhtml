@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Branislav Cavlin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:fmt="http://omnifaces.org/functions">
+
+<p:dialog id="invoice-form-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+          widgetVar="invoice-form-dialog" width="500" modal="true" resizable="false">
+    <f:facet name="header">
+        <h:outputText value="Add/Edit Invoice"/>
+    </f:facet>
+    <h:form id="invoice-form">
+        <p:focus for="from"/>
+        <p:messages autoUpdate="true"/>
+
+        <h:panelGrid id="invoice-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
+                     style="padding-top: 3px;">
+
+            <p:outputLabel value="ID:"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.invoiceId}"
+                          style="margin-left: 5px; font-weight: bold;"/>
+
+
+            <p:outputLabel value="Created date:"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.createdDate}"
+                          style="margin-left: 5px; font-weight: bold;">
+                <f:convertDateTime pattern="yyyy-MM-dd"/>
+            </h:outputText>
+
+            <p:outputLabel value="From:"/>
+            <p:selectOneMenu id="from" value="#{invoiceBean.selectedInvoiceEntity.companyContactFrom}"
+                             required="true" style="margin-left: 5px;"
+                             requiredMessage="From company is required">
+                <f:selectItem itemLabel="---Select Company Owned By You---" itemValue=""/>
+                <f:selectItems var="selection1"
+                               value="#{invoiceBean.companyContactEntityCollectionForSelection}"
+                               itemLabel="#{selection1.companiesByCompanyId.companyName} - BN:#{selection1.companiesByCompanyId.businessNumber}"
+                               itemValue="#{selection1.companyContactId}"/>
+                <p:ajax event="change" update="@form:updates,@form:title,@form:submit1"
+                        listener="#{invoiceBean.updateSelectionFromTo}" partialSubmit="false"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="To:"/>
+            <p:selectOneMenu id="to" value="#{invoiceBean.selectedInvoiceEntity.companyTo}"
+                             required="true" style="margin-left: 5px;" requiredMessage="To company is required"
+                             valueChangeListener="#{invoiceBean.updateSelectionFromTo}">
+                <f:selectItem itemLabel="---Select Company NOT Owned By You---" itemValue=""/>
+                <f:selectItems var="selection2"
+                               value="#{invoiceBean.companiesEntityCollectionForSelection}"
+                               itemLabel="#{selection2.companyName}, contracts (#{fn:length(selection2.contractsByCompanyId)}) - BN:#{selection2.businessNumber}"
+                               itemValue="#{selection2.companyId}"/>
+                <p:ajax event="change" update="@form:updates,@form:title,@form:submit1"
+                        listener="#{invoiceBean.updateSelectionFromTo}" partialSubmit="false"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="Tax %:"/>
+            <p:selectOneMenu id="tax" value="#{invoiceBean.selectedInvoiceEntity.taxPercent}"
+                             required="true" style="margin-left: 5px;" requiredMessage="Tax is required">
+                <f:selectItems var="selection3"
+                               value="#{invoiceBean.taxEntityCollectionForSelection}"
+                               itemLabel="#{fmt:formatNumber(selection3.percent * 100.00, '0.00')} - #{selection3.identifier}"
+                               itemValue="#{selection3.percent}"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="From Date:"/>
+            <p:calendar value="#{invoiceBean.selectedInvoiceEntity.fromDate}" style="margin-left: 5px;"
+                        pattern="yyyy-MM-dd" maxlength="10" id="from-date" required="true"
+                        requiredMessage="First reporting date date is required"/>
+
+            <p:outputLabel value="To Date:"/>
+            <p:calendar value="#{invoiceBean.selectedInvoiceEntity.toDate}" style="margin-left: 5px;"
+                        pattern="yyyy-MM-dd" maxlength="10" id="to-date" required="true"
+                        requiredMessage="Last reporting date date is required"/>
+
+            <p:outputLabel value="Due Date:"/>
+            <p:calendar value="#{invoiceBean.selectedInvoiceEntity.dueDate}" style="margin-left: 5px;"
+                        pattern="yyyy-MM-dd" maxlength="10" id="due-date" required="true"
+                        requiredMessage="Due date is required"/>
+
+            <p:outputLabel value="Paid Date:"/>
+            <p:calendar value="#{invoiceBean.selectedInvoiceEntity.paidDate}" style="margin-left: 5px;"
+                        pattern="yyyy-MM-dd" maxlength="10" id="paid-date"/>
+
+            <p:outputLabel value="Note:"/>
+            <p:inputTextarea value="#{invoiceBean.selectedInvoiceEntity.note}"
+                             style="margin-left: 5px;"
+                             size="300" maxlength="500"/>
+        </h:panelGrid>
+
+        <h:panelGrid id="updates" columns="2" columnClasses="two-column-1,two-column-2"
+                     style="padding-top: 3px;">
+
+            <p:outputLabel value="Number: "/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.title}" id="title"
+                          style="margin-left: 5px; font-weight: bold;"/>
+
+            <p:outputLabel value="Rate:"/>
+            <h:panelGroup id="rate-grp" style="font-weight: bold;">
+                <h:outputText value="${invoiceBean.selectedInvoiceEntity.rate}" style="margin-left: 5px;"
+                              rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}">
+                    <f:convertNumber pattern="0.00"/>
+                </h:outputText>
+                <h:outputText value="${invoiceBean.selectedInvoiceEntity.currencyByCcy.name}"
+                              style="margin-left: 5px;"
+                              rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
+                <h:outputText value="per ${invoiceBean.selectedInvoiceEntity.rateUnit}"
+                              style="margin-left: 5px;"
+                              rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
+            </h:panelGroup>
+
+            <p:outputLabel value="Total:"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.calculateTotalValue()}"
+                          style="margin-left: 5px; font-weight: bold;">
+                <f:convertNumber pattern="#,##0.00"/>
+            </h:outputText>
+
+            <p:outputLabel value="Total (+Tax):"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.calculateTotalValueWithTax()}"
+                          style="margin-left: 5px; font-weight: bold;">
+                <f:convertNumber pattern="#,##0.00"/>
+            </h:outputText>
+
+        </h:panelGrid>
+
+        <h:panelGroup layout="block">
+            <p:separator style="margin: 10px 0 10px 0"/>
+            <p:commandButton value="Submit" type="submit" id="submit1"
+                             actionListener="#{invoiceBean.addOrEditEntryListener}"
+                             update="invoice-form,main-form"
+                             disabled="#{empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
+        </h:panelGroup>
+    </h:form>
+</p:dialog>
+
+</html>
