@@ -252,4 +252,16 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     public InvoiceItemsRepository getInvoiceItemsRepository() {
         return invoiceItemsRepository;
     }
+
+    private AttachmentRepository attachmentRepository;
+
+    @Override
+    public AttachmentRepository getAttachmentRepository() {
+        return attachmentRepository;
+    }
+
+    @Autowired
+    public void setAttachmentRepository(AttachmentRepository attachmentRepository) {
+        this.attachmentRepository = attachmentRepository;
+    }
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Branislav Cavlin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:fmt="http://omnifaces.org/functions">
+
+<p:dialog id="invoice-attachment-form-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+          widgetVar="invoice-attachment-form-dialog" width="500" modal="true" resizable="false">
+    <f:facet name="header">
+        <h:outputText value="Upload Attachment"/>
+    </f:facet>
+
+    <h:form id="invoice-attachment-form">
+
+        <p:messages autoUpdate="true"/>
+
+        <h:panelGrid id="invoice-attachment-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
+                     style="padding-top: 3px;">
+
+            <p:outputLabel value="Invoice ID:"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.invoiceId}"
+                          style="margin-left: 5px; font-weight: bold;"/>
+
+            <p:outputLabel value="Uploaded:"/>
+            <p:dataList value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" id="data-list"
+                        style="margin-left: 5px; width: 90%;"
+                        var="att">
+                <f:facet name="header">
+                    Uploaded
+                </f:facet>
+                <h:outputText value="#{att.filename}"/>
+            </p:dataList>
+
+            <p:outputLabel value="Upload: "/>
+            <p:fileUpload fileUploadListener="#{invoiceBean.handleFileUpload}"
+                          mode="advanced"
+                          dragDropSupport="false"
+                          multiple="true"
+                          fileLimit="5"
+                          style="margin-left: 5px;"
+                          update="@parent"
+                          sizeLimit="10000000"
+                          allowTypes="/(\.|\/)(gif|jpeg|png|pdf|docx|xlsx)$/"/>
+
+        </h:panelGrid>
+
+        <h:panelGroup layout="block">
+            <p:separator style="margin: 10px 0 10px 0"/>
+            <p:commandButton value="Submit" type="submit" id="submit3"
+                             actionListener="#{invoiceBean.addOrEditInvoiceAttachmentListener}"
+                             update="invoice-form,,invoice-attachment-form,main-form"
+            />
+        </h:panelGroup>
+    </h:form>
+</p:dialog>
+
+</html>

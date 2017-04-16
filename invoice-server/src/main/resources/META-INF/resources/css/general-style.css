@@ -85,6 +85,14 @@ body {
     text-align: left;
 }
 
+.column-left {
+    text-align: left;
+}
+
+.column-right {
+    text-align: right;
+}
+
 .invoice-column-1 {
     width: 50%;
     text-align: left;

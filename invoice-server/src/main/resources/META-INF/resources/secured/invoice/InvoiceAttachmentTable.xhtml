@@ -33,20 +33,20 @@
     <p:commandButton value="Upload Attachment for (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
                      icon="ui-icon-extlink" style="margin-right: 15px;"
                      rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
-                     oncomplete="PF('invoice-form-dialog').show();"
+                     oncomplete="PF('invoice-attachment-form-dialog').show();"
                      actionListener="#{invoiceBean.addNewAttachmentListener}"
-                     update="main-form,invoice-form"/>
+                     update="main-form,invoice-attachment-form"/>
 </h:panelGroup>
 
 <p:carousel value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" headerText="Attachments" var="att"
             itemStyle="text-align:center" responsive="true" style="width: 634px;" id="image-carousel-1">
     <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-1">
         <h:graphicImage value="#{invoiceBean.getImageAttachment(att)}" width="128" height="128" id="content-image"/>
-        <p:commandLink id="image-link" value="#{fn:substring(att.filename, 0, 20)}"
+        <p:commandLink id="image-link" value="#{applicationBean.abbreviate(att.filename)}"
                        style="font-family: 'Courier New', Monospace"
                        actionListener="#{invoiceBean.switchProxy(att)}" update="carusel-grid-1"/>
         <p:contextMenu for="carusel-grid-1">
-            <p:menuitem value="Download [#{att.filename}]" icon="ui-icon-arrowthickstop-1-s"/>
+            <p:menuitem value="Download [#{att.filename}]" icon="ui-icon-arrowthickstop-1-s" actionListener="#{invoiceBean.download(att)}" ajax="false"/>
             <p:separator/>
             <p:menuitem value="Delete [#{att.filename}]" update="image-carousel-1" icon="ui-icon-trash"
                         oncomplete="PF('confirmation-inv-#{att.attachmentId}').show();"/>
@@ -59,8 +59,8 @@
                          widgetVar="confirmation-inv-#{att.attachmentId}">
             <p:commandButton value="Remove ID (#{att.attachmentId})"
                              oncomplete="PF('confirmation-inv-#{att.attachmentId}').hide()"
-                             actionListener="#{invoiceBean.deleteAttachmentListener}"
-                             update="image-carousel-1"
+                             actionListener="#{invoiceBean.deleteAttachment(att)}"
+                             update="main-form"
                              style="color: brown;">
                 <f:attribute name="attachmentId" value="#{att.attachmentId}"/>
             </p:commandButton>
