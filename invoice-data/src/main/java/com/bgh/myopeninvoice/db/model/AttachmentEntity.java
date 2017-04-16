@@ -16,6 +16,9 @@
 
 package com.bgh.myopeninvoice.db.model;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -107,12 +110,42 @@ public class AttachmentEntity implements Serializable {
         this.invoiceByInvoiceId = invoiceByInvoiceId;
     }
 
+    private Boolean loadProxy;
+
+    @Transient
+    public Boolean getLoadProxy() {
+        if (loadProxy == null) {
+            loadProxy = Boolean.TRUE;
+        }
+        return loadProxy;
+    }
+
+    public void setLoadProxy(Boolean loadProxy) {
+        this.loadProxy = loadProxy;
+    }
+
+    private String fileExtension;
+
+    @Transient
+    public String getFileExtension() {
+        if (!StringUtils.isBlank(filename)) {
+            this.fileExtension = FilenameUtils.getExtension(filename).toLowerCase();
+        }
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
+
     @Override
     public String toString() {
         return "AttachmentEntity{" +
                 "attachmentId=" + attachmentId +
                 ", invoiceId=" + invoiceId +
                 ", filename='" + filename + '\'' +
+                ", loadProxy=" + loadProxy +
+                ", fileExtension='" + fileExtension + '\'' +
                 '}';
     }
 }

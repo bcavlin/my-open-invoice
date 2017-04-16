@@ -41,7 +41,7 @@
                     </h:panelGroup>
 
                     <h:panelGroup id="attachments-panel" layout="block">
-                        Attachments
+                        <ui:include src="invoice/InvoiceAttachmentTable.xhtml"/>
                     </h:panelGroup>
 
                     <h:panelGroup id="timesheet-panel" layout="block">
@@ -54,6 +54,7 @@
 
     <ui:define name="dialog">
         <ui:include src="invoice/InvoiceDialog.xhtml"/>
+        <ui:include src="invoice/InvoiceItemsDialog.xhtml"/>
     </ui:define>
 </ui:composition>
 </html>

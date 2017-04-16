@@ -29,16 +29,16 @@
 
 <h:panelGroup id="buttons-2-group" layout="block" style="margin-bottom: 15px;">
     <p:spacer height="23" rendered="#{empty invoiceBean.selectedInvoiceEntity or empty invoiceBean.selectedInvoiceEntity.invoiceId}"/>
-    <p:commandButton value="New Item (#{invoiceBean.selectedInvoiceEntity.invoiceId})" icon="ui-icon-extlink" style="margin-right: 15px;"
+    <p:commandButton value="New Invoice Item (#{invoiceBean.selectedInvoiceEntity.invoiceId})" icon="ui-icon-extlink" style="margin-right: 15px;"
                      rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
-                     oncomplete="PF('invoice-form-dialog').show();"
-                     actionListener="#{invoiceBean.newEntryListener}"
-                     update="main-form,invoice-form"/>
-    <p:commandButton value="Edit Item (#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId})"
+                     oncomplete="PF('invoice-items-form-dialog').show();"
+                     actionListener="#{invoiceBean.addNewInvoiceItemsListener}"
+                     update="main-form,invoice-items-form"/>
+    <p:commandButton value="Edit Invoice Item (#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId})"
                      icon="ui-icon-pencil"
                      rendered="#{!empty invoiceBean.selectedInvoiceItemsEntity and invoiceBean.selectedInvoiceItemsEntity.invoiceItemId gt 0}"
-                     style="margin-right: 15px;" oncomplete="PF('invoice-form-dialog').show();"
-                     update="main-form,invoice-form"/>
+                     style="margin-right: 15px;" oncomplete="PF('invoice-items-form-dialog').show();"
+                     update="main-form,invoice-items-form"/>
     <p:commandButton
             value="Delete Invoice Item (#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId})"
             icon="ui-icon-trash"
@@ -47,13 +47,13 @@
 
     <p:confirmDialog message="Do you want to remove this Invoice Item?"
                      showEffect="bounce"
-                     header="Delete Item"
+                     header="Delete Invoice Item"
                      severity="alert"
                      widgetVar="confirmation2">
         <p:commandButton value="Remove ID (#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId})"
                          oncomplete="PF('confirmation2').hide()"
-                         actionListener="#{invoiceBean.deleteEntryListener}"
-                         update="main-form,invoice-form"
+                         actionListener="#{invoiceBean.deleteInvoiceItemsListener}"
+                         update="main-form,invoice-items-form"
                          style="color: brown;"/>
         <p:commandButton value="No" oncomplete="PF('confirmation2').hide()" type="button"/>
     </p:confirmDialog>
@@ -71,8 +71,7 @@
              emptyMessage="No items found with given criteria"
              scrollable="true"
              scrollWidth="638"
-             paginator="false"
-             >
+             paginator="false">
 
     <p:ajax event="rowSelect" update="main-form:buttons-2-group"
             listener="#{invoiceBean.ajaxChangeRowListener}"/>
@@ -80,11 +79,6 @@
     <p:column headerText="Id" sortBy="#{invoiceItem.invoiceItemId}" style="text-align:right;"
               width="50">
         <h:outputText value="#{invoiceItem.invoiceItemId}"/>
-    </p:column>
-
-    <p:column headerText="Code" sortBy="#{invoiceItem.code}" style="text-align:start;"
-              width="100">
-        <h:outputText value="#{invoiceItem.code}"/>
     </p:column>
 
     <p:column headerText="Total" sortBy="#{invoiceItem.total}" style="text-align:right;"
@@ -97,6 +91,11 @@
     <p:column headerText="Description" sortBy="#{invoiceItem.description}" style="text-align:start;"
               width="400">
         <h:outputText value="#{invoiceItem.description}"/>
+    </p:column>
+
+    <p:column headerText="Code" sortBy="#{invoiceItem.code}" style="text-align:start;"
+              width="100">
+        <h:outputText value="#{invoiceItem.code}"/>
     </p:column>
 
 </p:dataTable>

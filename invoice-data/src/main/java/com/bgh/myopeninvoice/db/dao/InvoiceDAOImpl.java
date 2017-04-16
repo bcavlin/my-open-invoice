@@ -240,4 +240,16 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     public Integer getInvoiceCounterSeq() {
         return jdbcTemplate.queryForObject("SELECT PUBLIC.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", Integer.class);
     }
+
+    private InvoiceItemsRepository invoiceItemsRepository;
+
+    @Autowired
+    public void setInvoiceItemsRepository(InvoiceItemsRepository invoiceItemsRepository) {
+        this.invoiceItemsRepository = invoiceItemsRepository;
+    }
+
+    @Override
+    public InvoiceItemsRepository getInvoiceItemsRepository() {
+        return invoiceItemsRepository;
+    }
 }

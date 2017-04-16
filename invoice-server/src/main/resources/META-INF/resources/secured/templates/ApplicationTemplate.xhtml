@@ -57,6 +57,7 @@
                         </sec:authorize>
                     </f:facet>
                     <f:facet name="right">
+                        <p:commandButton icon="ui-icon-gear" title="Settings"/>
                         <p:commandButton value="Logout (#{p:userPrincipal().name})" icon="ui-icon-close" ajax="false"
                                          action="#{applicationBean.logout}"/>
                     </f:facet>
