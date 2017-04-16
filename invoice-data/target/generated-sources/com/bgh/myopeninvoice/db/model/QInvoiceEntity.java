@@ -60,6 +60,10 @@ public class QInvoiceEntity extends EntityPathBase<InvoiceEntity> {
 
     public final DatePath<java.util.Date> toDate = createDate("toDate", java.util.Date.class);
 
+    public final NumberPath<java.math.BigDecimal> totalValue = createNumber("totalValue", java.math.BigDecimal.class);
+
+    public final NumberPath<java.math.BigDecimal> totalValueWithTax = createNumber("totalValueWithTax", java.math.BigDecimal.class);
+
     public QInvoiceEntity(String variable) {
         this(InvoiceEntity.class, forVariable(variable), INITS);
     }

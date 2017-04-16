@@ -131,23 +131,31 @@
             </h:panelGroup>
 
             <p:outputLabel value="Total:"/>
-            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.calculateTotalValue()}"
-                          style="margin-left: 5px; font-weight: bold;">
-                <f:convertNumber pattern="#,##0.00"/>
-            </h:outputText>
+            <h:panelGrid columns="2" style="margin-left: 3px;">
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.totalValue}"
+                              style="margin-left: 5px; font-weight: bold;">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcy.name}" style="font-weight: bold; margin-left: 3px;"/>
+
+            </h:panelGrid>
 
             <p:outputLabel value="Total (+Tax):"/>
-            <h:outputText value="#{invoiceBean.selectedInvoiceEntity.calculateTotalValueWithTax()}"
-                          style="margin-left: 5px; font-weight: bold;">
-                <f:convertNumber pattern="#,##0.00"/>
-            </h:outputText>
+            <h:panelGrid columns="2" style="margin-left: 3px;">
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.totalValueWithTax}"
+                              style="margin-left: 5px; font-weight: bold;">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcy.name}" style="font-weight: bold; margin-left: 3px;"/>
+
+            </h:panelGrid>
 
         </h:panelGrid>
 
         <h:panelGroup layout="block">
             <p:separator style="margin: 10px 0 10px 0"/>
             <p:commandButton value="Submit" type="submit" id="submit1"
-                             actionListener="#{invoiceBean.addOrEditEntryListener}"
+                             actionListener="#{invoiceBean.addOrEditInvoiceListener}"
                              update="invoice-form,main-form"
                              disabled="#{empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
         </h:panelGroup>

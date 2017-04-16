@@ -30,7 +30,7 @@
 <h:panelGroup id="buttons-1-group" layout="block" style="margin-bottom: 15px;">
     <p:commandButton value="New Invoice" icon="ui-icon-extlink" style="margin-right: 15px;"
                      oncomplete="PF('invoice-form-dialog').show();"
-                     actionListener="#{invoiceBean.newEntryListener}"
+                     actionListener="#{invoiceBean.addNewInvoiceListener}"
                      update="main-form,invoice-form"/>
     <p:commandButton value="Edit Invoice (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
                      icon="ui-icon-pencil"
@@ -50,7 +50,7 @@
                      widgetVar="confirmation1">
         <p:commandButton value="Remove ID (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
                          oncomplete="PF('confirmation1').hide()"
-                         actionListener="#{invoiceBean.deleteEntryListener}"
+                         actionListener="#{invoiceBean.deleteInvoiceListener}"
                          update="main-form,invoice-form"
                          style="color: brown;"/>
         <p:commandButton value="No" oncomplete="PF('confirmation1').hide()" type="button"/>
@@ -86,7 +86,7 @@
         <h:outputText value="#{invoice.title}"/>
     </p:column>
     <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}"
-              width="100">
+              width="110">
         <h:outputText value="#{invoice.totalValueWithTax}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
@@ -116,12 +116,8 @@
               width="70">
         <h:outputText value="#{invoice.rateUnit}"/>
     </p:column>
-    <p:column headerText="CCY" sortBy="#{invoice.currencyByCcy.name}" style="text-align:center;"
-              width="70">
-        <h:outputText value="#{invoice.currencyByCcy.name}"/>
-    </p:column>
     <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}"
-              width="100">
+              width="110">
         <h:outputText value="#{invoice.totalValue}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
@@ -131,6 +127,10 @@
         <h:outputText value="#{invoice.taxPercent}">
             <f:convertNumber pattern="#,##0.00 %"/>
         </h:outputText>
+    </p:column>
+    <p:column headerText="CCY" sortBy="#{invoice.currencyByCcy.name}" style="text-align:center;"
+              width="70">
+        <h:outputText value="#{invoice.currencyByCcy.name}"/>
     </p:column>
     <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
               width="120">

@@ -22,7 +22,14 @@ import com.bgh.myopeninvoice.jsfbeans.model.InvoiceEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.sanselan.ImageFormat;
+import org.apache.sanselan.ImageReadException;
+import org.apache.sanselan.Sanselan;
 import org.joda.time.LocalDate;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
@@ -35,6 +42,10 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,10 +99,10 @@ public class InvoiceBean implements Serializable {
 
     private void refresh() {
         logger.info("Loading entries");
+        invoiceEntityLazyDataModel = new InvoiceEntityLazyModel(invoiceDAO);
     }
 
-    public void newEntryListener(ActionEvent event) {
-        logger.info("Creating new entity");
+    public void addNewInvoiceListener(ActionEvent event) {
         selectedInvoiceEntity = new InvoiceEntity();
         selectedInvoiceEntity.setCreatedDate(new Date());
         selectedInvoiceEntity.setFromDate(new LocalDate().withDayOfMonth(1).toDate());
@@ -100,11 +111,20 @@ public class InvoiceBean implements Serializable {
         selectedInvoiceEntity.setInvoiceItemsByInvoiceId(new ArrayList<>()); //for value calculation
     }
 
+    public void addNewInvoiceItemsListener(ActionEvent event) {
+        selectedInvoiceItemsEntity = new InvoiceItemsEntity();
+        selectedInvoiceItemsEntity.setInvoiceId(selectedInvoiceEntity.getInvoiceId());
+    }
+
+    public void addNewAttachmentListener(ActionEvent event) {
+
+    }
+
     public void ajaxChangeRowListener() {
 
     }
 
-    public void addOrEditEntryListener(ActionEvent event) {
+    public void addOrEditInvoiceListener(ActionEvent event) {
         if (selectedInvoiceEntity != null && selectedInvoiceEntity.getTitle() == null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-form-dialog').hide()");
 
@@ -117,16 +137,47 @@ public class InvoiceBean implements Serializable {
         }
     }
 
-    public void deleteEntryListener(ActionEvent event) {
+    public void addOrEditInvoiceItemsListener(ActionEvent event) {
+        if (selectedInvoiceEntity != null && selectedInvoiceItemsEntity != null) {
+            RequestContext.getCurrentInstance().execute("PF('invoice-items-form-dialog').hide()");
+
+            logger.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
+            selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().save(selectedInvoiceItemsEntity);
+            selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
+            refresh();
+            FacesUtils.addSuccessMessage("Entity record updated");
+        } else {
+            FacesUtils.addErrorMessage("Selected entity is null or title not set");
+        }
+    }
+
+    public void deleteInvoiceListener(ActionEvent event) {
         if (selectedInvoiceEntity != null) {
             logger.info("Deleting entity {}", selectedInvoiceEntity.toString());
-            invoiceDAO.getTaxRepository().delete(selectedInvoiceEntity.getInvoiceId());
+            invoiceDAO.getInvoiceRepository().delete(selectedInvoiceEntity.getInvoiceId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
             selectedInvoiceEntity = null;
         } else {
             FacesUtils.addErrorMessage("Selected entity is null");
         }
+    }
+
+    public void deleteInvoiceItemsListener(ActionEvent event) {
+        if (selectedInvoiceEntity != null && selectedInvoiceItemsEntity != null) {
+            logger.info("Deleting entity [{}] item [{}]", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
+            invoiceDAO.getInvoiceItemsRepository().delete(selectedInvoiceItemsEntity.getInvoiceItemId());
+            refresh();
+            FacesUtils.addSuccessMessage("Entity deleted");
+            selectedInvoiceItemsEntity = null;
+        } else {
+            FacesUtils.addErrorMessage("Selected entity is null");
+        }
+    }
+
+    public void deleteAttachmentListener(ActionEvent event) {
+        Integer attachmentId = (Integer) event.getComponent().getAttributes().get("attachmentId");
+        logger.info("Deleting " + attachmentId);
     }
 
     public void updateSelectionFromTo() {
@@ -151,6 +202,51 @@ public class InvoiceBean implements Serializable {
                 }
             }
         }
+    }
+
+    public String getImageAttachment(AttachmentEntity attachmentEntity) throws IOException, ImageReadException {
+        if (attachmentEntity != null && attachmentEntity.getFile().length > 0) {
+            if (attachmentEntity.getLoadProxy()) {
+                return "/images/" + attachmentEntity.getFileExtension() + ".png";
+            } else {
+                ImageFormat mimeType = Sanselan.guessFormat(attachmentEntity.getFile());
+                if (mimeType != null && !"UNKNOWN".equalsIgnoreCase(mimeType.name)) {
+                    return "data:image/" + mimeType.extension.toLowerCase() + ";base64," +
+                            Base64.encodeBase64String(attachmentEntity.getFile());
+                } else if ("pdf".equalsIgnoreCase(attachmentEntity.getFileExtension())) {
+                    byte[] imageInByte;
+                    ByteArrayOutputStream baos = null;
+                    PDDocument document = null;
+                    try {
+                        document = PDDocument.load(attachmentEntity.getFile());
+                        final PDPage page = document.getPage(0);
+                        PDFRenderer pdfRenderer = new PDFRenderer(document);
+                        final BufferedImage bufferedImage = pdfRenderer.renderImage(0);
+                        baos = new ByteArrayOutputStream();
+                        ImageIO.write(bufferedImage, "png", baos);
+                        baos.flush();
+                        imageInByte = baos.toByteArray();
+                    } finally {
+                        if (document != null) {
+                            document.close();
+                        }
+                        if (baos != null) {
+                            baos.close();
+                        }
+                    }
+                    return "data:image/png;base64," +
+                            Base64.encodeBase64String(imageInByte);
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public void switchProxy(AttachmentEntity attachmentEntity) {
+        attachmentEntity.setLoadProxy(!attachmentEntity.getLoadProxy());
     }
 
     public int getPageSize() {

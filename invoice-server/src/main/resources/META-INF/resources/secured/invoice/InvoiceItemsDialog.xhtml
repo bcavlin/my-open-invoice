@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Branislav Cavlin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:fmt="http://omnifaces.org/functions">
+
+<p:dialog id="invoice-items-form-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+          widgetVar="invoice-items-form-dialog" width="500" modal="true" resizable="false">
+    <f:facet name="header">
+        <h:outputText value="Add/Edit Invoice Item"/>
+    </f:facet>
+
+    <h:form id="invoice-items-form">
+
+        <p:focus for="description"/>
+        <p:messages autoUpdate="true"/>
+
+        <h:panelGrid id="invoice-items-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
+                     style="padding-top: 3px;">
+
+            <p:outputLabel value="Invoice ID:"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.invoiceId}"
+                          style="margin-left: 5px; font-weight: bold;"/>
+
+            <p:outputLabel value="ID:"/>
+            <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId}"
+                          style="margin-left: 5px; font-weight: bold;"/>
+
+            <p:outputLabel value="Description:"/>
+            <p:inputText value="#{invoiceBean.selectedInvoiceItemsEntity.description}"
+                         maxlength="255" id="description"
+                         style="margin-left: 5px;" required="true" requiredMessage="Description is mandatory"/>
+
+            <p:outputLabel value="Code:"/>
+            <p:inputText value="#{invoiceBean.selectedInvoiceItemsEntity.code}"
+                         maxlength="255"
+                         style="margin-left: 5px;"/>
+
+            <p:outputLabel value="Total:"/>
+            <h:panelGrid columns="2" style="margin-left: 3px;">
+                <p:inputNumber value="#{invoiceBean.selectedInvoiceItemsEntity.total}"
+                               maxlength="10"
+                               size="20"
+                               required="true"
+                               id="total"
+                               requiredMessage="Total value is required" style="width: 70px; text-align: right;">
+                </p:inputNumber>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcy.name}" style="font-weight: bold; margin-left: 3px;"/>
+            </h:panelGrid>
+        </h:panelGrid>
+
+        <p:watermark value="0.00" for="total"/>
+
+        <h:panelGroup layout="block">
+            <p:separator style="margin: 10px 0 10px 0"/>
+            <p:commandButton value="Submit" type="submit" id="submit2"
+                             actionListener="#{invoiceBean.addOrEditInvoiceItemsListener}"
+                             update="invoice-form,,invoice-items-form,main-form"
+                             />
+        </h:panelGroup>
+    </h:form>
+</p:dialog>
+
+</html>

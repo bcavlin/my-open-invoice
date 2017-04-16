@@ -238,6 +238,7 @@ public class InvoiceEntity implements Serializable {
         return result;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "invoiceByInvoiceId")
     public Collection<AttachmentEntity> getAttachmentsByInvoiceId() {
         return attachmentsByInvoiceId;
