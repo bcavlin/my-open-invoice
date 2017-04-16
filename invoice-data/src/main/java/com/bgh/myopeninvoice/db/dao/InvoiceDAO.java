@@ -53,4 +53,6 @@ public interface InvoiceDAO {
     Integer getInvoiceCounterSeq();
 
     InvoiceItemsRepository getInvoiceItemsRepository();
+
+    AttachmentRepository getAttachmentRepository();
 }

@@ -16,6 +16,9 @@
 
 package com.bgh.myopeninvoice.jsfbeans;
 
+import org.apache.commons.lang.StringUtils;
+import org.omnifaces.util.Faces;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -38,5 +41,20 @@ public class ApplicationBean implements Serializable {
 
     public void logout() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/logout");
+    }
+
+    public String getVersion() {
+        StringBuilder b = new StringBuilder();
+        b.append(FacesContext.class.getPackage().getImplementationTitle()).append("/");
+        b.append(FacesContext.class.getPackage().getImplementationVersion()).append(", ");
+        b.append(Faces.getServerInfo()).append(", ");
+        b.append("PrimeFaces/");
+        b.append(RequestContext.getCurrentInstance().getApplicationContext().getConfig().getBuildVersion());
+
+        return b.toString();
+    }
+
+    public String abbreviate(String input) {
+        return StringUtils.abbreviateMiddle(input, "...", 20);
     }
 }

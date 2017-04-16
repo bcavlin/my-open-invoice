@@ -31,7 +31,9 @@ import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
 import org.joda.time.LocalDate;
+import org.omnifaces.util.Faces;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +102,7 @@ public class InvoiceBean implements Serializable {
     private void refresh() {
         logger.info("Loading entries");
         invoiceEntityLazyDataModel = new InvoiceEntityLazyModel(invoiceDAO);
+        selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
     }
 
     public void addNewInvoiceListener(ActionEvent event) {
@@ -125,7 +128,7 @@ public class InvoiceBean implements Serializable {
     }
 
     public void addOrEditInvoiceListener(ActionEvent event) {
-        if (selectedInvoiceEntity != null && selectedInvoiceEntity.getTitle() == null) {
+        if (selectedInvoiceEntity != null && selectedInvoiceEntity.getTitle() != null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-form-dialog').hide()");
 
             logger.info("Adding/editing entity {}", selectedInvoiceEntity.toString());
@@ -137,13 +140,25 @@ public class InvoiceBean implements Serializable {
         }
     }
 
+    public void addOrEditInvoiceAttachmentListener(ActionEvent event) {
+        if (selectedInvoiceEntity != null) {
+            RequestContext.getCurrentInstance().execute("PF('invoice-attachment-form-dialog').hide()");
+
+            logger.info("Adding/editing attachment");
+            invoiceDAO.getAttachmentRepository().save(selectedInvoiceEntity.getAttachmentsByInvoiceId());
+            refresh();
+            FacesUtils.addSuccessMessage("Entity record updated");
+        } else {
+            FacesUtils.addErrorMessage("Selected entity is null");
+        }
+    }
+
     public void addOrEditInvoiceItemsListener(ActionEvent event) {
         if (selectedInvoiceEntity != null && selectedInvoiceItemsEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-items-form-dialog').hide()");
 
             logger.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
             selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().save(selectedInvoiceItemsEntity);
-            selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
         } else {
@@ -175,9 +190,33 @@ public class InvoiceBean implements Serializable {
         }
     }
 
-    public void deleteAttachmentListener(ActionEvent event) {
-        Integer attachmentId = (Integer) event.getComponent().getAttributes().get("attachmentId");
-        logger.info("Deleting " + attachmentId);
+    public void handleFileUpload(FileUploadEvent event) {
+        logger.info("Uploading {}", event.getFile().getFileName());
+        if (selectedInvoiceEntity != null) {
+            Collection<AttachmentEntity> attachmentsByInvoiceId = selectedInvoiceEntity.getAttachmentsByInvoiceId();
+            if (attachmentsByInvoiceId == null) {
+                attachmentsByInvoiceId = new ArrayList<>();
+                selectedInvoiceEntity.setAttachmentsByInvoiceId(attachmentsByInvoiceId);
+            }
+
+            AttachmentEntity attachmentEntity = new AttachmentEntity();
+            attachmentEntity.setInvoiceId(selectedInvoiceEntity.getInvoiceId());
+            attachmentEntity.setInvoiceByInvoiceId(selectedInvoiceEntity);
+            attachmentEntity.setFile(event.getFile().getContents());
+            attachmentEntity.setFilename(event.getFile().getFileName());
+
+            attachmentsByInvoiceId.add(attachmentEntity);
+        }
+    }
+
+    public void deleteAttachment(AttachmentEntity attachmentEntity) {
+        logger.info("Deleting attachment [{}]", attachmentEntity.toString());
+        invoiceDAO.getAttachmentRepository().delete(attachmentEntity.getAttachmentId());
+        refresh();
+    }
+
+    public void download(AttachmentEntity attachmentEntity) throws IOException {
+        Faces.sendFile(attachmentEntity.getFile(), attachmentEntity.getFilename(), true);
     }
 
     public void updateSelectionFromTo() {
