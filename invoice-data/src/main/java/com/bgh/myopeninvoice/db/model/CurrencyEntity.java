@@ -26,22 +26,22 @@ import java.util.Collection;
 @Entity
 @Table(name = "CURRENCY", schema = "INVOICE", catalog = "INVOICEDB")
 public class CurrencyEntity implements Serializable {
-    private Integer ccy;
+    private Integer ccyId;
     private String name;
     private String description;
-    private Collection<ContractsEntity> contractsByCcy;
-    private Collection<InvoiceEntity> invoicesByCcy;
-    private Collection<InvoiceItemsEntity> invoiceItemsByCcy;
+    private Collection<ContractsEntity> contractsByCcyId;
+    private Collection<InvoiceEntity> invoicesByCcyId;
+    private Collection<InvoiceItemsEntity> invoiceItemsByCcyId;
 
     @Id
     @GeneratedValue
     @Column(name = "CCY_ID", nullable = false)
-    public Integer getCcy() {
-        return ccy;
+    public Integer getCcyId() {
+        return ccyId;
     }
 
-    public void setCcy(Integer ccy) {
-        this.ccy = ccy;
+    public void setCcyId(Integer ccyId) {
+        this.ccyId = ccyId;
     }
 
     @Basic
@@ -71,7 +71,7 @@ public class CurrencyEntity implements Serializable {
 
         CurrencyEntity that = (CurrencyEntity) o;
 
-        if (ccy != null ? !ccy.equals(that.ccy) : that.ccy != null) return false;
+        if (ccyId != null ? !ccyId.equals(that.ccyId) : that.ccyId != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
 
@@ -80,34 +80,34 @@ public class CurrencyEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = ccy != null ? ccy.hashCode() : 0;
+        int result = ccyId != null ? ccyId.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(mappedBy = "currencyByCcy")
-    public Collection<ContractsEntity> getContractsByCcy() {
-        return contractsByCcy;
+    @OneToMany(mappedBy = "currencyByCcyId")
+    public Collection<ContractsEntity> getContractsByCcyId() {
+        return contractsByCcyId;
     }
 
-    public void setContractsByCcy(Collection<ContractsEntity> contractsByCcy) {
-        this.contractsByCcy = contractsByCcy;
+    public void setContractsByCcyId(Collection<ContractsEntity> contractsByCcyId) {
+        this.contractsByCcyId = contractsByCcyId;
     }
 
-    @OneToMany(mappedBy = "currencyByCcy")
-    public Collection<InvoiceEntity> getInvoicesByCcy() {
-        return invoicesByCcy;
+    @OneToMany(mappedBy = "currencyByCcyId")
+    public Collection<InvoiceEntity> getInvoicesByCcyId() {
+        return invoicesByCcyId;
     }
 
-    public void setInvoicesByCcy(Collection<InvoiceEntity> invoicesByCcy) {
-        this.invoicesByCcy = invoicesByCcy;
+    public void setInvoicesByCcyId(Collection<InvoiceEntity> invoicesByCcyId) {
+        this.invoicesByCcyId = invoicesByCcyId;
     }
 
     @Override
     public String toString() {
         return "CurrencyEntity{" +
-                "ccy=" + ccy +
+                "ccyId=" + ccyId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';

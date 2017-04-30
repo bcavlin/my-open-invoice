@@ -3,18 +3,18 @@
 
     <persistence-unit name="invoice-db-persistence">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.bgh.myopeninvoice.db.model.AttachmentEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.CompaniesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.ContactsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.ContractsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.CompanyContactEntity</class>
         <class>com.bgh.myopeninvoice.db.model.InvoiceEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.InvoiceItemsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.RolesEntity</class>
-        <class>com.bgh.myopeninvoice.db.model.TaxEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.ContactsEntity</class>
         <class>com.bgh.myopeninvoice.db.model.TimeSheetEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.CompaniesEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.InvoiceItemsEntity</class>
         <class>com.bgh.myopeninvoice.db.model.UsersEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.ContractsEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.AttachmentEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.RolesEntity</class>
         <class>com.bgh.myopeninvoice.db.model.UserRoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.CompanyContactEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.TaxEntity</class>
         <class>com.bgh.myopeninvoice.db.model.CurrencyEntity</class>
         <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
         <class>org.springframework.data.jpa.domain.AbstractAuditable</class>

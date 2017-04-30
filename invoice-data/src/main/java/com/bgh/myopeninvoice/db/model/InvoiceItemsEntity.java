@@ -16,6 +16,9 @@
 
 package com.bgh.myopeninvoice.db.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -123,13 +126,33 @@ public class InvoiceItemsEntity implements Serializable {
         this.invoiceByInvoiceId = invoiceByInvoiceId;
     }
 
-    @OneToMany(mappedBy = "invoiceItemsByInvoiceItemId")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "invoiceItemsByInvoiceItemId", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderBy("itemDate ASC")
     public Collection<TimeSheetEntity> getTimeSheetsByInvoiceItemId() {
         return timeSheetsByInvoiceItemId;
     }
 
     public void setTimeSheetsByInvoiceItemId(Collection<TimeSheetEntity> timeSheetsByInvoiceItemId) {
         this.timeSheetsByInvoiceItemId = timeSheetsByInvoiceItemId;
+    }
+
+    private BigDecimal timeSheetTotal;
+
+    //this did not wor as we need to update total hours upfront - new entries cannot be calcualted until they are in the database
+//    @Formula("(select sum(e.hours_worked) from invoice.time_sheet e where e.invoice_item_id = invoice_item_id)")
+    @Transient
+    public BigDecimal getTimeSheetTotal() {
+        if(getTimeSheetsByInvoiceItemId()!=null) {
+            timeSheetTotal = getTimeSheetsByInvoiceItemId().stream().map(TimeSheetEntity::getHoursWorked).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }else{
+            timeSheetTotal = new BigDecimal(0);
+        }
+        return timeSheetTotal == null ? new BigDecimal(0) : timeSheetTotal;
+    }
+
+    public void setTimeSheetTotal(BigDecimal timeSheetTotal) {
+        this.timeSheetTotal = timeSheetTotal;
     }
 
     @Override

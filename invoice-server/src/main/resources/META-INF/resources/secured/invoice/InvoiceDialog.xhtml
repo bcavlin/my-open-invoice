@@ -87,12 +87,12 @@
             <p:outputLabel value="From Date:"/>
             <p:calendar value="#{invoiceBean.selectedInvoiceEntity.fromDate}" style="margin-left: 5px;"
                         pattern="yyyy-MM-dd" maxlength="10" id="from-date" required="true"
-                        requiredMessage="First reporting date date is required"/>
+                        requiredMessage="First reporting date is required"/>
 
             <p:outputLabel value="To Date:"/>
             <p:calendar value="#{invoiceBean.selectedInvoiceEntity.toDate}" style="margin-left: 5px;"
                         pattern="yyyy-MM-dd" maxlength="10" id="to-date" required="true"
-                        requiredMessage="Last reporting date date is required"/>
+                        requiredMessage="Last reporting date is required"/>
 
             <p:outputLabel value="Due Date:"/>
             <p:calendar value="#{invoiceBean.selectedInvoiceEntity.dueDate}" style="margin-left: 5px;"
@@ -122,7 +122,7 @@
                               rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}">
                     <f:convertNumber pattern="0.00"/>
                 </h:outputText>
-                <h:outputText value="${invoiceBean.selectedInvoiceEntity.currencyByCcy.name}"
+                <h:outputText value="${invoiceBean.selectedInvoiceEntity.currencyByCcyId.name}"
                               style="margin-left: 5px;"
                               rendered="#{not empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
                 <h:outputText value="per ${invoiceBean.selectedInvoiceEntity.rateUnit}"
@@ -136,7 +136,7 @@
                               style="margin-left: 5px; font-weight: bold;">
                     <f:convertNumber pattern="#,##0.00"/>
                 </h:outputText>
-                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcy.name}" style="font-weight: bold; margin-left: 3px;"/>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcyId.name}" style="font-weight: bold; margin-left: 3px;"/>
 
             </h:panelGrid>
 
@@ -146,7 +146,7 @@
                               style="margin-left: 5px; font-weight: bold;">
                     <f:convertNumber pattern="#,##0.00"/>
                 </h:outputText>
-                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcy.name}" style="font-weight: bold; margin-left: 3px;"/>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcyId.name}" style="font-weight: bold; margin-left: 3px;"/>
 
             </h:panelGrid>
 

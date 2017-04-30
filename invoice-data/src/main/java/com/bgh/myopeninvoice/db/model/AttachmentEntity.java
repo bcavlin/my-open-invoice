@@ -31,7 +31,7 @@ import java.util.Arrays;
 public class AttachmentEntity implements Serializable {
     private Integer attachmentId;
     private Integer invoiceId;
-    private byte[] file;
+    private byte[] content;
     private String filename;
     private InvoiceEntity invoiceByInvoiceId;
 
@@ -57,13 +57,13 @@ public class AttachmentEntity implements Serializable {
     }
 
     @Lob
-    @Column(name = "FILE", nullable = false)
-    public byte[] getFile() {
-        return file;
+    @Column(name = "CONTENT", nullable = false)
+    public byte[] getContent() {
+        return content;
     }
 
-    public void setFile(byte[] file) {
-        this.file = file;
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 
     @Basic
@@ -85,7 +85,7 @@ public class AttachmentEntity implements Serializable {
 
         if (attachmentId != null ? !attachmentId.equals(that.attachmentId) : that.attachmentId != null) return false;
         if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
-        if (!Arrays.equals(file, that.file)) return false;
+        if (!Arrays.equals(content, that.content)) return false;
         if (filename != null ? !filename.equals(that.filename) : that.filename != null) return false;
 
         return true;
@@ -95,7 +95,7 @@ public class AttachmentEntity implements Serializable {
     public int hashCode() {
         int result = attachmentId != null ? attachmentId.hashCode() : 0;
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(file);
+        result = 31 * result + Arrays.hashCode(content);
         result = 31 * result + (filename != null ? filename.hashCode() : 0);
         return result;
     }

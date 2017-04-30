@@ -24,7 +24,7 @@ public class QAttachmentEntity extends EntityPathBase<AttachmentEntity> {
 
     public final NumberPath<Integer> attachmentId = createNumber("attachmentId", Integer.class);
 
-    public final ArrayPath<byte[], Byte> file = createArray("file", byte[].class);
+    public final ArrayPath<byte[], Byte> content = createArray("content", byte[].class);
 
     public final StringPath filename = createString("filename");
 

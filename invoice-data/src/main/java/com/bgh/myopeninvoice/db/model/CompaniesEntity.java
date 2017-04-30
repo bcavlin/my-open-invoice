@@ -38,9 +38,10 @@ public class CompaniesEntity implements Serializable {
     private String phone1;
     private Boolean ownedByMe;
     private String businessNumber;
-    private byte[] companyLogo;
+    private byte[] content;
     private Collection<CompanyContactEntity> companyContactsByCompanyId;
     private Collection<ContractsEntity> contractsByCompanyId;
+    private Collection<ContractsEntity> contractsByCompanyId_0;
     private Collection<InvoiceEntity> invoicesByCompanyId;
 
     @Id
@@ -125,13 +126,13 @@ public class CompaniesEntity implements Serializable {
     }
 
     @Lob
-    @Column(name = "COMPANY_LOGO", nullable = true)
-    public byte[] getCompanyLogo() {
-        return companyLogo;
+    @Column(name = "CONTENT", nullable = true)
+    public byte[] getContent() {
+        return content;
     }
 
-    public void setCompanyLogo(byte[] companyLogo) {
-        this.companyLogo = companyLogo;
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 
     @Override
@@ -150,7 +151,7 @@ public class CompaniesEntity implements Serializable {
         if (ownedByMe != null ? !ownedByMe.equals(that.ownedByMe) : that.ownedByMe != null) return false;
         if (businessNumber != null ? !businessNumber.equals(that.businessNumber) : that.businessNumber != null)
             return false;
-        if (!Arrays.equals(companyLogo, that.companyLogo)) return false;
+        if (!Arrays.equals(content, that.content)) return false;
 
         return true;
     }
@@ -165,7 +166,7 @@ public class CompaniesEntity implements Serializable {
         result = 31 * result + (phone1 != null ? phone1.hashCode() : 0);
         result = 31 * result + (ownedByMe != null ? ownedByMe.hashCode() : 0);
         result = 31 * result + (businessNumber != null ? businessNumber.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(companyLogo);
+        result = 31 * result + Arrays.hashCode(content);
         return result;
     }
 
@@ -197,6 +198,16 @@ public class CompaniesEntity implements Serializable {
 
     public void setContractsByCompanyId(Collection<ContractsEntity> contractsByCompanyId) {
         this.contractsByCompanyId = contractsByCompanyId;
+    }
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "companiesByContractSignedWithSubcontract")
+    public Collection<ContractsEntity> getContractsByCompanyId_0() {
+        return contractsByCompanyId_0;
+    }
+
+    public void setContractsByCompanyId_0(Collection<ContractsEntity> contractsByCompanyId_0) {
+        this.contractsByCompanyId_0 = contractsByCompanyId_0;
     }
 
     @OneToMany(mappedBy = "companiesByCompanyTo")

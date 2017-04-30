@@ -238,7 +238,7 @@ public class InvoiceDAOImpl implements InvoiceDAO {
 
     @Override
     public Integer getInvoiceCounterSeq() {
-        return jdbcTemplate.queryForObject("SELECT PUBLIC.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", Integer.class);
+        return jdbcTemplate.queryForObject("SELECT INVOICE.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", Integer.class);
     }
 
     private InvoiceItemsRepository invoiceItemsRepository;
@@ -263,5 +263,17 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     @Autowired
     public void setAttachmentRepository(AttachmentRepository attachmentRepository) {
         this.attachmentRepository = attachmentRepository;
+    }
+
+    private TimeSheetRepository timeSheetRepository;
+
+    @Override
+    public TimeSheetRepository getTimeSheetRepository() {
+        return timeSheetRepository;
+    }
+
+    @Autowired
+    public void setTimeSheetRepository(TimeSheetRepository timeSheetRepository) {
+        this.timeSheetRepository = timeSheetRepository;
     }
 }

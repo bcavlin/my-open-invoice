@@ -43,15 +43,6 @@
             <h:outputText value="#{invoiceBean.selectedInvoiceEntity.invoiceId}"
                           style="margin-left: 5px; font-weight: bold;"/>
 
-            <p:outputLabel value="Uploaded:"/>
-            <p:dataList value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" id="data-list"
-                        style="margin-left: 5px; width: 90%;"
-                        var="att">
-                <f:facet name="header">
-                    Uploaded
-                </f:facet>
-                <h:outputText value="#{att.filename}"/>
-            </p:dataList>
 
             <p:outputLabel value="Upload: "/>
             <p:fileUpload fileUploadListener="#{invoiceBean.handleFileUpload}"
@@ -59,12 +50,22 @@
                           dragDropSupport="false"
                           multiple="true"
                           fileLimit="5"
-                          style="margin-left: 5px;"
-                          update="@parent"
+                          update="invoice-attachment-form"
                           sizeLimit="10000000"
                           allowTypes="/(\.|\/)(gif|jpeg|png|pdf|docx|xlsx)$/"/>
 
+            <p:outputLabel value=""/>
+            <p:dataList value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" id="data-list"
+                        var="att">
+                <f:facet name="header">
+                    Uploaded
+                </f:facet>
+                <h:outputText value="#{att.filename}"/>
+            </p:dataList>
+
         </h:panelGrid>
+
+
 
         <h:panelGroup layout="block">
             <p:separator style="margin: 10px 0 10px 0"/>
