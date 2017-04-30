@@ -45,7 +45,7 @@
                     </h:panelGroup>
 
                     <h:panelGroup id="timesheet-panel" layout="block">
-                        Timesheet
+                        <ui:include src="invoice/InvoiceItemsTimesheetTable.xhtml"/>
                     </h:panelGroup>
                 </h:panelGrid>
             </h:form>
@@ -56,6 +56,7 @@
         <ui:include src="invoice/InvoiceDialog.xhtml"/>
         <ui:include src="invoice/InvoiceItemsDialog.xhtml"/>
         <ui:include src="invoice/InvoiceAttachmentDialog.xhtml"/>
+        <ui:include src="invoice/InvoiceItemsTimesheetDialog.xhtml"/>
     </ui:define>
 </ui:composition>
 </html>

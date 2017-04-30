@@ -74,6 +74,8 @@ public class CompaniesBean implements Serializable {
 
     private Collection<CurrencyEntity> currencyEntityCollectionForSelection;
 
+    private Collection<CompaniesEntity> companiesEntityCollectionForSelection;
+
     private int pageSize = 20;
 
     @PostConstruct
@@ -81,14 +83,14 @@ public class CompaniesBean implements Serializable {
         logger.info("Initializing companies entries");
         companiesEntityLazyDataModel = new CompaniesEntityLazyModel(invoiceDAO);
         currencyEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCurrencyRepository().findAll());
+        companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
+        companiesEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompaniesRepository().findAll(QCompaniesEntity.companiesEntity.ownedByMe.eq(false)));
     }
 
     private void refresh() {
         logger.info("Loading companies entries");
-        if (selectedCompaniesEntity != null) {
-            selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().findOne(selectedCompaniesEntity.getCompanyId());
-        }
-        companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
+        selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().findOne(selectedCompaniesEntity.getCompanyId());
+//        companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
     }
 
     public void newEntryListenerForCompany(ActionEvent event) {
@@ -144,11 +146,16 @@ public class CompaniesBean implements Serializable {
         contactsEntityDualListModel.setTarget(targetList);
     }
 
-    public void addOrEditEntryListener(ActionEvent event) {
+    public void addOrEditCompanyListener(ActionEvent event) {
         if (selectedCompaniesEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('companies-form-dialog').hide()");
 
             logger.info("Adding/editing entity {}", selectedCompaniesEntity.toString());
+            //TODO this needs to be one transaction - delete and save - or prevent this change
+            if (selectedCompaniesEntity.getOwnedByMe()) { //need to do this because of edit
+                logger.info("Removing contracts for {} as it is owned by me", selectedCompaniesEntity.getCompanyName());
+                invoiceDAO.getContractsRepository().delete(selectedCompaniesEntity.getContractsByCompanyId());
+            }
             selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().save(selectedCompaniesEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -170,14 +177,20 @@ public class CompaniesBean implements Serializable {
         }
     }
 
-    public void addOrEditEntryListener3(ActionEvent event) {
+    public void addOrEditCompanyContractListener(ActionEvent event) {
         if (selectedCompaniesEntity != null && selectedContractsEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('contracts-form-dialog').hide()");
 
             logger.info("Adding/editing entity {}", selectedContractsEntity.toString());
-            invoiceDAO.getContractsRepository().save(selectedContractsEntity);
-            refresh();
-            FacesUtils.addSuccessMessage("Entity record updated");
+
+            if (selectedContractsEntity.getContractSignedWith().equals(selectedContractsEntity.getContractSignedWithSubcontract())) {
+                FacesUtils.addErrorMessage("Subcontract and contract cannot be signed for same company");
+            } else {
+                invoiceDAO.getContractsRepository().save(selectedContractsEntity);
+                refresh();
+                FacesUtils.addSuccessMessage("Entity record updated");
+            }
+
         } else {
             FacesUtils.addErrorMessage("Selected users entity is null");
         }
@@ -197,16 +210,16 @@ public class CompaniesBean implements Serializable {
 
     public void handleFileUpload(FileUploadEvent event) {
         if (selectedCompaniesEntity != null) {
-            selectedCompaniesEntity.setCompanyLogo(event.getFile().getContents());
+            selectedCompaniesEntity.setContent(event.getFile().getContents());
         }
     }
 
     public String getImageLogo(CompaniesEntity companiesEntity) throws IOException, ImageReadException {
-        if (companiesEntity != null && companiesEntity.getCompanyLogo() != null) {
-            ImageFormat mimeType = Sanselan.guessFormat(companiesEntity.getCompanyLogo());
+        if (companiesEntity != null && companiesEntity.getContent() != null) {
+            ImageFormat mimeType = Sanselan.guessFormat(companiesEntity.getContent());
 
             return "data:image/" + mimeType.extension.toLowerCase() + ";base64," +
-                    Base64.encodeBase64String(companiesEntity.getCompanyLogo());
+                    Base64.encodeBase64String(companiesEntity.getContent());
         } else {
             return null;
         }
@@ -274,5 +287,13 @@ public class CompaniesBean implements Serializable {
 
     public void setCurrencyEntityCollectionForSelection(Collection<CurrencyEntity> currencyEntityCollectionForSelection) {
         this.currencyEntityCollectionForSelection = currencyEntityCollectionForSelection;
+    }
+
+    public Collection<CompaniesEntity> getCompaniesEntityCollectionForSelection() {
+        return companiesEntityCollectionForSelection;
+    }
+
+    public void setCompaniesEntityCollectionForSelection(Collection<CompaniesEntity> companiesEntityCollectionForSelection) {
+        this.companiesEntityCollectionForSelection = companiesEntityCollectionForSelection;
     }
 }

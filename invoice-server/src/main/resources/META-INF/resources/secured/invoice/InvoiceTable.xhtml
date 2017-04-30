@@ -75,7 +75,7 @@
              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
     <p:ajax event="rowSelect" update="main-form"
-            listener="#{invoiceBean.ajaxChangeRowListener}"/>
+            listener="#{invoiceBean.ajaxChangeRowInvoiceListener}"/>
 
     <p:column headerText="Id" sortBy="#{invoice.invoiceId}" style="text-align:right;"
               width="50">
@@ -90,6 +90,10 @@
         <h:outputText value="#{invoice.totalValueWithTax}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
+    </p:column>
+    <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;"
+              width="70">
+        <h:outputText value="#{invoice.currencyByCcyId.name}"/>
     </p:column>
     <p:column headerText="From"
               sortBy="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"
@@ -128,10 +132,7 @@
             <f:convertNumber pattern="#,##0.00 %"/>
         </h:outputText>
     </p:column>
-    <p:column headerText="CCY" sortBy="#{invoice.currencyByCcy.name}" style="text-align:center;"
-              width="70">
-        <h:outputText value="#{invoice.currencyByCcy.name}"/>
-    </p:column>
+
     <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
               width="120">
         <h:outputText value="#{invoice.paidDate}"/>
@@ -139,5 +140,7 @@
     <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;" width="500">
         <h:outputText value="#{invoice.note}"/>
     </p:column>
+
+    <p:column/>
 </p:dataTable>
 </html>

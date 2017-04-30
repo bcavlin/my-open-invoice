@@ -30,11 +30,13 @@ public class QCompaniesEntity extends EntityPathBase<CompaniesEntity> {
 
     public final NumberPath<Integer> companyId = createNumber("companyId", Integer.class);
 
-    public final ArrayPath<byte[], Byte> companyLogo = createArray("companyLogo", byte[].class);
-
     public final StringPath companyName = createString("companyName");
 
+    public final ArrayPath<byte[], Byte> content = createArray("content", byte[].class);
+
     public final CollectionPath<ContractsEntity, QContractsEntity> contractsByCompanyId = this.<ContractsEntity, QContractsEntity>createCollection("contractsByCompanyId", ContractsEntity.class, QContractsEntity.class, PathInits.DIRECT2);
+
+    public final CollectionPath<ContractsEntity, QContractsEntity> contractsByCompanyId_0 = this.<ContractsEntity, QContractsEntity>createCollection("contractsByCompanyId_0", ContractsEntity.class, QContractsEntity.class, PathInits.DIRECT2);
 
     public final CollectionPath<InvoiceEntity, QInvoiceEntity> invoicesByCompanyId = this.<InvoiceEntity, QInvoiceEntity>createCollection("invoicesByCompanyId", InvoiceEntity.class, QInvoiceEntity.class, PathInits.DIRECT2);
 

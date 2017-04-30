@@ -33,6 +33,10 @@ public class CustomUtils {
         return passwordEncoder.encode(password);
     }
 
+//    public static Boolean dateFirstOrLast(Date date){
+//        return new LocalDate(date).i;
+//    }
+
 //    public static void main(String[] args) {
 //        System.out.println(CustomUtils.encodePassword("***REMOVED***"));
 //    }

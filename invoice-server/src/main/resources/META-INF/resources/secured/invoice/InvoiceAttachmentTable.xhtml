@@ -45,7 +45,7 @@
         <p:commandLink id="image-link" value="#{applicationBean.abbreviate(att.filename)}"
                        style="font-family: 'Courier New', Monospace"
                        actionListener="#{invoiceBean.switchProxy(att)}" update="carusel-grid-1"/>
-        <p:contextMenu for="carusel-grid-1">
+        <p:contextMenu for="carusel-grid-1" style="width: 400px;">
             <p:menuitem value="Download [#{att.filename}]" icon="ui-icon-arrowthickstop-1-s" actionListener="#{invoiceBean.download(att)}" ajax="false"/>
             <p:separator/>
             <p:menuitem value="Delete [#{att.filename}]" update="image-carousel-1" icon="ui-icon-trash"
@@ -58,11 +58,10 @@
                          severity="alert"
                          widgetVar="confirmation-inv-#{att.attachmentId}">
             <p:commandButton value="Remove ID (#{att.attachmentId})"
-                             oncomplete="PF('confirmation-inv-#{att.attachmentId}').hide()"
+                             onclick="PF('confirmation-inv-#{att.attachmentId}').hide()"
                              actionListener="#{invoiceBean.deleteAttachment(att)}"
-                             update="main-form"
+                             update="main-form,carusel-grid-1"
                              style="color: brown;">
-                <f:attribute name="attachmentId" value="#{att.attachmentId}"/>
             </p:commandButton>
             <p:commandButton value="No" onclick="PF('confirmation-inv-#{att.attachmentId}').hide()" type="button"/>
         </p:confirmDialog>

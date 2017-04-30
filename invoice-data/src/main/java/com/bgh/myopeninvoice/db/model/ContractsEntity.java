@@ -33,15 +33,17 @@ public class ContractsEntity implements Serializable{
     private Integer contractId;
     private Integer contractIsFor;
     private Integer contractSignedWith;
+    private Integer contractSignedWithSubcontract;
     private BigDecimal rate;
     private String rateUnit;
-    private Integer ccy;
+    private Integer ccyId;
     private Date validFrom;
     private Date validTo;
     private String description;
     private CompanyContactEntity companyContactByContractIsFor;
     private CompaniesEntity companiesByContractSignedWith;
-    private CurrencyEntity currencyByCcy;
+    private CompaniesEntity companiesByContractSignedWithSubcontract;
+    private CurrencyEntity currencyByCcyId;
 
     @GeneratedValue
     @Id
@@ -75,6 +77,16 @@ public class ContractsEntity implements Serializable{
     }
 
     @Basic
+    @Column(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", nullable = true)
+    public Integer getContractSignedWithSubcontract() {
+        return contractSignedWithSubcontract;
+    }
+
+    public void setContractSignedWithSubcontract(Integer contractSignedWithSubcontract) {
+        this.contractSignedWithSubcontract = contractSignedWithSubcontract;
+    }
+
+    @Basic
     @Column(name = "RATE", nullable = false, precision = 32767)
     public BigDecimal getRate() {
         return rate;
@@ -96,12 +108,12 @@ public class ContractsEntity implements Serializable{
 
     @Basic
     @Column(name = "CCY_ID", nullable = false)
-    public Integer getCcy() {
-        return ccy;
+    public Integer getCcyId() {
+        return ccyId;
     }
 
-    public void setCcy(Integer ccy) {
-        this.ccy = ccy;
+    public void setCcyId(Integer ccyId) {
+        this.ccyId = ccyId;
     }
 
     @Temporal(TemporalType.DATE)
@@ -148,9 +160,11 @@ public class ContractsEntity implements Serializable{
             return false;
         if (contractSignedWith != null ? !contractSignedWith.equals(that.contractSignedWith) : that.contractSignedWith != null)
             return false;
+        if (contractSignedWithSubcontract != null ? !contractSignedWithSubcontract.equals(that.contractSignedWithSubcontract) : that.contractSignedWithSubcontract != null)
+            return false;
         if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
         if (rateUnit != null ? !rateUnit.equals(that.rateUnit) : that.rateUnit != null) return false;
-        if (ccy != null ? !ccy.equals(that.ccy) : that.ccy != null) return false;
+        if (ccyId != null ? !ccyId.equals(that.ccyId) : that.ccyId != null) return false;
         if (validFrom != null ? !validFrom.equals(that.validFrom) : that.validFrom != null) return false;
         if (validTo != null ? !validTo.equals(that.validTo) : that.validTo != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
@@ -163,9 +177,10 @@ public class ContractsEntity implements Serializable{
         int result = contractId != null ? contractId.hashCode() : 0;
         result = 31 * result + (contractIsFor != null ? contractIsFor.hashCode() : 0);
         result = 31 * result + (contractSignedWith != null ? contractSignedWith.hashCode() : 0);
+        result = 31 * result + (contractSignedWithSubcontract != null ? contractSignedWithSubcontract.hashCode() : 0);
         result = 31 * result + (rate != null ? rate.hashCode() : 0);
         result = 31 * result + (rateUnit != null ? rateUnit.hashCode() : 0);
-        result = 31 * result + (ccy != null ? ccy.hashCode() : 0);
+        result = 31 * result + (ccyId != null ? ccyId.hashCode() : 0);
         result = 31 * result + (validFrom != null ? validFrom.hashCode() : 0);
         result = 31 * result + (validTo != null ? validTo.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
@@ -183,6 +198,16 @@ public class ContractsEntity implements Serializable{
     }
 
     @ManyToOne
+    @JoinColumn(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", referencedColumnName = "COMPANY_ID", insertable = false, updatable = false)
+    public CompaniesEntity getCompaniesByContractSignedWithSubcontract() {
+        return companiesByContractSignedWithSubcontract;
+    }
+
+    public void setCompaniesByContractSignedWithSubcontract(CompaniesEntity companiesByContractSignedWithSubcontract) {
+        this.companiesByContractSignedWithSubcontract = companiesByContractSignedWithSubcontract;
+    }
+
+    @ManyToOne
     @JoinColumn(name = "CONTRACT_IS_FOR", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false, insertable = false, updatable = false)
     public CompanyContactEntity getCompanyContactByContractIsFor() {
         return companyContactByContractIsFor;
@@ -195,12 +220,12 @@ public class ContractsEntity implements Serializable{
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CCY_ID", referencedColumnName = "CCY_ID", nullable = false, insertable = false, updatable = false)
-    public CurrencyEntity getCurrencyByCcy() {
-        return currencyByCcy;
+    public CurrencyEntity getCurrencyByCcyId() {
+        return currencyByCcyId;
     }
 
-    public void setCurrencyByCcy(CurrencyEntity currencyByCcy) {
-        this.currencyByCcy = currencyByCcy;
+    public void setCurrencyByCcyId(CurrencyEntity currencyByCcyId) {
+        this.currencyByCcyId = currencyByCcyId;
     }
 
     @Override

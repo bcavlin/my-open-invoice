@@ -50,7 +50,7 @@
                         oncomplete="PF('confirmation1').show();"/>
 
                 <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompaniesEntity.shortName})"
-                                 icon="ui-icon-contact"
+                                 icon="my-custom-icon-address-book"
                                  rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
                                  style="margin-right: 15px;"
                                  oncomplete="PF('companies-contacts-form-dialog').show();"
@@ -95,7 +95,8 @@
                 </p:column>
 
                 <p:column headerText="Owned" sortBy="#{company.ownedByMe}" style="text-align:center;" width="70">
-                    <h:outputText value="#{company.ownedByMe?'Yes':'No'}" style="color: #{company.ownedByMe?'green':'red'};"/>
+                    <h:outputText value="#{company.ownedByMe?'Yes':'No'}"
+                                  style="color: #{company.ownedByMe?'green':'red'};"/>
                 </p:column>
 
                 <p:column headerText="Short" sortBy="#{company.shortName}" style="text-align:start;" width="70">
@@ -104,16 +105,21 @@
 
                 <p:column headerText="Name" sortBy="#{company.companyName}" style="text-align:start;" width="300">
                     <h:outputText value="#{company.companyName}"/>
-                    <h:outputText value=" [#{fn:length(company.companyContactsByCompanyId)}]"
-                                  style="float: right; font-weight: bold;"
-                                  rendered="#{not empty company.companyContactsByCompanyId}"/>
-                    <h:link outcome="to-contacts-page"
-                            rendered="#{not empty company.companyContactsByCompanyId}">
-                        <f:param name="parameter1" value="#{company.contactsToList}"/>
-                        <p:graphicImage value="/images/address-book.png"
+
+                    <h:panelGroup rendered="#{not empty company.companyContactsByCompanyId}">
+                        <h:link outcome="to-contacts-page">
+                            <f:param name="parameter1" value="#{company.contactsToList}"/>
+                            <p:graphicImage value="/images/address-book.png"
+                                            style="float: right; opacity: 0.7;"
+                                            title="Number of contacts: #{fn:length(company.companyContactsByCompanyId)}"/>
+                        </h:link>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{not empty company.contractsByCompanyId}">
+                        <p:graphicImage value="/images/document-view-thumbnail.png"
                                         style="float: right; opacity: 0.7;"
-                                        title="contacts: #{company.companyContactsByCompanyId}"/>
-                    </h:link>
+                                        title="Number of contracts: #{fn:length(company.contractsByCompanyId)}"/>
+                    </h:panelGroup>
                 </p:column>
 
                 <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="100">
@@ -136,9 +142,9 @@
 
                 <p:column headerText="Logo" style="text-align:center;" width="70">
                     <h:graphicImage id="logoIcon" value="/images/image.png"
-                                    rendered="#{not empty  company.companyLogo}"/>
+                                    rendered="#{not empty  company.content}"/>
                     <p:overlayPanel id="imgPanel" for="logoIcon" showEvent="mouseover" hideEvent="mouseleave"
-                                    rendered="#{not empty company.companyLogo}" my="right top" at="right bottom"
+                                    rendered="#{not empty company.content}" my="right top" at="right bottom"
                                     style="left: 100px;">
                         <h:graphicImage value="#{companiesBean.getImageLogo(company)}" alt="logo"
                                         style="border: 1px;"/>
@@ -148,7 +154,7 @@
 
             <h:panelGroup id="contracts-buttons-layout" layout="block" style="margin: 15px 0 0 0"
                           rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.ownedByMe eq false}">
-                <p:commandButton value="New Contract"
+                <p:commandButton value="New Contract for #{companiesBean.selectedCompaniesEntity.shortName}"
                                  icon="ui-icon-extlink"
                                  style="margin-right: 15px;"
                                  oncomplete="PF('contracts-form-dialog').show();"
@@ -156,74 +162,102 @@
                                  actionListener="#{companiesBean.newEntryListenerForContract}"
                                  update="main-form,contracts-form"/>
 
-                <p:commandButton value="Edit Contract For Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                <p:commandButton value="Edit Contract #{companiesBean.selectedContractsEntity.contractId} For Company (#{companiesBean.selectedCompaniesEntity.shortName})"
                                  icon="ui-icon-script"
                                  rendered="#{!empty companiesBean.selectedContractsEntity and companiesBean.selectedContractsEntity.contractId gt 0
                                  and !empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
                                  style="margin-right: 15px;"
                                  oncomplete="PF('contracts-form-dialog').show();"
                                  update="main-form,contracts-form"/>
+
+
+                <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractsEntity"-->
+                <p:dataTable id="company-contracts-table"
+                             var="companyContract"
+                             rowKey="#{companyContract.contractId}"
+                             widgetVar="company-contract-table"
+                             value="#{companiesBean.contractsEntityLazyDataModel}"
+                             selection="#{companiesBean.selectedContractsEntity}"
+                             selectionMode="single"
+                             scrollable="true"
+                             scrollWidth="1280"
+                             emptyMessage="No items found with given criteria"
+                             style="margin-top: 15px;"
+                             rows="#{companiesBean.pageSize}"
+                             lazy="true"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                    <p:ajax event="rowSelect" update="main-form"
+                            listener="#{companiesBean.ajaxChangeRowListenerForContract}"/>
+
+                    <p:column headerText="Id" sortBy="#{companyContract.contractId}" style="text-align:right;"
+                              width="70">
+                        <h:outputText value="#{companyContract.contractId}"/>
+                    </p:column>
+
+                    <p:column headerText="Contract is For"
+                              sortBy="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"
+                              style="text-align:start;" width="300">
+                        <h:outputText value="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"
+                                      style="font-weight: bold;"/>
+                        <h:outputText value="from" style="margin-right: 5px; margin-left: 5px;"/>
+                        <h:outputText
+                                value="(#{companyContract.companyContactByContractIsFor.companiesByCompanyId.shortName})
+                                            [#{companyContract.companyContactByContractIsFor.companiesByCompanyId.companyId}]"
+                                style="font-weight: bold;"/>
+                    </p:column>
+
+                    <p:column headerText="Rate" sortBy="#{companyContract.rate}" style="text-align:right;" width="60">
+                        <h:outputText value="#{companyContract.rate}">
+                            <f:convertNumber pattern="#,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Unit" sortBy="#{companyContract.rateUnit}" style="text-align:center;"
+                              width="70">
+                        <h:outputText value="#{companyContract.rateUnit}"/>
+                    </p:column>
+
+                    <p:column headerText="CCY" sortBy="#{companyContract.currencyByCcyId.name}" style="text-align:center;"
+                              width="50">
+                        <h:outputText value="#{companyContract.currencyByCcyId.name}"/>
+                    </p:column>
+
+                    <p:column headerText="Valid From" sortBy="#{companyContract.validFrom}" style="text-align:center;"
+                              width="100" id="valid-from-edit-2">
+                        <h:outputText value="#{companyContract.validFrom}"/>
+                    </p:column>
+
+                    <p:column headerText="Valid To" sortBy="#{companyContract.validTo}" style="text-align:center;"
+                              width="100" id="valid-to-edit-2">
+                        <h:outputText value="#{companyContract.validTo}"/>
+                    </p:column>
+
+                    <p:column headerText="Signed with"
+                              sortBy="#{companyContract.companiesByContractSignedWith.shortName}"
+                              style="text-align:start;" width="150">
+                        <h:outputText value="#{companyContract.companiesByContractSignedWith.shortName}"/>
+                    </p:column>
+
+                    <p:column headerText="Subcontract with"
+                              sortBy="#{companyContract.companiesByContractSignedWithSubcontract.shortName}"
+                              style="text-align:start;" width="150">
+                        <h:outputText value="#{companyContract.companiesByContractSignedWithSubcontract.shortName}"/>
+                    </p:column>
+
+                    <p:column headerText="Description" sortBy="#{companyContract.description}" style="text-align:start;"
+                              width="500">
+                        <h:outputText value="#{companyContract.description}"/>
+                    </p:column>
+
+                    <p:column/>
+
+                </p:dataTable>
             </h:panelGroup>
 
-            <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractsEntity"-->
-            <p:dataTable id="company-contracts-table"
-                         var="companyContract"
-                         rowKey="#{companyContract.contractId}"
-                         widgetVar="company-contract-table"
-                         value="#{companiesBean.contractsEntityLazyDataModel}"
-                         selection="#{companiesBean.selectedContractsEntity}"
-                         selectionMode="single"
-                         scrollable="true"
-                         scrollWidth="1280"
-                         emptyMessage="No items found with given criteria"
-                         style="margin-top: 15px;"
-                         rows="#{companiesBean.pageSize}"
-                         lazy="true"
-                         paginatorPosition="bottom"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
-
-                <p:ajax event="rowSelect" update="main-form"
-                        listener="#{companiesBean.ajaxChangeRowListenerForContract}"/>
-
-                <p:column headerText="Id" sortBy="#{companyContract.contractId}" style="text-align:right;" width="70">
-                    <h:outputText value="#{companyContract.contractId}"/>
-                </p:column>
-                <p:column headerText="Signed with" sortBy="#{companyContract.companiesByContractSignedWith.shortName}"
-                          style="text-align:start;" width="150">
-                    <h:outputText value="#{companyContract.companiesByContractSignedWith.shortName}"/>
-                </p:column>
-                <p:column headerText="Contract For"
-                          sortBy="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"
-                          style="text-align:start;" width="200">
-                    <h:outputText value="#{companyContract.companyContactByContractIsFor.contactsByContactId.email}"/>
-                </p:column>
-                <p:column headerText="Rate" sortBy="#{companyContract.rate}" style="text-align:right;" width="100">
-                    <h:outputText value="#{companyContract.rate}">
-                        <f:convertNumber pattern="#,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="Unit" sortBy="#{companyContract.rateUnit}" style="text-align:center;" width="70">
-                    <h:outputText value="#{companyContract.rateUnit}"/>
-                </p:column>
-                <p:column headerText="CCY" sortBy="#{companyContract.currencyByCcy.name}" style="text-align:center;"
-                          width="70">
-                    <h:outputText value="#{companyContract.currencyByCcy.name}"/>
-                </p:column>
-                <p:column headerText="Valid From" sortBy="#{companyContract.validFrom}" style="text-align:center;"
-                          width="150">
-                    <h:outputText value="#{companyContract.validFrom}"/>
-                </p:column>
-                <p:column headerText="Valid To" sortBy="#{companyContract.validTo}" style="text-align:center;"
-                          width="150">
-                    <h:outputText value="#{companyContract.validTo}"/>
-                </p:column>
-                <p:column headerText="Description" sortBy="#{companyContract.description}" style="text-align:start;"
-                          width="500">
-                    <h:outputText value="#{companyContract.description}"/>
-                </p:column>
-
-            </p:dataTable>
+            <o:validateOrder components="valid-from-edit-2 valid-to-edit-2"/>
 
         </h:form>
     </ui:define>
@@ -239,76 +273,83 @@
                 <p:focus for="shortName"/>
                 <p:messages autoUpdate="true" id="messages"/>
 
-                <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2"
-                             style="padding-top: 3px;">
-                    <p:outputLabel value="ID: "/>
-                    <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
-                                  style="margin-left: 5px;"/>
+                <p:scrollPanel mode="native" style="height:500px">
+                    <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2"
+                                 style="padding-top: 3px;">
+                        <p:outputLabel value="ID: "/>
+                        <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
+                                      style="margin-left: 5px;"/>
 
-                    <p:outputLabel value="Short name: "/>
-                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
-                                 maxlength="10"
-                                 size="20"
-                                 required="true"
-                                 id="shortName"
-                                 requiredMessage="Short name is required"
-                                 style="margin-left: 5px; text-transform: uppercase;"
-                                 converter="upperCaseConverter"/>
-
-                    <p:outputLabel value="Company name: "/>
-                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
-                                 converter="capitalizeConverter"
-                                 maxlength="255"
-                                 id="company-name"
-                                 requiredMessage="Company name is required"
-                                 required="true"
-                                 style="margin-left: 5px; text-transform: capitalize;"/>
-
-                    <p:outputLabel value="Phone 1: "/>
-                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
-                                 maxlength="20"
-                                 style="margin-left: 5px;" validatorMessage="Phone number is not in correct format">
-                        <f:validateRegex
-                                pattern="^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$"/>
-                    </p:inputText>
-
-                    <p:outputLabel value="BIN: "/>
-                    <p:inputText value="#{companiesBean.selectedCompaniesEntity.businessNumber}"
-                                 maxlength="30"
-                                 style="margin-left: 5px;"/>
-
-                    <p:outputLabel value="Address 1: "/>
-                    <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
-                                     style="margin-left: 5px;"
+                        <p:outputLabel value="Short name: "/>
+                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
+                                     maxlength="10"
+                                     size="20"
                                      required="true"
-                                     requiredMessage="Address line 1 is required"
-                                     size="300" maxlength="500"/>
+                                     id="shortName"
+                                     requiredMessage="Short name is required"
+                                     style="margin-left: 5px; text-transform: uppercase;"
+                                     converter="upperCaseConverter"/>
 
-                    <p:outputLabel value="Address 2: "/>
-                    <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine2}"
-                                     style="margin-left: 5px;"
-                                     size="300" maxlength="500"/>
+                        <p:outputLabel value="Company name: "/>
+                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
+                                     converter="capitalizeConverter"
+                                     maxlength="255"
+                                     id="company-name"
+                                     requiredMessage="Company name is required"
+                                     required="true"
+                                     style="margin-left: 5px; text-transform: capitalize;"/>
 
-                    <p:outputLabel value="Owned: "/>
-                    <p:selectBooleanButton value="#{companiesBean.selectedCompaniesEntity.ownedByMe}"
-                                           style="margin-left: 5px;"
-                                           offLabel="No" onLabel="Yes"/>
+                        <p:outputLabel value="Phone 1: "/>
+                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
+                                     maxlength="20"
+                                     style="margin-left: 5px;" validatorMessage="Phone number is not in correct format">
+                            <!--<f:validateRegex-->
+                            <!--pattern="^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$"/>-->
+                        </p:inputText>
 
-                    <p:outputLabel value="Logo: "/>
-                    <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"
-                                    alt="logo" style="border: 1px; margin-left: 5px;"/>
+                        <p:outputLabel value="BIN: "/>
+                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.businessNumber}"
+                                     maxlength="30"
+                                     style="margin-left: 5px;"/>
 
-                    <p:outputLabel value="Upload: "/>
-                    <p:fileUpload fileUploadListener="#{companiesBean.handleFileUpload}" mode="advanced"
-                                  dragDropSupport="false"
-                                  style="margin-left: 5px;"
-                                  update="@parent" sizeLimit="20480" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
-                </h:panelGrid>
+                        <p:outputLabel value="Address 1: "/>
+                        <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
+                                         style="margin-left: 5px;"
+                                         required="true"
+                                         requiredMessage="Address line 1 is required"
+                                         size="300" maxlength="500"/>
+
+                        <p:outputLabel value="Address 2: "/>
+                        <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine2}"
+                                         style="margin-left: 5px;"
+                                         size="300" maxlength="500"/>
+
+                        <p:outputLabel value="Owned: " style="color: red; font-weight: bold;"/>
+                        <p:selectBooleanButton value="#{companiesBean.selectedCompaniesEntity.ownedByMe}"
+                                               id="owned-by-me"
+                                               style="margin-left: 5px;"
+                                               offLabel="No" onLabel="Yes"
+                                               disabled="#{companiesBean.selectedCompaniesEntity.companyId ne null}"/>
+
+                        <p:outputLabel value="Logo: "/>
+                        <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"
+                                        alt="logo" style="border: 1px; margin-left: 5px;"/>
+
+                        <p:outputLabel value="Upload: "/>
+                        <p:fileUpload fileUploadListener="#{companiesBean.handleFileUpload}" mode="advanced"
+                                      dragDropSupport="false"
+                                      style="margin-left: 5px;"
+                                      update="@parent" sizeLimit="20480" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                    </h:panelGrid>
+                </p:scrollPanel>
+
+                <p:tooltip for="owned-by-me"
+                           value="If company is not owned by me, all contracts will be removed as contracts are only signed by my companies!"/>
 
                 <h:panelGroup layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit"
-                                     actionListener="#{companiesBean.addOrEditEntryListener}"
+                                     actionListener="#{companiesBean.addOrEditCompanyListener}"
                                      update="main-form,companies-form"/>
                 </h:panelGroup>
             </h:form>
@@ -376,11 +417,21 @@
                     <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractsEntity.contractIsFor}"
                                      style="margin-left: 5px;" required="true"
                                      requiredMessage="A person is needed for the contract">
-                        <f:selectItem itemLabel="---Select a Person---" itemValue=""/>
+                        <f:selectItem itemLabel="--- Select a Person ---" itemValue=""/>
                         <f:selectItems var="selection1"
                                        value="#{companiesBean.companyContactEntityCollectionForSelection}"
-                                       itemLabel="#{selection1.contactsByContactId.email} from #{selection1.companiesByCompanyId.shortName}"
+                                       itemLabel="[#{selection1.contactsByContactId.email}] from [#{selection1.companiesByCompanyId.shortName}]"
                                        itemValue="#{selection1.companyContactId}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Subcontracting For: "/>
+                    <p:selectOneMenu id="subcontract-for" value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"
+                                     style="margin-left: 5px;">
+                        <f:selectItem itemLabel="--- Select a Company ---" itemValue=""/>
+                        <f:selectItems var="selection4"
+                                       value="#{companiesBean.companiesEntityCollectionForSelection}"
+                                       itemLabel="#{selection4.companyName}"
+                                       itemValue="#{selection4.companyId}"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Rate: "/>
@@ -391,12 +442,12 @@
                                        required="true"
                                        id="rate"
                                        requiredMessage="Rate is required"/>
-                        <p:selectOneMenu id="currency" value="#{companiesBean.selectedContractsEntity.ccy}"
+                        <p:selectOneMenu id="currency" value="#{companiesBean.selectedContractsEntity.ccyId}"
                                          required="true" style="margin-left: 5px;">
                             <f:selectItems var="selection2"
                                            value="#{companiesBean.currencyEntityCollectionForSelection}"
                                            itemLabel="#{selection2.name}"
-                                           itemValue="#{selection2.ccy}"/>
+                                           itemValue="#{selection2.ccyId}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
 
@@ -428,7 +479,7 @@
                 <h:panelGroup layout="block">
                     <p:separator style="margin: 10px 0 10px 0"/>
                     <p:commandButton value="Submit" type="submit"
-                                     actionListener="#{companiesBean.addOrEditEntryListener3}"
+                                     actionListener="#{companiesBean.addOrEditCompanyContractListener}"
                                      update="contracts-form,main-form"/>
                 </h:panelGroup>
 

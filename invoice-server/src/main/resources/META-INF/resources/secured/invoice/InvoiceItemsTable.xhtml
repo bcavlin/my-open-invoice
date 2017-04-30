@@ -64,17 +64,19 @@
              var="invoiceItem"
              widgetVar="invoice-item-table"
              value="#{invoiceBean.selectedInvoiceEntity.invoiceItemsByInvoiceId}"
-             rows="#{invoiceBean.pageSize}"
+             rows="10"
              rowKey="#{invoiceItem.invoiceItemId}"
              selection="#{invoiceBean.selectedInvoiceItemsEntity}"
              selectionMode="single"
              emptyMessage="No items found with given criteria"
              scrollable="true"
              scrollWidth="638"
-             paginator="false">
+             paginatorPosition="bottom"
+             paginator="true"
+             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-    <p:ajax event="rowSelect" update="main-form:buttons-2-group"
-            listener="#{invoiceBean.ajaxChangeRowListener}"/>
+    <p:ajax event="rowSelect" update="main-form:buttons-2-group,main-form:buttons-4-group,invoice-items-timesheet-form,main-form:timesheet-table"
+            listener="#{invoiceBean.ajaxChangeRowInvoiceItemListener}"/>
 
     <p:column headerText="Id" sortBy="#{invoiceItem.invoiceItemId}" style="text-align:right;"
               width="50">
@@ -82,10 +84,22 @@
     </p:column>
 
     <p:column headerText="Total" sortBy="#{invoiceItem.total}" style="text-align:right;"
-              width="100">
+              width="70">
         <h:outputText value="#{invoiceItem.total}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
+    </p:column>
+
+    <p:column headerText="Total TS" style="text-align:right;"
+              width="70">
+        <h:outputText value="#{invoiceItem.timeSheetTotal}">
+            <f:convertNumber pattern="#,##0.00"/>
+        </h:outputText>
+    </p:column>
+
+    <p:column headerText="Unit" style="text-align:center;"
+              width="60">
+        <h:outputText value="#{invoiceItem.invoiceByInvoiceId.rateUnit}"/>
     </p:column>
 
     <p:column headerText="Description" sortBy="#{invoiceItem.description}" style="text-align:start;"
@@ -97,6 +111,8 @@
               width="100">
         <h:outputText value="#{invoiceItem.code}"/>
     </p:column>
+
+    <p:column/>
 
 </p:dataTable>
 </html>

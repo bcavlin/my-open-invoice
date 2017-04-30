@@ -55,4 +55,6 @@ public interface InvoiceDAO {
     InvoiceItemsRepository getInvoiceItemsRepository();
 
     AttachmentRepository getAttachmentRepository();
+
+    TimeSheetRepository getTimeSheetRepository();
 }

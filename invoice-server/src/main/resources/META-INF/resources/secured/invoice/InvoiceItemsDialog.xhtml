@@ -59,15 +59,26 @@
                          style="margin-left: 5px;"/>
 
             <p:outputLabel value="Total:"/>
-            <h:panelGrid columns="2" style="margin-left: 3px;">
+            <h:panelGrid columns="2" style="margin-left: 3px;" id="ctr1">
                 <p:inputNumber value="#{invoiceBean.selectedInvoiceItemsEntity.total}"
                                maxlength="10"
                                size="20"
                                required="true"
                                id="total"
+                               disabled="#{not empty invoiceBean.selectedInvoiceItemsEntity.timeSheetsByInvoiceItemId}"
                                requiredMessage="Total value is required" style="width: 70px; text-align: right;">
                 </p:inputNumber>
-                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.currencyByCcy.name}" style="font-weight: bold; margin-left: 3px;"/>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.rateUnit}"
+                              style="font-weight: bold; margin-left: 3px;"/>
+            </h:panelGrid>
+
+            <p:outputLabel value="Timesheet:"/>
+            <h:panelGrid columns="2" style="margin-left: 3px;" id="ctr2">
+                <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.timeSheetTotal}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+                <h:outputText value="#{invoiceBean.selectedInvoiceEntity.rateUnit}"
+                              style="font-weight: bold; margin-left: 3px;"/>
             </h:panelGrid>
         </h:panelGrid>
 
@@ -78,7 +89,7 @@
             <p:commandButton value="Submit" type="submit" id="submit2"
                              actionListener="#{invoiceBean.addOrEditInvoiceItemsListener}"
                              update="invoice-form,,invoice-items-form,main-form"
-                             />
+            />
         </h:panelGroup>
     </h:form>
 </p:dialog>

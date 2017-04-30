@@ -16,6 +16,9 @@
 
 package com.bgh.myopeninvoice.db.model;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -107,6 +110,21 @@ public class TimeSheetEntity implements Serializable {
 
     public void setInvoiceItemsByInvoiceItemId(InvoiceItemsEntity invoiceItemsByInvoiceItemId) {
         this.invoiceItemsByInvoiceItemId = invoiceItemsByInvoiceItemId;
+    }
+
+    private Boolean isWeekend;
+
+    @Transient
+    public Boolean getWeekend() {
+        if(isWeekend==null){
+            DateTime d = new DateTime(itemDate);
+            isWeekend = d.getDayOfWeek() == DateTimeConstants.SATURDAY || d.getDayOfWeek() == DateTimeConstants.SUNDAY ? Boolean.TRUE: Boolean.FALSE;
+        }
+        return isWeekend;
+    }
+
+    public void setWeekend(Boolean weekend) {
+        isWeekend = weekend;
     }
 
     @Override
