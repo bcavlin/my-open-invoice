@@ -32,6 +32,7 @@
                      oncomplete="PF('invoice-form-dialog').show();"
                      actionListener="#{invoiceBean.addNewInvoiceListener}"
                      update="main-form,invoice-form"/>
+
     <p:commandButton value="Edit Invoice (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
                      icon="ui-icon-pencil"
                      rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
@@ -42,6 +43,10 @@
             icon="ui-icon-trash"
             rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
             style="margin-right: 15px; color: brown;" oncomplete="PF('confirmation1').show();"/>
+
+    <p:commandButton icon="ui-icon-print"
+                     rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
+                     style="margin-right: 15px;" title="Print"/>
 
     <p:confirmDialog message="Do you want to remove this Invoice?"
                      showEffect="bounce"
@@ -85,12 +90,13 @@
               width="100">
         <h:outputText value="#{invoice.title}"/>
     </p:column>
-    <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}"
+    <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}"
               width="110">
-        <h:outputText value="#{invoice.totalValueWithTax}">
+        <h:outputText value="#{invoice.totalValue}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
     </p:column>
+
     <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;"
               width="70">
         <h:outputText value="#{invoice.currencyByCcyId.name}"/>
@@ -120,9 +126,9 @@
               width="70">
         <h:outputText value="#{invoice.rateUnit}"/>
     </p:column>
-    <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}"
+    <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}"
               width="110">
-        <h:outputText value="#{invoice.totalValue}">
+        <h:outputText value="#{invoice.totalValueWithTax}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
     </p:column>

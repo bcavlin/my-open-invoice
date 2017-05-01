@@ -26,63 +26,67 @@
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:fmt="http://omnifaces.org/functions">
 
+<h:panelGroup id="group-4-holder" layout="block">
+    <h:panelGroup id="buttons-4-group" layout="block" style="margin: 15px 0 15px 0;"
+                  rendered="#{invoiceBean.selectedInvoiceItemsEntity.unit eq 'HOUR'}">
 
-<h:panelGroup id="buttons-4-group" layout="block" style="margin: 15px 0 15px 0;">
+        <p:spacer height="23"
+                  rendered="#{empty invoiceBean.selectedInvoiceItemsEntity or empty invoiceBean.selectedInvoiceItemsEntity.invoiceItemId}"/>
 
-    <p:spacer height="23"
-              rendered="#{empty invoiceBean.selectedInvoiceItemsEntity or empty invoiceBean.selectedInvoiceItemsEntity.invoiceItemId}"/>
+        <p:commandButton value="Edit Timesheet (#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId})"
+                         icon="ui-icon-extlink" style="margin-right: 15px;"
+                         rendered="#{!empty invoiceBean.selectedInvoiceItemsEntity and invoiceBean.selectedInvoiceItemsEntity.invoiceItemId gt 0}"
+                         oncomplete="PF('invoice-items-timesheet-form-dialog').show();"
+                         actionListener="#{invoiceBean.addNewTimesheetListener}"
+                         update="main-form"/>
 
-    <p:commandButton value="Edit Timesheet (#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId})"
-                     icon="ui-icon-extlink" style="margin-right: 15px;"
-                     rendered="#{!empty invoiceBean.selectedInvoiceItemsEntity and invoiceBean.selectedInvoiceItemsEntity.invoiceItemId gt 0}"
-                     oncomplete="PF('invoice-items-timesheet-form-dialog').show();"
-                     actionListener="#{invoiceBean.addNewTimesheetListener}"
-                     update="main-form"/>
+    </h:panelGroup>
+
+    <!--@elvariable id="timesheet" type="com.bgh.myopeninvoice.db.model.TimeSheetEntity"-->
+    <p:dataTable id="timesheet-table"
+                 var="timesheet"
+                 widgetVar="timesheet-table"
+                 value="#{invoiceBean.selectedInvoiceItemsEntity.timeSheetsByInvoiceItemId}"
+                 rows="10"
+                 rowKey="#{timesheet.timesheetId}"
+                 emptyMessage="No items found with given criteria"
+                 scrollable="true"
+                 scrollWidth="638"
+                 paginatorPosition="bottom"
+                 paginator="true"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                 rendered="#{invoiceBean.selectedInvoiceItemsEntity.unit eq 'HOUR'}">
+
+        <p:ajax event="rowSelect" update="main-form:buttons-4-group"/>
+
+        <p:column headerText="Id" sortBy="#{timesheet.timesheetId}" style="text-align:right;"
+                  width="50">
+            <h:outputText value="#{timesheet.timesheetId}"/>
+        </p:column>
+
+        <p:column headerText="Total" sortBy="#{timesheet.hoursWorked}" style="text-align:right;"
+                  width="70">
+            <h:outputText value="#{timesheet.hoursWorked}">
+                <f:convertNumber pattern="#,##0.00"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="Unit" style="text-align:center;"
+                  width="60">
+            <h:outputText value="#{timesheet.invoiceItemsByInvoiceItemId.invoiceByInvoiceId.rateUnit}"/>
+        </p:column>
+
+        <p:column headerText="Date" sortBy="#{timesheet.itemDate}" style="text-align:left;"
+                  width="200">
+            <h:outputText value="#{timesheet.itemDate}">
+                <f:convertDateTime pattern="EEE, MMM d, yyyy"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column/>
+
+    </p:dataTable>
 
 </h:panelGroup>
-
-<!--@elvariable id="timesheet" type="com.bgh.myopeninvoice.db.model.TimeSheetEntity"-->
-<p:dataTable id="timesheet-table"
-             var="timesheet"
-             widgetVar="timesheet-table"
-             value="#{invoiceBean.selectedInvoiceItemsEntity.timeSheetsByInvoiceItemId}"
-             rows="10"
-             rowKey="#{timesheet.timesheetId}"
-             emptyMessage="No items found with given criteria"
-             scrollable="true"
-             scrollWidth="638"
-             paginatorPosition="bottom"
-             paginator="true"
-             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
-
-    <p:ajax event="rowSelect" update="main-form:buttons-4-group"/>
-
-    <p:column headerText="Id" sortBy="#{timesheet.timesheetId}" style="text-align:right;"
-              width="50">
-        <h:outputText value="#{timesheet.timesheetId}"/>
-    </p:column>
-
-    <p:column headerText="Total" sortBy="#{timesheet.hoursWorked}" style="text-align:right;"
-              width="70">
-        <h:outputText value="#{timesheet.hoursWorked}">
-            <f:convertNumber pattern="#,##0.00"/>
-        </h:outputText>
-    </p:column>
-
-    <p:column headerText="Unit" style="text-align:center;"
-              width="60">
-        <h:outputText value="#{timesheet.invoiceItemsByInvoiceItemId.invoiceByInvoiceId.rateUnit}"/>
-    </p:column>
-
-    <p:column headerText="Date" sortBy="#{timesheet.itemDate}" style="text-align:left;"
-              width="200">
-        <h:outputText value="#{timesheet.itemDate}">
-            <f:convertDateTime pattern="EEE, MMM d, yyyy"/>
-        </h:outputText>
-    </p:column>
-
-    <p:column/>
-
-</p:dataTable>
 
 </html>
