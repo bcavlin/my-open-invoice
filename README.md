@@ -6,12 +6,12 @@ Time reporting and invoice generation tool specialized for the IT consultant. Th
 [H2](http://www.h2database.com/html/main.html) database, [JoinFaces](http://joinfaces.org) 
 and [Spring Boot](http://projects.spring.io/spring-boot).
 
-##TODO
+## TODO
 * Create Jasper Report engine integration<br/>
 * Create Invoice report<br/>
 * Create Main page<br/>
 
-##Initialization
+## Initialization
 Before using the application, user needs to pass in command line parameter for the database init: 
 
 ```Shell
@@ -20,5 +20,5 @@ Before using the application, user needs to pass in command line parameter for t
 
 This will create and populate basic data profile.
 
-##License
+## License
 Copyright 2017 Branislav Cavlin. Licensed under the Apache License, Version 2.0 (the "License").
