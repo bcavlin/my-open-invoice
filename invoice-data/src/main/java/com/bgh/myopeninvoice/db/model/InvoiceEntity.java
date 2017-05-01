@@ -291,7 +291,7 @@ public class InvoiceEntity implements Serializable {
 
     private BigDecimal totalValue;
 
-    @Formula("(select sum(e.total) * rate from invoice.invoice_items e where e.invoice_id = invoice_id)")
+    @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) from invoice.invoice_items e where e.invoice_id = invoice_id)")
     public BigDecimal getTotalValue() {
         return totalValue == null ? new BigDecimal(0) : totalValue;
     }
@@ -302,7 +302,7 @@ public class InvoiceEntity implements Serializable {
 
     private BigDecimal totalValueWithTax;
 
-    @Formula("(select sum(e.total) * rate * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
+    @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
     public BigDecimal getTotalValueWithTax() {
         return totalValueWithTax == null ? new BigDecimal(0) : totalValueWithTax;
 

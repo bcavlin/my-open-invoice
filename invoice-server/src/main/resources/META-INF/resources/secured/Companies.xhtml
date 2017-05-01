@@ -33,7 +33,7 @@
                                  style="margin-right: 15px;"
                                  oncomplete="PF('companies-form-dialog').show();"
                                  actionListener="#{companiesBean.newEntryListenerForCompany}"
-                                 update="main-form, companies-form"/>
+                                 update="main-form,companies-form"/>
 
                 <p:commandButton value="Edit Company (#{companiesBean.selectedCompaniesEntity.shortName})"
                                  icon="ui-icon-pencil"
@@ -257,7 +257,7 @@
                 </p:dataTable>
             </h:panelGroup>
 
-            <o:validateOrder components="valid-from-edit-2 valid-to-edit-2"/>
+            <!--<o:validateOrder components="valid-from-edit-2 valid-to-edit-2"/>-->
 
         </h:form>
     </ui:define>
@@ -302,9 +302,7 @@
                         <p:outputLabel value="Phone 1: "/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
                                      maxlength="20"
-                                     style="margin-left: 5px;" validatorMessage="Phone number is not in correct format">
-                            <!--<f:validateRegex-->
-                            <!--pattern="^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$"/>-->
+                                     style="margin-left: 5px;">
                         </p:inputText>
 
                         <p:outputLabel value="BIN: "/>

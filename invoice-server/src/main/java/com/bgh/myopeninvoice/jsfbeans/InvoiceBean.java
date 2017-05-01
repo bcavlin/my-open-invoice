@@ -130,7 +130,7 @@ public class InvoiceBean implements Serializable {
     public void addNewInvoiceItemsListener(ActionEvent event) {
         selectedInvoiceItemsEntity = new InvoiceItemsEntity();
         selectedInvoiceItemsEntity.setInvoiceId(selectedInvoiceEntity.getInvoiceId());
-        selectedInvoiceItemsEntity.setTotal(new BigDecimal(0));
+        selectedInvoiceItemsEntity.setQuantity(new BigDecimal(0));
     }
 
     public void addNewTimesheetListener(ActionEvent event) {
@@ -195,7 +195,7 @@ public class InvoiceBean implements Serializable {
 
             //update total
             if (selectedInvoiceItemsEntity.getTimeSheetTotal().compareTo(new BigDecimal(0)) > 0) {
-                selectedInvoiceItemsEntity.setTotal(selectedInvoiceItemsEntity.getTimeSheetTotal());
+                selectedInvoiceItemsEntity.setQuantity(selectedInvoiceItemsEntity.getTimeSheetTotal());
             }
 
             selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().save(selectedInvoiceItemsEntity);
@@ -216,7 +216,7 @@ public class InvoiceBean implements Serializable {
             selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId().removeIf(o -> o.getHoursWorked() == null || o.getHoursWorked().equals(new BigDecimal(0.0)));
             //update total
             if (selectedInvoiceItemsEntity.getTimeSheetTotal().compareTo(new BigDecimal(0)) > 0) {
-                selectedInvoiceItemsEntity.setTotal(selectedInvoiceItemsEntity.getTimeSheetTotal());
+                selectedInvoiceItemsEntity.setQuantity(selectedInvoiceItemsEntity.getTimeSheetTotal());
             }
 
             invoiceDAO.getInvoiceItemsRepository().save(selectedInvoiceItemsEntity);

@@ -58,9 +58,18 @@
                          maxlength="255"
                          style="margin-left: 5px;"/>
 
-            <p:outputLabel value="Total:"/>
+            <p:outputLabel value="Unit:"/>
+            <p:selectOneMenu id="unit" value="#{invoiceBean.selectedInvoiceItemsEntity.unit}"
+                             required="true" style="margin-left: 5px;" requiredMessage="Tax is required">
+                <f:selectItem itemValue="" itemLabel="Select unit value"/>
+                <f:selectItem itemValue="HOUR" itemLabel="HOUR"/>
+                <f:selectItem itemValue="DAY" itemLabel="DAY/$"/>
+                <p:ajax event="change" update="ctr1,ctr2"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="Quantity:"/>
             <h:panelGrid columns="2" style="margin-left: 3px;" id="ctr1">
-                <p:inputNumber value="#{invoiceBean.selectedInvoiceItemsEntity.total}"
+                <p:inputNumber value="#{invoiceBean.selectedInvoiceItemsEntity.quantity}"
                                maxlength="10"
                                size="20"
                                required="true"
@@ -69,16 +78,16 @@
                                requiredMessage="Total value is required" style="width: 70px; text-align: right;">
                 </p:inputNumber>
                 <h:outputText value="#{invoiceBean.selectedInvoiceEntity.rateUnit}"
-                              style="font-weight: bold; margin-left: 3px;"/>
+                              style="font-weight: bold; margin-left: 3px;" rendered="#{invoiceBean.selectedInvoiceItemsEntity.unit eq 'HOUR'}"/>
             </h:panelGrid>
 
             <p:outputLabel value="Timesheet:"/>
             <h:panelGrid columns="2" style="margin-left: 3px;" id="ctr2">
-                <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.timeSheetTotal}">
+                <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.timeSheetTotal}" rendered="#{invoiceBean.selectedInvoiceItemsEntity.unit eq 'HOUR'}">
                     <f:convertNumber pattern="#,##0.00"/>
                 </h:outputText>
                 <h:outputText value="#{invoiceBean.selectedInvoiceEntity.rateUnit}"
-                              style="font-weight: bold; margin-left: 3px;"/>
+                              style="font-weight: bold; margin-left: 3px;" rendered="#{invoiceBean.selectedInvoiceItemsEntity.unit eq 'HOUR'}"/>
             </h:panelGrid>
         </h:panelGrid>
 

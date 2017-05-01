@@ -75,7 +75,7 @@
              paginator="true"
              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-    <p:ajax event="rowSelect" update="main-form:buttons-2-group,main-form:buttons-4-group,invoice-items-timesheet-form,main-form:timesheet-table"
+    <p:ajax event="rowSelect" update="main-form:buttons-2-group,main-form:group-4-holder,invoice-items-timesheet-form,main-form:timesheet-table"
             listener="#{invoiceBean.ajaxChangeRowInvoiceItemListener}"/>
 
     <p:column headerText="Id" sortBy="#{invoiceItem.invoiceItemId}" style="text-align:right;"
@@ -83,9 +83,9 @@
         <h:outputText value="#{invoiceItem.invoiceItemId}"/>
     </p:column>
 
-    <p:column headerText="Total" sortBy="#{invoiceItem.total}" style="text-align:right;"
-              width="70">
-        <h:outputText value="#{invoiceItem.total}">
+    <p:column headerText="Quantity" sortBy="#{invoiceItem.quantity}" style="text-align:right;"
+              width="80">
+        <h:outputText value="#{invoiceItem.quantity}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
     </p:column>
@@ -99,7 +99,7 @@
 
     <p:column headerText="Unit" style="text-align:center;"
               width="60">
-        <h:outputText value="#{invoiceItem.invoiceByInvoiceId.rateUnit}"/>
+        <h:outputText value="#{invoiceItem.unit}"/>
     </p:column>
 
     <p:column headerText="Description" sortBy="#{invoiceItem.description}" style="text-align:start;"

@@ -34,7 +34,8 @@ public class InvoiceItemsEntity implements Serializable {
     private Integer invoiceId;
     private String description;
     private String code;
-    private BigDecimal total;
+    private BigDecimal quantity;
+    private String unit;
     private InvoiceEntity invoiceByInvoiceId;
     private Collection<TimeSheetEntity> timeSheetsByInvoiceItemId;
 
@@ -80,13 +81,23 @@ public class InvoiceItemsEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "TOTAL", nullable = false, precision = 32767)
-    public BigDecimal getTotal() {
-        return total;
+    @Column(name = "QUANTITY", nullable = false, precision = 32767)
+    public BigDecimal getQuantity() {
+        return quantity;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setQuantity(BigDecimal quantity) {
+        this.quantity = quantity;
+    }
+
+    @Basic
+    @Column(name = "UNIT", nullable = false, length = 20)
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     @Override
@@ -101,7 +112,8 @@ public class InvoiceItemsEntity implements Serializable {
         if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
-        if (total != null ? !total.equals(that.total) : that.total != null) return false;
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
+        if (unit != null ? !unit.equals(that.unit) : that.unit != null) return false;
 
         return true;
     }
@@ -112,7 +124,8 @@ public class InvoiceItemsEntity implements Serializable {
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (code != null ? code.hashCode() : 0);
-        result = 31 * result + (total != null ? total.hashCode() : 0);
+        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (unit != null ? unit.hashCode() : 0);
         return result;
     }
 
@@ -143,9 +156,9 @@ public class InvoiceItemsEntity implements Serializable {
 //    @Formula("(select sum(e.hours_worked) from invoice.time_sheet e where e.invoice_item_id = invoice_item_id)")
     @Transient
     public BigDecimal getTimeSheetTotal() {
-        if(getTimeSheetsByInvoiceItemId()!=null) {
-            timeSheetTotal = getTimeSheetsByInvoiceItemId().stream().map(TimeSheetEntity::getHoursWorked).reduce(BigDecimal.ZERO, BigDecimal::add);
-        }else{
+        if (getTimeSheetsByInvoiceItemId() != null) {
+            timeSheetTotal = getTimeSheetsByInvoiceItemId().stream().filter(o -> o.getHoursWorked() != null).map(TimeSheetEntity::getHoursWorked).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
             timeSheetTotal = new BigDecimal(0);
         }
         return timeSheetTotal == null ? new BigDecimal(0) : timeSheetTotal;
@@ -162,7 +175,8 @@ public class InvoiceItemsEntity implements Serializable {
                 ", invoiceId=" + invoiceId +
                 ", description='" + description + '\'' +
                 ", code='" + code + '\'' +
-                ", total=" + total +
+                ", quantity=" + quantity +
+                ", unit='" + unit + '\'' +
                 '}';
     }
 }
