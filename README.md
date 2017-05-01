@@ -1,17 +1,24 @@
-# my-open-invoice
-Time reporting and invoice generation tool specialized for the IT consultant
+my-open-invoice
+=====
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-#TODO
-Create Jasper Report engine integration<br/>
-Create Invoice report<br/>
-Create Main page<br/>
+Time reporting and invoice generation tool specialized for the IT consultant. This project utilizes 
+[H2](http://www.h2database.com/html/main.html) database, [JoinFaces](http://joinfaces.org) 
+and [Spring Boot](http://projects.spring.io/spring-boot).
 
-#Initialization
-Before using the application, user needs to pass in parameter for the database init: 
+##TODO
+* Create Jasper Report engine integration<br/>
+* Create Invoice report<br/>
+* Create Main page<br/>
 
-<code>--spring.datasource.initialize=true.</code> 
+##Initialization
+Before using the application, user needs to pass in command line parameter for the database init: 
 
-This will create and populate basic data.
+```Shell
+--spring.datasource.initialize=true.
+```
 
-#License
+This will create and populate basic data profile.
+
+##License
 Copyright 2017 Branislav Cavlin. Licensed under the Apache License, Version 2.0 (the "License").
