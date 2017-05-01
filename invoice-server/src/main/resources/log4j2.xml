@@ -2,9 +2,9 @@
 <Configuration>
     <Appenders>
         <RollingFile name="File"
-                     fileName="/home/bcavlin/logs/invoice-server.log"
+                     fileName="./logs/invoice-server.log"
                      append="false"
-                     filePattern="/home/bcavlin/logs/$${date:yyyy-MM}/invoice-server-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="./logs/$${date:yyyy-MM}/invoice-server-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>[%d{ISO8601}{GMT-5}][%-5p][%t][%X{userName}][%c.%M] - %m%n</Pattern>
             </PatternLayout>
