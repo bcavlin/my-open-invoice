@@ -18,7 +18,9 @@ Before using the application, user needs to pass in command line parameter for t
 --spring.datasource.initialize=true.
 ```
 
-This will create and populate basic data profile.
+This will create and populate basic data profile. Since the project uses [Querydsl](http://www.querydsl.com/)
+it is necessary to compile the application in the maven to get Q* objects that are used for filtering 
+data.
 
 ## License
 Copyright 2017 Branislav Cavlin. Licensed under the Apache License, Version 2.0 (the "License").

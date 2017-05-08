@@ -17,6 +17,7 @@
 package com.bgh.myopeninvoice;
 
 import com.bgh.myopeninvoice.service.CustomUserDetailsService;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,9 @@ import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ErrorPageRegistrar;
 import org.springframework.boot.web.servlet.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,11 +54,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableJpaRepositories(basePackages = {"com.bgh.myopeninvoice.db.dao"})
 @EntityScan(basePackages = {"com.bgh.myopeninvoice.db.model"})
+@ComponentScan({"com.bgh.myopeninvoice"})
 public class InvoiceServerApplication {
 
     private static Logger logger = LoggerFactory.getLogger(InvoiceServerApplication.class);
@@ -63,6 +68,25 @@ public class InvoiceServerApplication {
     public static void main(String[] args) {
         System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(InvoiceServerApplication.class, args);
+    }
+
+
+    private Environment env;
+
+    @Autowired
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
+
+    @Bean
+    public ComboPooledDataSource dataSource() throws PropertyVetoException {
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+        dataSource.setMinPoolSize(Integer.parseInt(env.getProperty("hibernate.c3p0.max_size")));
+        dataSource.setInitialPoolSize(Integer.parseInt(env.getProperty("hibernate.c3p0.initial_pool_size")));
+        dataSource.setJdbcUrl(env.getProperty("spring.datasource.url"));
+        dataSource.setUser(env.getProperty("spring.datasource.username"));
+        dataSource.setDriverClass(env.getProperty("spring.datasource.driver-class-name"));
+        return dataSource;
     }
 
     @Bean

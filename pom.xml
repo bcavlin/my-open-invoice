@@ -6,6 +6,7 @@
     <modules>
         <module>invoice-server</module>
         <module>invoice-data</module>
+        <module>invoice-reporting</module>
     </modules>
 
     <parent>
@@ -17,7 +18,7 @@
 
     <groupId>com.bgh.myopeninvoice</groupId>
     <artifactId>my-open-invoice-main</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -113,6 +114,11 @@
                 <artifactId>invoice-data</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.bgh.myopeninvoice</groupId>
+                <artifactId>invoice-reporting</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
             <dependency>
                 <groupId>com.querydsl</groupId>
@@ -161,7 +167,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
-                <version>5.3.4.Final</version>
+                <version>5.4.1.Final</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.geronimo.specs</groupId>
@@ -169,6 +175,24 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-c3p0</artifactId>
+                <version>5.2.9.Final</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
+            <dependency>
+                <groupId>org.imgscalr</groupId>
+                <artifactId>imgscalr-lib</artifactId>
+                <version>4.2</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.eclipse.birt.runtime/org.eclipse.birt.runtime -->
+            <dependency>
+                <groupId>org.eclipse.birt.runtime</groupId>
+                <artifactId>org.eclipse.birt.runtime</artifactId>
+                <version>4.4.2</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -224,6 +248,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.3</version>
             </plugin>
         </plugins>
     </build>

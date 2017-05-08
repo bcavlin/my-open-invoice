@@ -26,6 +26,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
+import org.imgscalr.Scalr;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -40,6 +41,10 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -210,7 +215,23 @@ public class CompaniesBean implements Serializable {
 
     public void handleFileUpload(FileUploadEvent event) {
         if (selectedCompaniesEntity != null) {
-            selectedCompaniesEntity.setContent(event.getFile().getContents());
+
+            try {
+                BufferedImage scaledImg = Scalr.resize(
+                        ImageIO.read(
+                                new ByteArrayInputStream(
+                                        event.getFile().getContents())), Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_HEIGHT, 70, Scalr.OP_ANTIALIAS);
+                try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                    ImageIO.write(scaledImg, "png", baos);
+                    baos.flush();
+                    selectedCompaniesEntity.setContent(baos.toByteArray());
+                }
+
+            } catch (IOException e) {
+                logger.error(e.toString());
+                FacesUtils.addErrorMessage("Cannot process the image");
+            }
+
         }
     }
 

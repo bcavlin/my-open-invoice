@@ -33,6 +33,7 @@ public class ReportsEntity implements Serializable{
     private InvoiceEntity invoiceByInvoiceId;
 
     @Id
+    @GeneratedValue
     @Column(name = "REPORT_ID", nullable = false)
     public Integer getReportId() {
         return reportId;

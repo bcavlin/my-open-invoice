@@ -19,6 +19,8 @@ package com.bgh.myopeninvoice.jsfbeans;
 import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.InvoiceEntityLazyModel;
+import com.bgh.myopeninvoice.reporting.BIRTReport;
+import com.bgh.myopeninvoice.reporting.ReportRunner;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
@@ -51,10 +53,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by bcavlin on 17/03/17.
@@ -88,10 +87,18 @@ public class InvoiceBean implements Serializable {
 
     private int pageSize = 20;
 
+    private ReportRunner reportRunner;
+
     @Autowired
-    public InvoiceBean(InvoiceDAO invoiceDAO) {
+    public InvoiceBean(InvoiceDAO invoiceDAO, ReportRunner reportRunner) {
         this.invoiceDAO = invoiceDAO;
+        this.reportRunner = reportRunner;
     }
+
+//    @Autowired
+//    public InvoiceBean(InvoiceDAO invoiceDAO) {
+//        this.invoiceDAO = invoiceDAO;
+//    }
 
     @PostConstruct
     private void init() {
@@ -380,6 +387,19 @@ public class InvoiceBean implements Serializable {
 
     public void switchProxy(AttachmentEntity attachmentEntity) {
         attachmentEntity.setLoadProxy(!attachmentEntity.getLoadProxy());
+    }
+
+    public void runReportListener(ActionEvent event) throws IOException {
+        Map<String,Object> params = new HashMap<>();
+        params.put("InvoiceId",1);
+
+        final ReportTemplatesEntity invoice_v1 = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
+
+        final BIRTReport myReport = new BIRTReport("MyReport", params, invoice_v1.getContent(), reportRunner);
+        final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
+
+        Faces.sendFile(reportContent.toByteArray(), "MyReport.pdf", true);
+
     }
 
     public int getPageSize() {
