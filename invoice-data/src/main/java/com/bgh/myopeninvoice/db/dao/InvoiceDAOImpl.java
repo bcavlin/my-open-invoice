@@ -276,4 +276,16 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     public void setTimeSheetRepository(TimeSheetRepository timeSheetRepository) {
         this.timeSheetRepository = timeSheetRepository;
     }
+
+    private ReportTemplatesRepository reportTemplatesRepository;
+
+    @Override
+    public ReportTemplatesRepository getReportTemplatesRepository() {
+        return reportTemplatesRepository;
+    }
+
+    @Autowired
+    public void setReportTemplatesRepository(ReportTemplatesRepository reportTemplatesRepository) {
+        this.reportTemplatesRepository = reportTemplatesRepository;
+    }
 }

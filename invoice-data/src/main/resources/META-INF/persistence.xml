@@ -21,6 +21,7 @@
         <class>com.bgh.myopeninvoice.db.model2.InvoiceItemsEntity</class>
         <class>com.bgh.myopeninvoice.db.model2.InvoiceEntity</class>
         <class>com.bgh.myopeninvoice.db.model.ReportsEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.ReportTemplatesEntity</class>
 
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>

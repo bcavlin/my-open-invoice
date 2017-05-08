@@ -46,7 +46,8 @@
 
     <p:commandButton icon="ui-icon-print"
                      rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
-                     style="margin-right: 15px;" title="Print"/>
+                     style="margin-right: 15px;" title="Print"
+                     actionListener="#{invoiceBean.runReportListener}" ajax="false"/>
 
     <p:confirmDialog message="Do you want to remove this Invoice?"
                      showEffect="bounce"

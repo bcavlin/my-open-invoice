@@ -422,16 +422,6 @@
                                        itemValue="#{selection1.companyContactId}"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel value="Subcontracting For: "/>
-                    <p:selectOneMenu id="subcontract-for" value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"
-                                     style="margin-left: 5px;">
-                        <f:selectItem itemLabel="--- Select a Company ---" itemValue=""/>
-                        <f:selectItems var="selection4"
-                                       value="#{companiesBean.companiesEntityCollectionForSelection}"
-                                       itemLabel="#{selection4.companyName}"
-                                       itemValue="#{selection4.companyId}"/>
-                    </p:selectOneMenu>
-
                     <p:outputLabel value="Rate: "/>
                     <h:panelGrid columns="2" style="margin-left: 3px;" id="rate-grid">
                         <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
@@ -468,6 +458,16 @@
                     <p:inputTextarea value="#{companiesBean.selectedContractsEntity.description}"
                                      style="margin-left: 5px;"
                                      size="300" maxlength="100"/>
+
+                    <p:outputLabel value="Subcontracting For: "/>
+                    <p:selectOneMenu id="subcontract-for" value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"
+                                     style="margin-left: 5px;">
+                        <f:selectItem itemLabel="--- Select a Company ---" itemValue=""/>
+                        <f:selectItems var="selection4"
+                                       value="#{companiesBean.companiesEntityCollectionForSelection}"
+                                       itemLabel="#{selection4.companyName}"
+                                       itemValue="#{selection4.companyId}"/>
+                    </p:selectOneMenu>
 
                 </h:panelGrid>
 
