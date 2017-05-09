@@ -95,6 +95,20 @@ public class ReportsEntity implements Serializable{
         this.invoiceByInvoiceId = invoiceByInvoiceId;
     }
 
+    private Boolean loadProxy;
+
+    @Transient
+    public Boolean getLoadProxy() {
+        if (loadProxy == null) {
+            loadProxy = Boolean.TRUE;
+        }
+        return loadProxy;
+    }
+
+    public void setLoadProxy(Boolean loadProxy) {
+        this.loadProxy = loadProxy;
+    }
+
     @Override
     public String toString() {
         return "ReportsEntity{" +

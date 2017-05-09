@@ -105,8 +105,8 @@
 
             <p:outputLabel value="Note:"/>
             <p:inputTextarea value="#{invoiceBean.selectedInvoiceEntity.note}"
-                             style="margin-left: 5px;"
-                             size="300" maxlength="500"/>
+                             style="margin-left: 5px; width: 300px;"
+                             maxlength="500" autoResize="false" />
         </h:panelGrid>
 
         <h:panelGrid id="updates" columns="2" columnClasses="two-column-1,two-column-2"

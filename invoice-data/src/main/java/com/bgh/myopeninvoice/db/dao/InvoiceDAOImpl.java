@@ -288,4 +288,16 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     public void setReportTemplatesRepository(ReportTemplatesRepository reportTemplatesRepository) {
         this.reportTemplatesRepository = reportTemplatesRepository;
     }
+
+    private ReportsRepository reportsRepository;
+
+    @Override
+    public ReportsRepository getReportsRepository() {
+        return reportsRepository;
+    }
+
+    @Autowired
+    public void setReportsRepository(ReportsRepository reportsRepository) {
+        this.reportsRepository = reportsRepository;
+    }
 }

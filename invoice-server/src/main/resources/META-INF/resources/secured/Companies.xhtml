@@ -126,7 +126,7 @@
                     <h:outputText value="#{company.phone1}"/>
                 </p:column>
 
-                <p:column headerText="BIN" sortBy="#{company.businessNumber}" style="text-align:start;" width="100">
+                <p:column headerText="BN" sortBy="#{company.businessNumber}" style="text-align:start;" width="100">
                     <h:outputText value="#{company.businessNumber}"/>
                 </p:column>
 
@@ -305,22 +305,22 @@
                                      style="margin-left: 5px;">
                         </p:inputText>
 
-                        <p:outputLabel value="BIN: "/>
+                        <p:outputLabel value="BN: "/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.businessNumber}"
                                      maxlength="30"
                                      style="margin-left: 5px;"/>
 
                         <p:outputLabel value="Address 1: "/>
                         <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
-                                         style="margin-left: 5px;"
+                                         style="margin-left: 5px; width: 300px;"
                                          required="true"
                                          requiredMessage="Address line 1 is required"
-                                         size="300" maxlength="500"/>
+                                         autoResize="false" maxlength="500"/>
 
                         <p:outputLabel value="Address 2: "/>
                         <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine2}"
-                                         style="margin-left: 5px;"
-                                         size="300" maxlength="500"/>
+                                         style="margin-left: 5px; width: 300px;"
+                                         autoResize="false" maxlength="500"/>
 
                         <p:outputLabel value="Owned: " style="color: red; font-weight: bold;"/>
                         <p:selectBooleanButton value="#{companiesBean.selectedCompaniesEntity.ownedByMe}"
@@ -456,8 +456,8 @@
 
                     <p:outputLabel value="Description: "/>
                     <p:inputTextarea value="#{companiesBean.selectedContractsEntity.description}"
-                                     style="margin-left: 5px;"
-                                     size="300" maxlength="100"/>
+                                     style="margin-left: 5px; width: 300px;"
+                                     autoResize="false" maxlength="100"/>
 
                     <p:outputLabel value="Subcontracting For: "/>
                     <p:selectOneMenu id="subcontract-for" value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"

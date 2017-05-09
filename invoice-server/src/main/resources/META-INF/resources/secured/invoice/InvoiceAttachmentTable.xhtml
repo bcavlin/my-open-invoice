@@ -45,7 +45,7 @@
         <p:commandLink id="image-link" value="#{applicationBean.abbreviate(att.filename)}"
                        style="font-family: 'Courier New', Monospace"
                        actionListener="#{invoiceBean.switchProxy(att)}" update="carusel-grid-1"/>
-        <p:contextMenu for="carusel-grid-1" style="width: 400px;">
+        <p:contextMenu for="carusel-grid-1" style="width: 500px;">
             <p:menuitem value="Download [#{att.filename}]" icon="ui-icon-arrowthickstop-1-s" actionListener="#{invoiceBean.download(att)}" ajax="false"/>
             <p:separator/>
             <p:menuitem value="Delete [#{att.filename}]" update="image-carousel-1" icon="ui-icon-trash"

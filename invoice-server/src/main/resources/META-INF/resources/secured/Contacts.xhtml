@@ -133,7 +133,8 @@
                 <h:panelGrid id="contacts-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
                              style="padding-top: 3px;">
                     <p:outputLabel value="ID: " style="font-weight: bold;"/>
-                    <h:outputText value="#{contactsBean.selectedContactsEntity.contactId}" style="margin-left: 5px; font-weight: bold;"/>
+                    <h:outputText value="#{contactsBean.selectedContactsEntity.contactId}"
+                                  style="margin-left: 5px; font-weight: bold;"/>
 
                     <p:outputLabel value="Email: " id="email"/>
                     <p:inputText value="#{contactsBean.selectedContactsEntity.email}"
@@ -169,13 +170,13 @@
 
                     <p:outputLabel value="Address Line 1: "/>
                     <p:inputTextarea value="#{contactsBean.selectedContactsEntity.addressLine1}"
-                                     style="margin-left: 5px;"
-                                     size="300" maxlength="500"/>
+                                     style="margin-left: 5px; width: 300px;"
+                                     autoResize="false" maxlength="500"/>
 
                     <p:outputLabel value="Address Line 2: "/>
                     <p:inputTextarea value="#{contactsBean.selectedContactsEntity.addressLine2}"
-                                     style="margin-left: 5px;"
-                                     size="300" maxlength="500"/>
+                                     style="margin-left: 5px; width: 300px;"
+                                     autoResize="false" maxlength="500"/>
 
                 </h:panelGrid>
 
