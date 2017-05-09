@@ -59,4 +59,6 @@ public interface InvoiceDAO {
     TimeSheetRepository getTimeSheetRepository();
 
     ReportTemplatesRepository getReportTemplatesRepository();
+
+    ReportsRepository getReportsRepository();
 }

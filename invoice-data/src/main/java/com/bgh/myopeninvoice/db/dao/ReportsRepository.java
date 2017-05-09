@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.reporting;
+package com.bgh.myopeninvoice.db.dao;
 
-import java.io.ByteArrayOutputStream;
+import com.bgh.myopeninvoice.db.model.ReportsEntity;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
- * Created by bcavlin on 07/05/17.
+ * Created by bcavlin on 14/03/17.
  */
-public interface ReportRunner {
+public interface ReportsRepository extends PagingAndSortingRepository<ReportsEntity, Integer>, QueryDslPredicateExecutor<ReportsEntity> {
 
-    /**
-     * Changed version of the http://stackoverflow.com/questions/32069938/birt-in-spring-boot-app
-     *
-     * @param report
-     * @return
-     */
-    ByteArrayOutputStream runReport(Report report);
 }

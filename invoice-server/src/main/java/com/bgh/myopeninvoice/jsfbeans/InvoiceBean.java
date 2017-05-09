@@ -53,6 +53,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -89,6 +90,8 @@ public class InvoiceBean implements Serializable {
 
     private ReportRunner reportRunner;
 
+    private Collection<ReportsEntity> reportsEntityCollection;
+
     @Autowired
     public InvoiceBean(InvoiceDAO invoiceDAO, ReportRunner reportRunner) {
         this.invoiceDAO = invoiceDAO;
@@ -115,6 +118,7 @@ public class InvoiceBean implements Serializable {
         dateFromTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue().toDate();
         //last day of the month
         dateToTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue().toDate();
+
     }
 
     private void refresh() {
@@ -163,6 +167,9 @@ public class InvoiceBean implements Serializable {
 
     public void ajaxChangeRowInvoiceListener() {
         selectedInvoiceItemsEntity = null;
+
+        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(
+                QReportsEntity.reportsEntity.invoiceByInvoiceId.invoiceId.eq(selectedInvoiceEntity.getInvoiceId())));
     }
 
     public void ajaxChangeRowInvoiceItemListener() {
@@ -352,6 +359,16 @@ public class InvoiceBean implements Serializable {
         }
     }
 
+    public String getReportData(ReportsEntity reportsEntity) throws IOException, ImageReadException {
+        if (reportsEntity != null && reportsEntity.getContent().length > 0) {
+            if (reportsEntity.getLoadProxy()) {
+                return "/images/pdf.png";
+            }
+        }
+
+        return null;
+    }
+
     public String onFlowProcessTimesheet(FlowEvent event) {
 
         RequestContext.getCurrentInstance().execute("PF('invoice-items-timesheet-form-dialog').initPosition();");
@@ -390,15 +407,26 @@ public class InvoiceBean implements Serializable {
     }
 
     public void runReportListener(ActionEvent event) throws IOException {
-        Map<String,Object> params = new HashMap<>();
-        params.put("InvoiceId",1);
 
-        final ReportTemplatesEntity invoice_v1 = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
+        if (selectedInvoiceEntity != null) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("p_invoice_id", selectedInvoiceEntity.getInvoiceId());
 
-        final BIRTReport myReport = new BIRTReport("MyReport", params, invoice_v1.getContent(), reportRunner);
-        final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
+            final ReportTemplatesEntity invoice_v1 = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
 
-        Faces.sendFile(reportContent.toByteArray(), "MyReport.pdf", true);
+            String name = "INVOICE_" + selectedInvoiceEntity.getTitle() + new SimpleDateFormat("yyyyMMddHHmmss").format(selectedInvoiceEntity.getCreatedDate());
+
+            final BIRTReport myReport = new BIRTReport(name, params, invoice_v1.getContent(), reportRunner);
+            final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
+
+            Faces.sendFile(reportContent.toByteArray(), name + ".pdf", true);
+
+            FacesUtils.addSuccessMessage("Document has been generated");
+
+        } else {
+            FacesUtils.addErrorMessage("Selected invoice is null");
+
+        }
 
     }
 
@@ -474,4 +502,11 @@ public class InvoiceBean implements Serializable {
         this.dateToTimesheet = dateToTimesheet;
     }
 
+    public Collection<ReportsEntity> getReportsEntityCollection() {
+        return reportsEntityCollection;
+    }
+
+    public void setReportsEntityCollection(Collection<ReportsEntity> reportsEntityCollection) {
+        this.reportsEntityCollection = reportsEntityCollection;
+    }
 }

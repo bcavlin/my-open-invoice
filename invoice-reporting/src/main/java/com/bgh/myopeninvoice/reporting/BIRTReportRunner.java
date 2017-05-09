@@ -115,6 +115,7 @@ public class BIRTReportRunner implements ReportRunner {
 
             PDFRenderOption pdfRenderOption = new PDFRenderOption();
             pdfRenderOption.setOption(IPDFRenderOption.REPAGINATE_FOR_PDF, Boolean.TRUE);
+            pdfRenderOption.setEmbededFont(true);
             pdfRenderOption.setOutputFormat("pdf");
             pdfRenderOption.setOutputStream(byteArrayOutputStream);
 
