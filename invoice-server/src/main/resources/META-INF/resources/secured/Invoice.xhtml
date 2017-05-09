@@ -50,7 +50,7 @@
                 </h:panelGrid>
 
                 <p:carousel value="#{invoiceBean.reportsEntityCollection}" headerText="Reports" var="rpt"
-                            itemStyle="text-align:left" responsive="true"  id="image-carousel-2">
+                            itemStyle="text-align:left; margin-top: 15px;" responsive="true"  id="image-carousel-2">
                     <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-2">
                         <h:graphicImage value="#{invoiceBean.getReportData(rpt)}" width="128" height="128" id="content-image"/>
                     </h:panelGrid>
