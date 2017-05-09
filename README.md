@@ -15,7 +15,7 @@ and [Spring Boot](http://projects.spring.io/spring-boot).
 Before using the application, user needs to pass in command line parameter for the database init: 
 
 ```Shell
---spring.datasource.initialize=true.
+--spring.datasource.initialize=true
 ```
 
 This will create and populate basic data profile. Since the project uses [Querydsl](http://www.querydsl.com/)
