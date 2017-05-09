@@ -20,7 +20,8 @@ Before using the application, user needs to pass in command line parameter for t
 
 This will create and populate basic data profile. Since the project uses [Querydsl](http://www.querydsl.com/)
 it is necessary to compile the application in the maven to get Q* objects that are used for filtering 
-data.
+data. To generate the report, for now, a template with name 'Invoice_V1' needs to be inserted into the REPORT_TEMPLATES
+ table.
 
 ## License
 Copyright 2017 Branislav Cavlin. Licensed under the Apache License, Version 2.0 (the "License").

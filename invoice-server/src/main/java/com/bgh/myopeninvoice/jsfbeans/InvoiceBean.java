@@ -92,6 +92,8 @@ public class InvoiceBean implements Serializable {
 
     private Collection<ReportsEntity> reportsEntityCollection;
 
+    private ReportTemplatesEntity reportTemplatesEntity;
+
     @Autowired
     public InvoiceBean(InvoiceDAO invoiceDAO, ReportRunner reportRunner) {
         this.invoiceDAO = invoiceDAO;
@@ -119,6 +121,7 @@ public class InvoiceBean implements Serializable {
         //last day of the month
         dateToTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue().toDate();
 
+        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
     }
 
     private void refresh() {
@@ -412,11 +415,9 @@ public class InvoiceBean implements Serializable {
             Map<String, Object> params = new HashMap<>();
             params.put("p_invoice_id", selectedInvoiceEntity.getInvoiceId());
 
-            final ReportTemplatesEntity invoice_v1 = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
-
             String name = "INVOICE_" + selectedInvoiceEntity.getTitle() + new SimpleDateFormat("yyyyMMddHHmmss").format(selectedInvoiceEntity.getCreatedDate());
 
-            final BIRTReport myReport = new BIRTReport(name, params, invoice_v1.getContent(), reportRunner);
+            final BIRTReport myReport = new BIRTReport(name, params, reportTemplatesEntity.getContent(), reportRunner);
             final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
 
             Faces.sendFile(reportContent.toByteArray(), name + ".pdf", true);
@@ -428,6 +429,14 @@ public class InvoiceBean implements Serializable {
 
         }
 
+    }
+
+    public ReportTemplatesEntity getReportTemplatesEntity() {
+        return reportTemplatesEntity;
+    }
+
+    public void setReportTemplatesEntity(ReportTemplatesEntity reportTemplatesEntity) {
+        this.reportTemplatesEntity = reportTemplatesEntity;
     }
 
     public int getPageSize() {
