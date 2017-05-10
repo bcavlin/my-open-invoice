@@ -74,5 +74,9 @@
     background-image: url("#{resource['images/address-book.png']}") !important;
 }
 
+#main-form\:image-carousel-2 {
+    margin-top: 15px;
+}
+
 
 
