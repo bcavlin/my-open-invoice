@@ -23,8 +23,10 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:fmt="http://omnifaces.org/functions">
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:su="http://omnifaces.org/functions">
+
+<o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
 
 
 <h:panelGroup id="buttons-2-group" layout="block" style="margin-bottom: 15px;">
@@ -104,7 +106,7 @@
 
     <p:column headerText="Description" sortBy="#{invoiceItem.description}" style="text-align:start;"
               width="400">
-        <h:outputText value="#{invoiceItem.description}"/>
+        <h:outputText value="#{su:abbreviate(invoiceItem.description,60)}"/>
     </p:column>
 
     <p:column headerText="Code" sortBy="#{invoiceItem.code}" style="text-align:start;"

@@ -19,13 +19,12 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:fmt="http://omnifaces.org/functions">
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:su="http://omnifaces.org/functions">
 
+<o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
 
 <h:panelGroup id="buttons-1-group" layout="block" style="margin-bottom: 15px;">
     <p:commandButton value="New Invoice" icon="ui-icon-extlink" style="margin-right: 15px;"
@@ -47,7 +46,8 @@
     <p:commandButton icon="ui-icon-print"
                      rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
                      style="margin-right: 15px;" title="Print"
-                     actionListener="#{invoiceBean.runReportListener}" ajax="false" disabled="#{empty invoiceBean.reportTemplatesEntity}"/>
+                     actionListener="#{invoiceBean.runReportListener}" ajax="false"
+                     disabled="#{empty invoiceBean.reportTemplatesEntity}"/>
 
     <p:confirmDialog message="Do you want to remove this Invoice?"
                      showEffect="bounce"
@@ -145,7 +145,7 @@
         <h:outputText value="#{invoice.paidDate}"/>
     </p:column>
     <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;" width="500">
-        <h:outputText value="#{invoice.note}"/>
+        <h:outputText value="#{su:abbreviate(invoice.note,80)}"/>
     </p:column>
 
     <p:column/>

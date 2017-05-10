@@ -16,7 +16,6 @@
 
 package com.bgh.myopeninvoice.jsfbeans;
 
-import org.apache.commons.lang.StringUtils;
 import org.omnifaces.util.Faces;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -54,7 +53,4 @@ public class ApplicationBean implements Serializable {
         return b.toString();
     }
 
-    public String abbreviate(String input) {
-        return StringUtils.abbreviateMiddle(input, "...", 20);
-    }
 }
