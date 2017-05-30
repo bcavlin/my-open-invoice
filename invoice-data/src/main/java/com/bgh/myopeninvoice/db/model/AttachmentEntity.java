@@ -138,6 +138,17 @@ public class AttachmentEntity implements Serializable {
         this.fileExtension = fileExtension;
     }
 
+    private byte[] imageData;
+
+    @Transient
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
+
     @Override
     public String toString() {
         return "AttachmentEntity{" +

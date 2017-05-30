@@ -21,9 +21,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:o="http://omnifaces.org/ui"
-      xmlns:su="http://omnifaces.org/functions">
+      xmlns:su="http://omnifaces.org/functions" xmlns:f="http://java.sun.com/jsf/core">
 
 <o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
+
+
 
 <h:panelGroup id="buttons-3-group" layout="block" style="margin: 15px 0 15px 0;">
     <p:spacer height="23"
@@ -40,7 +42,9 @@
             itemStyle="text-align:center" responsive="true" style="width: 634px;" id="image-carousel-1">
 
     <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-1">
-        <h:graphicImage value="#{invoiceBean.getImageAttachment(att)}" width="128" height="128" id="content-image"/>
+        <p:commandLink actionListener="#{invoiceBean.updateSelectedAttachment(att)}">
+            <h:graphicImage value="#{invoiceBean.getImageAttachment(att)}" width="128" height="128" id="content-image"/>
+        </p:commandLink>
         <p:commandLink id="image-link" value="#{su:abbreviateMiddle(att.filename, '...', 20)}"
                        style="font-family: 'Courier New', Monospace"
                        actionListener="#{invoiceBean.switchProxy(att)}" update="carusel-grid-1"/>
@@ -67,6 +71,14 @@
         </p:confirmDialog>
     </h:panelGrid>
 </p:carousel>
+
+<p:dialog id="content-image-2-dialog" widgetVar="content-image-2-dialog" closeOnEscape="true" modal="true" resizable="false">
+    <f:facet name="header">
+        <h:outputText value="#{invoiceBean.selectedAttachmentEntity.filename}"/>
+    </f:facet>
+    <h:graphicImage value="#{invoiceBean.getImageAttachment(invoiceBean.selectedAttachmentEntity)}" id="content-image-2"
+                    width="512" height="692"/>
+</p:dialog>
 
 
 </html>
