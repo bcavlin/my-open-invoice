@@ -94,6 +94,8 @@ public class InvoiceBean implements Serializable {
 
     private ReportTemplatesEntity reportTemplatesEntity;
 
+    private AttachmentEntity selectedAttachmentEntity;
+
     @Autowired
     public InvoiceBean(InvoiceDAO invoiceDAO, ReportRunner reportRunner) {
         this.invoiceDAO = invoiceDAO;
@@ -326,12 +328,19 @@ public class InvoiceBean implements Serializable {
             if (attachmentEntity.getLoadProxy()) {
                 return "/images/" + attachmentEntity.getFileExtension() + ".png";
             } else {
+
+                selectedAttachmentEntity = attachmentEntity;
+
                 ImageFormat mimeType = Sanselan.guessFormat(attachmentEntity.getContent());
                 if (mimeType != null && !"UNKNOWN".equalsIgnoreCase(mimeType.name)) {
                     return "data:image/" + mimeType.extension.toLowerCase() + ";base64," +
                             Base64.encodeBase64String(attachmentEntity.getContent());
+
+                } else if (attachmentEntity.getImageData() != null && attachmentEntity.getImageData().length > 0) {
+                    return "data:image/png;base64," +
+                            Base64.encodeBase64String(attachmentEntity.getImageData());
+
                 } else if ("pdf".equalsIgnoreCase(attachmentEntity.getFileExtension())) {
-                    byte[] imageInByte;
                     ByteArrayOutputStream baos = null;
                     PDDocument document = null;
                     try {
@@ -342,7 +351,7 @@ public class InvoiceBean implements Serializable {
                         baos = new ByteArrayOutputStream();
                         ImageIO.write(bufferedImage, "png", baos);
                         baos.flush();
-                        imageInByte = baos.toByteArray();
+                        attachmentEntity.setImageData(baos.toByteArray());
                     } finally {
                         if (document != null) {
                             document.close();
@@ -352,11 +361,15 @@ public class InvoiceBean implements Serializable {
                         }
                     }
                     return "data:image/png;base64," +
-                            Base64.encodeBase64String(imageInByte);
+                            Base64.encodeBase64String(attachmentEntity.getImageData());
                 } else {
                     return null;
                 }
             }
+        } else if (selectedAttachmentEntity != null && selectedAttachmentEntity.getImageData() != null && selectedAttachmentEntity.getImageData().length > 0) {
+            return "data:image/png;base64," +
+                    Base64.encodeBase64String(selectedAttachmentEntity.getImageData());
+
         } else {
             return null;
         }
@@ -517,5 +530,19 @@ public class InvoiceBean implements Serializable {
 
     public void setReportsEntityCollection(Collection<ReportsEntity> reportsEntityCollection) {
         this.reportsEntityCollection = reportsEntityCollection;
+    }
+
+    public AttachmentEntity getSelectedAttachmentEntity() {
+        return selectedAttachmentEntity;
+    }
+
+    public void setSelectedAttachmentEntity(AttachmentEntity selectedAttachmentEntity) {
+        this.selectedAttachmentEntity = selectedAttachmentEntity;
+    }
+
+    public void updateSelectedAttachment(AttachmentEntity attachmentEntity) {
+        selectedAttachmentEntity = attachmentEntity;
+        RequestContext.getCurrentInstance().update("main-form:content-image-2-dialog");
+        RequestContext.getCurrentInstance().execute("PF('content-image-2-dialog').show()");
     }
 }

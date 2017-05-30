@@ -23,7 +23,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:o="http://omnifaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      xmlns:o="http://omnifaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:su="http://omnifaces.org/functions">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
         <h:form id="main-form" onkeypress="return event.keyCode !== 13">
@@ -126,13 +127,13 @@
                     <h:outputText value="#{company.phone1}"/>
                 </p:column>
 
-                <p:column headerText="BN" sortBy="#{company.businessNumber}" style="text-align:start;" width="100">
+                <p:column headerText="BN" sortBy="#{company.businessNumber}" style="text-align:start;" width="140">
                     <h:outputText value="#{company.businessNumber}"/>
                 </p:column>
 
                 <p:column headerText="Address 1" sortBy="#{company.addressLine1}" style="text-align:start;"
                           width="300">
-                    <h:outputText value="#{company.addressLine1}"/>
+                    <h:outputText value="#{su:abbreviate(company.addressLine1,40)}"/>
                 </p:column>
 
                 <p:column headerText="Address 2" sortBy="#{company.addressLine2}" style="text-align:start;"
@@ -162,13 +163,14 @@
                                  actionListener="#{companiesBean.newEntryListenerForContract}"
                                  update="main-form,contracts-form"/>
 
-                <p:commandButton value="Edit Contract #{companiesBean.selectedContractsEntity.contractId} For Company (#{companiesBean.selectedCompaniesEntity.shortName})"
-                                 icon="ui-icon-script"
-                                 rendered="#{!empty companiesBean.selectedContractsEntity and companiesBean.selectedContractsEntity.contractId gt 0
+                <p:commandButton
+                        value="Edit Contract #{companiesBean.selectedContractsEntity.contractId} For Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                        icon="ui-icon-script"
+                        rendered="#{!empty companiesBean.selectedContractsEntity and companiesBean.selectedContractsEntity.contractId gt 0
                                  and !empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
-                                 style="margin-right: 15px;"
-                                 oncomplete="PF('contracts-form-dialog').show();"
-                                 update="main-form,contracts-form"/>
+                        style="margin-right: 15px;"
+                        oncomplete="PF('contracts-form-dialog').show();"
+                        update="main-form,contracts-form"/>
 
 
                 <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractsEntity"-->
@@ -220,7 +222,8 @@
                         <h:outputText value="#{companyContract.rateUnit}"/>
                     </p:column>
 
-                    <p:column headerText="CCY" sortBy="#{companyContract.currencyByCcyId.name}" style="text-align:center;"
+                    <p:column headerText="CCY" sortBy="#{companyContract.currencyByCcyId.name}"
+                              style="text-align:center;"
                               width="50">
                         <h:outputText value="#{companyContract.currencyByCcyId.name}"/>
                     </p:column>
@@ -460,7 +463,8 @@
                                      autoResize="false" maxlength="100"/>
 
                     <p:outputLabel value="Subcontracting For: "/>
-                    <p:selectOneMenu id="subcontract-for" value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"
+                    <p:selectOneMenu id="subcontract-for"
+                                     value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"
                                      style="margin-left: 5px;">
                         <f:selectItem itemLabel="--- Select a Company ---" itemValue=""/>
                         <f:selectItems var="selection4"

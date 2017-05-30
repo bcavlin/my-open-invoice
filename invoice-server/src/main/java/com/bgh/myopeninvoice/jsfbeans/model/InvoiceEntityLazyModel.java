@@ -18,6 +18,7 @@ package com.bgh.myopeninvoice.jsfbeans.model;
 
 import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.InvoiceEntity;
+import com.bgh.myopeninvoice.db.model.QInvoiceEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -71,6 +72,26 @@ public class InvoiceEntityLazyModel extends LazyDataModel<InvoiceEntity> {
         }
 
         BooleanExpression predicate = null;
+
+        if (filters != null && !filters.isEmpty()) {
+            for (Map.Entry<String, Object> stringObjectEntry : filters.entrySet()) {
+                BooleanExpression temp = null;
+
+                if (QInvoiceEntity.invoiceEntity.title.toString().equalsIgnoreCase("invoiceEntity." + stringObjectEntry.getKey())) {
+                    temp = QInvoiceEntity.invoiceEntity.title.containsIgnoreCase(stringObjectEntry.getValue().toString());
+                } else if (QInvoiceEntity.invoiceEntity.createdDate.toString().equalsIgnoreCase("invoiceEntity." + stringObjectEntry.getKey())) {
+                    temp = QInvoiceEntity.invoiceEntity.createdDate.stringValue().containsIgnoreCase(stringObjectEntry.getValue().toString());
+                }
+
+                if (temp != null) {
+                    if (predicate == null) {
+                        predicate = temp;
+                    } else {
+                        predicate.and(temp);
+                    }
+                }
+            }
+        }
 
         Page<InvoiceEntity> invoiceEntityPage = null;
 
