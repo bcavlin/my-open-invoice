@@ -172,7 +172,9 @@
     </p:column>
     <p:column headerText="Created" sortBy="#{invoice.createdDate}" style="text-align:center;"
               width="120">
-        <h:outputText value="#{invoice.createdDate}"/>
+        <h:outputText value="#{invoice.createdDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:outputText>
     </p:column>
     <p:column headerText="Due" sortBy="#{invoice.dueDate}" style="text-align:center;"
               width="120">

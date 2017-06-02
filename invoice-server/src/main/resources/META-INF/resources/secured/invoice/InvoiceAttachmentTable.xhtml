@@ -21,11 +21,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:o="http://omnifaces.org/ui"
-      xmlns:su="http://omnifaces.org/functions" xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core">
 
 <o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
-
-
 
 <h:panelGroup id="buttons-3-group" layout="block" style="margin: 15px 0 15px 0;">
     <p:spacer height="23"
@@ -39,7 +37,7 @@
 </h:panelGroup>
 
 <p:carousel value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" headerText="Attachments" var="att"
-            itemStyle="text-align:center" responsive="true" style="width: 634px;" id="image-carousel-1">
+            itemStyle="text-align:center" responsive="true" style="width: 634px;" id="image-carousel-1" numVisible="3">
 
     <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-1">
         <p:commandLink actionListener="#{invoiceBean.updateSelectedAttachment(att)}">

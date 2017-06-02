@@ -103,7 +103,7 @@ public class InvoiceEntity implements Serializable {
         this.toDate = toDate;
     }
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE", nullable = false)
     public Date getCreatedDate() {
         return createdDate;

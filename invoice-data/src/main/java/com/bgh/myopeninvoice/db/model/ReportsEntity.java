@@ -31,6 +31,17 @@ public class ReportsEntity implements Serializable{
     private byte[] content;
     private Date dateCreated;
     private InvoiceEntity invoiceByInvoiceId;
+    private String reportName;
+
+    @Basic
+    @Column(name = "REPORT_NAME")
+    public String getReportName() {
+        return reportName;
+    }
+
+    public void setReportName(String reportName) {
+        this.reportName = reportName;
+    }
 
     @Id
     @GeneratedValue
@@ -53,7 +64,7 @@ public class ReportsEntity implements Serializable{
         this.content = content;
     }
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "DATE_CREATED", nullable = false)
     public Date getDateCreated() {
         return dateCreated;
@@ -73,6 +84,7 @@ public class ReportsEntity implements Serializable{
         if (reportId != null ? !reportId.equals(that.reportId) : that.reportId != null) return false;
         if (!Arrays.equals(content, that.content)) return false;
         if (dateCreated != null ? !dateCreated.equals(that.dateCreated) : that.dateCreated != null) return false;
+        if (reportName != null ? !reportName.equals(that.reportName) : that.reportName != null) return false;
 
         return true;
     }
@@ -82,6 +94,7 @@ public class ReportsEntity implements Serializable{
         int result = reportId != null ? reportId.hashCode() : 0;
         result = 31 * result + Arrays.hashCode(content);
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
+        result = 31 * result + (reportName != null ? reportName.hashCode() : 0);
         return result;
     }
 
@@ -114,6 +127,10 @@ public class ReportsEntity implements Serializable{
         return "ReportsEntity{" +
                 "reportId=" + reportId +
                 ", dateCreated=" + dateCreated +
+                ", reportName='" + reportName + '\'' +
+                ", loadProxy=" + loadProxy +
                 '}';
     }
+
+
 }

@@ -22,12 +22,13 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:fmt="http://omnifaces.org/functions">
+      xmlns:o="http://omnifaces.org/ui">
+
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
+
+        <o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
+
         <h:panelGroup id="main-layout" styleClass="main-layout" layout="block" style="margin: 15px 0 15px 0">
             <h:form id="main-form" onkeypress="return event.keyCode !== 13">
                 <h:panelGrid columns="2" columnClasses="invoice-column-1,invoice-column-2" style="width: 100%;">
@@ -50,10 +51,13 @@
                 </h:panelGrid>
 
                 <p:carousel value="#{invoiceBean.reportsEntityCollection}" headerText="Reports" var="rpt"
-                            itemStyle="text-align:left;" responsive="true"  id="image-carousel-2">
+                            style="width: 100%;" responsive="true" id="image-carousel-2" numVisible="6">
                     <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-2">
-                        <h:graphicImage value="#{invoiceBean.getReportData(rpt)}" width="128" height="128" id="content-image"/>
+                        <h:graphicImage value="#{invoiceBean.getReportData(rpt)}" width="128" height="128"
+                                        id="content-image"/>
                     </h:panelGrid>
+                    <h:outputText value="#{su:abbreviateMiddle(rpt.reportName, '...', 20)}"
+                                  style="font-family: 'Courier New', Monospace" title="#{rpt.reportName}"/>
                 </p:carousel>
             </h:form>
         </h:panelGroup>
