@@ -41,6 +41,7 @@ import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -102,11 +103,6 @@ public class InvoiceBean implements Serializable {
         this.reportRunner = reportRunner;
     }
 
-//    @Autowired
-//    public InvoiceBean(InvoiceDAO invoiceDAO) {
-//        this.invoiceDAO = invoiceDAO;
-//    }
-
     @PostConstruct
     private void init() {
         logger.info("Initializing entries");
@@ -124,6 +120,8 @@ public class InvoiceBean implements Serializable {
         dateToTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue().toDate();
 
         reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
+
+        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(new Sort(Sort.Direction.DESC, "dateCreated")));
     }
 
     private void refresh() {
@@ -134,7 +132,7 @@ public class InvoiceBean implements Serializable {
 
     public void addNewInvoiceListener(ActionEvent event) {
         selectedInvoiceEntity = new InvoiceEntity();
-        selectedInvoiceEntity.setCreatedDate(new Date());
+        selectedInvoiceEntity.setCreatedDate(new DateTime().toDate());
         selectedInvoiceEntity.setFromDate(new LocalDate().withDayOfMonth(1).toDate());
         selectedInvoiceEntity.setToDate(new LocalDate().dayOfMonth().withMaximumValue().toDate());
         selectedInvoiceEntity.setDueDate(new LocalDate().plusMonths(1).withDayOfMonth(15).toDate());
@@ -173,8 +171,6 @@ public class InvoiceBean implements Serializable {
     public void ajaxChangeRowInvoiceListener() {
         selectedInvoiceItemsEntity = null;
 
-        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(
-                QReportsEntity.reportsEntity.invoiceByInvoiceId.invoiceId.eq(selectedInvoiceEntity.getInvoiceId())));
     }
 
     public void ajaxChangeRowInvoiceItemListener() {
@@ -428,10 +424,19 @@ public class InvoiceBean implements Serializable {
             Map<String, Object> params = new HashMap<>();
             params.put("p_invoice_id", selectedInvoiceEntity.getInvoiceId());
 
-            String name = "INVOICE_" + selectedInvoiceEntity.getTitle() + new SimpleDateFormat("yyyyMMddHHmmss").format(selectedInvoiceEntity.getCreatedDate());
+            Date printDate = new DateTime().toDate();
+
+            String name = "INVOICE-" + selectedInvoiceEntity.getTitle() + "-" + new SimpleDateFormat("yyyyMMddHHmmss").format(printDate);
 
             final BIRTReport myReport = new BIRTReport(name, params, reportTemplatesEntity.getContent(), reportRunner);
             final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
+
+            ReportsEntity report = new ReportsEntity();
+            report.setDateCreated(printDate);
+            report.setInvoiceByInvoiceId(selectedInvoiceEntity);
+            report.setContent(reportContent.toByteArray());
+            report.setReportName(name + ".pdf");
+            invoiceDAO.getReportsRepository().save(report);
 
             Faces.sendFile(reportContent.toByteArray(), name + ".pdf", true);
 

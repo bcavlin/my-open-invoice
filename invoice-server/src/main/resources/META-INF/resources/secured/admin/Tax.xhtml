@@ -22,7 +22,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui">
+
+<o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
+
 <ui:composition template="../templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
         <h:form id="main-form" onkeypress="return event.keyCode !== 13">
