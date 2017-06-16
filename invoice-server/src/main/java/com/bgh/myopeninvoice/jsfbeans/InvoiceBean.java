@@ -121,7 +121,17 @@ public class InvoiceBean implements Serializable {
 
         reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
 
-        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(new Sort(Sort.Direction.DESC, "dateCreated")));
+        selectReports();
+    }
+
+    private void selectReports() {
+        Predicate predicate = null;
+
+        if (selectedInvoiceEntity != null) {
+            predicate = QReportsEntity.reportsEntity.invoiceByInvoiceId.invoiceId.eq(selectedInvoiceEntity.getInvoiceId());
+        }
+
+        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(predicate, new Sort(Sort.Direction.DESC, "dateCreated")));
     }
 
     private void refresh() {
@@ -170,7 +180,7 @@ public class InvoiceBean implements Serializable {
 
     public void ajaxChangeRowInvoiceListener() {
         selectedInvoiceItemsEntity = null;
-
+        selectReports();
     }
 
     public void ajaxChangeRowInvoiceItemListener() {
