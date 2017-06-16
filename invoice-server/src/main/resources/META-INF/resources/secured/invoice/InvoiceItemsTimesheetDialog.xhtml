@@ -93,7 +93,8 @@
                                        inputStyleClass="#{time.weekend?'background-color':''}"
                                        id="hours-worked" minValue="0" maxValue="24.00" decimalPlaces="2">
                             <f:convertNumber pattern="#,##0.00"/>
-                            <p:ajax event="change" update="invoice-items-timesheet-form:total"/>
+                            <p:ajax event="change"
+                                    update="invoice-items-timesheet-form:total-hours,invoice-items-timesheet-form:total-days"/>
                         </p:inputNumber>
                         <!--<p:watermark value="0.00" for="hours-worked"/>-->
                     </h:panelGrid>
@@ -101,14 +102,31 @@
 
                 <h:panelGroup layout="block" id="submit-group">
                     <p:separator style="margin: 10px 0 10px 0"/>
-                    <p:commandButton value="Submit" type="submit" id="submit4"
-                                     actionListener="#{invoiceBean.addOrEditTimesheetListener}"
-                                     oncomplete="PF('wizard1').loadStep('select-date', false)"
-                                     update="invoice-items-timesheet-form,main-form"/>
-                    <h:outputText value="Total Hours: #{invoiceBean.selectedInvoiceItemsEntity.timeSheetTotal}" style="margin-left: 20px;" id="total">
-                        <f:convertNumber pattern="#,##0.00"/>
-                    </h:outputText>
+
+                    <h:panelGrid columns="2" columnClasses="column-left,column-right-2">
+
+                        <p:commandButton value="Submit" type="submit" id="submit4"
+                                         actionListener="#{invoiceBean.addOrEditTimesheetListener}"
+                                         oncomplete="PF('wizard1').loadStep('select-date', false)"
+                                         update="invoice-items-timesheet-form,main-form"/>
+
+                        <h:panelGroup>
+                            <h:outputText value="Total Hours: #{invoiceBean.selectedInvoiceItemsEntity.timeSheetTotal}"
+                                          style="margin-left: 20px; font-size: 16px; font-weight: bold"
+                                          id="total-hours">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </h:outputText>
+
+                            <h:outputText
+                                    value="Total Days: #{invoiceBean.selectedInvoiceItemsEntity.timeSheetTotalDays}"
+                                    style="margin-left: 20px; font-size: 16px; font-weight: bold" id="total-days">
+                                <f:convertNumber pattern="0"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
                     <p:separator style="margin: 10px 0 10px 0"/>
+
                 </h:panelGroup>
             </p:tab>
         </p:wizard>

@@ -168,6 +168,22 @@ public class InvoiceItemsEntity implements Serializable {
         this.timeSheetTotal = timeSheetTotal;
     }
 
+    private Long timeSheetTotalDays;
+
+    @Transient
+    public Long getTimeSheetTotalDays() {
+        if (getTimeSheetsByInvoiceItemId() != null) {
+            timeSheetTotalDays = getTimeSheetsByInvoiceItemId().stream().filter(o -> o.getHoursWorked() != null).count();
+        } else {
+            timeSheetTotalDays = 0L;
+        }
+        return timeSheetTotalDays;
+    }
+
+    public void setTimeSheetTotalDays(Long timeSheetTotalDays) {
+        this.timeSheetTotalDays = timeSheetTotalDays;
+    }
+
     @Override
     public String toString() {
         return "InvoiceItemsEntity{" +

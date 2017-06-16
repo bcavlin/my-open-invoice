@@ -93,6 +93,12 @@ body {
     text-align: right;
 }
 
+.column-right-2 {
+    text-align: right;
+    width: 100%;
+    padding-right: 21px;
+}
+
 .invoice-column-1 {
     width: 50%;
     text-align: left;
