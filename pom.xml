@@ -25,7 +25,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-version>1.4.1.RELEASE</spring-version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
@@ -34,13 +33,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <version>${spring-version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -48,93 +45,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-aop</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-jpa</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-security</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-tomcat</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter</artifactId>
-                <version>${spring-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-log4j2</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>2.9.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.joinfaces</groupId>
-                <artifactId>jsf-spring-boot-starter</artifactId>
-                <version>2.3.6</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>1.4.193</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bgh.myopeninvoice</groupId>
-                <artifactId>invoice-data</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bgh.myopeninvoice</groupId>
-                <artifactId>invoice-reporting</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
-            <dependency>
-                <groupId>com.querydsl</groupId>
-                <artifactId>querydsl-jpa</artifactId>
-                <version>4.1.4</version>
-            </dependency>
-            <dependency>
-                <groupId>com.querydsl</groupId>
-                <artifactId>querydsl-apt</artifactId>
-                <version>4.1.4</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/rome/rome -->
-            <dependency>
-                <groupId>rome</groupId>
-                <artifactId>rome</artifactId>
-                <version>1.0</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
             <dependency>
@@ -154,45 +67,6 @@
                 <artifactId>commons-io</artifactId>
                 <version>2.5</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.pdfbox</groupId>
-                <artifactId>pdfbox</artifactId>
-                <version>2.0.5</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.sanselan</groupId>
-                <artifactId>sanselan</artifactId>
-                <version>0.97-incubator</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>5.4.1.Final</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-jta_1.1_spec</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-c3p0</artifactId>
-                <version>5.2.9.Final</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
-            <dependency>
-                <groupId>org.imgscalr</groupId>
-                <artifactId>imgscalr-lib</artifactId>
-                <version>4.2</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.eclipse.birt.runtime/org.eclipse.birt.runtime -->
-            <dependency>
-                <groupId>org.eclipse.birt.runtime</groupId>
-                <artifactId>org.eclipse.birt.runtime</artifactId>
-                <version>4.4.2</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 

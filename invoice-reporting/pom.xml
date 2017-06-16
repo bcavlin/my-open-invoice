@@ -38,6 +38,7 @@
         <dependency>
             <groupId>org.eclipse.birt.runtime</groupId>
             <artifactId>org.eclipse.birt.runtime</artifactId>
+            <version>4.4.2</version>
             <exclusions>
                 <exclusion>
                     <artifactId>org.eclipse.orbit.mongodb</artifactId>
