@@ -69,6 +69,7 @@ public class InvoiceBean implements Serializable {
 
     private InvoiceDAO invoiceDAO;
 
+    private String DEFAULT_INVOICE = "Invoice_V2";
 
     //Invoice data
     private LazyDataModel<InvoiceEntity> invoiceEntityLazyDataModel;
@@ -119,7 +120,7 @@ public class InvoiceBean implements Serializable {
         //last day of the month
         dateToTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue().toDate();
 
-        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq("Invoice_V1"));
+        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq(DEFAULT_INVOICE));
 
         selectReports();
     }

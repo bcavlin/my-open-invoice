@@ -36,6 +36,7 @@ import java.util.logging.Level;
 /**
  * Created by bcavlin on 07/05/17.
  */
+@SuppressWarnings("unchecked")
 @Service
 public class BIRTReportRunner implements ReportRunner {
 
@@ -115,7 +116,7 @@ public class BIRTReportRunner implements ReportRunner {
 
             PDFRenderOption pdfRenderOption = new PDFRenderOption();
             pdfRenderOption.setOption(IPDFRenderOption.REPAGINATE_FOR_PDF, Boolean.TRUE);
-            pdfRenderOption.setEmbededFont(true);
+//            pdfRenderOption.setEmbededFont(true);
             pdfRenderOption.setOutputFormat("pdf");
             pdfRenderOption.setOutputStream(byteArrayOutputStream);
 
