@@ -179,13 +179,15 @@ public class CompaniesBean implements Serializable {
 
     public void addOrEditCompanyContractListener(ActionEvent event) {
         if (selectedCompaniesEntity != null && selectedContractsEntity != null) {
-            RequestContext.getCurrentInstance().execute("PF('contracts-form-dialog').hide()");
-
             logger.info("Adding/editing entity {}", selectedContractsEntity.toString());
+
+            //TODO check active contracts vs current record
 
             if (selectedContractsEntity.getContractSignedWith().equals(selectedContractsEntity.getContractSignedWithSubcontract())) {
                 FacesUtils.addErrorMessage("Subcontract and contract cannot be signed for same company");
             } else {
+                RequestContext.getCurrentInstance().execute("PF('contracts-form-dialog').hide()");
+
                 invoiceDAO.getContractsRepository().save(selectedContractsEntity);
                 refresh();
                 FacesUtils.addSuccessMessage("Entity record updated");

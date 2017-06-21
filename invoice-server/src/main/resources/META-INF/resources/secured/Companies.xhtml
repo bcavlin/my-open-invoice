@@ -148,7 +148,7 @@
                                     rendered="#{not empty company.content}" my="right top" at="right bottom"
                                     style="left: 100px;">
                         <h:graphicImage value="#{companiesBean.getImageLogo(company)}" alt="logo"
-                                        style="border: 1px;"/>
+                                        style="border: 1px;" width="500"/>
                     </p:overlayPanel>
                 </p:column>
             </p:dataTable>
@@ -197,6 +197,11 @@
                     <p:column headerText="Id" sortBy="#{companyContract.contractId}" style="text-align:right;"
                               width="70">
                         <h:outputText value="#{companyContract.contractId}"/>
+                    </p:column>
+
+                    <p:column headerText="Valid" style="text-align:center;" width="70">
+                        <h:outputText value="#{companyContract.checkIfContractValid()?'Yes':'No'}"
+                                      style="color: #{companyContract.checkIfContractValid()?'green':'red'};"/>
                     </p:column>
 
                     <p:column headerText="Contract is For"
@@ -334,12 +339,12 @@
 
                         <p:outputLabel value="Logo: "/>
                         <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"
-                                        alt="logo" style="border: 1px; margin-left: 5px;"/>
+                                        alt="logo" style="border: 1px; margin-left: 5px;" id="image-logo"/>
 
                         <p:outputLabel value="Upload: "/>
                         <p:fileUpload fileUploadListener="#{companiesBean.handleFileUpload}" mode="advanced"
                                       dragDropSupport="false"
-                                      style="margin-left: 5px;"
+                                      style="margin-left: 5px;" fileLimit="1"
                                       update="@parent" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                     </h:panelGrid>
                 </p:scrollPanel>
@@ -476,6 +481,7 @@
                 </h:panelGrid>
 
                 <o:validateOrder components="valid-from-edit valid-to-edit"/>
+
                 <p:watermark value="0.00" for="rate"/>
 
                 <h:panelGroup layout="block">

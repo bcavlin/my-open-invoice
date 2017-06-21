@@ -29,7 +29,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "CONTRACTS", schema = "INVOICE", catalog = "INVOICEDB")
-public class ContractsEntity implements Serializable{
+public class ContractsEntity implements Serializable {
     private Integer contractId;
     private Integer contractIsFor;
     private Integer contractSignedWith;
@@ -226,6 +226,11 @@ public class ContractsEntity implements Serializable{
 
     public void setCurrencyByCcyId(CurrencyEntity currencyByCcyId) {
         this.currencyByCcyId = currencyByCcyId;
+    }
+
+    public boolean checkIfContractValid() {
+        Date now = new Date();
+        return getValidFrom() != null && getValidTo() != null && now.compareTo(getValidFrom()) >= 0 && now.compareTo(getValidTo()) <= 0;
     }
 
     @Override
