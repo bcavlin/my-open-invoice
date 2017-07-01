@@ -36,9 +36,11 @@
                      update="main-form,invoice-attachment-form"/>
 </h:panelGroup>
 
-<p:carousel value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" headerText="Attachments" var="att"
+<p:carousel value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}"  var="att"
             itemStyle="text-align:center" responsive="true" style="width: 634px;" id="image-carousel-1" numVisible="3">
-
+    <f:facet name="header">
+        Attachments (${invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId.size()})
+    </f:facet>
     <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-1">
         <p:commandLink actionListener="#{invoiceBean.updateSelectedAttachment(att)}">
             <h:graphicImage value="#{invoiceBean.getImageAttachment(att)}" width="128" height="128" id="content-image"/>

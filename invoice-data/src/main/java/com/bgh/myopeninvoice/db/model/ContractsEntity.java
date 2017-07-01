@@ -22,6 +22,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -44,6 +45,8 @@ public class ContractsEntity implements Serializable {
     private CompaniesEntity companiesByContractSignedWith;
     private CompaniesEntity companiesByContractSignedWithSubcontract;
     private CurrencyEntity currencyByCcyId;
+    private String contractNumber;
+    private byte[] content;
 
     @GeneratedValue
     @Id
@@ -148,6 +151,26 @@ public class ContractsEntity implements Serializable {
         this.description = description;
     }
 
+    @Basic
+    @Column(name = "CONTRACT_NUMBER", nullable = true, length = 50)
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
+    @Lob
+    @Column(name = "CONTENT", nullable = true)
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,6 +191,9 @@ public class ContractsEntity implements Serializable {
         if (validFrom != null ? !validFrom.equals(that.validFrom) : that.validFrom != null) return false;
         if (validTo != null ? !validTo.equals(that.validTo) : that.validTo != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (contractNumber != null ? !contractNumber.equals(that.contractNumber) : that.contractNumber != null)
+            return false;
+        if (!Arrays.equals(content, that.content)) return false;
 
         return true;
     }
@@ -184,6 +210,8 @@ public class ContractsEntity implements Serializable {
         result = 31 * result + (validFrom != null ? validFrom.hashCode() : 0);
         result = 31 * result + (validTo != null ? validTo.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (contractNumber != null ? contractNumber.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(content);
         return result;
     }
 

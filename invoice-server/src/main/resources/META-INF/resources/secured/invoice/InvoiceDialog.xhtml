@@ -49,7 +49,7 @@
                 <f:convertDateTime pattern="yyyy-MM-dd"/>
             </h:outputText>
 
-            <p:outputLabel value="From:"/>
+            <p:outputLabel value="From:" styleClass="required"/>
             <p:selectOneMenu id="from" value="#{invoiceBean.selectedInvoiceEntity.companyContactFrom}"
                              required="true" style="margin-left: 5px;"
                              requiredMessage="From company is required">
@@ -62,7 +62,7 @@
                         listener="#{invoiceBean.updateSelectionFromTo}" partialSubmit="false"/>
             </p:selectOneMenu>
 
-            <p:outputLabel value="To:"/>
+            <p:outputLabel value="To:" styleClass="required"/>
             <p:selectOneMenu id="to" value="#{invoiceBean.selectedInvoiceEntity.companyTo}"
                              required="true" style="margin-left: 5px;" requiredMessage="To company is required"
                              valueChangeListener="#{invoiceBean.updateSelectionFromTo}">
@@ -75,7 +75,7 @@
                         listener="#{invoiceBean.updateSelectionFromTo}" partialSubmit="false"/>
             </p:selectOneMenu>
 
-            <p:outputLabel value="Tax %:"/>
+            <p:outputLabel value="Tax %:" styleClass="required"/>
             <p:selectOneMenu id="tax" value="#{invoiceBean.selectedInvoiceEntity.taxPercent}"
                              required="true" style="margin-left: 5px;" requiredMessage="Tax is required">
                 <f:selectItems var="selection3"
@@ -84,17 +84,17 @@
                                itemValue="#{selection3.percent}"/>
             </p:selectOneMenu>
 
-            <p:outputLabel value="From Date:"/>
+            <p:outputLabel value="From Date:" styleClass="required"/>
             <p:calendar value="#{invoiceBean.selectedInvoiceEntity.fromDate}" style="margin-left: 5px;"
                         pattern="yyyy-MM-dd" maxlength="10" id="from-date" required="true"
                         requiredMessage="First reporting date is required"/>
 
-            <p:outputLabel value="To Date:"/>
+            <p:outputLabel value="To Date:" styleClass="required"/>
             <p:calendar value="#{invoiceBean.selectedInvoiceEntity.toDate}" style="margin-left: 5px;"
                         pattern="yyyy-MM-dd" maxlength="10" id="to-date" required="true"
                         requiredMessage="Last reporting date is required"/>
 
-            <p:outputLabel value="Due Date:"/>
+            <p:outputLabel value="Due Date:" styleClass="required"/>
             <p:calendar value="#{invoiceBean.selectedInvoiceEntity.dueDate}" style="margin-left: 5px;"
                         pattern="yyyy-MM-dd" maxlength="10" id="due-date" required="true"
                         requiredMessage="Due date is required"/>

@@ -121,20 +121,20 @@
             <h:form id="tax-form">
                 <p:focus for="input-tax"/>
                 <p:messages autoUpdate="true"/>
-                <h:panelGrid id="tax-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                <h:panelGrid id="tax-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
                              style="padding-top: 3px;">
 
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{taxBean.selectedTaxEntity.taxId}" id="identifier" style="margin-left: 5px;"/>
 
-                    <p:outputLabel value="Tax (%): "/>
+                    <p:outputLabel value="Tax (%): " styleClass="required"/>
                     <p:inputNumber value="#{taxBean.selectedTaxEntity.percent}" id="input-tax"
                                    style="margin-left: 5px;" decimalPlaces="2" minValue="0" maxValue="100"
                                    emptyValue="0" required="true" requiredMessage="Tax percent is required">
                         <f:converter converterId="com.bgh.myopeninvoice.converters.PercentConverter"/>
                     </p:inputNumber>
 
-                    <p:outputLabel value="Identifier: "/>
+                    <p:outputLabel value="Identifier: " styleClass="required"/>
                     <p:inputText value="#{taxBean.selectedTaxEntity.identifier}" id="input-identifier"
                                  style="margin-left: 5px;" required="true" requiredMessage="Tax identifier is required"/>
 

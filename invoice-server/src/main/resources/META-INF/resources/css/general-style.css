@@ -76,7 +76,7 @@ body {
 }
 
 .two-column-1 {
-    width: 100px;
+    width: 180px;
     text-align: right;
     margin-right: 10px;
 }
@@ -109,4 +109,10 @@ body {
     width: 50%;
     text-align: left;
     vertical-align: top;
+}
+
+.required:before {
+    content: "* ";
+    color: red;
+    vertical-align: sub;
 }

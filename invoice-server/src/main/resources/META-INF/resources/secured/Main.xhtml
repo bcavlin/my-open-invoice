@@ -22,11 +22,52 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
-        <h:panelGroup id="main-layout" styleClass="main-layout" layout="block">
+        <o:importFunctions type="org.apache.commons.lang.StringUtils" var="su"/>
 
+        <h:panelGroup id="main-layout" styleClass="main-layout" layout="block" style="margin-top: 30px;">
+            <h:form id="main-page-form" onkeypress="return event.keyCode !== 13">
+                <p:carousel value="#{invoiceBean.reportsEntityCollection}" var="rpt"
+                            style="width: 100%" responsive="true" id="image-carousel-2" numVisible="6">
+
+                    <f:facet name="header">
+                        Invoices (${invoiceBean.reportsEntityCollection.size()})
+                    </f:facet>
+
+                    <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-2">
+                        <h:graphicImage value="#{invoiceBean.getReportData(rpt)}" width="128" height="128"
+                                        id="content-image"/>
+                    </h:panelGrid>
+                    <h:outputText value="#{su:abbreviateMiddle(rpt.reportName, '...', 20)}"
+                                  style="font-family: 'Courier New', Monospace" title="#{rpt.reportName}"/>
+
+                    <!--<p:contextMenu for="carusel-grid-2" style="width: 500px;">-->
+                    <!--<p:menuitem value="Download [#{rpt.reportName}]" icon="ui-icon-arrowthickstop-1-s"-->
+                    <!--actionListener="#{invoiceBean.download(rpt)}" ajax="false"/>-->
+                    <!--<p:separator/>-->
+                    <!--<p:menuitem value="Delete [#{rpt.reportName}]" update="image-carousel-2" icon="ui-icon-trash"-->
+                    <!--oncomplete="PF('confirmation-inv-#{rpt.reportId}').show();"/>-->
+                    <!--</p:contextMenu>-->
+
+                    <!--<p:confirmDialog message="Do you want to remove this Attachment?"-->
+                    <!--showEffect="bounce"-->
+                    <!--header="Delete Attachment"-->
+                    <!--severity="alert"-->
+                    <!--widgetVar="confirmation-inv-#{rpt.reportId}">-->
+                    <!--<p:commandButton value="Remove ID (#{rpt.reportId})"-->
+                    <!--onclick="PF('confirmation-inv-#{rpt.reportId}').hide()"-->
+                    <!--actionListener="#{invoiceBean.deleteAttachment(rpt)}"-->
+                    <!--update="main-form,carusel-grid-1"-->
+                    <!--style="color: brown;">-->
+                    <!--</p:commandButton>-->
+                    <!--<p:commandButton value="No" onclick="PF('confirmation-inv-#{rpt.reportId}').hide()" type="button"/>-->
+                    <!--</p:confirmDialog>-->
+                </p:carousel>
+            </h:form>
         </h:panelGroup>
     </ui:define>
 </ui:composition>

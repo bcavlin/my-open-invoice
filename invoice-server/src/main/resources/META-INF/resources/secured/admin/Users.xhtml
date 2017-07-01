@@ -175,23 +175,23 @@
                 <p:focus for="username"/>
                 <p:messages autoUpdate="true"/>
 
-                <h:panelGrid id="users-form-grid1" columns="2" columnClasses="two-column-1 two-column-2"
+                <h:panelGrid id="users-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
                              style="padding-top: 3px;">
 
                     <p:outputLabel value="ID: "/>
                     <h:outputText value="#{usersBean.selectedUsersEntity.userId}" style="margin-left: 5px;"/>
 
-                    <p:outputLabel value="Username: "/>
+                    <p:outputLabel value="Username: " styleClass="required"/>
                     <p:inputText value="#{usersBean.selectedUsersEntity.username}" style="margin-left: 5px;"
                                  required="true"
                                  maxlength="50"
                                  immediate="true" id="username"/>
 
-                    <p:outputLabel value="Password: "/>
+                    <p:outputLabel value="Password: " styleClass="required"/>
                     <p:password id="password1" value="#{usersBean.password}" maxlength="30"
                                 style="margin-left: 5px;" feedback="true"/>
 
-                    <p:outputLabel value="Password Repeat: "/>
+                    <p:outputLabel value="Password Repeat: " styleClass="required"/>
                     <p:password id="password2" value="#{usersBean.passwordRepeat}" maxlength="30"
                                 style="margin-left: 5px;" validatorMessage="Passwords must match" feedback="true">
                         <f:validator validatorId="duplicateFieldValidator"/>

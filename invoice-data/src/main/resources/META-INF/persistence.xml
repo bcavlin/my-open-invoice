@@ -18,8 +18,6 @@
         <class>com.bgh.myopeninvoice.db.model.CurrencyEntity</class>
         <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
         <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
-        <class>com.bgh.myopeninvoice.db.model2.InvoiceItemsEntity</class>
-        <class>com.bgh.myopeninvoice.db.model2.InvoiceEntity</class>
         <class>com.bgh.myopeninvoice.db.model.ReportsEntity</class>
         <class>com.bgh.myopeninvoice.db.model.ReportTemplatesEntity</class>
 

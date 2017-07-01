@@ -79,7 +79,7 @@
         <p:column headerText="Date" sortBy="#{timesheet.itemDate}" style="text-align:left;"
                   width="200">
             <h:outputText value="#{timesheet.itemDate}">
-                <f:convertDateTime pattern="EEE, MMM d, yyyy"/>
+                <f:convertDateTime pattern="MMM dd, yyyy - EEE"/>
             </h:outputText>
         </p:column>
 
