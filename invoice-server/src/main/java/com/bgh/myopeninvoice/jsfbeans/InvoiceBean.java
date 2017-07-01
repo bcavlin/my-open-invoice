@@ -116,9 +116,9 @@ public class InvoiceBean implements Serializable {
         taxEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getTaxRepository().findAll());
 
         //first in the previous month
-        dateFromTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue().toDate();
+        dateFromTimesheet = new DateTime().minusDays(15).dayOfMonth().withMinimumValue().toDate();
         //last day of the month
-        dateToTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue().toDate();
+        dateToTimesheet = new DateTime().plusDays(15).dayOfMonth().withMaximumValue().toDate();
 
         reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq(DEFAULT_INVOICE));
 
@@ -160,9 +160,9 @@ public class InvoiceBean implements Serializable {
 
     public void addNewTimesheetListener(ActionEvent event) {
         //first in the previous month
-        dateFromTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue().toDate();
+        dateFromTimesheet = new DateTime().minusDays(15).dayOfMonth().withMinimumValue().toDate();
         //last day of the month
-        dateToTimesheet = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue().toDate();
+        dateToTimesheet = new DateTime().plusDays(15).dayOfMonth().withMaximumValue().toDate();
         //refresh
         selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
 

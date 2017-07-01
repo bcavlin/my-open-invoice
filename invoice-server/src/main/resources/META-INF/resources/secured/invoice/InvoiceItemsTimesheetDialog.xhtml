@@ -58,13 +58,13 @@
                     <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId}"
                                   style="margin-left: 5px; font-weight: bold;"/>
 
-                    <p:outputLabel value="From Date:"/>
+                    <p:outputLabel value="From Date:" styleClass="required"/>
                     <p:calendar value="#{invoiceBean.dateFromTimesheet}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10" id="from-date" required="true"
                                 requiredMessage="From date date is required" pages="3" showButtonPanel="true"
                                 showOtherMonths="true"/>
 
-                    <p:outputLabel value="To Date:"/>
+                    <p:outputLabel value="To Date:" styleClass="required"/>
                     <p:calendar value="#{invoiceBean.dateToTimesheet}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10" id="to-date" required="true"
                                 requiredMessage="To date is required" pages="3" showButtonPanel="true"

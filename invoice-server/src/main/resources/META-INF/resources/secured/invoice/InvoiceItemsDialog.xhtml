@@ -48,7 +48,7 @@
             <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId}"
                           style="margin-left: 5px; font-weight: bold;"/>
 
-            <p:outputLabel value="Description:"/>
+            <p:outputLabel value="Description:" styleClass="required"/>
             <p:inputText value="#{invoiceBean.selectedInvoiceItemsEntity.description}"
                          maxlength="255" id="description"
                          style="margin-left: 5px;" required="true" requiredMessage="Description is mandatory"/>
@@ -67,7 +67,7 @@
                 <p:ajax event="change" update="ctr1,ctr2"/>
             </p:selectOneMenu>
 
-            <p:outputLabel value="Quantity:"/>
+            <p:outputLabel value="Quantity:" styleClass="required"/>
             <h:panelGrid columns="2" style="margin-left: 3px;" id="ctr1">
                 <p:inputNumber value="#{invoiceBean.selectedInvoiceItemsEntity.quantity}"
                                maxlength="10"

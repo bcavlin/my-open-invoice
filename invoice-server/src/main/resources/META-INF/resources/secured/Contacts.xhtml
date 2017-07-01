@@ -89,10 +89,10 @@
                                     title="username: #{contact.usersByUserId.username}"
                                     rendered="#{not empty contact.usersByUserId}"/>
                 </p:column>
-                <p:column headerText="Middle n." sortBy="#{contact.middleName}" style="text-align:start;"
-                          width="90">
-                    <h:outputText value="#{contact.middleName}"/>
-                </p:column>
+                <!--<p:column headerText="Middle n." sortBy="#{contact.middleName}" style="text-align:start;"-->
+                          <!--width="90">-->
+                    <!--<h:outputText value="#{contact.middleName}"/>-->
+                <!--</p:column>-->
                 <p:column headerText="Last name" sortBy="#{contact.lastName}" style="text-align:start;" width="120">
                     <h:outputText value="#{contact.lastName}"/>
                 </p:column>
@@ -136,7 +136,7 @@
                     <h:outputText value="#{contactsBean.selectedContactsEntity.contactId}"
                                   style="margin-left: 5px; font-weight: bold;"/>
 
-                    <p:outputLabel value="Email: " id="email"/>
+                    <p:outputLabel value="Email: " id="email" styleClass="required"/>
                     <p:inputText value="#{contactsBean.selectedContactsEntity.email}"
                                  style="margin-left: 5px;"
                                  maxlength="255"
@@ -147,15 +147,15 @@
                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
                     </p:inputText>
 
-                    <p:outputLabel value="First Name: "/>
+                    <p:outputLabel value="First Name: " styleClass="required"/>
                     <p:inputText value="#{contactsBean.selectedContactsEntity.firstName}" style="margin-left: 5px;"
                                  maxlength="100"
                                  required="true"
                                  requiredMessage="First name is required"/>
 
-                    <p:outputLabel value="Middle Name: "/>
-                    <p:inputText value="#{contactsBean.selectedContactsEntity.middleName}" style="margin-left: 5px;"
-                                 maxlength="100"/>
+                    <!--<p:outputLabel value="Middle Name: "/>-->
+                    <!--<p:inputText value="#{contactsBean.selectedContactsEntity.middleName}" style="margin-left: 5px;"-->
+                                 <!--maxlength="100"/>-->
 
                     <p:outputLabel value="Last Name: "/>
                     <p:inputText value="#{contactsBean.selectedContactsEntity.lastName}" style="margin-left: 5px;"

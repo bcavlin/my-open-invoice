@@ -88,7 +88,7 @@
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 
-                <p:ajax event="rowSelect" update="main-form,edit-3-dialog"
+                <p:ajax event="rowSelect" update="main-form,contracts-dialog"
                         listener="#{companiesBean.ajaxChangeRowListenerForCompany}"/>
 
                 <p:column headerText="Id" sortBy="#{company.companyId}" style="text-align:right;" width="50">
@@ -233,6 +233,11 @@
                         <h:outputText value="#{companyContract.currencyByCcyId.name}"/>
                     </p:column>
 
+                    <p:column headerText="Number" sortBy="#{companyContract.contractNumber}" style="text-align:center;"
+                              width="70">
+                        <h:outputText value="#{companyContract.contractNumber}"/>
+                    </p:column>
+
                     <p:column headerText="Valid From" sortBy="#{companyContract.validFrom}" style="text-align:center;"
                               width="100" id="valid-from-edit-2">
                         <h:outputText value="#{companyContract.validFrom}"/>
@@ -270,7 +275,7 @@
         </h:form>
     </ui:define>
     <ui:define name="dialog">
-        <p:dialog id="edit-1-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+        <p:dialog id="companies-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
                   widgetVar="companies-form-dialog" width="500" modal="true" resizable="false">
             <f:facet name="header">
                 <h:outputText value="Add/Edit Company"/>
@@ -281,14 +286,14 @@
                 <p:focus for="shortName"/>
                 <p:messages autoUpdate="true" id="messages"/>
 
-                <p:scrollPanel mode="native" style="height:500px">
+                <p:scrollPanel mode="native" style="height:500px" id="scrlpnl1">
                     <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2"
                                  style="padding-top: 3px;">
                         <p:outputLabel value="ID: "/>
                         <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
                                       style="margin-left: 5px;"/>
 
-                        <p:outputLabel value="Short name: "/>
+                        <p:outputLabel value="Short name: " styleClass="required"/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
                                      maxlength="10"
                                      size="20"
@@ -298,7 +303,7 @@
                                      style="margin-left: 5px; text-transform: uppercase;"
                                      converter="upperCaseConverter"/>
 
-                        <p:outputLabel value="Company name: "/>
+                        <p:outputLabel value="Company name: " styleClass="required"/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
                                      converter="capitalizeConverter"
                                      maxlength="255"
@@ -318,7 +323,7 @@
                                      maxlength="30"
                                      style="margin-left: 5px;"/>
 
-                        <p:outputLabel value="Address 1: "/>
+                        <p:outputLabel value="Address 1: " styleClass="required"/>
                         <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
                                          style="margin-left: 5px; width: 300px;"
                                          required="true"
@@ -361,7 +366,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog id="edit-2-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+        <p:dialog id="contacts-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
                   widgetVar="companies-contacts-form-dialog" width="500" modal="true" resizable="false">
             <f:facet name="header">
                 <h:outputText value="Add/Edit Contacts"/>
@@ -399,7 +404,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog id="edit-3-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
+        <p:dialog id="contracts-dialog" closable="true" closeOnEscape="true" dynamic="true" appendTo="@(body)"
                   widgetVar="contracts-form-dialog" width="500" modal="true" resizable="false">
             <f:facet name="header">
                 <h:outputText value="Add/Edit Contracts"/>
@@ -419,7 +424,7 @@
                     <h:outputText value="#{companiesBean.selectedContractsEntity.contractId}"
                                   style="margin-left: 5px;"/>
 
-                    <p:outputLabel value="Contract is For: "/>
+                    <p:outputLabel value="Contract is For: " styleClass="required"/>
                     <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractsEntity.contractIsFor}"
                                      style="margin-left: 5px;" required="true"
                                      requiredMessage="A person is needed for the contract">
@@ -430,7 +435,13 @@
                                        itemValue="#{selection1.companyContactId}"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel value="Rate: "/>
+                    <p:outputLabel value="Contract Number: "/>
+                    <p:inputText value="#{companiesBean.selectedContractsEntity.contractNumber}"
+                                 maxlength="20"
+                                 style="margin-left: 5px;">
+                    </p:inputText>
+
+                    <p:outputLabel value="Rate: " styleClass="required"/>
                     <h:panelGrid columns="2" style="margin-left: 3px;" id="rate-grid">
                         <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
                                        maxlength="10"
@@ -447,14 +458,14 @@
                         </p:selectOneMenu>
                     </h:panelGrid>
 
-                    <p:outputLabel value="Rate Unit: "/>
+                    <p:outputLabel value="Rate Unit: " styleClass="required"/>
                     <p:selectOneMenu value="#{companiesBean.selectedContractsEntity.rateUnit}"
                                      style="margin-left: 5px;" required="true">
                         <f:selectItem itemLabel="HOUR" itemValue="HOUR"/>
                         <f:selectItem itemLabel="DAY" itemValue="DAY"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel value="Valid From: "/>
+                    <p:outputLabel value="Valid From: " styleClass="required"/>
                     <p:calendar value="#{companiesBean.selectedContractsEntity.validFrom}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10" id="valid-from-edit" required="true"/>
 
