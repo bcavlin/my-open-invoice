@@ -38,34 +38,34 @@
                         Invoices (${invoiceBean.reportsEntityCollection.size()})
                     </f:facet>
 
-                    <h:panelGrid columns="1" style="width: 100%; align-content: center;" id="carusel-grid-2">
+                    <h:panelGrid columns="2" style="width: 100%; align-content: center;" id="carusel-grid-2">
                         <h:graphicImage value="#{invoiceBean.getReportData(rpt)}" width="128" height="128"
                                         id="content-image"/>
+                        <h:panelGrid id="buttons" columns="1">
+                            <p:commandButton icon="ui-icon-arrowthickstop-1-s" title="Download (#{rpt.reportName})"
+                                             actionListener="#{invoiceBean.download(rpt)}" ajax="false" style="margin-bottom: 15px;"/>
+                            <p:commandButton icon="ui-icon-trash" title="Delete (#{rpt.reportName})"
+                                             oncomplete="PF('confirmation-inv-#{rpt.reportId}').show();"/>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:outputText value="#{su:abbreviateMiddle(rpt.reportName, '...', 20)}"
+                    <h:outputText value="#{su:abbreviateMiddle(rpt.reportName, '..', 24)}"
                                   style="font-family: 'Courier New', Monospace" title="#{rpt.reportName}"/>
 
-                    <!--<p:contextMenu for="carusel-grid-2" style="width: 500px;">-->
-                    <!--<p:menuitem value="Download [#{rpt.reportName}]" icon="ui-icon-arrowthickstop-1-s"-->
-                    <!--actionListener="#{invoiceBean.download(rpt)}" ajax="false"/>-->
-                    <!--<p:separator/>-->
-                    <!--<p:menuitem value="Delete [#{rpt.reportName}]" update="image-carousel-2" icon="ui-icon-trash"-->
-                    <!--oncomplete="PF('confirmation-inv-#{rpt.reportId}').show();"/>-->
-                    <!--</p:contextMenu>-->
 
-                    <!--<p:confirmDialog message="Do you want to remove this Attachment?"-->
-                    <!--showEffect="bounce"-->
-                    <!--header="Delete Attachment"-->
-                    <!--severity="alert"-->
-                    <!--widgetVar="confirmation-inv-#{rpt.reportId}">-->
-                    <!--<p:commandButton value="Remove ID (#{rpt.reportId})"-->
-                    <!--onclick="PF('confirmation-inv-#{rpt.reportId}').hide()"-->
-                    <!--actionListener="#{invoiceBean.deleteAttachment(rpt)}"-->
-                    <!--update="main-form,carusel-grid-1"-->
-                    <!--style="color: brown;">-->
-                    <!--</p:commandButton>-->
-                    <!--<p:commandButton value="No" onclick="PF('confirmation-inv-#{rpt.reportId}').hide()" type="button"/>-->
-                    <!--</p:confirmDialog>-->
+                    <p:confirmDialog message="Do you want to remove this Invoice?"
+                                     showEffect="bounce"
+                                     header="Delete Invoice #{rpt.reportName}"
+                                     severity="alert"
+                                     widgetVar="confirmation-inv-#{rpt.reportId}">
+                        <p:commandButton value="Remove ID (#{rpt.reportId})"
+                                         onclick="PF('confirmation-inv-#{rpt.reportId}').hide()"
+                                         actionListener="#{invoiceBean.deleteReport(rpt)}"
+                                         update="main-page-form,carusel-grid-2"
+                                         style="color: brown;">
+                        </p:commandButton>
+                        <p:commandButton value="No" onclick="PF('confirmation-inv-#{rpt.reportId}').hide()"
+                                         type="button"/>
+                    </p:confirmDialog>
                 </p:carousel>
             </h:form>
         </h:panelGroup>
