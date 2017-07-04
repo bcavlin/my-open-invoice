@@ -25,6 +25,7 @@ import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -69,8 +70,6 @@ public class InvoiceBean implements Serializable {
 
     private InvoiceDAO invoiceDAO;
 
-    private String DEFAULT_INVOICE = "Invoice_V2";
-
     //Invoice data
     private LazyDataModel<InvoiceEntity> invoiceEntityLazyDataModel;
 
@@ -93,8 +92,6 @@ public class InvoiceBean implements Serializable {
     private ReportRunner reportRunner;
 
     private Collection<ReportsEntity> reportsEntityCollection;
-
-    private ReportTemplatesEntity reportTemplatesEntity;
 
     private AttachmentEntity selectedAttachmentEntity;
 
@@ -120,7 +117,7 @@ public class InvoiceBean implements Serializable {
         //last day of the month
         dateToTimesheet = new DateTime().plusDays(15).dayOfMonth().withMaximumValue().toDate();
 
-        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq(DEFAULT_INVOICE));
+//        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq(DEFAULT_INVOICE));
 
         selectReports();
     }
@@ -138,7 +135,9 @@ public class InvoiceBean implements Serializable {
     private void refresh() {
         logger.info("Loading entries");
         invoiceEntityLazyDataModel = new InvoiceEntityLazyModel(invoiceDAO);
-        selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
+        if(selectedInvoiceEntity!=null) {
+            selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
+        }
     }
 
     public void addNewInvoiceListener(ActionEvent event) {
@@ -302,8 +301,19 @@ public class InvoiceBean implements Serializable {
         refresh();
     }
 
+    public void deleteReport(ReportsEntity reportsEntity) {
+        logger.info("Deleting reportsEntity [{}]", reportsEntity.toString());
+        invoiceDAO.getReportsRepository().delete(reportsEntity.getReportId());
+        refresh();
+        selectReports();
+    }
+
     public void download(AttachmentEntity attachmentEntity) throws IOException {
         Faces.sendFile(attachmentEntity.getContent(), attachmentEntity.getFilename(), true);
+    }
+
+    public void download(ReportsEntity reportsEntity) throws IOException {
+        Faces.sendFile(reportsEntity.getContent(), reportsEntity.getReportName(), true);
     }
 
     public void updateSelectionFromTo() {
@@ -439,7 +449,9 @@ public class InvoiceBean implements Serializable {
 
             String name = "INVOICE-" + selectedInvoiceEntity.getTitle() + "-" + new SimpleDateFormat("yyyyMMddHHmmss").format(printDate);
 
-            final BIRTReport myReport = new BIRTReport(name, params, reportTemplatesEntity.getContent(), reportRunner);
+            final byte[] bytes = IOUtils.toByteArray(ClassLoader.getSystemResourceAsStream("new_report_1.rptdesign"));
+
+            final BIRTReport myReport = new BIRTReport(name, params, bytes, reportRunner);
             final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
 
             ReportsEntity report = new ReportsEntity();
@@ -458,14 +470,6 @@ public class InvoiceBean implements Serializable {
 
         }
 
-    }
-
-    public ReportTemplatesEntity getReportTemplatesEntity() {
-        return reportTemplatesEntity;
-    }
-
-    public void setReportTemplatesEntity(ReportTemplatesEntity reportTemplatesEntity) {
-        this.reportTemplatesEntity = reportTemplatesEntity;
     }
 
     public int getPageSize() {
