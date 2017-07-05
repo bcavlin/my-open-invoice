@@ -22,7 +22,6 @@ import com.bgh.myopeninvoice.jsfbeans.model.CompaniesEntityLazyModel;
 import com.bgh.myopeninvoice.jsfbeans.model.ContractsEntityLazyModel;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
@@ -42,10 +41,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by bcavlin on 17/03/17.
@@ -57,7 +53,6 @@ public class CompaniesBean implements Serializable {
 
     private static Logger logger = LoggerFactory.getLogger(CompaniesBean.class);
 
-    @Autowired
     private InvoiceDAO invoiceDAO;
 
     private LazyDataModel<CompaniesEntity> companiesEntityLazyDataModel;
@@ -78,6 +73,11 @@ public class CompaniesBean implements Serializable {
 
     private int pageSize = 20;
 
+    @Autowired
+    public CompaniesBean(InvoiceDAO invoiceDAO) {
+        this.invoiceDAO = invoiceDAO;
+    }
+
     @PostConstruct
     private void init() {
         logger.info("Initializing companies entries");
@@ -90,7 +90,8 @@ public class CompaniesBean implements Serializable {
     private void refresh() {
         logger.info("Loading companies entries");
         selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().findOne(selectedCompaniesEntity.getCompanyId());
-//        companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
+        companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
+        companiesEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompaniesRepository().findAll(QCompaniesEntity.companiesEntity.ownedByMe.eq(false)));
     }
 
     public void newEntryListenerForCompany(ActionEvent event) {
@@ -212,24 +213,7 @@ public class CompaniesBean implements Serializable {
 
     public void handleFileUpload(FileUploadEvent event) {
         if (selectedCompaniesEntity != null) {
-
             selectedCompaniesEntity.setContent(event.getFile().getContents());
-
-//            try {
-//                BufferedImage scaledImg = Scalr.resize(
-//                        ImageIO.read(
-//                                new ByteArrayInputStream(
-//                                        event.getFile().getContents())), Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_HEIGHT, 70, Scalr.OP_ANTIALIAS);
-//                try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-//                    ImageIO.write(scaledImg, "png", baos);
-//                    baos.flush();
-//                    selectedCompaniesEntity.setContent(baos.toByteArray());
-//                }
-//
-//            } catch (IOException e) {
-//                logger.error(e.toString());
-//                FacesUtils.addErrorMessage("Cannot process the image");
-//            }
 
         }
     }
@@ -238,8 +222,7 @@ public class CompaniesBean implements Serializable {
         if (companiesEntity != null && companiesEntity.getContent() != null) {
             ImageFormat mimeType = Sanselan.guessFormat(companiesEntity.getContent());
 
-            return "data:image/" + mimeType.extension.toLowerCase() + ";base64," +
-                    Base64.encodeBase64String(companiesEntity.getContent());
+            return "data:image/" + mimeType.extension.toLowerCase() + ";base64," + Base64.getEncoder().encodeToString(companiesEntity.getContent()); //Base64.encodeBase64String(companiesEntity.getContent());
         } else {
             return null;
         }

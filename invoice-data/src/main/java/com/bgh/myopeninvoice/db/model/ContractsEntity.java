@@ -46,6 +46,7 @@ public class ContractsEntity implements Serializable {
     private CompaniesEntity companiesByContractSignedWithSubcontract;
     private CurrencyEntity currencyByCcyId;
     private String contractNumber;
+    private String purchaseOrder;
     private byte[] content;
 
     @GeneratedValue
@@ -161,6 +162,16 @@ public class ContractsEntity implements Serializable {
         this.contractNumber = contractNumber;
     }
 
+    @Basic
+    @Column(name = "PURCHASE_ORDER", nullable = true, length = 50)
+    public String getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(String purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
     @Lob
     @Column(name = "CONTENT", nullable = true)
     public byte[] getContent() {
@@ -191,8 +202,8 @@ public class ContractsEntity implements Serializable {
         if (validFrom != null ? !validFrom.equals(that.validFrom) : that.validFrom != null) return false;
         if (validTo != null ? !validTo.equals(that.validTo) : that.validTo != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (contractNumber != null ? !contractNumber.equals(that.contractNumber) : that.contractNumber != null)
-            return false;
+        if (contractNumber != null ? !contractNumber.equals(that.contractNumber) : that.contractNumber != null) return false;
+        if (purchaseOrder != null ? !purchaseOrder.equals(that.purchaseOrder) : that.purchaseOrder != null) return false;
         if (!Arrays.equals(content, that.content)) return false;
 
         return true;
@@ -211,6 +222,7 @@ public class ContractsEntity implements Serializable {
         result = 31 * result + (validTo != null ? validTo.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (contractNumber != null ? contractNumber.hashCode() : 0);
+        result = 31 * result + (purchaseOrder != null ? purchaseOrder.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(content);
         return result;
     }
@@ -267,11 +279,19 @@ public class ContractsEntity implements Serializable {
                 "contractId=" + contractId +
                 ", contractIsFor=" + contractIsFor +
                 ", contractSignedWith=" + contractSignedWith +
+                ", contractSignedWithSubcontract=" + contractSignedWithSubcontract +
                 ", rate=" + rate +
                 ", rateUnit='" + rateUnit + '\'' +
+                ", ccyId=" + ccyId +
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
                 ", description='" + description + '\'' +
+                ", companyContactByContractIsFor=" + companyContactByContractIsFor +
+                ", companiesByContractSignedWith=" + companiesByContractSignedWith +
+                ", companiesByContractSignedWithSubcontract=" + companiesByContractSignedWithSubcontract +
+                ", currencyByCcyId=" + currencyByCcyId +
+                ", contractNumber='" + contractNumber + '\'' +
+                ", purchaseOrder='" + purchaseOrder + '\'' +
                 '}';
     }
 }

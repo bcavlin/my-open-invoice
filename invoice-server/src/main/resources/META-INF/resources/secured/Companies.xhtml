@@ -123,7 +123,7 @@
                     </h:panelGroup>
                 </p:column>
 
-                <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="100">
+                <p:column headerText="Phone" sortBy="#{company.phone1}" style="text-align:start;" width="150">
                     <h:outputText value="#{company.phone1}"/>
                 </p:column>
 
@@ -131,14 +131,9 @@
                     <h:outputText value="#{company.businessNumber}"/>
                 </p:column>
 
-                <p:column headerText="Address 1" sortBy="#{company.addressLine1}" style="text-align:start;"
+                <p:column headerText="Address" sortBy="#{company.addressLine1}" style="text-align:start;"
                           width="300">
                     <h:outputText value="#{su:abbreviate(company.addressLine1,40)}"/>
-                </p:column>
-
-                <p:column headerText="Address 2" sortBy="#{company.addressLine2}" style="text-align:start;"
-                          width="300">
-                    <h:outputText value="#{company.addressLine2}"/>
                 </p:column>
 
                 <p:column headerText="Logo" style="text-align:center;" width="70">
@@ -233,9 +228,14 @@
                         <h:outputText value="#{companyContract.currencyByCcyId.name}"/>
                     </p:column>
 
-                    <p:column headerText="Number" sortBy="#{companyContract.contractNumber}" style="text-align:center;"
-                              width="70">
+                    <p:column headerText="Number" sortBy="#{companyContract.contractNumber}" style="text-align:start;"
+                              width="120">
                         <h:outputText value="#{companyContract.contractNumber}"/>
+                    </p:column>
+
+                    <p:column headerText="PO" sortBy="#{companyContract.purchaseOrder}" style="text-align:start;"
+                              width="120">
+                        <h:outputText value="#{companyContract.purchaseOrder}"/>
                     </p:column>
 
                     <p:column headerText="Valid From" sortBy="#{companyContract.validFrom}" style="text-align:center;"
@@ -312,7 +312,7 @@
                                      required="true"
                                      style="margin-left: 5px; text-transform: capitalize;"/>
 
-                        <p:outputLabel value="Phone 1: "/>
+                        <p:outputLabel value="Phone: "/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
                                      maxlength="20"
                                      style="margin-left: 5px;">
@@ -323,16 +323,11 @@
                                      maxlength="30"
                                      style="margin-left: 5px;"/>
 
-                        <p:outputLabel value="Address 1: " styleClass="required"/>
+                        <p:outputLabel value="Address: " styleClass="required"/>
                         <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
                                          style="margin-left: 5px; width: 300px;"
                                          required="true"
-                                         requiredMessage="Address line 1 is required"
-                                         autoResize="false" maxlength="500"/>
-
-                        <p:outputLabel value="Address 2: "/>
-                        <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine2}"
-                                         style="margin-left: 5px; width: 300px;"
+                                         requiredMessage="Address line is required"
                                          autoResize="false" maxlength="500"/>
 
                         <p:outputLabel value="Owned: " style="color: red; font-weight: bold;"/>
@@ -344,13 +339,13 @@
 
                         <p:outputLabel value="Logo: "/>
                         <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"
-                                        alt="logo" style="border: 1px; margin-left: 5px;" id="image-logo"/>
+                                        alt="logo" style="border: 1px; margin-left: 5px; height: 50px;" id="image-logo"/>
 
                         <p:outputLabel value="Upload: "/>
                         <p:fileUpload fileUploadListener="#{companiesBean.handleFileUpload}" mode="advanced"
                                       dragDropSupport="false"
                                       style="margin-left: 5px;" fileLimit="1"
-                                      update="@parent" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                                      update="companies-form" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                     </h:panelGrid>
                 </p:scrollPanel>
 
@@ -437,6 +432,12 @@
 
                     <p:outputLabel value="Contract Number: "/>
                     <p:inputText value="#{companiesBean.selectedContractsEntity.contractNumber}"
+                                 maxlength="20"
+                                 style="margin-left: 5px;">
+                    </p:inputText>
+
+                    <p:outputLabel value="Purchase Order: "/>
+                    <p:inputText value="#{companiesBean.selectedContractsEntity.purchaseOrder}"
                                  maxlength="20"
                                  style="margin-left: 5px;">
                     </p:inputText>
