@@ -78,9 +78,9 @@
                 <p:column headerText="Id" sortBy="#{contact.contactId}" style="text-align:right;" width="50">
                     <h:outputText value="#{contact.contactId}"/>
                 </p:column>
-                <p:column headerText="First name" sortBy="#{contact.firstName}" style="text-align:start;"
-                          width="221">
-                    <h:outputText value="#{contact.firstName}"/>
+                <p:column headerText="Name" sortBy="#{contact.firstName}" style="text-align:start;"
+                          width="270">
+                    <h:outputText value="#{contact.firstName} #{contact.lastName}"/>
                     <p:graphicImage value="/images/telephone.png"
                                     style="float: right; opacity: 0.7;" title="companies: #{contact.companiesList}"
                                     rendered="#{not empty contact.companiesList}"/>
@@ -88,13 +88,6 @@
                                     style="float: right; opacity: 0.7; margin-right: 3px;"
                                     title="username: #{contact.usersByUserId.username}"
                                     rendered="#{not empty contact.usersByUserId}"/>
-                </p:column>
-                <!--<p:column headerText="Middle n." sortBy="#{contact.middleName}" style="text-align:start;"-->
-                          <!--width="90">-->
-                    <!--<h:outputText value="#{contact.middleName}"/>-->
-                <!--</p:column>-->
-                <p:column headerText="Last name" sortBy="#{contact.lastName}" style="text-align:start;" width="120">
-                    <h:outputText value="#{contact.lastName}"/>
                 </p:column>
                 <p:column headerText="Email" sortBy="#{contact.email}" style="text-align:start;" width="330">
                     <f:facet name="filter">
@@ -108,13 +101,11 @@
                 <p:column headerText="Phone 1" sortBy="#{contact.phone1}" style="text-align:left;" width="150">
                     <h:outputText value="#{contact.phone1}"/>
                 </p:column>
-                <p:column headerText="Address 1" sortBy="#{contact.addressLine1}" style="text-align:left;"
+                <p:column headerText="Address" sortBy="#{contact.addressLine1}" style="text-align:left;"
                           width="350">
                     <h:outputText value="#{contact.addressLine1}"/>
                 </p:column>
-                <p:column headerText="Address 2" sortBy="#{contact.addressLine2}" style="text-align:left;" width="350">
-                    <h:outputText value="#{contact.addressLine2}"/>
-                </p:column>
+                <p:column/>
             </p:dataTable>
         </h:form>
     </ui:define>
@@ -153,28 +144,19 @@
                                  required="true"
                                  requiredMessage="First name is required"/>
 
-                    <!--<p:outputLabel value="Middle Name: "/>-->
-                    <!--<p:inputText value="#{contactsBean.selectedContactsEntity.middleName}" style="margin-left: 5px;"-->
-                                 <!--maxlength="100"/>-->
-
-                    <p:outputLabel value="Last Name: "/>
+                    <p:outputLabel value="Last Name: " styleClass="required"/>
                     <p:inputText value="#{contactsBean.selectedContactsEntity.lastName}" style="margin-left: 5px;"
-                                 maxlength="100"/>
+                                 maxlength="100" required="true"/>
 
-                    <p:outputLabel value="Phone 1: "/>
+                    <p:outputLabel value="Phone: "/>
                     <p:inputText value="#{contactsBean.selectedContactsEntity.phone1}" style="margin-left: 5px;"
                                  maxlength="20" validatorMessage="Phone number is not in correct format">
                         <f:validateRegex
                                 pattern="^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$"/>
                     </p:inputText>
 
-                    <p:outputLabel value="Address Line 1: "/>
+                    <p:outputLabel value="Address: "/>
                     <p:inputTextarea value="#{contactsBean.selectedContactsEntity.addressLine1}"
-                                     style="margin-left: 5px; width: 300px;"
-                                     autoResize="false" maxlength="500"/>
-
-                    <p:outputLabel value="Address Line 2: "/>
-                    <p:inputTextarea value="#{contactsBean.selectedContactsEntity.addressLine2}"
                                      style="margin-left: 5px; width: 300px;"
                                      autoResize="false" maxlength="500"/>
 
