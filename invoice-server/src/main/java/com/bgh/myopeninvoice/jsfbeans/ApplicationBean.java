@@ -20,6 +20,8 @@ import org.omnifaces.util.Faces;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ApplicationScoped;
@@ -34,9 +36,21 @@ import java.io.Serializable;
 @ManagedBean
 @ApplicationScoped
 @Component
+@PropertySource("classpath:version.properties")
 public class ApplicationBean implements Serializable {
 
     private static Logger logger = LoggerFactory.getLogger(ApplicationBean.class);
+
+    @Value("${application.version}")
+    private String applicationVersion;
+
+    public String getApplicationVersion() {
+        return applicationVersion;
+    }
+
+    public void setApplicationVersion(String applicationVersion) {
+        this.applicationVersion = applicationVersion;
+    }
 
     public void logout() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/logout");
