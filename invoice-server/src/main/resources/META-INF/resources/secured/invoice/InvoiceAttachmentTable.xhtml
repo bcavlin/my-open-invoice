@@ -36,7 +36,7 @@
                      update="main-form,invoice-attachment-form"/>
 </h:panelGroup>
 
-<p:carousel value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}"  var="att"
+<p:carousel value="#{invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId}" var="att"
             itemStyle="text-align:center" responsive="true" style="width: 634px;" id="image-carousel-1" numVisible="3">
     <f:facet name="header">
         Attachments (${invoiceBean.selectedInvoiceEntity.attachmentsByInvoiceId.size()})
@@ -73,12 +73,15 @@
     </h:panelGrid>
 </p:carousel>
 
-<p:dialog id="content-image-2-dialog" widgetVar="content-image-2-dialog" closeOnEscape="true" modal="true" resizable="false">
+<p:dialog id="content-image-2-dialog" widgetVar="content-image-2-dialog" closeOnEscape="true" modal="true"
+          resizable="false">
     <f:facet name="header">
         <h:outputText value="#{invoiceBean.selectedAttachmentEntity.filename}"/>
     </f:facet>
-    <h:graphicImage value="#{invoiceBean.getImageAttachment(invoiceBean.selectedAttachmentEntity)}" id="content-image-2"
-                    width="512" height="692"/>
+    <p:scrollPanel style="height: 692px; width: 512px;">
+        <h:graphicImage value="#{invoiceBean.getImageAttachment(invoiceBean.selectedAttachmentEntity)}"
+                        id="content-image-2"/>
+    </p:scrollPanel>
 </p:dialog>
 
 

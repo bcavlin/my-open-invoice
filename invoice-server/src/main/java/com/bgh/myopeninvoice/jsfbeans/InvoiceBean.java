@@ -24,7 +24,6 @@ import com.bgh.myopeninvoice.reporting.ReportRunner;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -42,6 +41,7 @@ import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -142,10 +142,11 @@ public class InvoiceBean implements Serializable {
 
     public void addNewInvoiceListener(ActionEvent event) {
         selectedInvoiceEntity = new InvoiceEntity();
+        selectedInvoiceEntity.setNote("All currency amounts are in CAD unless specified otherwise.");
         selectedInvoiceEntity.setCreatedDate(new DateTime().toDate());
-        selectedInvoiceEntity.setFromDate(new LocalDate().withDayOfMonth(1).toDate());
-        selectedInvoiceEntity.setToDate(new LocalDate().dayOfMonth().withMaximumValue().toDate());
-        selectedInvoiceEntity.setDueDate(new LocalDate().plusMonths(1).withDayOfMonth(15).toDate());
+        selectedInvoiceEntity.setFromDate(new LocalDate().minusMonths(1).withDayOfMonth(1).toDate());
+        selectedInvoiceEntity.setToDate(new LocalDate().minusMonths(1).dayOfMonth().withMaximumValue().toDate());
+        selectedInvoiceEntity.setDueDate(new LocalDate().withDayOfMonth(15).toDate());
         selectedInvoiceEntity.setInvoiceItemsByInvoiceId(new ArrayList<>()); //for value calculation
 
         selectedInvoiceItemsEntity = null;
@@ -159,9 +160,9 @@ public class InvoiceBean implements Serializable {
 
     public void addNewTimesheetListener(ActionEvent event) {
         //first in the previous month
-        dateFromTimesheet = new DateTime().minusDays(15).dayOfMonth().withMinimumValue().toDate();
+        dateFromTimesheet = selectedInvoiceEntity.getFromDate();
         //last day of the month
-        dateToTimesheet = new DateTime().plusDays(15).dayOfMonth().withMaximumValue().toDate();
+        dateToTimesheet = selectedInvoiceEntity.getToDate();
         //refresh
         selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
 
@@ -351,11 +352,11 @@ public class InvoiceBean implements Serializable {
                 ImageFormat mimeType = Sanselan.guessFormat(attachmentEntity.getContent());
                 if (mimeType != null && !"UNKNOWN".equalsIgnoreCase(mimeType.name)) {
                     return "data:image/" + mimeType.extension.toLowerCase() + ";base64," +
-                            Base64.encodeBase64String(attachmentEntity.getContent());
+                            Base64.getEncoder().encodeToString(attachmentEntity.getContent());
 
                 } else if (attachmentEntity.getImageData() != null && attachmentEntity.getImageData().length > 0) {
                     return "data:image/png;base64," +
-                            Base64.encodeBase64String(attachmentEntity.getImageData());
+                            Base64.getEncoder().encodeToString(attachmentEntity.getImageData());
 
                 } else if ("pdf".equalsIgnoreCase(attachmentEntity.getFileExtension())) {
                     ByteArrayOutputStream baos = null;
@@ -378,14 +379,14 @@ public class InvoiceBean implements Serializable {
                         }
                     }
                     return "data:image/png;base64," +
-                            Base64.encodeBase64String(attachmentEntity.getImageData());
+                            Base64.getEncoder().encodeToString(attachmentEntity.getImageData());
                 } else {
                     return null;
                 }
             }
         } else if (selectedAttachmentEntity != null && selectedAttachmentEntity.getImageData() != null && selectedAttachmentEntity.getImageData().length > 0) {
             return "data:image/png;base64," +
-                    Base64.encodeBase64String(selectedAttachmentEntity.getImageData());
+                    Base64.getEncoder().encodeToString(selectedAttachmentEntity.getImageData());
 
         } else {
             return null;
@@ -449,7 +450,9 @@ public class InvoiceBean implements Serializable {
 
             String name = "INVOICE-" + selectedInvoiceEntity.getTitle() + "-" + new SimpleDateFormat("yyyyMMddHHmmss").format(printDate);
 
-            final byte[] bytes = IOUtils.toByteArray(ClassLoader.getSystemResourceAsStream("new_report_1.rptdesign"));
+            //TODO this is not working
+            ClassPathResource report1 = new ClassPathResource("new_report_1.rptdesign");
+            final byte[] bytes = IOUtils.toByteArray(report1.getInputStream());
 
             final BIRTReport myReport = new BIRTReport(name, params, bytes, reportRunner);
             final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
