@@ -161,6 +161,12 @@
                     <text-property name="heading">CCY</text-property>
                 </structure>
                 <structure>
+                    <property name="columnName">CONTRACT_NUMBER</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">CONTRACT_NUMBER</text-property>
+                    <text-property name="heading">CONTRACT_NUMBER</text-property>
+                </structure>
+                <structure>
                     <property name="columnName">FROM_TS_DATE</property>
                     <property name="analysis">dimension</property>
                     <text-property name="displayName">FROM_TS_DATE</text-property>
@@ -274,16 +280,21 @@
                     </structure>
                     <structure>
                         <property name="position">18</property>
+                        <property name="name">CONTRACT_NUMBER</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">19</property>
                         <property name="name">FROM_TS_DATE</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
-                        <property name="position">19</property>
+                        <property name="position">20</property>
                         <property name="name">TO_TS_DATE</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
-                        <property name="position">20</property>
+                        <property name="position">21</property>
                         <property name="name">REPORT_TEXT</property>
                         <property name="dataType">string</property>
                     </structure>
@@ -416,13 +427,20 @@ vars["Notes"]=row["NOTE"];]]></method>
                 </structure>
                 <structure>
                     <property name="position">18</property>
+                    <property name="name">CONTRACT_NUMBER</property>
+                    <property name="nativeName">CONTRACT_NUMBER</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">19</property>
                     <property name="name">FROM_TS_DATE</property>
                     <property name="nativeName">FROM_TS_DATE</property>
                     <property name="dataType">date</property>
                     <property name="nativeDataType">91</property>
                 </structure>
                 <structure>
-                    <property name="position">19</property>
+                    <property name="position">20</property>
                     <property name="name">TO_TS_DATE</property>
                     <property name="nativeName">TO_TS_DATE</property>
                     <property name="dataType">date</property>
@@ -443,24 +461,32 @@ FROM (
          INV.DUE_DATE,
          INV.TAX_PERCENT,
          INV.NOTE,
-         TO.COMPANY_NAME                               AS TO_NAME,
-         TO.ADDRESS_LINE1 || ' ' || TO.ADDRESS_LINE2   AS TO_ADDRESS,
-         TO.PHONE1                                     AS TO_PHONE,
+         TOC.COMPANY_NAME                              AS TO_NAME,
+         TOC.ADDRESS_LINE1 || ' ' || TOC.ADDRESS_LINE2 AS TO_ADDRESS,
+         TOC.PHONE1                                    AS TO_PHONE,
          CFR.COMPANY_NAME                              AS FROM_NAME,
          CFR.ADDRESS_LINE1 || ' ' || CFR.ADDRESS_LINE2 AS FROM_ADDRESS,
          CFR.PHONE1                                    AS FROM_PHONE,
          CFR.CONTENT                                   AS FROM_LOGO,
          CFR.BUSINESS_NUMBER                           AS FROM_BN,
-         CC.NAME                                       AS CCY
+         CC.NAME                                       AS CCY,
+         CT.CONTRACT_NUMBER
        FROM INVOICE.INVOICE INV
-         LEFT JOIN INVOICE.COMPANIES TO ON INV.COMPANY_TO = TO.COMPANY_ID
+         LEFT JOIN INVOICE.COMPANIES TOC ON INV.COMPANY_TO = TOC.COMPANY_ID
          LEFT JOIN INVOICE.COMPANY_CONTACT FR ON INV.COMPANY_CONTACT_FROM = FR.COMPANY_CONTACT_ID
+         LEFT JOIN INVOICE.CONTRACTS CT
+           ON FR.COMPANY_CONTACT_ID = CT.CONTRACT_IS_FOR AND CT.CONTRACT_ID = (SELECT TOP 1 CONTRACT_ID
+                                                                               FROM INVOICE.CONTRACTS
+                                                                               WHERE
+                                                                                 VALID_FROM < sysdate AND
+                                                                                 VALID_TO > sysdate
+                                                                               ORDER BY VALID_TO DESC)
          LEFT JOIN INVOICE.COMPANIES CFR ON FR.COMPANY_ID = CFR.COMPANY_ID
          LEFT JOIN INVOICE.CURRENCY CC ON INV.CCY_ID = CC.CCY_ID
        WHERE INV.INVOICE_ID = ?
      ) DS1
   LEFT JOIN INVOICE.INVOICE_ITEMS II ON II.INVOICE_ID = DS1.INVOICE_ID
-  LEFT JOIN INVOICE.TIME_SHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID]]></xml-property>
+  LEFT JOIN INVOICE.TIME_SHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -1534,10 +1560,10 @@ WHERE IA.INVOICE_ID = ?
                             <property name="paddingRight">10pt</property>
                             <data id="167">
                                 <property name="fontFamily">"Consolas"</property>
-                                <property name="fontSize">18px</property>
+                                <property name="fontSize">16px</property>
                                 <property name="fontWeight">bold</property>
                                 <property name="color">#505050</property>
-                                <property name="marginBottom">3pt</property>
+                                <property name="marginBottom">0pt</property>
                                 <property name="paddingBottom">5pt</property>
                                 <property name="textAlign">right</property>
                                 <property name="dataSet">Data Set Main</property>
@@ -1666,16 +1692,25 @@ WHERE IA.INVOICE_ID = ?
         </simple-master-page>
     </page-setup>
     <body>
+        <label id="362">
+            <property name="fontFamily">"Consolas"</property>
+            <property name="fontSize">18pt</property>
+            <property name="fontWeight">bold</property>
+            <property name="paddingTop">10pt</property>
+            <property name="paddingBottom">10pt</property>
+            <property name="textAlign">center</property>
+            <text-property name="text">INVOICE</text-property>
+        </label>
         <grid id="169">
             <property name="width">572.25pt</property>
             <column id="171"/>
             <column id="297">
                 <property name="repeat">1</property>
-                <property name="width">150pt</property>
+                <property name="width">130pt</property>
             </column>
             <column id="170">
                 <property name="repeat">1</property>
-                <property name="width">150px</property>
+                <property name="width">170px</property>
             </column>
             <row id="172">
                 <cell id="174">
@@ -1689,16 +1724,16 @@ WHERE IA.INVOICE_ID = ?
                         <property name="borderBottomWidth">thin</property>
                         <property name="paddingTop">5pt</property>
                         <property name="paddingLeft">10pt</property>
-                        <property name="paddingBottom">10pt</property>
+                        <property name="paddingBottom">5pt</property>
                         <property name="textAlign">left</property>
                         <text-property name="text">Billed To</text-property>
                     </label>
                     <data id="148">
                         <property name="fontFamily">"Consolas"</property>
-                        <property name="fontSize">18px</property>
+                        <property name="fontSize">16px</property>
                         <property name="fontWeight">bold</property>
                         <property name="marginTop">10pt</property>
-                        <property name="marginBottom">3pt</property>
+                        <property name="marginBottom">0pt</property>
                         <property name="paddingLeft">30pt</property>
                         <property name="paddingBottom">1pt</property>
                         <property name="textAlign">left</property>
@@ -1766,7 +1801,7 @@ WHERE IA.INVOICE_ID = ?
                         <property name="marginRight">0pt</property>
                         <property name="paddingTop">5pt</property>
                         <property name="paddingLeft">10pt</property>
-                        <property name="paddingBottom">10pt</property>
+                        <property name="paddingBottom">5pt</property>
                         <property name="paddingRight">1pt</property>
                         <property name="textAlign">left</property>
                         <property name="letterSpacing">normal</property>
@@ -1783,7 +1818,7 @@ WHERE IA.INVOICE_ID = ?
                         <property name="showIfBlank">false</property>
                         <property name="canShrink">false</property>
                         <property name="overflow">hidden</property>
-                        <text-property name="text">Invoice</text-property>
+                        <text-property name="text">Details</text-property>
                     </label>
                     <label id="298">
                         <property name="fontFamily">"Consolas"</property>
@@ -1794,7 +1829,7 @@ WHERE IA.INVOICE_ID = ?
                         <property name="paddingTop">1pt</property>
                         <property name="paddingLeft">30pt</property>
                         <property name="paddingBottom">3pt</property>
-                        <text-property name="text">Invoice#:</text-property>
+                        <text-property name="text">Invoice #:</text-property>
                     </label>
                     <label id="299">
                         <property name="fontFamily">"Consolas"</property>
@@ -1825,6 +1860,16 @@ WHERE IA.INVOICE_ID = ?
                         <property name="paddingLeft">30pt</property>
                         <property name="paddingBottom">3pt</property>
                         <text-property name="text">BN:</text-property>
+                    </label>
+                    <label id="360">
+                        <property name="fontFamily">"Consolas"</property>
+                        <property name="fontSize">14px</property>
+                        <property name="fontWeight">bold</property>
+                        <property name="marginLeft">0pt</property>
+                        <property name="paddingTop">1pt</property>
+                        <property name="paddingLeft">30pt</property>
+                        <property name="paddingBottom">3pt</property>
+                        <text-property name="text">Contract #:</text-property>
                     </label>
                 </cell>
                 <cell id="173">
@@ -1861,7 +1906,7 @@ WHERE IA.INVOICE_ID = ?
                         <property name="marginRight">0pt</property>
                         <property name="paddingTop">5pt</property>
                         <property name="paddingLeft">10pt</property>
-                        <property name="paddingBottom">10pt</property>
+                        <property name="paddingBottom">5pt</property>
                         <property name="paddingRight">1pt</property>
                         <property name="textAlign">left</property>
                         <property name="letterSpacing">normal</property>
@@ -1954,9 +1999,10 @@ WHERE IA.INVOICE_ID = ?
                         <list-property name="boundDataColumns">
                             <structure>
                                 <property name="name">CREATED_DATE</property>
-                                <text-property name="displayName">CREATED_DATE</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["CREATED_DATE"]</expression>
+                                <text-property name="displayName">DUE_DATE</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["DUE_DATE"]</expression>
                                 <property name="dataType">date</property>
+                                <property name="allowExport">true</property>
                             </structure>
                         </list-property>
                         <property name="resultSetColumn">CREATED_DATE</property>
@@ -1977,8 +2023,8 @@ WHERE IA.INVOICE_ID = ?
                         <list-property name="boundDataColumns">
                             <structure>
                                 <property name="name">DUE_DATE</property>
-                                <text-property name="displayName">DUE_DATE</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["DUE_DATE"]</expression>
+                                <text-property name="displayName">CREATED_DATE</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["CREATED_DATE"]</expression>
                                 <property name="dataType">date</property>
                                 <property name="allowExport">true</property>
                             </structure>
@@ -1998,13 +2044,72 @@ WHERE IA.INVOICE_ID = ?
                             <structure>
                                 <property name="name">FROM_BN</property>
                                 <text-property name="displayName">FROM_BN</text-property>
-                                <expression name="expression" type="javascript">
- dataSetRow["FROM_BN"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["FROM_BN"]==null?"N/A":dataSetRow["FROM_BN"]</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>
                         </list-property>
                         <property name="resultSetColumn">FROM_BN</property>
+                    </data>
+                    <data id="361">
+                        <property name="backgroundAttachment">scroll</property>
+                        <property name="backgroundPositionX">0%</property>
+                        <property name="backgroundPositionY">0%</property>
+                        <property name="backgroundRepeat">repeat</property>
+                        <property name="fontFamily">"Consolas"</property>
+                        <property name="fontSize">14px</property>
+                        <property name="fontWeight">bold</property>
+                        <property name="fontStyle">normal</property>
+                        <property name="fontVariant">normal</property>
+                        <property name="color">black</property>
+                        <property name="textLineThrough">none</property>
+                        <property name="textOverline">none</property>
+                        <property name="textUnderline">none</property>
+                        <property name="borderBottomColor">black</property>
+                        <property name="borderBottomStyle">none</property>
+                        <property name="borderBottomWidth">medium</property>
+                        <property name="borderLeftColor">black</property>
+                        <property name="borderLeftStyle">none</property>
+                        <property name="borderLeftWidth">medium</property>
+                        <property name="borderRightColor">black</property>
+                        <property name="borderRightStyle">none</property>
+                        <property name="borderRightWidth">medium</property>
+                        <property name="borderTopColor">black</property>
+                        <property name="borderTopStyle">none</property>
+                        <property name="borderTopWidth">medium</property>
+                        <property name="marginTop">0pt</property>
+                        <property name="marginLeft">0pt</property>
+                        <property name="marginBottom">0pt</property>
+                        <property name="marginRight">0pt</property>
+                        <property name="paddingTop">1pt</property>
+                        <property name="paddingLeft">1pt</property>
+                        <property name="paddingBottom">3pt</property>
+                        <property name="paddingRight">1pt</property>
+                        <property name="letterSpacing">normal</property>
+                        <property name="lineHeight">normal</property>
+                        <property name="orphans">2</property>
+                        <property name="textTransform">none</property>
+                        <property name="whiteSpace">normal</property>
+                        <property name="widows">2</property>
+                        <property name="wordSpacing">normal</property>
+                        <property name="display">block</property>
+                        <property name="pageBreakAfter">auto</property>
+                        <property name="pageBreakBefore">auto</property>
+                        <property name="pageBreakInside">auto</property>
+                        <property name="showIfBlank">false</property>
+                        <property name="canShrink">false</property>
+                        <property name="overflow">hidden</property>
+                        <property name="dataSet">Data Set Main</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">CONTRACT_NUMBER</property>
+                                <text-property name="displayName">CONTRACT_NUMBER</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["CONTRACT_NUMBER"]==null?"N/A":dataSetRow["CONTRACT_NUMBER"]</expression>
+                                <property name="dataType">string</property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                        </list-property>
+                        <property name="resultSetColumn">CONTRACT_NUMBER</property>
                     </data>
                 </cell>
             </row>
@@ -2107,7 +2212,7 @@ WHERE IA.INVOICE_ID = ?
             <column id="224">
                 <property name="repeat">1</property>
                 <property name="textAlign">right</property>
-                <property name="width">90pt</property>
+                <property name="width">110pt</property>
             </column>
             <header>
                 <row id="185">
@@ -2157,7 +2262,11 @@ WHERE IA.INVOICE_ID = ?
                     <cell id="276"/>
                     <cell id="277"/>
                     <cell id="278"/>
-                    <cell id="279"/>
+                    <cell id="279">
+                        <label id="363">
+                            <property name="fontSize">6px</property>
+                        </label>
+                    </cell>
                 </row>
             </header>
             <detail>
@@ -2240,7 +2349,11 @@ WHERE IA.INVOICE_ID = ?
                     <cell id="268"/>
                     <cell id="269"/>
                     <cell id="270"/>
-                    <cell id="271"/>
+                    <cell id="271">
+                        <label id="364">
+                            <property name="fontSize">6px</property>
+                        </label>
+                    </cell>
                 </row>
                 <row id="215">
                     <property name="backgroundColor">white</property>
@@ -2256,7 +2369,7 @@ WHERE IA.INVOICE_ID = ?
                         <property name="textAlign">center</property>
                         <property name="verticalAlign">middle</property>
                         <data id="311">
-                            <property name="fontSize">10pt</property>
+                            <property name="fontSize">12pt</property>
                             <list-property name="boundDataColumns">
                                 <structure>
                                     <property name="name">DataCCY</property>
@@ -2374,27 +2487,33 @@ WHERE IA.INVOICE_ID = ?
                         <property name="colSpan">2</property>
                         <property name="rowSpan">1</property>
                         <label id="257">
+                            <property name="backgroundColor">#DDDDDD</property>
+                            <property name="fontSize">14pt</property>
                             <property name="borderBottomStyle">none</property>
                             <property name="borderLeftStyle">none</property>
                             <property name="borderRightStyle">none</property>
                             <property name="borderTopColor">#BF3F3F</property>
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
-                            <property name="paddingTop">3pt</property>
+                            <property name="paddingTop">10pt</property>
+                            <property name="paddingBottom">10pt</property>
                             <property name="textAlign">right</property>
-                            <text-property name="text">Grand Total:</text-property>
+                            <text-property name="text">GRAND TOTAL:</text-property>
                         </label>
                     </cell>
                     <cell id="249">
                         <data id="250">
+                            <property name="backgroundColor">#DDDDDD</property>
                             <property name="fontFamily">"Consolas"</property>
+                            <property name="fontSize">14pt</property>
                             <property name="borderBottomStyle">none</property>
                             <property name="borderLeftStyle">none</property>
                             <property name="borderRightStyle">none</property>
                             <property name="borderTopColor">#BF3F3F</property>
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
-                            <property name="paddingTop">3pt</property>
+                            <property name="paddingTop">10pt</property>
+                            <property name="paddingBottom">10pt</property>
                             <property name="paddingRight">5px</property>
                             <structure name="numberFormat">
                                 <property name="category">Currency</property>
@@ -2429,7 +2548,7 @@ WHERE IA.INVOICE_ID = ?
                         <property name="backgroundPositionY">0%</property>
                         <property name="backgroundRepeat">repeat</property>
                         <property name="fontFamily">"Consolas"</property>
-                        <property name="fontSize">14px</property>
+                        <property name="fontSize">16px</property>
                         <property name="fontWeight">normal</property>
                         <property name="fontStyle">normal</property>
                         <property name="fontVariant">normal</property>
@@ -2477,7 +2596,7 @@ WHERE IA.INVOICE_ID = ?
                             <structure>
                                 <property name="name">NOTE</property>
                                 <text-property name="displayName">NOTE</text-property>
-                                <expression name="expression" type="javascript">"Note: " + dataSetRow["NOTE"]</expression>
+                                <expression name="expression" type="javascript">"Note: " + (dataSetRow["NOTE"]==null?"N/A":dataSetRow["NOTE"])</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>

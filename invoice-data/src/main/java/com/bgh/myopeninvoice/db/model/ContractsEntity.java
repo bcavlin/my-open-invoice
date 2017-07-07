@@ -277,18 +277,12 @@ public class ContractsEntity implements Serializable {
     public String toString() {
         return "ContractsEntity{" +
                 "contractId=" + contractId +
-                ", contractIsFor=" + contractIsFor +
-                ", contractSignedWith=" + contractSignedWith +
-                ", contractSignedWithSubcontract=" + contractSignedWithSubcontract +
                 ", rate=" + rate +
                 ", rateUnit='" + rateUnit + '\'' +
                 ", ccyId=" + ccyId +
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
                 ", description='" + description + '\'' +
-                ", companyContactByContractIsFor=" + companyContactByContractIsFor +
-                ", companiesByContractSignedWith=" + companiesByContractSignedWith +
-                ", companiesByContractSignedWithSubcontract=" + companiesByContractSignedWithSubcontract +
                 ", currencyByCcyId=" + currencyByCcyId +
                 ", contractNumber='" + contractNumber + '\'' +
                 ", purchaseOrder='" + purchaseOrder + '\'' +

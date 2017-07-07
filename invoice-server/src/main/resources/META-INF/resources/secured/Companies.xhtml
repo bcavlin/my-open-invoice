@@ -283,7 +283,7 @@
             <h:form id="companies-form">
 
                 <o:highlight/>
-                <p:focus for="shortName"/>
+                <p:focus for="company-name"/>
                 <p:messages autoUpdate="true" id="messages"/>
 
                 <p:scrollPanel mode="native" style="height:500px" id="scrlpnl1">
@@ -292,6 +292,15 @@
                         <p:outputLabel value="ID: "/>
                         <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
                                       style="margin-left: 5px;"/>
+
+                        <p:outputLabel value="Company name: " styleClass="required"/>
+                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
+                                     converter="capitalizeConverter"
+                                     maxlength="255"
+                                     id="company-name"
+                                     requiredMessage="Company name is required"
+                                     required="true"
+                                     style="margin-left: 5px; text-transform: capitalize;"/>
 
                         <p:outputLabel value="Short name: " styleClass="required"/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
@@ -303,14 +312,7 @@
                                      style="margin-left: 5px; text-transform: uppercase;"
                                      converter="upperCaseConverter"/>
 
-                        <p:outputLabel value="Company name: " styleClass="required"/>
-                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
-                                     converter="capitalizeConverter"
-                                     maxlength="255"
-                                     id="company-name"
-                                     requiredMessage="Company name is required"
-                                     required="true"
-                                     style="margin-left: 5px; text-transform: capitalize;"/>
+
 
                         <p:outputLabel value="Phone: "/>
                         <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
