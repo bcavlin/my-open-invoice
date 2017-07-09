@@ -21,6 +21,7 @@ import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.InvoiceEntityLazyModel;
 import com.bgh.myopeninvoice.reporting.BIRTReport;
 import com.bgh.myopeninvoice.reporting.ReportRunner;
+import com.bgh.myopeninvoice.utils.CustomUtils;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
@@ -83,9 +84,9 @@ public class InvoiceBean implements Serializable {
 
     private InvoiceItemsEntity selectedInvoiceItemsEntity;
 
-    private Date dateFromTimesheet;
+    private LocalDate dateFromTimesheet;
 
-    private Date dateToTimesheet;
+    private LocalDate dateToTimesheet;
 
     private int pageSize = 20;
 
@@ -113,9 +114,9 @@ public class InvoiceBean implements Serializable {
         taxEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getTaxRepository().findAll());
 
         //first in the previous month
-        dateFromTimesheet = new DateTime().minusDays(15).dayOfMonth().withMinimumValue().toDate();
+//        dateFromTimesheet = new LocalDate().minusDays(15).dayOfMonth().withMinimumValue();
         //last day of the month
-        dateToTimesheet = new DateTime().plusDays(15).dayOfMonth().withMaximumValue().toDate();
+//        dateToTimesheet = new LocalDate().plusDays(15).dayOfMonth().withMaximumValue();
 
 //        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq(DEFAULT_INVOICE));
 
@@ -135,7 +136,7 @@ public class InvoiceBean implements Serializable {
     private void refresh() {
         logger.info("Loading entries");
         invoiceEntityLazyDataModel = new InvoiceEntityLazyModel(invoiceDAO);
-        if(selectedInvoiceEntity!=null) {
+        if (selectedInvoiceEntity != null) {
             selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
         }
     }
@@ -143,7 +144,7 @@ public class InvoiceBean implements Serializable {
     public void addNewInvoiceListener(ActionEvent event) {
         selectedInvoiceEntity = new InvoiceEntity();
         selectedInvoiceEntity.setNote("All currency amounts are in CAD unless specified otherwise.");
-        selectedInvoiceEntity.setCreatedDate(new DateTime().toDate());
+        selectedInvoiceEntity.setCreatedDate(new Date());
         selectedInvoiceEntity.setFromDate(new LocalDate().minusMonths(1).withDayOfMonth(1).toDate());
         selectedInvoiceEntity.setToDate(new LocalDate().minusMonths(1).dayOfMonth().withMaximumValue().toDate());
         selectedInvoiceEntity.setDueDate(new LocalDate().withDayOfMonth(15).toDate());
@@ -159,20 +160,35 @@ public class InvoiceBean implements Serializable {
     }
 
     public void addNewTimesheetListener(ActionEvent event) {
-        //first in the previous month
-        dateFromTimesheet = selectedInvoiceEntity.getFromDate();
-        //last day of the month
-        dateToTimesheet = selectedInvoiceEntity.getToDate();
+
+        dateFromTimesheet = new LocalDate(selectedInvoiceEntity.getFromDate());
+        dateToTimesheet = new LocalDate(selectedInvoiceEntity.getToDate());
         //refresh
         selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
 
+        //now search actual minimum date in the date for the entry and compare to invoice date. Use less of the two.
         selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId()
                 .stream().min((o1, o2) -> o1.getItemDate().compareTo(o2.getItemDate()))
-                .ifPresent(timeSheetEntity -> dateFromTimesheet = timeSheetEntity.getItemDate().compareTo(dateFromTimesheet) > 0 ? dateFromTimesheet : timeSheetEntity.getItemDate());
+                .ifPresent(timeSheetEntity -> dateFromTimesheet = timeSheetEntity.getItemDate().compareTo(dateFromTimesheet.toDate()) > 0 ? dateFromTimesheet : new LocalDate(timeSheetEntity.getItemDate()));
 
+        //search max date from the one of the invoice and the database data and use larger one
         selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId()
                 .stream().max((o1, o2) -> o1.getItemDate().compareTo(o2.getItemDate()))
-                .ifPresent(timeSheetEntity -> dateToTimesheet = timeSheetEntity.getItemDate().compareTo(dateToTimesheet) < 0 ? dateToTimesheet : timeSheetEntity.getItemDate());
+                .ifPresent(timeSheetEntity -> dateToTimesheet = timeSheetEntity.getItemDate().compareTo(dateToTimesheet.toDate()) < 0 ? dateToTimesheet : new LocalDate(timeSheetEntity.getItemDate()));
+
+        //1-mon ... 7-sun
+        if (dateFromTimesheet.getDayOfWeek() - CustomUtils.WEEK_START < 0) {
+            dateFromTimesheet = dateFromTimesheet.minusWeeks(1).withDayOfWeek(CustomUtils.WEEK_START);
+        } else {
+            dateFromTimesheet = dateFromTimesheet.withDayOfWeek(CustomUtils.WEEK_START);
+        }
+
+        if (dateToTimesheet.getDayOfWeek() - CustomUtils.WEEK_END < 0) {
+            dateToTimesheet = dateToTimesheet.withDayOfWeek(CustomUtils.WEEK_END);
+        } else {
+            dateFromTimesheet = dateFromTimesheet.plusWeeks(1).withDayOfWeek(CustomUtils.WEEK_END);
+        }
+
     }
 
     public void addNewAttachmentListener(ActionEvent event) {
@@ -408,17 +424,17 @@ public class InvoiceBean implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('invoice-items-timesheet-form-dialog').initPosition();");
 
         if ("select-date".equalsIgnoreCase(event.getOldStep()) && selectedInvoiceItemsEntity != null) {
-            LocalDate startDate = new LocalDate(dateFromTimesheet).withDayOfWeek(DateTimeConstants.MONDAY);
-            LocalDate endDate = new LocalDate(dateToTimesheet).withDayOfWeek(DateTimeConstants.SUNDAY);
+//            LocalDate startDate = new LocalDate(dateFromTimesheet).withDayOfWeek(CustomUtils.WEEK_START);
+//            LocalDate endDate = new LocalDate(dateToTimesheet).withDayOfWeek(CustomUtils.WEEK_END);
 
             //need to reset in case we changed something
             selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
             final List<TimeSheetEntity> timeSheetsByInvoiceItemId = (List<TimeSheetEntity>) selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId();
 
-            int days = Days.daysBetween(startDate, endDate).getDays() + 1;
+            int days = Days.daysBetween(dateFromTimesheet, dateToTimesheet).getDays() + 1;
             for (int i = 0; i < days; i++) {
 
-                LocalDate d = startDate.withFieldAdded(DurationFieldType.days(), i);
+                LocalDate d = dateFromTimesheet.withFieldAdded(DurationFieldType.days(), i);
                 TimeSheetEntity e = new TimeSheetEntity();
                 e.setInvoiceItemId(selectedInvoiceItemsEntity.getInvoiceItemId());
                 e.setInvoiceItemsByInvoiceItemId(selectedInvoiceItemsEntity);
@@ -450,7 +466,6 @@ public class InvoiceBean implements Serializable {
 
             String name = "INVOICE-" + selectedInvoiceEntity.getTitle() + "-" + new SimpleDateFormat("yyyyMMddHHmmss").format(printDate);
 
-            //TODO this is not working
             ClassPathResource report1 = new ClassPathResource("new_report_1.rptdesign");
             final byte[] bytes = IOUtils.toByteArray(report1.getInputStream());
 
@@ -532,19 +547,19 @@ public class InvoiceBean implements Serializable {
     }
 
     public Date getDateFromTimesheet() {
-        return dateFromTimesheet;
+        return dateFromTimesheet != null ? dateFromTimesheet.toDate() : null;
     }
 
     public void setDateFromTimesheet(Date dateFromTimesheet) {
-        this.dateFromTimesheet = dateFromTimesheet;
+        this.dateFromTimesheet = new LocalDate(dateFromTimesheet);
     }
 
     public Date getDateToTimesheet() {
-        return dateToTimesheet;
+        return dateToTimesheet != null ? dateToTimesheet.toDate() : null;
     }
 
     public void setDateToTimesheet(Date dateToTimesheet) {
-        this.dateToTimesheet = dateToTimesheet;
+        this.dateToTimesheet = new LocalDate(dateToTimesheet);
     }
 
     public Collection<ReportsEntity> getReportsEntityCollection() {

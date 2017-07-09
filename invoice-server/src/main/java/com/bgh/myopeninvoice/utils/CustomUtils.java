@@ -16,6 +16,7 @@
 
 package com.bgh.myopeninvoice.utils;
 
+import org.joda.time.DateTimeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +28,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class CustomUtils {
 
     private static Logger logger = LoggerFactory.getLogger(CustomUtils.class);
+
+    public static int WEEK_START = DateTimeConstants.MONDAY;
+    public static int WEEK_END = DateTimeConstants.SUNDAY;
 
     public static String encodePassword(String password){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
