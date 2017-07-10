@@ -122,7 +122,7 @@ public class InvoiceServerApplication {
                     .antMatchers("/secured/admin/**").hasRole("ADMIN")
                     .antMatchers("/**").permitAll()
                     .anyRequest().authenticated()
-                    .and().formLogin().loginPage("/Index.xhtml").permitAll()
+                    .and().formLogin().loginPage("/Index.xhtml").successForwardUrl("/secured/Main.xhtml").failureForwardUrl("/Index.xhtml").permitAll()
                     .failureHandler(authenticationFailureHandler())
                     .successHandler(authenticationSuccessHandler())
                     .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/Index.xhtml");
