@@ -57,11 +57,22 @@
                         </sec:authorize>
                     </f:facet>
                     <f:facet name="right">
-                        <p:commandButton icon="ui-icon-gear" title="Settings (version #{applicationBean.applicationVersion})"/>
+                        <p:commandButton icon="ui-icon-gear"
+                                         title="Settings (version #{applicationBean.applicationVersion})"
+                                         id="tool-settings"/>
                         <p:commandButton value="Logout (#{p:userPrincipal().name})" icon="ui-icon-close" ajax="false"
                                          action="#{applicationBean.logout}"/>
                     </f:facet>
                 </p:toolbar>
+                <p:overlayPanel id="settingsPanel" for="tool-settings" hideEffect="fade" dynamic="true"
+                                style="width:500px" showCloseIcon="true">
+                    <h:panelGroup layout="block"
+                                  style="margin-bottom: 15px; text-align: center; width: 100%; background-color: #b3b3b3">
+                        <h1 style="padding: 10px;">User Settings</h1></h:panelGroup>
+                    <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2" id="settings-grid"
+                                 style="width: 100%;">
+                    </h:panelGrid>
+                </p:overlayPanel>
             </h:form>
 
             <h:panelGroup id="body" layout="block">

@@ -20,6 +20,8 @@
         <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
         <class>com.bgh.myopeninvoice.db.model.ReportsEntity</class>
         <class>com.bgh.myopeninvoice.db.model.ReportTemplatesEntity</class>
+        <class>com.bgh.myopeninvoice.db.model2.ContractsEntity</class>
+        <class>com.bgh.myopeninvoice.db.model2.InvoiceEntity</class>
 
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>

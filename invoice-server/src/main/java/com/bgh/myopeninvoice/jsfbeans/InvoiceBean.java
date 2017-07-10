@@ -21,7 +21,6 @@ import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.InvoiceEntityLazyModel;
 import com.bgh.myopeninvoice.reporting.BIRTReport;
 import com.bgh.myopeninvoice.reporting.ReportRunner;
-import com.bgh.myopeninvoice.utils.CustomUtils;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
@@ -33,7 +32,10 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
-import org.joda.time.*;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.DurationFieldType;
+import org.joda.time.LocalDate;
 import org.omnifaces.util.Faces;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -49,7 +51,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseId;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -78,15 +82,17 @@ public class InvoiceBean implements Serializable {
 
     private Collection<CompaniesEntity> companiesEntityCollectionForSelection;
 
+    private Collection<ContractsEntity> contractsEntityCollectionForSelection;
+
     private Collection<TaxEntity> taxEntityCollectionForSelection;
 
     private InvoiceEntity selectedInvoiceEntity;
 
     private InvoiceItemsEntity selectedInvoiceItemsEntity;
 
-    private LocalDate dateFromTimesheet;
+    private LocalDate dateFromTimesheet = new LocalDate();
 
-    private LocalDate dateToTimesheet;
+    private LocalDate dateToTimesheet = new LocalDate();
 
     private int pageSize = 20;
 
@@ -110,27 +116,32 @@ public class InvoiceBean implements Serializable {
         companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(p));
         Predicate p1 = QCompaniesEntity.companiesEntity.ownedByMe.isFalse();
         companiesEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompaniesRepository().findAll(p1));
-
         taxEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getTaxRepository().findAll());
-
-        //first in the previous month
-//        dateFromTimesheet = new LocalDate().minusDays(15).dayOfMonth().withMinimumValue();
-        //last day of the month
-//        dateToTimesheet = new LocalDate().plusDays(15).dayOfMonth().withMaximumValue();
-
-//        reportTemplatesEntity = invoiceDAO.getReportTemplatesRepository().findOne(QReportTemplatesEntity.reportTemplatesEntity.templateName.eq(DEFAULT_INVOICE));
-
-        selectReports();
+        refreshReports();
+        refreshContracts();
     }
 
-    private void selectReports() {
-        Predicate predicate = null;
+    private void refreshReports() {
+        Predicate predicateReports = null;
 
         if (selectedInvoiceEntity != null) {
-            predicate = QReportsEntity.reportsEntity.invoiceByInvoiceId.invoiceId.eq(selectedInvoiceEntity.getInvoiceId());
+            predicateReports = QReportsEntity.reportsEntity.invoiceByInvoiceId.invoiceId.eq(selectedInvoiceEntity.getInvoiceId());
         }
 
-        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(predicate, new Sort(Sort.Direction.DESC, "dateCreated")));
+        reportsEntityCollection = Lists.newArrayList(invoiceDAO.getReportsRepository().findAll(predicateReports, new Sort(Sort.Direction.DESC, "dateCreated")));
+    }
+
+    private void refreshContracts() {
+        Predicate predicateContracts = null;
+        contractsEntityCollectionForSelection = null;
+        Date today = new Date();
+        if (selectedInvoiceEntity != null && selectedInvoiceEntity.getCompanyTo() != null) {
+            predicateContracts = QContractsEntity.contractsEntity.contractSignedWith.eq(selectedInvoiceEntity.getCompanyTo())
+                    .and(QContractsEntity.contractsEntity.validFrom.before(today))
+                    .and(QContractsEntity.contractsEntity.validTo.after(today));
+
+            contractsEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getContractsRepository().findAll(predicateContracts));
+        }
     }
 
     private void refresh() {
@@ -151,6 +162,7 @@ public class InvoiceBean implements Serializable {
         selectedInvoiceEntity.setInvoiceItemsByInvoiceId(new ArrayList<>()); //for value calculation
 
         selectedInvoiceItemsEntity = null;
+        contractsEntityCollectionForSelection = null;
     }
 
     public void addNewInvoiceItemsListener(ActionEvent event) {
@@ -177,18 +189,34 @@ public class InvoiceBean implements Serializable {
                 .ifPresent(timeSheetEntity -> dateToTimesheet = timeSheetEntity.getItemDate().compareTo(dateToTimesheet.toDate()) < 0 ? dateToTimesheet : new LocalDate(timeSheetEntity.getItemDate()));
 
         //1-mon ... 7-sun
-        if (dateFromTimesheet.getDayOfWeek() - CustomUtils.WEEK_START < 0) {
-            dateFromTimesheet = dateFromTimesheet.minusWeeks(1).withDayOfWeek(CustomUtils.WEEK_START);
+        final Integer weekStart = selectedInvoiceEntity.getCompaniesByCompanyTo().getWeekStart();
+        final Integer weekEnd = selectedInvoiceEntity.getCompaniesByCompanyTo().calculateWeekEnd();
+
+        if (dateFromTimesheet.getDayOfWeek() - weekStart < 0) {
+            dateFromTimesheet = dateFromTimesheet.minusWeeks(1).withDayOfWeek(weekStart);
         } else {
-            dateFromTimesheet = dateFromTimesheet.withDayOfWeek(CustomUtils.WEEK_START);
+            dateFromTimesheet = dateFromTimesheet.withDayOfWeek(weekStart);
         }
 
-        if (dateToTimesheet.getDayOfWeek() - CustomUtils.WEEK_END < 0) {
-            dateToTimesheet = dateToTimesheet.withDayOfWeek(CustomUtils.WEEK_END);
+        if (dateToTimesheet.getDayOfWeek() - weekEnd <= 0) {
+            dateToTimesheet = dateToTimesheet.withDayOfWeek(weekEnd);
         } else {
-            dateFromTimesheet = dateFromTimesheet.plusWeeks(1).withDayOfWeek(CustomUtils.WEEK_END);
+            dateToTimesheet = dateToTimesheet.plusWeeks(1).withDayOfWeek(weekEnd);
         }
 
+    }
+
+    /**
+     * This is used for the time sheet dialog to display year range in last selection
+     *
+     * @return
+     */
+    public String calculateYearString() {
+        if (dateToTimesheet.getYear() == dateFromTimesheet.getYear()) {
+            return String.valueOf(dateFromTimesheet.getYear());
+        } else {
+            return String.valueOf(dateFromTimesheet.getYear()) + "/" + String.valueOf(dateToTimesheet.getYear());
+        }
     }
 
     public void addNewAttachmentListener(ActionEvent event) {
@@ -197,7 +225,8 @@ public class InvoiceBean implements Serializable {
 
     public void ajaxChangeRowInvoiceListener() {
         selectedInvoiceItemsEntity = null;
-        selectReports();
+        refreshReports();
+        refreshContracts();
     }
 
     public void ajaxChangeRowInvoiceItemListener() {
@@ -322,7 +351,7 @@ public class InvoiceBean implements Serializable {
         logger.info("Deleting reportsEntity [{}]", reportsEntity.toString());
         invoiceDAO.getReportsRepository().delete(reportsEntity.getReportId());
         refresh();
-        selectReports();
+        refreshReports();
     }
 
     public void download(AttachmentEntity attachmentEntity) throws IOException {
@@ -333,27 +362,66 @@ public class InvoiceBean implements Serializable {
         Faces.sendFile(reportsEntity.getContent(), reportsEntity.getReportName(), true);
     }
 
-    public void updateSelectionFromTo() {
-        if (selectedInvoiceEntity != null
-                && selectedInvoiceEntity.getCompanyContactFrom() != null
-                && selectedInvoiceEntity.getCompanyTo() != null
-                ) {
-            if (selectedInvoiceEntity.getCompanyContactByCompanyContactFrom() == null || selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().getCompanyContactId() != selectedInvoiceEntity.getCompanyContactFrom()) {
+    public void updateSelectionFrom() {
+        if (FacesContext.getCurrentInstance().getCurrentPhaseId() == PhaseId.INVOKE_APPLICATION) {
+            if (selectedInvoiceEntity != null
+                    && selectedInvoiceEntity.getCompanyContactFrom() != null) {
                 selectedInvoiceEntity.setCompanyContactByCompanyContactFrom(invoiceDAO.getCompanyContactRepository().findOne(selectedInvoiceEntity.getCompanyContactFrom()));
-                selectedInvoiceEntity.setCompaniesByCompanyTo(invoiceDAO.getCompaniesRepository().findOne(selectedInvoiceEntity.getCompanyTo()));
-                final ContractsEntity validContract = selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().findValidContract(selectedInvoiceEntity.getCompaniesByCompanyTo());
-                if (validContract != null) {
-                    selectedInvoiceEntity.setRate(validContract.getRate());
-                    selectedInvoiceEntity.setRateUnit(validContract.getRateUnit());
-                    selectedInvoiceEntity.setCcyId(validContract.getCcyId());
-                    selectedInvoiceEntity.setCurrencyByCcyId(validContract.getCurrencyByCcyId());
-
-                    if (StringUtils.isBlank(selectedInvoiceEntity.getTitle())) {
-                        selectedInvoiceEntity.setTitle(selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().getCompaniesByCompanyId().getShortName() +
-                                "-" + LocalDate.now().getYear() + "-" + invoiceDAO.getInvoiceCounterSeq());
-                    }
-                }
             }
+        }
+    }
+
+    public void updateSelectionTo() {
+        if (FacesContext.getCurrentInstance().getCurrentPhaseId() == PhaseId.INVOKE_APPLICATION) {
+            refreshContracts();
+            if (selectedInvoiceEntity != null
+                    && selectedInvoiceEntity.getCompanyContactFrom() != null
+                    && selectedInvoiceEntity.getCompanyTo() != null
+                    ) {
+                selectedInvoiceEntity.setCompaniesByCompanyTo(invoiceDAO.getCompaniesRepository().findOne(selectedInvoiceEntity.getCompanyTo()));
+                selectedInvoiceEntity.setContractsByCompanyContractTo(null);
+                selectedInvoiceEntity.setCompanyContractTo(null);
+                recalculateBasedOnSelection();
+            }
+        }
+    }
+
+    public void updateSelectionToContract() {
+        if (FacesContext.getCurrentInstance().getCurrentPhaseId() == PhaseId.INVOKE_APPLICATION) {
+            if (selectedInvoiceEntity != null
+                    && selectedInvoiceEntity.getCompanyContactFrom() != null
+                    && selectedInvoiceEntity.getCompanyTo() != null
+                    && selectedInvoiceEntity.getCompanyContractTo() != null
+                    ) {
+                selectedInvoiceEntity.setContractsByCompanyContractTo(invoiceDAO.getContractsRepository().findOne(selectedInvoiceEntity.getCompanyContractTo()));
+                recalculateBasedOnSelection();
+            }
+        }
+    }
+
+    private void recalculateBasedOnSelection() {
+        boolean reset = false;
+
+        if (selectedInvoiceEntity.getContractsByCompanyContractTo() != null) {
+            selectedInvoiceEntity.setRate(selectedInvoiceEntity.getContractsByCompanyContractTo().getRate());
+            selectedInvoiceEntity.setRateUnit(selectedInvoiceEntity.getContractsByCompanyContractTo().getRateUnit());
+            selectedInvoiceEntity.setCcyId(selectedInvoiceEntity.getContractsByCompanyContractTo().getCcyId());
+            selectedInvoiceEntity.setCurrencyByCcyId(selectedInvoiceEntity.getContractsByCompanyContractTo().getCurrencyByCcyId());
+
+            if (StringUtils.isBlank(selectedInvoiceEntity.getTitle())) {
+                selectedInvoiceEntity.setTitle(selectedInvoiceEntity.getCompanyContactByCompanyContactFrom().getCompaniesByCompanyId().getShortName() +
+                        "-" + LocalDate.now().getYear() + "-" + invoiceDAO.getInvoiceCounterSeq());
+            }
+        } else {
+            reset = true;
+        }
+
+        if (reset) {
+            selectedInvoiceEntity.setRate(new BigDecimal(0));
+            selectedInvoiceEntity.setRateUnit(null);
+            selectedInvoiceEntity.setCcyId(null);
+            selectedInvoiceEntity.setCurrencyByCcyId(null);
+            selectedInvoiceEntity.setTitle("");
         }
     }
 
@@ -420,32 +488,28 @@ public class InvoiceBean implements Serializable {
     }
 
     public String onFlowProcessTimesheet(FlowEvent event) {
-
+        //this is to reset position and adjust based on the size of data
         RequestContext.getCurrentInstance().execute("PF('invoice-items-timesheet-form-dialog').initPosition();");
 
         if ("select-date".equalsIgnoreCase(event.getOldStep()) && selectedInvoiceItemsEntity != null) {
-//            LocalDate startDate = new LocalDate(dateFromTimesheet).withDayOfWeek(CustomUtils.WEEK_START);
-//            LocalDate endDate = new LocalDate(dateToTimesheet).withDayOfWeek(CustomUtils.WEEK_END);
-
             //need to reset in case we changed something
             selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
             final List<TimeSheetEntity> timeSheetsByInvoiceItemId = (List<TimeSheetEntity>) selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId();
 
             int days = Days.daysBetween(dateFromTimesheet, dateToTimesheet).getDays() + 1;
-            for (int i = 0; i < days; i++) {
 
-                LocalDate d = dateFromTimesheet.withFieldAdded(DurationFieldType.days(), i);
+            for (int i = 0; i < days; i++) {
+                LocalDate potentialLocalDate = dateFromTimesheet.withFieldAdded(DurationFieldType.days(), i);
                 TimeSheetEntity e = new TimeSheetEntity();
                 e.setInvoiceItemId(selectedInvoiceItemsEntity.getInvoiceItemId());
                 e.setInvoiceItemsByInvoiceItemId(selectedInvoiceItemsEntity);
-                e.setItemDate(d.toDate());
+                e.setItemDate(potentialLocalDate.toDate());
 
-                final boolean anyMatch = timeSheetsByInvoiceItemId.stream().anyMatch(p -> p.getItemDate().equals(d.toDate()));
-                if (!anyMatch) {
-                    //TODO we cannot just add dates, we have to insert values
+                if (timeSheetsByInvoiceItemId.stream().noneMatch(p -> p.getItemDate().equals(potentialLocalDate.toDate()))) {
                     timeSheetsByInvoiceItemId.add(e);
                 }
             }
+            //need to sort here because we added some values - they will be displayed in order
             timeSheetsByInvoiceItemId.sort((l1, l2) -> l1.getItemDate().compareTo(l2.getItemDate()));
 
         }
@@ -582,5 +646,13 @@ public class InvoiceBean implements Serializable {
         selectedAttachmentEntity = attachmentEntity;
         RequestContext.getCurrentInstance().update("main-form:content-image-2-dialog");
         RequestContext.getCurrentInstance().execute("PF('content-image-2-dialog').show()");
+    }
+
+    public Collection<ContractsEntity> getContractsEntityCollectionForSelection() {
+        return contractsEntityCollectionForSelection;
+    }
+
+    public void setContractsEntityCollectionForSelection(Collection<ContractsEntity> contractsEntityCollectionForSelection) {
+        this.contractsEntityCollectionForSelection = contractsEntityCollectionForSelection;
     }
 }

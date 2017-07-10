@@ -52,7 +52,7 @@ public class InvoiceEntityLazyModel extends LazyDataModel<InvoiceEntity> {
 
         invoiceEntityList = new ArrayList<>();
 
-        PageRequest pageRequest = new PageRequest(first * pageSize, pageSize);
+        PageRequest pageRequest = null;
 
         Sort.Direction direction = null;
         if (sortOrder == SortOrder.ASCENDING) {
@@ -60,15 +60,21 @@ public class InvoiceEntityLazyModel extends LazyDataModel<InvoiceEntity> {
         } else if (sortOrder == SortOrder.DESCENDING) {
             direction = Sort.Direction.DESC;
         }
-        try {
-            if (direction != null && sortField != null) {
-                pageRequest = new PageRequest(
-                        first * pageSize,
-                        pageSize,
-                        new Sort(new Sort.Order(direction, sortField)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        Sort sort = null;
+
+        if (direction != null && sortField != null) {
+            sort = new Sort(new Sort.Order(direction, sortField));
+        }
+
+
+        if (sort != null) {
+            pageRequest = new PageRequest(
+                    first * pageSize,
+                    pageSize,
+                    sort);
+        } else {
+            pageRequest = new PageRequest(first * pageSize, pageSize);
         }
 
         BooleanExpression predicate = null;

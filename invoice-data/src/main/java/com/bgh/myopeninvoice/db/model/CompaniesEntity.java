@@ -43,6 +43,7 @@ public class CompaniesEntity implements Serializable {
     private Collection<ContractsEntity> contractsByCompanyId;
     private Collection<ContractsEntity> contractsByCompanyId_0;
     private Collection<InvoiceEntity> invoicesByCompanyId;
+    private Integer weekStart;
 
     @Id
     @GeneratedValue
@@ -135,6 +136,16 @@ public class CompaniesEntity implements Serializable {
         this.content = content;
     }
 
+    @Basic
+    @Column(name = "WEEK_START", nullable = false)
+    public Integer getWeekStart() {
+        return weekStart;
+    }
+
+    public void setWeekStart(Integer weekStart) {
+        this.weekStart = weekStart;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -152,6 +163,8 @@ public class CompaniesEntity implements Serializable {
         if (businessNumber != null ? !businessNumber.equals(that.businessNumber) : that.businessNumber != null)
             return false;
         if (!Arrays.equals(content, that.content)) return false;
+        if (weekStart != null ? !weekStart.equals(that.weekStart) : that.weekStart != null) return false;
+
 
         return true;
     }
@@ -167,14 +180,16 @@ public class CompaniesEntity implements Serializable {
         result = 31 * result + (ownedByMe != null ? ownedByMe.hashCode() : 0);
         result = 31 * result + (businessNumber != null ? businessNumber.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(content);
+        result = 31 * result + (weekStart != null ? weekStart.hashCode() : 0);
+
         return result;
     }
 
     @Transient
-    public String getContactsToList(){
+    public String getContactsToList() {
         StringBuilder sb = new StringBuilder();
         for (CompanyContactEntity companyContactEntity : companyContactsByCompanyId) {
-            if(sb.length()>0) sb.append(",");
+            if (sb.length() > 0) sb.append(",");
             sb.append(companyContactEntity.getContactsByContactId().getContactId());
         }
         return sb.toString();
@@ -219,6 +234,10 @@ public class CompaniesEntity implements Serializable {
         this.invoicesByCompanyId = invoicesByCompanyId;
     }
 
+    public Integer calculateWeekEnd() {
+        return weekStart == 1 ? 7 : weekStart - 1;
+    }
+
     @Override
     public String toString() {
         return "CompaniesEntity{" +
@@ -230,6 +249,7 @@ public class CompaniesEntity implements Serializable {
                 ", phone1='" + phone1 + '\'' +
                 ", ownedByMe=" + ownedByMe +
                 ", businessNumber='" + businessNumber + '\'' +
+                ", weekStart='" + weekStart + '\'' +
                 '}';
     }
 }

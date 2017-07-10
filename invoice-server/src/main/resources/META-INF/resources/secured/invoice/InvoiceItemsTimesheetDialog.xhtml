@@ -80,13 +80,18 @@
                     <h:outputText value="#{invoiceBean.selectedInvoiceItemsEntity.invoiceItemId}"
                                   style="margin-left: 5px; font-weight: bold;"/>
 
+                    <p:outputLabel value="Year:"/>
+                    <h:outputText value="#{invoiceBean.calculateYearString()}"
+                                  style="margin-left: 5px; font-weight: bold;"/>
+
                 </h:panelGrid>
 
                 <p:dataGrid columns="7" value="#{invoiceBean.selectedInvoiceItemsEntity.timeSheetsByInvoiceItemId}"
                             layout="grid" id="time-grid-1"
                             var="time">
-                    <h:panelGrid columns="1" style="width: 100%; text-align: center;">
-                        <h:outputText value="#{time.itemDate}" id="label1">
+                    <h:panelGrid columns="1" style="width: 100%; text-align: center; font-variant: str">
+                        <h:outputText value="#{time.itemDate}" id="label1" style="#{time.itemDate.before(invoiceBean.selectedInvoiceEntity.fromDate)
+                        || time.itemDate.after(invoiceBean.selectedInvoiceEntity.toDate) ? 'text-decoration: line-through': ''}">
                             <f:convertDateTime pattern="E, MMM dd"/>
                         </h:outputText>
                         <p:inputNumber value="#{time.hoursWorked}"

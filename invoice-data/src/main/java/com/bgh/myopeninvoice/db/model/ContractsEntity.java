@@ -23,6 +23,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -48,6 +49,7 @@ public class ContractsEntity implements Serializable {
     private String contractNumber;
     private String purchaseOrder;
     private byte[] content;
+    private Collection<InvoiceEntity> invoicesByContractId;
 
     @GeneratedValue
     @Id
@@ -185,7 +187,7 @@ public class ContractsEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof ContractsEntity)) return false;
 
         ContractsEntity that = (ContractsEntity) o;
 
@@ -202,11 +204,20 @@ public class ContractsEntity implements Serializable {
         if (validFrom != null ? !validFrom.equals(that.validFrom) : that.validFrom != null) return false;
         if (validTo != null ? !validTo.equals(that.validTo) : that.validTo != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (contractNumber != null ? !contractNumber.equals(that.contractNumber) : that.contractNumber != null) return false;
-        if (purchaseOrder != null ? !purchaseOrder.equals(that.purchaseOrder) : that.purchaseOrder != null) return false;
+        if (companyContactByContractIsFor != null ? !companyContactByContractIsFor.equals(that.companyContactByContractIsFor) : that.companyContactByContractIsFor != null)
+            return false;
+        if (companiesByContractSignedWith != null ? !companiesByContractSignedWith.equals(that.companiesByContractSignedWith) : that.companiesByContractSignedWith != null)
+            return false;
+        if (companiesByContractSignedWithSubcontract != null ? !companiesByContractSignedWithSubcontract.equals(that.companiesByContractSignedWithSubcontract) : that.companiesByContractSignedWithSubcontract != null)
+            return false;
+        if (currencyByCcyId != null ? !currencyByCcyId.equals(that.currencyByCcyId) : that.currencyByCcyId != null)
+            return false;
+        if (contractNumber != null ? !contractNumber.equals(that.contractNumber) : that.contractNumber != null)
+            return false;
+        if (purchaseOrder != null ? !purchaseOrder.equals(that.purchaseOrder) : that.purchaseOrder != null)
+            return false;
         if (!Arrays.equals(content, that.content)) return false;
-
-        return true;
+        return invoicesByContractId != null ? invoicesByContractId.equals(that.invoicesByContractId) : that.invoicesByContractId == null;
     }
 
     @Override
@@ -221,9 +232,14 @@ public class ContractsEntity implements Serializable {
         result = 31 * result + (validFrom != null ? validFrom.hashCode() : 0);
         result = 31 * result + (validTo != null ? validTo.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (companyContactByContractIsFor != null ? companyContactByContractIsFor.hashCode() : 0);
+        result = 31 * result + (companiesByContractSignedWith != null ? companiesByContractSignedWith.hashCode() : 0);
+        result = 31 * result + (companiesByContractSignedWithSubcontract != null ? companiesByContractSignedWithSubcontract.hashCode() : 0);
+        result = 31 * result + (currencyByCcyId != null ? currencyByCcyId.hashCode() : 0);
         result = 31 * result + (contractNumber != null ? contractNumber.hashCode() : 0);
         result = 31 * result + (purchaseOrder != null ? purchaseOrder.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(content);
+        result = 31 * result + (invoicesByContractId != null ? invoicesByContractId.hashCode() : 0);
         return result;
     }
 
@@ -273,17 +289,28 @@ public class ContractsEntity implements Serializable {
         return getValidFrom() != null && getValidTo() != null && now.compareTo(getValidFrom()) >= 0 && now.compareTo(getValidTo()) <= 0;
     }
 
+    @OneToMany(mappedBy = "contractsByCompanyContractTo")
+    public Collection<InvoiceEntity> getInvoicesByContractId() {
+        return invoicesByContractId;
+    }
+
+    public void setInvoicesByContractId(Collection<InvoiceEntity> invoicesByContractId) {
+        this.invoicesByContractId = invoicesByContractId;
+    }
+
     @Override
     public String toString() {
         return "ContractsEntity{" +
                 "contractId=" + contractId +
+                ", contractIsFor=" + contractIsFor +
+                ", contractSignedWith=" + contractSignedWith +
+                ", contractSignedWithSubcontract=" + contractSignedWithSubcontract +
                 ", rate=" + rate +
                 ", rateUnit='" + rateUnit + '\'' +
                 ", ccyId=" + ccyId +
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
                 ", description='" + description + '\'' +
-                ", currencyByCcyId=" + currencyByCcyId +
                 ", contractNumber='" + contractNumber + '\'' +
                 ", purchaseOrder='" + purchaseOrder + '\'' +
                 '}';

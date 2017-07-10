@@ -136,6 +136,10 @@
                     <h:outputText value="#{su:abbreviate(company.addressLine1,40)}"/>
                 </p:column>
 
+                <p:column headerText="Week Start" sortBy="#{company.weekStart}" style="text-align:start;" width="100">
+                    <h:outputText value="#{company.weekStart}"/>
+                </p:column>
+
                 <p:column headerText="Logo" style="text-align:center;" width="70">
                     <h:graphicImage id="logoIcon" value="/images/image.png"
                                     rendered="#{not empty  company.content}"/>
@@ -338,6 +342,17 @@
                                                style="margin-left: 5px;"
                                                offLabel="No" onLabel="Yes"
                                                disabled="#{companiesBean.selectedCompaniesEntity.companyId ne null}"/>
+
+                        <p:outputLabel value="Week Start: "/>
+                        <p:selectOneMenu style="margin-left: 5px;" value="#{companiesBean.selectedCompaniesEntity.weekStart}">
+                            <f:selectItem itemLabel="Monday" itemValue="1"/>
+                            <f:selectItem itemLabel="Tuesday" itemValue="2"/>
+                            <f:selectItem itemLabel="Wednesday" itemValue="3"/>
+                            <f:selectItem itemLabel="Thursday" itemValue="4"/>
+                            <f:selectItem itemLabel="Friday" itemValue="5"/>
+                            <f:selectItem itemLabel="Saturday" itemValue="6"/>
+                            <f:selectItem itemLabel="Sunday" itemValue="7"/>
+                        </p:selectOneMenu>
 
                         <p:outputLabel value="Logo: "/>
                         <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"

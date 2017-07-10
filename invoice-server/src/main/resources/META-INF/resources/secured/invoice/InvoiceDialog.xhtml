@@ -54,34 +54,45 @@
                              required="true" style="margin-left: 5px;"
                              requiredMessage="From company is required">
                 <f:selectItem itemLabel="---Select Company Owned By You---" itemValue=""/>
-                <f:selectItems var="selection1"
+                <f:selectItems var="selection_from_c"
                                value="#{invoiceBean.companyContactEntityCollectionForSelection}"
-                               itemLabel="#{selection1.companiesByCompanyId.companyName} - BN:#{selection1.companiesByCompanyId.businessNumber}"
-                               itemValue="#{selection1.companyContactId}"/>
-                <p:ajax event="change" update="@form:updates,@form:title,@form:submit1"
-                        listener="#{invoiceBean.updateSelectionFromTo}" partialSubmit="false"/>
+                               itemLabel="#{selection_from_c.companiesByCompanyId.companyName} - BN:#{selection_from_c.companiesByCompanyId.businessNumber}"
+                               itemValue="#{selection_from_c.companyContactId}"/>
+                <p:ajax event="change" update="@form:updates,@form:title,@form:submitInvoice"
+                        listener="#{invoiceBean.updateSelectionFrom}" partialSubmit="false"/>
             </p:selectOneMenu>
 
             <p:outputLabel value="To:" styleClass="required"/>
             <p:selectOneMenu id="to" value="#{invoiceBean.selectedInvoiceEntity.companyTo}"
-                             required="true" style="margin-left: 5px;" requiredMessage="To company is required"
-                             valueChangeListener="#{invoiceBean.updateSelectionFromTo}">
-                <f:selectItem itemLabel="---Select Company NOT Owned By You---" itemValue=""/>
-                <f:selectItems var="selection2"
+                             required="true" style="margin-left: 5px;" requiredMessage="To company is required">
+                <f:selectItem itemLabel="---Select Company To Bill---" itemValue=""/>
+                <f:selectItems var="selection_to_c"
                                value="#{invoiceBean.companiesEntityCollectionForSelection}"
-                               itemLabel="#{selection2.companyName}, contracts (#{fn:length(selection2.contractsByCompanyId)}) - BN:#{selection2.businessNumber}"
-                               itemValue="#{selection2.companyId}"/>
-                <p:ajax event="change" update="@form:updates,@form:title,@form:submit1"
-                        listener="#{invoiceBean.updateSelectionFromTo}" partialSubmit="false"/>
+                               itemLabel="#{selection_to_c.companyName}, contracts (#{fn:length(selection_to_c.contractsByCompanyId)}) - BN:#{selection_to_c.businessNumber}"
+                               itemValue="#{selection_to_c.companyId}"/>
+                <p:ajax event="change" update="@form:updates,@form:title,@form:submitInvoice,@form:contract"
+                        listener="#{invoiceBean.updateSelectionTo}" partialSubmit="false"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="Contract:" styleClass="required"/>
+            <p:selectOneMenu id="contract" value="#{invoiceBean.selectedInvoiceEntity.companyContractTo}"
+                             required="true" style="margin-left: 5px;" requiredMessage="Contract is required">
+                <f:selectItem itemLabel="---Select Contract---" itemValue=""/>
+                <f:selectItems var="selection_contract"
+                               value="#{invoiceBean.contractsEntityCollectionForSelection}"
+                               itemLabel="ID: #{selection_contract.contractId}, Number: #{selection_contract.contractNumber}, From: #{selection_contract.validFrom}, To: #{selection_contract.validTo}"
+                               itemValue="#{selection_contract.contractId}"/>
+                <p:ajax event="change" update="@form:updates,@form:title,@form:submitInvoice"
+                        listener="#{invoiceBean.updateSelectionToContract}" partialSubmit="false"/>
             </p:selectOneMenu>
 
             <p:outputLabel value="Tax %:" styleClass="required"/>
             <p:selectOneMenu id="tax" value="#{invoiceBean.selectedInvoiceEntity.taxPercent}"
                              required="true" style="margin-left: 5px;" requiredMessage="Tax is required">
-                <f:selectItems var="selection3"
+                <f:selectItems var="selection_tax"
                                value="#{invoiceBean.taxEntityCollectionForSelection}"
-                               itemLabel="#{fmt:formatNumber(selection3.percent * 100.00, '0.00')} - #{selection3.identifier}"
-                               itemValue="#{selection3.percent}"/>
+                               itemLabel="#{fmt:formatNumber(selection_tax.percent * 100.00, '0.00')} - #{selection_tax.identifier}"
+                               itemValue="#{selection_tax.percent}"/>
             </p:selectOneMenu>
 
             <p:outputLabel value="From Date:" styleClass="required"/>
@@ -154,10 +165,15 @@
 
         <h:panelGroup layout="block">
             <p:separator style="margin: 10px 0 10px 0"/>
-            <p:commandButton value="Submit" type="submit" id="submit1"
+            <p:commandButton value="Submit" type="submit" id="submitInvoice"
                              actionListener="#{invoiceBean.addOrEditInvoiceListener}"
                              update="invoice-form,main-form"
                              disabled="#{empty invoiceBean.selectedInvoiceEntity.rateUnit}"/>
+
+            <p:commandButton value="Refresh Rate" id="refreshRate"
+                             actionListener="#{invoiceBean.updateSelectionToContract}"
+                             update="invoice-form"
+                             disabled="#{empty invoiceBean.selectedInvoiceEntity.contractsByCompanyContractTo}"/>
         </h:panelGroup>
     </h:form>
 </p:dialog>
