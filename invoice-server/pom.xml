@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.bgh.myopeninvoice</groupId>
         <artifactId>my-open-invoice-main</artifactId>
-        <version>0.1.1-SNAPSHOT</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -81,17 +81,22 @@
             <artifactId>imgscalr-lib</artifactId>
             <version>4.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>1.12</version>
+        </dependency>
 
         <!-- My deps -->
         <dependency>
             <groupId>com.bgh.myopeninvoice</groupId>
             <artifactId>invoice-data</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.bgh.myopeninvoice</groupId>
             <artifactId>invoice-reporting</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

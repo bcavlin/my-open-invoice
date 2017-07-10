@@ -90,6 +90,12 @@
             <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}"
                       width="110"/>
             <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;" width="70"/>
+            <p:column headerText="From Date"
+                      sortBy="#{invoice.fromDate}"
+                      style="text-align:center;" width="120"/>
+            <p:column headerText="To Date"
+                      sortBy="#{invoice.toDate}"
+                      style="text-align:center;" width="120"/>
             <p:column headerText="From"
                       sortBy="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"
                       style="text-align:start;" width="250"/>
@@ -102,11 +108,12 @@
             <p:column headerText="Rate" sortBy="#{invoice.rate}" style="text-align:right;" width="70"/>
             <p:column headerText="Unit" sortBy="#{invoice.rateUnit}" style="text-align:center;"
                       width="70"/>
-
             <p:column headerText="Tax" sortBy="#{invoice.taxPercent}" style="text-align:right;"
                       width="70"/>
             <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
                       width="120"/>
+            <p:column headerText="Contr." sortBy="#{invoice.companyContractTo}" style="text-align:left;"
+                      width="70"/>
             <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;" width="500"/>
             <p:column/>
         </p:row>
@@ -123,13 +130,17 @@
             <p:column/>
             <p:column/>
             <p:column/>
+            <p:column/>
+            <p:column/>
             <p:column filterBy="#{invoice.createdDate}">
                 <f:facet name="filter">
-                    <p:inputText placeholder="Search (500ms delay)" style="width: 98%; text-align:center;" maxlength="20">
+                    <p:inputText placeholder="Search (500ms delay)" style="width: 98%; text-align:center;"
+                                 maxlength="20">
                         <p:ajax event="keyup" oncomplete="PF('invoice-table').filter()" delay="500"/>
                     </p:inputText>
                 </f:facet>
             </p:column>
+            <p:column/>
             <p:column/>
             <p:column/>
             <p:column/>
@@ -165,6 +176,21 @@
               width="70">
         <h:outputText value="#{invoice.currencyByCcyId.name}"/>
     </p:column>
+
+    <p:column headerText="From Date"
+              sortBy="#{invoice.fromDate}"
+              style="text-align:center;" width="120">
+        <h:outputText value="#{invoice.fromDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:outputText>
+    </p:column>
+    <p:column headerText="To Date" sortBy="#{invoice.toDate}"
+              style="text-align:center;" width="120">
+        <h:outputText value="#{invoice.toDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:outputText>
+    </p:column>
+
     <p:column headerText="From"
               sortBy="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"
               style="text-align:start;" width="250">
@@ -199,10 +225,13 @@
             <f:convertNumber pattern="#,##0.00 %"/>
         </h:outputText>
     </p:column>
-
     <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
               width="120">
         <h:outputText value="#{invoice.paidDate}"/>
+    </p:column>
+    <p:column headerText="Contr." sortBy="#{invoice.companyContractTo}" style="text-align:left;"
+              width="70">
+        <h:outputText value="#{invoice.companyContractTo}"/>
     </p:column>
     <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;" width="500">
         <h:outputText value="#{su:abbreviate(invoice.note,80)}"/>

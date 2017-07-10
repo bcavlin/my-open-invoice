@@ -50,8 +50,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private static Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
-    @Autowired
     private UsersRepository usersRepository;
+
+    private String passwordHashForEncryption;
+
+    @Autowired
+    public CustomUserDetailsService(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -106,6 +112,14 @@ public class CustomUserDetailsService implements UserDetailsService {
             usersRepository.save(byUsername.get());
         }
 
+    }
+
+    public String getPasswordHashForEncryption() {
+        return passwordHashForEncryption;
+    }
+
+    public void setPasswordHashForEncryption(String passwordHashForEncryption) {
+        this.passwordHashForEncryption = passwordHashForEncryption;
     }
 }
 

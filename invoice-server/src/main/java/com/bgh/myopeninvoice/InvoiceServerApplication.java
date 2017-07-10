@@ -17,6 +17,7 @@
 package com.bgh.myopeninvoice;
 
 import com.bgh.myopeninvoice.service.CustomUserDetailsService;
+import com.bgh.myopeninvoice.utils.MyDaoAuthenticationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -97,12 +97,16 @@ public class InvoiceServerApplication {
 
         private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
-        @Autowired
         private CustomUserDetailsService customUserDetailsService;
 
+        @Autowired
+        public WebSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+            this.customUserDetailsService = customUserDetailsService;
+        }
+
         @Bean
-        public DaoAuthenticationProvider authenticationProvider() {
-            DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        public MyDaoAuthenticationProvider authenticationProvider() {
+            MyDaoAuthenticationProvider authenticationProvider = new MyDaoAuthenticationProvider();
             authenticationProvider.setUserDetailsService(customUserDetailsService);
             authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
             return authenticationProvider;
@@ -165,8 +169,11 @@ public class InvoiceServerApplication {
                     HttpSession session = httpServletRequest.getSession(false);
                     if (session != null) {
                         session.removeAttribute("SPRING_SECURITY_LAST_EXCEPTION");
+                        session.setAttribute("EC_HASH", customUserDetailsService.getPasswordHashForEncryption());
                     }
+
                     customUserDetailsService.updateLastLoginDate((User) authentication.getPrincipal());
+
                     httpServletResponse.sendRedirect("/secured/Main.xhtml");
                 }
             };

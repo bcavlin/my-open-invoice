@@ -12,10 +12,11 @@
 # Description:       Start the Tomcat invoice-server-0.1.1-SNAPSHOT servlet engine.
 ### END INIT INFO
 
-SERVICE_NAME=invoice-server-0.1.1-SNAPSHOT
-PATH_TO_JAR=./invoice-server-0.1.1-SNAPSHOT.jar
-OPTS="-Xmx256m"
-PID_PATH_NAME=/tmp/invoice-server-0.1.1-SNAPSHOT-pid
+PROJECT_VERSION=0.1.2-SNAPSHOT
+SERVICE_NAME=invoice-server-$PROJECT_VERSION
+PATH_TO_JAR=./invoice-server-$PROJECT_VERSION.jar
+OPTS="-Xmx512m"
+PID_PATH_NAME=/tmp/invoice-server-$PROJECT_VERSION-pid
 case $1 in
     start)
         echo "Starting $SERVICE_NAME ..."

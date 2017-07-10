@@ -51,6 +51,9 @@ public class InvoiceEntity implements Serializable {
     private CompanyContactEntity companyContactByCompanyContactFrom;
     private CurrencyEntity currencyByCcyId;
     private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
+    private ContractsEntity contractsByCompanyContractTo;
+    private Integer companyContractTo;
+
 
     @Id
     @GeneratedValue
@@ -193,10 +196,20 @@ public class InvoiceEntity implements Serializable {
         this.ccyId = ccyId;
     }
 
+    @Basic
+    @Column(name = "COMPANY_CONTRACT_TO", nullable = true)
+    public Integer getCompanyContractTo() {
+        return companyContractTo;
+    }
+
+    public void setCompanyContractTo(Integer companyContractTo) {
+        this.companyContractTo = companyContractTo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof InvoiceEntity)) return false;
 
         InvoiceEntity that = (InvoiceEntity) o;
 
@@ -215,8 +228,22 @@ public class InvoiceEntity implements Serializable {
         if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
         if (rateUnit != null ? !rateUnit.equals(that.rateUnit) : that.rateUnit != null) return false;
         if (ccyId != null ? !ccyId.equals(that.ccyId) : that.ccyId != null) return false;
-
-        return true;
+        if (attachmentsByInvoiceId != null ? !attachmentsByInvoiceId.equals(that.attachmentsByInvoiceId) : that.attachmentsByInvoiceId != null)
+            return false;
+        if (companiesByCompanyTo != null ? !companiesByCompanyTo.equals(that.companiesByCompanyTo) : that.companiesByCompanyTo != null)
+            return false;
+        if (companyContactByCompanyContactFrom != null ? !companyContactByCompanyContactFrom.equals(that.companyContactByCompanyContactFrom) : that.companyContactByCompanyContactFrom != null)
+            return false;
+        if (currencyByCcyId != null ? !currencyByCcyId.equals(that.currencyByCcyId) : that.currencyByCcyId != null)
+            return false;
+        if (invoiceItemsByInvoiceId != null ? !invoiceItemsByInvoiceId.equals(that.invoiceItemsByInvoiceId) : that.invoiceItemsByInvoiceId != null)
+            return false;
+        if (contractsByCompanyContractTo != null ? !contractsByCompanyContractTo.equals(that.contractsByCompanyContractTo) : that.contractsByCompanyContractTo != null)
+            return false;
+        if (companyContractTo != null ? !companyContractTo.equals(that.companyContractTo) : that.companyContractTo != null)
+            return false;
+        if (totalValue != null ? !totalValue.equals(that.totalValue) : that.totalValue != null) return false;
+        return totalValueWithTax != null ? totalValueWithTax.equals(that.totalValueWithTax) : that.totalValueWithTax == null;
     }
 
     @Override
@@ -235,6 +262,15 @@ public class InvoiceEntity implements Serializable {
         result = 31 * result + (rate != null ? rate.hashCode() : 0);
         result = 31 * result + (rateUnit != null ? rateUnit.hashCode() : 0);
         result = 31 * result + (ccyId != null ? ccyId.hashCode() : 0);
+        result = 31 * result + (attachmentsByInvoiceId != null ? attachmentsByInvoiceId.hashCode() : 0);
+        result = 31 * result + (companiesByCompanyTo != null ? companiesByCompanyTo.hashCode() : 0);
+        result = 31 * result + (companyContactByCompanyContactFrom != null ? companyContactByCompanyContactFrom.hashCode() : 0);
+        result = 31 * result + (currencyByCcyId != null ? currencyByCcyId.hashCode() : 0);
+        result = 31 * result + (invoiceItemsByInvoiceId != null ? invoiceItemsByInvoiceId.hashCode() : 0);
+        result = 31 * result + (contractsByCompanyContractTo != null ? contractsByCompanyContractTo.hashCode() : 0);
+        result = 31 * result + (companyContractTo != null ? companyContractTo.hashCode() : 0);
+        result = 31 * result + (totalValue != null ? totalValue.hashCode() : 0);
+        result = 31 * result + (totalValueWithTax != null ? totalValueWithTax.hashCode() : 0);
         return result;
     }
 
@@ -288,6 +324,16 @@ public class InvoiceEntity implements Serializable {
         this.invoiceItemsByInvoiceId = invoiceItemsByInvoiceId;
     }
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_CONTRACT_TO", referencedColumnName = "CONTRACT_ID", insertable = false, updatable = false)
+    public ContractsEntity getContractsByCompanyContractTo() {
+        return contractsByCompanyContractTo;
+    }
+
+    public void setContractsByCompanyContractTo(ContractsEntity contractsByCompanyContractTo) {
+        this.contractsByCompanyContractTo = contractsByCompanyContractTo;
+    }
 
     private BigDecimal totalValue;
 
@@ -342,6 +388,9 @@ public class InvoiceEntity implements Serializable {
                 ", rate=" + rate +
                 ", rateUnit='" + rateUnit + '\'' +
                 ", ccyId=" + ccyId +
+                ", companyContractTo=" + companyContractTo +
+                ", totalValue=" + totalValue +
+                ", totalValueWithTax=" + totalValueWithTax +
                 '}';
     }
 }
