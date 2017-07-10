@@ -35,7 +35,7 @@ public class RequestFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication != null && authentication.getPrincipal() != null) {
+            if (authentication != null && authentication.getPrincipal() != null && authentication.getPrincipal() instanceof User) {
                 MDC.put("userName", ((User) authentication.getPrincipal()).getUsername());
             }
             filterChain.doFilter(servletRequest, servletResponse);
