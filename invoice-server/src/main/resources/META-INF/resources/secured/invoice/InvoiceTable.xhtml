@@ -212,7 +212,9 @@
         <h:outputText value="#{invoice.dueDate}"/>
     </p:column>
     <p:column headerText="Rate" sortBy="#{invoice.rate}" style="text-align:right;" width="70">
-        <h:outputText value="#{invoice.rate}"/>
+        <h:outputText value="#{invoice.rate}">
+            <f:convertNumber pattern="#,##0.00"/>
+        </h:outputText>
     </p:column>
     <p:column headerText="Unit" sortBy="#{invoice.rateUnit}" style="text-align:center;"
               width="70">
