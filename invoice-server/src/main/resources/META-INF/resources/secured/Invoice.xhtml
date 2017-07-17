@@ -22,7 +22,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:o="http://omnifaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:composition template="templates/ApplicationTemplate.xhtml">
     <ui:define name="center">
@@ -48,6 +49,8 @@
                         <ui:include src="invoice/InvoiceItemsTimesheetTable.xhtml"/>
                     </h:panelGroup>
                 </h:panelGrid>
+
+                <ui:include src="ReportsList.xhtml"/>
 
             </h:form>
         </h:panelGroup>

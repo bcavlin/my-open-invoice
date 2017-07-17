@@ -55,3 +55,7 @@ case $1 in
         fi
     ;;
 esac
+
+if [ -z "$1" ]; then
+    echo "Service usage is ./invoice-service.sh (start|stop|restart)"
+fi
