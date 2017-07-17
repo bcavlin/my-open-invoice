@@ -47,13 +47,13 @@
                         value="Delete Company (#{companiesBean.selectedCompaniesEntity.shortName})"
                         icon="ui-icon-trash"
                         rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
-                        style="margin-right: 15px; color: brown;"
+                        style="margin-right: 15px; background-color: rgba(229,8,5,0.63)"
                         oncomplete="PF('confirmation1').show();"/>
 
                 <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompaniesEntity.shortName})"
                                  icon="my-custom-icon-address-book"
                                  rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
-                                 style="margin-right: 15px;"
+                                 style="margin-right: 15px; background-color: rgba(47,60,229,0.63)"
                                  oncomplete="PF('companies-contacts-form-dialog').show();"
                                  update="main-form,companies-contacts-form"/>
 

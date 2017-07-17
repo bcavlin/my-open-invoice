@@ -41,11 +41,11 @@
             value="Delete Invoice (#{invoiceBean.selectedInvoiceEntity.invoiceId})"
             icon="ui-icon-trash"
             rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
-            style="margin-right: 15px; color: brown;" oncomplete="PF('confirmation1').show();"/>
+            style="margin-right: 15px; background-color: rgba(229,8,5,0.63);" oncomplete="PF('confirmation1').show();"/>
 
     <p:commandButton icon="ui-icon-print" value="Print"
                      rendered="#{!empty invoiceBean.selectedInvoiceEntity and invoiceBean.selectedInvoiceEntity.invoiceId gt 0}"
-                     style="margin-right: 15px;" title="Print"
+                     style="margin-right: 15px; background-color: rgba(246,255,65,0.63)" title="Print"
                      actionListener="#{invoiceBean.runReportListener}" ajax="false"/>
 
     <p:confirmDialog message="Do you want to remove this Invoice?"
@@ -85,17 +85,17 @@
     <p:columnGroup type="header">
         <p:row>
             <p:column headerText="Id" sortBy="#{invoice.invoiceId}" style="text-align:right;" width="50"/>
-            <p:column headerText="Number" sortBy="#{invoice.title}" style="text-align:start;" width="100"/>
-            <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}" width="110"/>
+            <p:column headerText="Number" sortBy="#{invoice.title}" style="text-align:start;" width="150"/>
+
             <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}"
                       width="110"/>
-            <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;" width="70"/>
+
             <p:column headerText="From Date"
                       sortBy="#{invoice.fromDate}"
-                      style="text-align:center;" width="120"/>
+                      style="text-align:center;" width="100"/>
             <p:column headerText="To Date"
                       sortBy="#{invoice.toDate}"
-                      style="text-align:center;" width="120"/>
+                      style="text-align:center;" width="100"/>
             <p:column headerText="From"
                       sortBy="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"
                       style="text-align:start;" width="250"/>
@@ -108,8 +108,10 @@
             <p:column headerText="Rate" sortBy="#{invoice.rate}" style="text-align:right;" width="70"/>
             <p:column headerText="Unit" sortBy="#{invoice.rateUnit}" style="text-align:center;"
                       width="70"/>
+            <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}" width="110"/>
             <p:column headerText="Tax" sortBy="#{invoice.taxPercent}" style="text-align:right;"
                       width="70"/>
+            <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;" width="70"/>
             <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
                       width="120"/>
             <p:column headerText="Contr." sortBy="#{invoice.companyContractTo}" style="text-align:left;"
@@ -152,40 +154,29 @@
         </p:row>
     </p:columnGroup>
 
-    <p:column headerText="Id" sortBy="#{invoice.invoiceId}" style="text-align:right;"
-              width="50">
+    <p:column headerText="Id" sortBy="#{invoice.invoiceId}" style="text-align:right;">
         <h:outputText value="#{invoice.invoiceId}"/>
     </p:column>
-    <p:column headerText="Number" sortBy="#{invoice.title}" style="text-align:start;"
-              width="100">
-        <h:outputText value="#{invoice.title}"/>
+    <p:column headerText="Number" sortBy="#{invoice.title}" style="text-align:start;">
+        <h:outputText value="#{invoice.title} &gt; #{invoice.companiesByCompanyTo.shortName}"/>
     </p:column>
-    <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}"
-              width="110">
-        <h:outputText value="#{invoice.totalValue}">
-            <f:convertNumber pattern="#,##0.00"/>
-        </h:outputText>
-    </p:column>
-    <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}"
-              width="110">
+
+    <p:column headerText="Total (+Tax)" style="text-align:right;" sortBy="#{invoice.totalValueWithTax}">
         <h:outputText value="#{invoice.totalValueWithTax}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
     </p:column>
-    <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;"
-              width="70">
-        <h:outputText value="#{invoice.currencyByCcyId.name}"/>
-    </p:column>
+
 
     <p:column headerText="From Date"
               sortBy="#{invoice.fromDate}"
-              style="text-align:center;" width="120">
+              style="text-align:center;">
         <h:outputText value="#{invoice.fromDate}">
             <f:convertDateTime pattern="yyyy-MM-dd"/>
         </h:outputText>
     </p:column>
     <p:column headerText="To Date" sortBy="#{invoice.toDate}"
-              style="text-align:center;" width="120">
+              style="text-align:center;">
         <h:outputText value="#{invoice.toDate}">
             <f:convertDateTime pattern="yyyy-MM-dd"/>
         </h:outputText>
@@ -193,49 +184,51 @@
 
     <p:column headerText="From"
               sortBy="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"
-              style="text-align:start;" width="250">
+              style="text-align:start;">
         <h:outputText
                 value="#{invoice.companyContactByCompanyContactFrom.companiesByCompanyId.companyName}"/>
     </p:column>
     <p:column headerText="To" sortBy="#{invoice.companiesByCompanyTo.companyName}"
-              style="text-align:start;" width="250">
+              style="text-align:start;">
         <h:outputText value="#{invoice.companiesByCompanyTo.companyName}"/>
     </p:column>
-    <p:column headerText="Created" sortBy="#{invoice.createdDate}" style="text-align:center;"
-              width="120">
+    <p:column headerText="Created" sortBy="#{invoice.createdDate}" style="text-align:center;">
         <h:outputText value="#{invoice.createdDate}">
             <f:convertDateTime pattern="yyyy-MM-dd"/>
         </h:outputText>
     </p:column>
-    <p:column headerText="Due" sortBy="#{invoice.dueDate}" style="text-align:center;"
-              width="120">
+    <p:column headerText="Due" sortBy="#{invoice.dueDate}" style="text-align:center;">
         <h:outputText value="#{invoice.dueDate}"/>
     </p:column>
-    <p:column headerText="Rate" sortBy="#{invoice.rate}" style="text-align:right;" width="70">
+    <p:column headerText="Rate" sortBy="#{invoice.rate}" style="text-align:right;">
         <h:outputText value="#{invoice.rate}">
             <f:convertNumber pattern="#,##0.00"/>
         </h:outputText>
     </p:column>
-    <p:column headerText="Unit" sortBy="#{invoice.rateUnit}" style="text-align:center;"
-              width="70">
+    <p:column headerText="Unit" sortBy="#{invoice.rateUnit}" style="text-align:center;">
         <h:outputText value="#{invoice.rateUnit}"/>
     </p:column>
 
-    <p:column headerText="Tax" sortBy="#{invoice.taxPercent}" style="text-align:right;"
-              width="70">
+    <p:column headerText="Total" style="text-align:right;" sortBy="#{invoice.totalValue}">
+        <h:outputText value="#{invoice.totalValue}">
+            <f:convertNumber pattern="#,##0.00"/>
+        </h:outputText>
+    </p:column>
+    <p:column headerText="Tax" sortBy="#{invoice.taxPercent}" style="text-align:right;">
         <h:outputText value="#{invoice.taxPercent}">
             <f:convertNumber pattern="#,##0.00 %"/>
         </h:outputText>
     </p:column>
-    <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;"
-              width="120">
+    <p:column headerText="CCY" sortBy="#{invoice.currencyByCcyId.name}" style="text-align:center;">
+        <h:outputText value="#{invoice.currencyByCcyId.name}"/>
+    </p:column>
+    <p:column headerText="Paid" sortBy="#{invoice.paidDate}" style="text-align:center;">
         <h:outputText value="#{invoice.paidDate}"/>
     </p:column>
-    <p:column headerText="Contr." sortBy="#{invoice.companyContractTo}" style="text-align:left;"
-              width="70">
+    <p:column headerText="Contr." sortBy="#{invoice.companyContractTo}" style="text-align:left;">
         <h:outputText value="#{invoice.companyContractTo}"/>
     </p:column>
-    <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;" width="500">
+    <p:column headerText="Note" sortBy="#{invoice.note}" style="text-align:start;">
         <h:outputText value="#{su:abbreviate(invoice.note,80)}"/>
     </p:column>
 

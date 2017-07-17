@@ -43,7 +43,7 @@
                         value="Delete User (#{usersBean.selectedUsersEntity.username})"
                         icon="ui-icon-trash"
                         rendered="#{!empty usersBean.selectedUsersEntity and usersBean.selectedUsersEntity.userId gt 0}"
-                        style="margin-right: 15px; color: brown;" oncomplete="PF('confirmation1').show();"/>
+                        style="margin-right: 15px; background-color: rgba(229,8,5,0.63)" oncomplete="PF('confirmation1').show();"/>
 
                 <p:confirmDialog message="Do you want to remove this User?"
                                  showEffect="bounce"
