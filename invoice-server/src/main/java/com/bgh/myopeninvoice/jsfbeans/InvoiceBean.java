@@ -21,6 +21,7 @@ import com.bgh.myopeninvoice.db.model.*;
 import com.bgh.myopeninvoice.jsfbeans.model.InvoiceEntityLazyModel;
 import com.bgh.myopeninvoice.reporting.BIRTReport;
 import com.bgh.myopeninvoice.reporting.ReportRunner;
+import com.bgh.myopeninvoice.reporting.util.Constants;
 import com.bgh.myopeninvoice.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
@@ -530,7 +531,7 @@ public class InvoiceBean implements Serializable {
 
             String name = "INVOICE-" + selectedInvoiceEntity.getTitle() + "-" + new SimpleDateFormat("yyyyMMddHHmmss").format(printDate);
 
-            ClassPathResource report1 = new ClassPathResource("new_report_1.rptdesign");
+            ClassPathResource report1 = new ClassPathResource(Constants.REPORT_1);
             final byte[] bytes = IOUtils.toByteArray(report1.getInputStream());
 
             final BIRTReport myReport = new BIRTReport(name, params, bytes, reportRunner);
