@@ -2584,6 +2584,7 @@ WHERE IA.INVOICE_ID = ?
         </table>
         <grid id="312">
             <property name="marginTop">30pt</property>
+            <property name="pageBreakAfter">always</property>
             <column id="313"/>
             <column id="314">
                 <property name="width">200pt</property>
