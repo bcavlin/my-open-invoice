@@ -2584,6 +2584,7 @@ WHERE IA.INVOICE_ID = ?
         </table>
         <grid id="312">
             <property name="marginTop">30pt</property>
+            <property name="marginBottom">20pt</property>
             <property name="pageBreakAfter">always</property>
             <column id="313"/>
             <column id="314">
@@ -2667,6 +2668,12 @@ WHERE IA.INVOICE_ID = ?
         </grid>
         <list id="357">
             <property name="dataSet">Data Set Attachment</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">row["CONTENT"]==null</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">CONTENT</property>
