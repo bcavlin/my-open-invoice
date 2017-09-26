@@ -1724,6 +1724,12 @@ WHERE IA.INVOICE_ID = ?
                                 <property name="contentType">auto</property>
                                 <text-property name="content"><![CDATA[Page]]></text-property>
                             </text>
+                            <label id="367">
+                                <property name="fontSize">7pt</property>
+                                <property name="color">#505050</property>
+                                <property name="textAlign">center</property>
+                                <text-property name="text">https://github.com/bcavlin/my-open-invoice</text-property>
+                            </label>
                         </cell>
                         <cell id="328">
                             <auto-text id="329">
@@ -2690,7 +2696,7 @@ WHERE IA.INVOICE_ID = ?
                     <property name="paddingTop">10pt</property>
                     <property name="paddingBottom">10pt</property>
                     <property name="textAlign">center</property>
-                    <text-property name="text">Attachments</text-property>
+                    <text-property name="text">Attachment</text-property>
                 </label>
             </header>
             <detail>
