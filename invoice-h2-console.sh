@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PROJECT_VERSION=0.1.2-SNAPSHOT
-PATH_TO_JAR=./invoice-server-$PROJECT_VERSION.jar
+PATH_TO_JAR=./invoice-server-jsf-$PROJECT_VERSION.jar
 echo "Starting H2 console ..."
 
 start_console(){

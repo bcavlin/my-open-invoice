@@ -13,10 +13,10 @@
 ### END INIT INFO
 
 PROJECT_VERSION=0.1.2-SNAPSHOT
-SERVICE_NAME=invoice-server-$PROJECT_VERSION
-PATH_TO_JAR=./invoice-server-$PROJECT_VERSION.jar
+SERVICE_NAME=invoice-server-jsf-$PROJECT_VERSION
+PATH_TO_JAR=./invoice-server-jsf-$PROJECT_VERSION.jar
 OPTS="-Xmx512m"
-PID_PATH_NAME=/tmp/invoice-server-$PROJECT_VERSION-pid
+PID_PATH_NAME=/tmp/invoice-server-jsf-$PROJECT_VERSION-pid
 case $1 in
     start)
         echo "Starting $SERVICE_NAME ..."
