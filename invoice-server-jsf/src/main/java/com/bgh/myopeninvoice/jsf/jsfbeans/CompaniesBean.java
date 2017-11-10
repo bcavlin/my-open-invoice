@@ -111,6 +111,12 @@ public class CompaniesBean implements Serializable {
         if (companyContactEntityCollectionForSelection == null) {
             companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
         }
+
+        selectedContractsEntity.setContractNumber(selectedCompaniesEntity.getShortName()
+                + "-"
+                + new DateTime(selectedContractsEntity.getValidFrom().getTime()).getYear()
+                + "-"
+                + invoiceDAO.getContractsRepository().getNewContractSequenceNumber());
     }
 
     public void ajaxChangeRowListenerForCompany() {
