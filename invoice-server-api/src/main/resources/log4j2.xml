@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <RollingFile name="File"
+                     fileName="./logs/invoice-server.log"
+                     append="false"
+                     filePattern="./logs/$${date:yyyy-MM}/invoice-server-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{ISO8601}][%-5p][%t][%X{userName}][%c.%M] - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+        <Console name="Console"
+                 target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%highlight{[%d][%-5p][%t][%X{userName}][%c.%M] - %m%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=white, TRACE=blue}</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
