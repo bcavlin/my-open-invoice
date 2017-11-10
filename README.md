@@ -19,3 +19,6 @@ data. Template if hardcoded for the current time. Two templates are available in
 
 ## License
 Copyright 2017 Branislav Cavlin. Licensed under the Apache [License](LICENSE), Version 2.0 (the "License").
+
+#### Some examples taken from
+https://github.com/mrin9/Angular-SpringBoot-REST-JWT

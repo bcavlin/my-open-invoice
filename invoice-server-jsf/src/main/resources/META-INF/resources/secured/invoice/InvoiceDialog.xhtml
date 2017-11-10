@@ -80,7 +80,8 @@
                 <f:selectItem itemLabel="---Select Contract---" itemValue=""/>
                 <f:selectItems var="selection_contract"
                                value="#{invoiceBean.contractsEntityCollectionForSelection}"
-                               itemLabel="ID: #{selection_contract.contractId}, Number: #{selection_contract.contractNumber}, From: #{selection_contract.validFrom}, To: #{selection_contract.validTo}"
+                               itemLabel="ID: #{selection_contract.contractId}, Number: #{selection_contract.contractNumber},
+                               From: #{selection_contract.validFrom}, To: #{selection_contract.validTo} #{selection_contract.checkIfContractValid()?' [Valid]':' [Not valid]'}"
                                itemValue="#{selection_contract.contractId}"/>
                 <p:ajax event="change" update="@form:updates,@form:title,@form:submitInvoice"
                         listener="#{invoiceBean.updateSelectionToContract}" partialSubmit="false"/>
