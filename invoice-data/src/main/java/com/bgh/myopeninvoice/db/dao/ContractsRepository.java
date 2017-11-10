@@ -17,6 +17,7 @@
 package com.bgh.myopeninvoice.db.dao;
 
 import com.bgh.myopeninvoice.db.model.ContractsEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -25,4 +26,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface ContractsRepository extends PagingAndSortingRepository<ContractsEntity, Integer>, QueryDslPredicateExecutor<ContractsEntity> {
 
+    @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)
+    Long getNewContractSequenceNumber();
 }
