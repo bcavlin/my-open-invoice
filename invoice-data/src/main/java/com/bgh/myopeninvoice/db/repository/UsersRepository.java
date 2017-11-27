@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.CompanyContactEntity;
+import com.bgh.myopeninvoice.db.model.UsersEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface CompanyContactRepository extends PagingAndSortingRepository<CompanyContactEntity, Integer>, QueryDslPredicateExecutor<CompanyContactEntity> {
+public interface UsersRepository extends PagingAndSortingRepository<UsersEntity, Integer>, QueryDslPredicateExecutor<UsersEntity> {
+
+    @Query("select e from UsersEntity e where e.username = :username")
+    Optional<UsersEntity> findByUsername(@Param("username") String username);
 
 }

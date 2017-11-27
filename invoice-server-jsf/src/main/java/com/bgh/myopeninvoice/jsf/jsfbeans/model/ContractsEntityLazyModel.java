@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
-import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.CompaniesEntity;
 import com.bgh.myopeninvoice.db.model.ContractsEntity;
 import com.bgh.myopeninvoice.db.model.QContractsEntity;

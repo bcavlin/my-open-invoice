@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.TaxEntity;
+import com.bgh.myopeninvoice.db.model.CompaniesEntity;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface TaxRepository extends PagingAndSortingRepository<TaxEntity, Integer>, QueryDslPredicateExecutor<TaxEntity> {
+public interface CompaniesRepository extends PagingAndSortingRepository<CompaniesEntity, Integer>, QueryDslPredicateExecutor<CompaniesEntity> {
 
 }

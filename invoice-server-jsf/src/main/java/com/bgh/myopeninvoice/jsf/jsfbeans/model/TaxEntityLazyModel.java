@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
-import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.QTaxEntity;
 import com.bgh.myopeninvoice.db.model.TaxEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;

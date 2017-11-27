@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans;
 
-import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.TaxEntity;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.TaxEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;

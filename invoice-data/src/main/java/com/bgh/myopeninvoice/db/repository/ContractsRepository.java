@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.UsersEntity;
+import com.bgh.myopeninvoice.db.model.ContractsEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface UsersRepository extends PagingAndSortingRepository<UsersEntity, Integer>, QueryDslPredicateExecutor<UsersEntity> {
+public interface ContractsRepository extends PagingAndSortingRepository<ContractsEntity, Integer>, QueryDslPredicateExecutor<ContractsEntity> {
 
-    @Query("select e from UsersEntity e where e.username = :username")
-    Optional<UsersEntity> findByUsername(@Param("username") String username);
-
+    @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)
+    Long getNewContractSequenceNumber();
 }

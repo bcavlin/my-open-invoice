@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.model.session;
+package com.bgh.myopeninvoice.api.model.user;
 
+import com.bgh.myopeninvoice.api.model.response.OperationResponse;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.util.List;
+import lombok.EqualsAndHashCode;
+import org.springframework.security.core.Authentication;
 
 @Data
-public class SessionItem {
-    private String token;
-    private String userId;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private List<String> roles;
+@EqualsAndHashCode(callSuper = false)
+public class LoggedUserDetailsResponse extends OperationResponse {
+
+    public LoggedUserDetailsResponse() {
+    }
+
+    public LoggedUserDetailsResponse(Authentication authentication) {
+        this.authentication = authentication;
+    }
+
+    @ApiModelProperty(required = true, value = "")
+    private Authentication authentication;
 }

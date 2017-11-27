@@ -31,7 +31,7 @@ import java.beans.PropertyVetoException;
  * Created by bcavlin on 20/06/17.
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.bgh.myopeninvoice.db.dao"})
+@EnableJpaRepositories(basePackages = {"com.bgh.myopeninvoice.db.repository"})
 @EntityScan(basePackages = {"com.bgh.myopeninvoice.db.model"})
 @EnableAutoConfiguration
 public class DatabaseConfiguration {

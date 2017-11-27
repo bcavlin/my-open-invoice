@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.model.session;
+package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.api.model.response.OperationResponse;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.security.core.userdetails.User;
+import com.bgh.myopeninvoice.db.model.InvoiceEntity;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class SessionResponse extends OperationResponse {
-    @ApiModelProperty(required = true, value = "")
-    private User item;
+/**
+ * Created by bcavlin on 14/03/17.
+ */
+public interface InvoiceRepository extends PagingAndSortingRepository<InvoiceEntity, Integer>, QueryDslPredicateExecutor<InvoiceEntity> {
+
 }

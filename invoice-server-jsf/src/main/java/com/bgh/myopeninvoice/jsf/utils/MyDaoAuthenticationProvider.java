@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.jsf.utils;
 
-import com.bgh.myopeninvoice.jsf.service.CustomUserDetailsService;
+import com.bgh.myopeninvoice.db.service.CustomUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
