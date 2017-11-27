@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.db.repository;
 
 import com.bgh.myopeninvoice.db.model.*;
 import org.springframework.beans.factory.annotation.Autowired;

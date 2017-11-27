@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.InvoiceItemsEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.bgh.myopeninvoice.db.model.RolesEntity;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface InvoiceItemsRepository extends PagingAndSortingRepository<InvoiceItemsEntity, Integer>, QueryDslPredicateExecutor<InvoiceItemsEntity> {
+public interface RolesRepository extends CrudRepository<RolesEntity, Integer> {
+
+    RolesEntity findByRoleName(String roleName);
 
 }

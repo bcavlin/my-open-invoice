@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.jsf.service;
+package com.bgh.myopeninvoice.db.service;
 
 /**
  * Created by bcavlin on 23/10/16.
  */
 
 
-import com.bgh.myopeninvoice.db.dao.UsersRepository;
 import com.bgh.myopeninvoice.db.model.UserRoleEntity;
 import com.bgh.myopeninvoice.db.model.UsersEntity;
+import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

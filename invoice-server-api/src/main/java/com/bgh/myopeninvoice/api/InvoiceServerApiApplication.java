@@ -16,7 +16,6 @@
 
 package com.bgh.myopeninvoice.api;
 
-import com.bgh.myopeninvoice.api.filter.CorsFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,13 +23,16 @@ import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 @Slf4j
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-@ComponentScan({"com.bgh.myopeninvoice.api", "com.bgh.myopeninvoice.db", "com.bgh.myopeninvoice.reporting"})
+@ComponentScan({
+        "com.bgh.myopeninvoice.api",
+        "com.bgh.myopeninvoice.db",
+        "com.bgh.myopeninvoice.reporting"})
 public class InvoiceServerApiApplication {
 
     public static void main(String[] args) {
@@ -38,26 +40,22 @@ public class InvoiceServerApiApplication {
         SpringApplication.run(InvoiceServerApiApplication.class, args);
     }
 
+    @EnableResourceServer
     @Configuration
-    public static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    public static class WebSecurityConfig extends ResourceServerConfigurerAdapter {
         @Override
-        public void configure(WebSecurity web) throws Exception {
-            // Filters will not get executed for the resources
-            web.ignoring().antMatchers("/", "/resources/**", "/static/**", "/public/**", "/webui/**", "/h2-console/**"
-                    , "/configuration/**", "/swagger-ui/**", "/swagger-resources/**", "/api-docs", "/api-docs/**", "/v2/api-docs/**"
-                    , "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.gif", "/**/*.svg", "/**/*.ico", "/**/*.ttf", "/**/*.woff");
+        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+            resources.resourceId("resource123");
         }
 
         @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.csrf()
-                    .disable()
-                    .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
+        public void configure(HttpSecurity http) throws Exception {
+            http.antMatcher("/**")
                     .authorizeRequests()
-                    .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
-                    .antMatchers("/session/**").permitAll()
-                    .anyRequest().authenticated();
+                    .antMatchers("/me/**").hasAuthority("ROLE_CUSTOM")
+                    .anyRequest().authenticated()
+                    .antMatchers("/oauth/revoke-token/**").permitAll();
         }
+
     }
 }

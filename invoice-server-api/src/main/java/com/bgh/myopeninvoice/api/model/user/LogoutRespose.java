@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.api.model.user;
 
-import com.bgh.myopeninvoice.db.model.ContractsEntity;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.bgh.myopeninvoice.api.model.response.OperationResponse;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface ContractsRepository extends PagingAndSortingRepository<ContractsEntity, Integer>, QueryDslPredicateExecutor<ContractsEntity> {
-
-    @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)
-    Long getNewContractSequenceNumber();
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class LogoutRespose extends OperationResponse {
 }

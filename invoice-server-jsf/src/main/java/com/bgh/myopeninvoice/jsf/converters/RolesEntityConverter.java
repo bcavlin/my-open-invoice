@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.jsf.converters;
 
-import com.bgh.myopeninvoice.db.dao.InvoiceDAO;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.RolesEntity;
 
 import javax.faces.bean.ManagedBean;

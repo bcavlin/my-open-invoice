@@ -17,7 +17,7 @@
 package com.bgh.myopeninvoice.db.test;
 
 import com.bgh.myopeninvoice.db.DatabaseConfiguration;
-import com.bgh.myopeninvoice.db.dao.ReportsRepository;
+import com.bgh.myopeninvoice.db.repository.ReportsRepository;
 import com.bgh.myopeninvoice.db.model.ReportsEntity;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;

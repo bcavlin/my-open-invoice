@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.api.exception;
 
-import com.bgh.myopeninvoice.db.model.ReportsEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
+public class SecurityException extends Exception {
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface ReportsRepository extends PagingAndSortingRepository<ReportsEntity, Integer>, QueryDslPredicateExecutor<ReportsEntity> {
+    public SecurityException() {
+    }
 
+    public SecurityException(String message) {
+        super(message);
+    }
+
+    public SecurityException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public SecurityException(Throwable cause) {
+        super(cause);
+    }
+
+    public SecurityException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

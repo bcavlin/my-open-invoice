@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.model.user;
+package com.bgh.myopeninvoice.db.repository;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import com.bgh.myopeninvoice.db.model.TaxEntity;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-@Data
-public class Login {
-
-    @ApiModelProperty(example = "demo", required = true)
-    private String username;
-
-    @ApiModelProperty(example = "demo", required = true)
-    private String password;
+/**
+ * Created by bcavlin on 14/03/17.
+ */
+public interface TaxRepository extends PagingAndSortingRepository<TaxEntity, Integer>, QueryDslPredicateExecutor<TaxEntity> {
 
 }

@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.jsf;
 
-import com.bgh.myopeninvoice.jsf.service.CustomUserDetailsService;
+import com.bgh.myopeninvoice.db.service.CustomUserDetailsService;
 import com.bgh.myopeninvoice.jsf.utils.MyDaoAuthenticationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

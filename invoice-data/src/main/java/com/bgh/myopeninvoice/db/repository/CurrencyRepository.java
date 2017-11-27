@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.dao;
+package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.TimeSheetEntity;
+import com.bgh.myopeninvoice.db.model.CurrencyEntity;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface TimeSheetRepository extends PagingAndSortingRepository<TimeSheetEntity, Integer>, QueryDslPredicateExecutor<TimeSheetEntity> {
+public interface CurrencyRepository extends PagingAndSortingRepository<CurrencyEntity, Integer>, QueryDslPredicateExecutor<CurrencyEntity> {
 
 }
