@@ -18,17 +18,19 @@ package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.model.user.LoggedUserDetailsResponse;
 import com.bgh.myopeninvoice.api.model.user.LogoutRespose;
+import com.bgh.myopeninvoice.api.utils.CommonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,11 +43,12 @@ import static com.bgh.myopeninvoice.api.model.response.OperationResponse.Respons
 @Slf4j
 public class UserController {
 
-    private ConsumerTokenServices consumerTokenServices;
+    private TokenStore tokenStore;
 
     @Autowired
-    public void setConsumerTokenServices(ConsumerTokenServices consumerTokenServices) {
-        this.consumerTokenServices = consumerTokenServices;
+    @Qualifier("customTokenStore")
+    public void setTokenStore(TokenStore tokenStore) {
+        this.tokenStore = tokenStore;
     }
 
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Will return details of a logged user", response =
@@ -69,9 +72,8 @@ public class UserController {
         LogoutRespose resp = new LogoutRespose();
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer")) {
-            String token = authHeader.replace("Bearer ", "");
-            consumerTokenServices.revokeToken(token);
-            log.info("Token removed: " + token);
+            CommonUtils.removeToken(authHeader, tokenStore);
+            log.info("Token removed: " + authHeader);
             resp.setOperationStatus(SUCCESS);
             resp.setOperationMessage("Auth header removed: " + authHeader);
         } else {

@@ -42,7 +42,7 @@ public class DatabaseConfiguration {
         this.env = env;
     }
 
-    @Bean
+    @Bean(name = "comboDataSource")
     public ComboPooledDataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setMinPoolSize(Integer.parseInt(env.getProperty("hibernate.c3p0.max_size")));
