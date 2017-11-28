@@ -19,16 +19,10 @@ package com.bgh.myopeninvoice.api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 @Slf4j
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
 @ComponentScan({
         "com.bgh.myopeninvoice.api",
         "com.bgh.myopeninvoice.db",
@@ -40,22 +34,4 @@ public class InvoiceServerApiApplication {
         SpringApplication.run(InvoiceServerApiApplication.class, args);
     }
 
-    @EnableResourceServer
-    @Configuration
-    public static class WebSecurityConfig extends ResourceServerConfigurerAdapter {
-        @Override
-        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-            resources.resourceId("resource123");
-        }
-
-        @Override
-        public void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/**")
-                    .authorizeRequests()
-                    .antMatchers("/me/**").hasAuthority("ROLE_CUSTOM")
-                    .anyRequest().authenticated()
-                    .antMatchers("/oauth/revoke-token/**").permitAll();
-        }
-
-    }
 }
