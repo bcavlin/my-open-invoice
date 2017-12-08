@@ -20,5 +20,5 @@ package com.bgh.myopeninvoice.reporting.util;
  * Created by bcavlin on 04/08/17.
  */
 public class Constants {
-    public static final String REPORT_1 = "new_report_1.rptdesign";
+    public static final String REPORT_1 = "bgh-invoice-v1.rptdesign";
 }

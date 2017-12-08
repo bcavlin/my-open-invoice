@@ -46,13 +46,14 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
 
         http.logout().logoutUrl("/oauth/logout").logoutSuccessHandler(customLogoutSuccessHandler)
-                .and().csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable()
+                .and()
+                .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable()
                 .headers().frameOptions().disable()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/me/**").hasAuthority("ROLE_CUSTOM")
+                .antMatchers("/me/**").authenticated()
                 .anyRequest().authenticated();
     }
 }
