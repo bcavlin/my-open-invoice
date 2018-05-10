@@ -23,6 +23,7 @@ import com.bgh.myopeninvoice.db.model.UsersEntity;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.UsersEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.CustomUtils;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
@@ -44,12 +45,11 @@ import java.util.List;
 /**
  * Created by bcavlin on 17/03/17.
  */
+@Slf4j
 @ManagedBean
 @ViewScoped
 @Component
 public class UsersBean implements Serializable {
-
-    private static Logger logger = LoggerFactory.getLogger(UsersBean.class);
 
     @Autowired
     private InvoiceDAO invoiceDAO;
@@ -67,7 +67,7 @@ public class UsersBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        logger.info("Initializing users entries");
+        log.info("Initializing users entries");
         usersEntityList = new UsersEntityLazyModel(invoiceDAO);
         selectedUsersEntity = null;
         setPassword(null);
@@ -76,7 +76,7 @@ public class UsersBean implements Serializable {
     }
 
     private void refresh() {
-        logger.info("Loading users entries");
+        log.info("Loading users entries");
         if (selectedUsersEntity != null) {
             selectedUsersEntity = invoiceDAO.getUsersRepository().findOne(selectedUsersEntity.getUserId());
         }
@@ -115,7 +115,7 @@ public class UsersBean implements Serializable {
     }
 
     public void ajaxChangeRowListener() {
-        logger.info("Filling dual list");
+        log.info("Filling dual list");
         fillDualList();
         setPassword(null);
         setPasswordRepeat(null);
@@ -123,7 +123,7 @@ public class UsersBean implements Serializable {
     }
 
     public void newEntryListener(ActionEvent event) {
-        logger.info("Creating new entity");
+        log.info("Creating new entity");
         selectedUsersEntity = new UsersEntity();
         selectedUsersEntity.setUserRolesByUserId(new ArrayList<>()); //cannot be null
         fillDualList();
@@ -153,7 +153,7 @@ public class UsersBean implements Serializable {
             if (success) {
                 RequestContext.getCurrentInstance().execute("PF('users-form-dialog').hide()");
 
-                logger.info("Adding/editing entity {}", selectedUsersEntity.toString());
+                log.info("Adding/editing entity {}", selectedUsersEntity.toString());
                 selectedUsersEntity = invoiceDAO.getUsersRepository().save(selectedUsersEntity);
                 refresh();
                 FacesUtils.addSuccessMessage("Entity record updated");
@@ -170,7 +170,7 @@ public class UsersBean implements Serializable {
         if (selectedUsersEntity != null && rolesDualListModel != null) {
             RequestContext.getCurrentInstance().execute("PF('roles-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", rolesDualListModel.getTarget().toString());
+            log.info("Adding/editing entity {}", rolesDualListModel.getTarget().toString());
             invoiceDAO.saveUserRolesEntity(selectedUsersEntity, rolesDualListModel.getTarget());
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -181,7 +181,7 @@ public class UsersBean implements Serializable {
 
     public void deleteEntryListener(ActionEvent event) {
         if (selectedUsersEntity != null) {
-            logger.info("Deleting entity {}", selectedUsersEntity.toString());
+            log.info("Deleting entity {}", selectedUsersEntity.toString());
             invoiceDAO.getUsersRepository().delete(selectedUsersEntity.getUserId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");

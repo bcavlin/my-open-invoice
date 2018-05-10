@@ -35,12 +35,9 @@ import java.beans.PropertyVetoException;
 @EntityScan(basePackages = {"com.bgh.myopeninvoice.db.model"})
 @EnableAutoConfiguration
 public class DatabaseConfiguration {
-    private Environment env;
 
     @Autowired
-    public void setEnv(Environment env) {
-        this.env = env;
-    }
+    private Environment env;
 
     @Bean(name = "comboDataSource")
     public ComboPooledDataSource dataSource() throws PropertyVetoException {

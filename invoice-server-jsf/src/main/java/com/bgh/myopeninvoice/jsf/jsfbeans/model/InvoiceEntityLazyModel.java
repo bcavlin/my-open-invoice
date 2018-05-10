@@ -16,14 +16,13 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
-import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.InvoiceEntity;
 import com.bgh.myopeninvoice.db.model.QInvoiceEntity;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.extern.slf4j.Slf4j;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,9 +34,8 @@ import java.util.Map;
 /**
  * Created by bcavlin on 17/03/17.
  */
+@Slf4j
 public class InvoiceEntityLazyModel extends LazyDataModel<InvoiceEntity> {
-
-    private static Logger logger = LoggerFactory.getLogger(InvoiceEntityLazyModel.class);
 
     private List<InvoiceEntity> invoiceEntityList;
 

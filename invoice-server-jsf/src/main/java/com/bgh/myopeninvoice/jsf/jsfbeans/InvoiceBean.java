@@ -16,15 +16,16 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans;
 
-import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.*;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.InvoiceEntityLazyModel;
+import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
 import com.bgh.myopeninvoice.reporting.BIRTReport;
 import com.bgh.myopeninvoice.reporting.ReportRunner;
 import com.bgh.myopeninvoice.reporting.util.Constants;
-import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -42,8 +43,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.LazyDataModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Sort;
@@ -67,12 +66,13 @@ import java.util.*;
 /**
  * Created by bcavlin on 17/03/17.
  */
+@Slf4j
 @ManagedBean
 @ViewScoped
 @Component
 public class InvoiceBean implements Serializable {
 
-    private static Logger logger = LoggerFactory.getLogger(InvoiceBean.class);
+    //private static Logger logger = LoggerFactory.getLogger(InvoiceBean.class);
 
     private InvoiceDAO invoiceDAO;
 
@@ -111,7 +111,7 @@ public class InvoiceBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        logger.info("Initializing entries");
+        log.info("Initializing entries");
         invoiceEntityLazyDataModel = new InvoiceEntityLazyModel(invoiceDAO);
         Predicate p = QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.isTrue();
         companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(p));
@@ -148,7 +148,7 @@ public class InvoiceBean implements Serializable {
     }
 
     private void refresh() {
-        logger.info("Loading entries");
+        log.info("Loading entries");
         invoiceEntityLazyDataModel = new InvoiceEntityLazyModel(invoiceDAO);
         if (selectedInvoiceEntity != null) {
             selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().findOne(selectedInvoiceEntity.getInvoiceId());
@@ -239,7 +239,7 @@ public class InvoiceBean implements Serializable {
         if (selectedInvoiceEntity != null && selectedInvoiceEntity.getTitle() != null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", selectedInvoiceEntity.toString());
+            log.info("Adding/editing entity {}", selectedInvoiceEntity.toString());
             selectedInvoiceEntity = invoiceDAO.getInvoiceRepository().save(selectedInvoiceEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -252,7 +252,7 @@ public class InvoiceBean implements Serializable {
         if (selectedInvoiceEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-attachment-form-dialog').hide()");
 
-            logger.info("Adding/editing attachment");
+            log.info("Adding/editing attachment");
             invoiceDAO.getAttachmentRepository().save(selectedInvoiceEntity.getAttachmentsByInvoiceId());
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -265,7 +265,7 @@ public class InvoiceBean implements Serializable {
         if (selectedInvoiceEntity != null && selectedInvoiceItemsEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-items-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
+            log.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
 
             //update total
             if (selectedInvoiceItemsEntity.getTimeSheetTotal().compareTo(new BigDecimal(0)) > 0) {
@@ -284,7 +284,7 @@ public class InvoiceBean implements Serializable {
         if (selectedInvoiceEntity != null && selectedInvoiceItemsEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('invoice-items-timesheet-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
+            log.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
 
             //filter out null or 0.00 values
             selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId().removeIf(o -> o.getHoursWorked() == null || o.getHoursWorked().equals(new BigDecimal(0.0)));
@@ -303,7 +303,7 @@ public class InvoiceBean implements Serializable {
 
     public void deleteInvoiceListener(ActionEvent event) {
         if (selectedInvoiceEntity != null) {
-            logger.info("Deleting entity {}", selectedInvoiceEntity.toString());
+            log.info("Deleting entity {}", selectedInvoiceEntity.toString());
             invoiceDAO.getInvoiceRepository().delete(selectedInvoiceEntity.getInvoiceId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
@@ -315,7 +315,7 @@ public class InvoiceBean implements Serializable {
 
     public void deleteInvoiceItemsListener(ActionEvent event) {
         if (selectedInvoiceEntity != null && selectedInvoiceItemsEntity != null) {
-            logger.info("Deleting entity [{}] item [{}]", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
+            log.info("Deleting entity [{}] item [{}]", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
             invoiceDAO.getInvoiceItemsRepository().delete(selectedInvoiceItemsEntity.getInvoiceItemId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
@@ -326,7 +326,7 @@ public class InvoiceBean implements Serializable {
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-        logger.info("Uploading {}", event.getFile().getFileName());
+        log.info("Uploading {}", event.getFile().getFileName());
         if (selectedInvoiceEntity != null) {
             Collection<AttachmentEntity> attachmentsByInvoiceId = selectedInvoiceEntity.getAttachmentsByInvoiceId();
             if (attachmentsByInvoiceId == null) {
@@ -345,13 +345,13 @@ public class InvoiceBean implements Serializable {
     }
 
     public void deleteAttachment(AttachmentEntity attachmentEntity) {
-        logger.info("Deleting attachment [{}]", attachmentEntity.toString());
+        log.info("Deleting attachment [{}]", attachmentEntity.toString());
         invoiceDAO.getAttachmentRepository().delete(attachmentEntity.getAttachmentId());
         refresh();
     }
 
     public void deleteReport(ReportsEntity reportsEntity) {
-        logger.info("Deleting reportsEntity [{}]", reportsEntity.toString());
+        log.info("Deleting reportsEntity [{}]", reportsEntity.toString());
         invoiceDAO.getReportsRepository().delete(reportsEntity.getReportId());
         refresh();
         refreshReports();

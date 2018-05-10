@@ -26,7 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class CustomUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(CustomUtils.class);
+    //private static Logger logger = LoggerFactory.getLogger(CustomUtils.class);
 
     public static String encodePassword(String password){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

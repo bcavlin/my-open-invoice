@@ -16,6 +16,7 @@
 
 package com.bgh.myopeninvoice.reporting;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.Platform;
 import org.eclipse.birt.report.engine.api.*;
@@ -36,11 +37,10 @@ import java.util.logging.Level;
 /**
  * Created by bcavlin on 07/05/17.
  */
+@Slf4j
 @SuppressWarnings("unchecked")
 @Service
 public class BIRTReportRunner implements ReportRunner {
-
-    private static Logger logger = LoggerFactory.getLogger(BIRTReportRunner.class);
 
     private IReportEngine birtReportEngine = null;
 
@@ -71,7 +71,7 @@ public class BIRTReportRunner implements ReportRunner {
             birtReportEngine = reportEngineFactory.createReportEngine(engineConfig);
 
         } catch (BirtException e) {
-            logger.error("Birt Startup Error: {}", e.getMessage());
+            log.error("Birt Startup Error: {}", e.getMessage());
         }
     }
 
@@ -126,7 +126,7 @@ public class BIRTReportRunner implements ReportRunner {
             runAndRenderTask.close();
 
         } catch (Exception e) {
-            logger.error("Error while running report task: {}.", e.getMessage());
+            log.error("Error while running report task: {}.", e.getMessage());
             throw new RuntimeException();
         }
 

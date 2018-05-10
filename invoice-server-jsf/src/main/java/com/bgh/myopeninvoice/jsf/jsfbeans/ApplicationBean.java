@@ -39,7 +39,7 @@ import java.io.Serializable;
 @PropertySource("classpath:version.properties")
 public class ApplicationBean implements Serializable {
 
-    private static Logger logger = LoggerFactory.getLogger(ApplicationBean.class);
+    //private static Logger logger = LoggerFactory.getLogger(ApplicationBean.class);
 
     @Value("${application.version}")
     private String applicationVersion;
