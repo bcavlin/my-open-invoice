@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
 
-    private static Logger logger = LoggerFactory.getLogger(UsersEntityLazyModel.class);
+    //private static Logger logger = LoggerFactory.getLogger(UsersEntityLazyModel.class);
 
     private List<UsersEntity> UsersEntityList;
 

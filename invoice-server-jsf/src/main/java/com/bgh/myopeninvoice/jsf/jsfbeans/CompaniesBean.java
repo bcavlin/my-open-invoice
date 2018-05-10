@@ -16,12 +16,13 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans;
 
-import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.*;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.CompaniesEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.ContractsEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
@@ -30,8 +31,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.LazyDataModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +45,13 @@ import java.util.*;
 /**
  * Created by bcavlin on 17/03/17.
  */
+@Slf4j
 @ManagedBean
 @ViewScoped
 @Component
 public class CompaniesBean implements Serializable {
 
-    private static Logger logger = LoggerFactory.getLogger(CompaniesBean.class);
+    //private static Logger logger = LoggerFactory.getLogger(CompaniesBean.class);
 
     private InvoiceDAO invoiceDAO;
 
@@ -80,7 +80,7 @@ public class CompaniesBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        logger.info("Initializing companies entries");
+        log.info("Initializing companies entries");
         companiesEntityLazyDataModel = new CompaniesEntityLazyModel(invoiceDAO);
         currencyEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCurrencyRepository().findAll());
         companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
@@ -88,21 +88,21 @@ public class CompaniesBean implements Serializable {
     }
 
     private void refresh() {
-        logger.info("Loading companies entries");
+        log.info("Loading companies entries");
         selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().findOne(selectedCompaniesEntity.getCompanyId());
         companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.eq(true)));
         companiesEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompaniesRepository().findAll(QCompaniesEntity.companiesEntity.ownedByMe.eq(false)));
     }
 
     public void newEntryListenerForCompany(ActionEvent event) {
-        logger.info("Creating new entity");
+        log.info("Creating new entity");
         selectedCompaniesEntity = new CompaniesEntity();
         selectedCompaniesEntity.setOwnedByMe(false);
         fillDualList();
     }
 
     public void newEntryListenerForContract(ActionEvent event) {
-        logger.info("newEntryListenerForContract");
+        log.info("newEntryListenerForContract");
         selectedContractsEntity = new ContractsEntity();
         selectedContractsEntity.setCompaniesByContractSignedWith(selectedCompaniesEntity);
         selectedContractsEntity.setContractSignedWith(selectedCompaniesEntity.getCompanyId());
@@ -120,7 +120,7 @@ public class CompaniesBean implements Serializable {
     }
 
     public void ajaxChangeRowListenerForCompany() {
-        logger.info("Filling dual list");
+        log.info("Filling dual list");
         contractsEntityLazyDataModel = new ContractsEntityLazyModel(invoiceDAO, selectedCompaniesEntity);
         fillDualList();
         if (companyContactEntityCollectionForSelection == null) {
@@ -157,10 +157,10 @@ public class CompaniesBean implements Serializable {
         if (selectedCompaniesEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('companies-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", selectedCompaniesEntity.toString());
+            log.info("Adding/editing entity {}", selectedCompaniesEntity.toString());
             //TODO this needs to be one transaction - delete and save - or prevent this change
             if (selectedCompaniesEntity.getOwnedByMe()) { //need to do this because of edit
-                logger.info("Removing contracts for {} as it is owned by me", selectedCompaniesEntity.getCompanyName());
+                log.info("Removing contracts for {} as it is owned by me", selectedCompaniesEntity.getCompanyName());
                 invoiceDAO.getContractsRepository().delete(selectedCompaniesEntity.getContractsByCompanyId());
             }
             selectedCompaniesEntity = invoiceDAO.getCompaniesRepository().save(selectedCompaniesEntity);
@@ -175,7 +175,7 @@ public class CompaniesBean implements Serializable {
         if (selectedCompaniesEntity != null && contactsEntityDualListModel != null) {
             RequestContext.getCurrentInstance().execute("PF('companies-contacts-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", contactsEntityDualListModel.getTarget().toString());
+            log.info("Adding/editing entity {}", contactsEntityDualListModel.getTarget().toString());
             invoiceDAO.saveCompanyContactEntity(selectedCompaniesEntity, contactsEntityDualListModel.getTarget());
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -186,7 +186,7 @@ public class CompaniesBean implements Serializable {
 
     public void addOrEditCompanyContractListener(ActionEvent event) {
         if (selectedCompaniesEntity != null && selectedContractsEntity != null) {
-            logger.info("Adding/editing entity {}", selectedContractsEntity.toString());
+            log.info("Adding/editing entity {}", selectedContractsEntity.toString());
 
             //TODO check active contracts vs current record
 
@@ -207,7 +207,7 @@ public class CompaniesBean implements Serializable {
 
     public void deleteEntryListener(ActionEvent event) {
         if (selectedCompaniesEntity != null) {
-            logger.info("Deleting entity {}", selectedCompaniesEntity.toString());
+            log.info("Deleting entity {}", selectedCompaniesEntity.toString());
             invoiceDAO.getCompaniesRepository().delete(selectedCompaniesEntity.getCompanyId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");

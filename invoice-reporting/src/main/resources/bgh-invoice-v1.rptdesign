@@ -9,7 +9,7 @@
     <property name="imageDPI">96</property>
     <parameters>
         <scalar-parameter name="p_invoice_id" id="9">
-            <property name="valueType">static</property>
+            <property name="valueType">templates</property>
             <property name="isRequired">true</property>
             <property name="dataType">integer</property>
             <property name="distinct">true</property>

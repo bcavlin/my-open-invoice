@@ -16,14 +16,13 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans;
 
-import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.TaxEntity;
+import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.TaxEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,12 +35,13 @@ import java.io.Serializable;
 /**
  * Created by bcavlin on 17/03/17.
  */
+@Slf4j
 @ManagedBean
 @ViewScoped
 @Component
 public class TaxBean implements Serializable {
 
-    private static Logger logger = LoggerFactory.getLogger(TaxBean.class);
+    //private static Logger logger = LoggerFactory.getLogger(TaxBean.class);
 
     @Autowired
     private InvoiceDAO invoiceDAO;
@@ -54,19 +54,19 @@ public class TaxBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        logger.info("Initializing tax entries");
+        log.info("Initializing tax entries");
         taxEntityList = new TaxEntityLazyModel(invoiceDAO);
     }
 
     private void refresh() {
-        logger.info("Loading tax entries");
+        log.info("Loading tax entries");
         if (selectedTaxEntity != null) {
             selectedTaxEntity = invoiceDAO.getTaxRepository().findOne(selectedTaxEntity.getTaxId());
         }
     }
 
     public void newEntryListener(ActionEvent event) {
-        logger.info("Creating new entity");
+        log.info("Creating new entity");
         selectedTaxEntity = new TaxEntity();
     }
 
@@ -74,7 +74,7 @@ public class TaxBean implements Serializable {
         if (selectedTaxEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('tax-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", selectedTaxEntity.toString());
+            log.info("Adding/editing entity {}", selectedTaxEntity.toString());
             selectedTaxEntity = invoiceDAO.getTaxRepository().save(selectedTaxEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -85,7 +85,7 @@ public class TaxBean implements Serializable {
 
     public void deleteEntryListener(ActionEvent event) {
         if (selectedTaxEntity != null) {
-            logger.info("Deleting entity {}", selectedTaxEntity.toString());
+            log.info("Deleting entity {}", selectedTaxEntity.toString());
             invoiceDAO.getTaxRepository().delete(selectedTaxEntity.getTaxId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");

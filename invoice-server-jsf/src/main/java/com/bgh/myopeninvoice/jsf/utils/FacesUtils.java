@@ -24,7 +24,7 @@ import java.text.NumberFormat;
  * Created with IntelliJ IDEA.
  * User: bcavlin
  * Date: 2/11/14
- * To change this template use File | Settings | File Templates.
+ * To change this template use File | Settings | File static.
  */
 public class FacesUtils {
 

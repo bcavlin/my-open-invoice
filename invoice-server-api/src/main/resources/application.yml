@@ -2,6 +2,9 @@ server:
   port: 8080
   context-path: /api
 spring:
+  thymeleaf:
+    cache: true
+    suffix: .xhtml
   profiles:
     include: database
 endpoints:
@@ -12,3 +15,6 @@ springfox:
     swagger:
       v2:
         path: /api-docs
+security:
+  basic:
+    enabled: false

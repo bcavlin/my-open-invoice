@@ -16,44 +16,32 @@
 
 package com.bgh.myopeninvoice.api.configuration;
 
-import com.bgh.myopeninvoice.api.security.CustomLogoutSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+@Slf4j
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
-
-    @Autowired
-    public void setCustomLogoutSuccessHandler(CustomLogoutSuccessHandler customLogoutSuccessHandler) {
-        this.customLogoutSuccessHandler = customLogoutSuccessHandler;
-    }
-
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId("resource123");
+        resources.resourceId("76dc37bb-ab66-4971-a528-5ac5fd5e2eb0");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
-        http.logout().logoutUrl("/oauth/logout").logoutSuccessHandler(customLogoutSuccessHandler)
-                .and()
-                .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")).disable()
-                .headers().frameOptions().disable()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/me/**").authenticated()
-                .anyRequest().authenticated();
+        http.formLogin().loginPage("/login").permitAll()
+                .and().logout().logoutUrl("/oauth/logout").permitAll()
+                .and().authorizeRequests().antMatchers("/","/login").permitAll()
+                .anyRequest().authenticated()
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 }

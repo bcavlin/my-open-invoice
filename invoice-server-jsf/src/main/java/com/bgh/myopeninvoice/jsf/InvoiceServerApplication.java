@@ -18,6 +18,7 @@ package com.bgh.myopeninvoice.jsf;
 
 import com.bgh.myopeninvoice.db.service.CustomUserDetailsService;
 import com.bgh.myopeninvoice.jsf.utils.MyDaoAuthenticationProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +53,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@Slf4j
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @ComponentScan({"com.bgh.myopeninvoice.jsf", "com.bgh.myopeninvoice.db", "com.bgh.myopeninvoice.reporting"})
 public class InvoiceServerApplication {
 
-    private static Logger logger = LoggerFactory.getLogger(InvoiceServerApplication.class);
+    //private static Logger logger = LoggerFactory.getLogger(InvoiceServerApplication.class);
 
     public static void main(String[] args) {
         System.setProperty("spring.devtools.restart.enabled", "false");
@@ -114,8 +116,8 @@ public class InvoiceServerApplication {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            if (logger.isDebugEnabled())
-                logger.debug("Setting up custom security");
+            if (log.isDebugEnabled())
+                log.debug("Setting up custom security");
 
             http.authorizeRequests()
                     .antMatchers("/secured/**").hasAnyRole("ADMIN", "USER")
@@ -148,7 +150,7 @@ public class InvoiceServerApplication {
 
                 @Override
                 public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                    logger.warn("Authentication failed!");
+                    log.warn("Authentication failed!");
                     HttpSession session = httpServletRequest.getSession(false);
                     if (session != null) {
                         session.setAttribute("error", e.getMessage());
@@ -164,7 +166,7 @@ public class InvoiceServerApplication {
 
                 @Override
                 public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                    logger.info("Authentication successful!");
+                    log.info("Authentication successful!");
                     HttpSession session = httpServletRequest.getSession(false);
                     if (session != null) {
                         session.removeAttribute("SPRING_SECURITY_LAST_EXCEPTION");

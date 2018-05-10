@@ -20,6 +20,7 @@ import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
 import com.bgh.myopeninvoice.db.model.ContactsEntity;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.ContactsEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.slf4j.Logger;
@@ -38,12 +39,11 @@ import java.io.Serializable;
 /**
  * Created by bcavlin on 17/03/17.
  */
+@Slf4j
 @ManagedBean
 @ViewScoped
 @Component
 public class ContactsBean implements Serializable {
-
-    private static Logger logger = LoggerFactory.getLogger(ContactsBean.class);
 
     @Autowired
     private InvoiceDAO invoiceDAO;
@@ -58,20 +58,20 @@ public class ContactsBean implements Serializable {
     public void init() {
         if (contactsEntityList == null) {
             final String parameter1 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("parameter1");
-            logger.info("Initializing contacts entries");
+            log.info("Initializing contacts entries");
             contactsEntityList = new ContactsEntityLazyModel(invoiceDAO, StringUtils.commaDelimitedListToSet(parameter1));
         }
     }
 
     private void refresh() {
-        logger.info("Loading contacts entries");
+        log.info("Loading contacts entries");
         if (selectedContactsEntity != null) {
             selectedContactsEntity = invoiceDAO.getContactsRepository().findOne(selectedContactsEntity.getContactId());
         }
     }
 
     public void newEntryListener(ActionEvent event) {
-        logger.info("Creating new entity");
+        log.info("Creating new entity");
         selectedContactsEntity = new ContactsEntity();
     }
 
@@ -79,7 +79,7 @@ public class ContactsBean implements Serializable {
         if (selectedContactsEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('contacts-form-dialog').hide()");
 
-            logger.info("Adding/editing entity {}", selectedContactsEntity.toString());
+            log.info("Adding/editing entity {}", selectedContactsEntity.toString());
             selectedContactsEntity = invoiceDAO.getContactsRepository().save(selectedContactsEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
@@ -90,7 +90,7 @@ public class ContactsBean implements Serializable {
 
     public void deleteEntryListener(ActionEvent event) {
         if (selectedContactsEntity != null) {
-            logger.info("Deleting entity {}", selectedContactsEntity.toString());
+            log.info("Deleting entity {}", selectedContactsEntity.toString());
             invoiceDAO.getContactsRepository().delete(selectedContactsEntity.getContactId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");

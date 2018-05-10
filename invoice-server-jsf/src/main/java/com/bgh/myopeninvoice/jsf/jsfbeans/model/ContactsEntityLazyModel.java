@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
 
-    private static Logger logger = LoggerFactory.getLogger(ContactsEntityLazyModel.class);
+    //private static Logger logger = LoggerFactory.getLogger(ContactsEntityLazyModel.class);
 
     private List<ContactsEntity> contactsEntityList;
 
