@@ -34,7 +34,8 @@ public class LoginController {
         if (log.isDebugEnabled()) {
             log.debug("Login method reached");
             if(request.getCookies() != null) {
-                Arrays.stream(request.getCookies()).forEach(c -> log.debug("Cookie information: {}", ToStringBuilder.reflectionToString(c)));
+                Arrays.stream(request.getCookies()).forEach(c -> log.debug("Cookie information: {}",
+                        ToStringBuilder.reflectionToString(c)));
             }
         }
         return "Login";
