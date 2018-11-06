@@ -17,30 +17,31 @@
 package com.bgh.myopeninvoice.db.model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
 @Data
 @Entity
-@Table(name = "TAX", schema = "INVOICE", catalog = "INVOICEDB")
-public class TaxEntity implements Serializable {
+@Table(name = "ROLE", schema = "INVOICE", catalog = "INVOICEDB")
+public class RoleEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "TAX_ID", nullable = false)
-    private Integer taxId;
+    @Column(name = "ROLE_ID", nullable = false)
+    private Integer roleId;
 
     @Basic
-    @Column(name = "PERCENT", nullable = false, precision = 4)
-    private BigDecimal percent;
+    @Column(name = "ROLE_NAME", nullable = false, length = 50)
+    private String roleName;
 
-    @Basic
-    @Column(name = "IDENTIFIER", nullable = false, length = 50)
-    private String identifier;
+    @LazyCollection(LazyCollectionOption.TRUE)
+    @OneToMany(mappedBy = "roleByRoleId")
+    private Collection<UserRoleEntity> userRoleByRoleId;
 
 }

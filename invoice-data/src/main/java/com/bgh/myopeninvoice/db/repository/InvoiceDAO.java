@@ -16,10 +16,10 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.CompaniesEntity;
-import com.bgh.myopeninvoice.db.model.ContactsEntity;
-import com.bgh.myopeninvoice.db.model.RolesEntity;
-import com.bgh.myopeninvoice.db.model.UsersEntity;
+import com.bgh.myopeninvoice.db.model.CompanyEntity;
+import com.bgh.myopeninvoice.db.model.ContactEntity;
+import com.bgh.myopeninvoice.db.model.RoleEntity;
+import com.bgh.myopeninvoice.db.model.UserEntity;
 
 import java.util.List;
 
@@ -42,9 +42,9 @@ public interface InvoiceDAO {
 
     InvoiceRepository getInvoiceRepository();
 
-    void saveUserRolesEntity(UsersEntity user, List<RolesEntity> targetRoles);
+    void saveUserRolesEntity(UserEntity user, List<RoleEntity> targetRoles);
 
-    void saveCompanyContactEntity(CompaniesEntity selectedCompaniesEntity, List<ContactsEntity> target);
+    void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> target);
 
     ContractsRepository getContractsRepository();
 

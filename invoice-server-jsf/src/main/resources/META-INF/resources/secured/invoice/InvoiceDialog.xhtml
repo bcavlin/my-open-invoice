@@ -67,7 +67,7 @@
                              required="true" style="margin-left: 5px;" requiredMessage="To company is required">
                 <f:selectItem itemLabel="---Select Company To Bill---" itemValue=""/>
                 <f:selectItems var="selection_to_c"
-                               value="#{invoiceBean.companiesEntityCollectionForSelection}"
+                               value="#{invoiceBean.companyEntityCollectionForSelection}"
                                itemLabel="#{selection_to_c.companyName}, contracts (#{fn:length(selection_to_c.contractsByCompanyId)}) - BN:#{selection_to_c.businessNumber}"
                                itemValue="#{selection_to_c.companyId}"/>
                 <p:ajax event="change" update="@form:updates,@form:title,@form:submitInvoice,@form:contract"
@@ -79,7 +79,7 @@
                              required="true" style="margin-left: 5px;" requiredMessage="Contract is required">
                 <f:selectItem itemLabel="---Select Contract---" itemValue=""/>
                 <f:selectItems var="selection_contract"
-                               value="#{invoiceBean.contractsEntityCollectionForSelection}"
+                               value="#{invoiceBean.contractEntityCollectionForSelection}"
                                itemLabel="ID: #{selection_contract.contractId}, Number: #{selection_contract.contractNumber},
                                From: #{selection_contract.validFrom}, To: #{selection_contract.validTo} #{selection_contract.checkIfContractValid()?' [Valid]':' [Not valid]'}"
                                itemValue="#{selection_contract.contractId}"/>

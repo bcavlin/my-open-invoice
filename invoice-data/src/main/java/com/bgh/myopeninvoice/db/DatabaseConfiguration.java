@@ -16,14 +16,15 @@
 
 package com.bgh.myopeninvoice.db;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.beans.PropertyVetoException;
 
@@ -33,20 +34,8 @@ import java.beans.PropertyVetoException;
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.bgh.myopeninvoice.db.repository"})
 @EntityScan(basePackages = {"com.bgh.myopeninvoice.db.model"})
+@ComponentScan(basePackages = {"com.bgh.myopeninvoice.db.repository", "com.bgh.myopeninvoice.db.service"})
 @EnableAutoConfiguration
+@EnableTransactionManagement
 public class DatabaseConfiguration {
-
-    @Autowired
-    private Environment env;
-
-    @Bean(name = "comboDataSource")
-    public ComboPooledDataSource dataSource() throws PropertyVetoException {
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setMinPoolSize(Integer.parseInt(env.getProperty("hibernate.c3p0.max_size")));
-        dataSource.setInitialPoolSize(Integer.parseInt(env.getProperty("hibernate.c3p0.initial_pool_size")));
-        dataSource.setJdbcUrl(env.getProperty("spring.datasource.url"));
-        dataSource.setUser(env.getProperty("spring.datasource.username"));
-        dataSource.setDriverClass(env.getProperty("spring.datasource.driver-class-name"));
-        return dataSource;
-    }
 }

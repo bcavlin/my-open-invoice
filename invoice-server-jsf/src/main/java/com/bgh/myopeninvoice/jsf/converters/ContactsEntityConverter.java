@@ -17,7 +17,7 @@
 package com.bgh.myopeninvoice.jsf.converters;
 
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.ContactsEntity;
+import com.bgh.myopeninvoice.db.model.ContactEntity;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -51,6 +51,6 @@ public class ContactsEntityConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
-        return ((ContactsEntity)o).getContactId().toString();
+        return ((ContactEntity)o).getContactId().toString();
     }
 }

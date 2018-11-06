@@ -81,9 +81,9 @@ public class InvoiceBean implements Serializable {
 
     private Collection<CompanyContactEntity> companyContactEntityCollectionForSelection;
 
-    private Collection<CompaniesEntity> companiesEntityCollectionForSelection;
+    private Collection<CompanyEntity> companyEntityCollectionForSelection;
 
-    private Collection<ContractsEntity> contractsEntityCollectionForSelection;
+    private Collection<ContractEntity> contractEntityCollectionForSelection;
 
     private Collection<TaxEntity> taxEntityCollectionForSelection;
 
@@ -116,7 +116,7 @@ public class InvoiceBean implements Serializable {
         Predicate p = QCompanyContactEntity.companyContactEntity.companiesByCompanyId.ownedByMe.isTrue();
         companyContactEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompanyContactRepository().findAll(p));
         Predicate p1 = QCompaniesEntity.companiesEntity.ownedByMe.isFalse();
-        companiesEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompaniesRepository().findAll(p1));
+        companyEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getCompaniesRepository().findAll(p1));
         taxEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getTaxRepository().findAll());
         refreshReports();
         refreshContracts();
@@ -134,7 +134,7 @@ public class InvoiceBean implements Serializable {
 
     private void refreshContracts() {
         Predicate predicateContracts = null;
-        contractsEntityCollectionForSelection = null;
+        contractEntityCollectionForSelection = null;
         Date today = new Date();
         if (selectedInvoiceEntity != null && selectedInvoiceEntity.getCompanyTo() != null) {
             predicateContracts = QContractsEntity.contractsEntity.contractSignedWith.eq(selectedInvoiceEntity.getCompanyTo());
@@ -143,7 +143,7 @@ public class InvoiceBean implements Serializable {
 
 
             Sort sortContracts = new Sort(Sort.Direction.DESC, "validTo");
-            contractsEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getContractsRepository().findAll(predicateContracts, sortContracts));
+            contractEntityCollectionForSelection = Lists.newArrayList(invoiceDAO.getContractsRepository().findAll(predicateContracts, sortContracts));
         }
     }
 
@@ -165,7 +165,7 @@ public class InvoiceBean implements Serializable {
         selectedInvoiceEntity.setInvoiceItemsByInvoiceId(new ArrayList<>()); //for value calculation
 
         selectedInvoiceItemsEntity = null;
-        contractsEntityCollectionForSelection = null;
+        contractEntityCollectionForSelection = null;
     }
 
     public void addNewInvoiceItemsListener(ActionEvent event) {
@@ -589,12 +589,12 @@ public class InvoiceBean implements Serializable {
         this.companyContactEntityCollectionForSelection = companyContactEntityCollectionForSelection;
     }
 
-    public Collection<CompaniesEntity> getCompaniesEntityCollectionForSelection() {
-        return companiesEntityCollectionForSelection;
+    public Collection<CompanyEntity> getCompanyEntityCollectionForSelection() {
+        return companyEntityCollectionForSelection;
     }
 
-    public void setCompaniesEntityCollectionForSelection(Collection<CompaniesEntity> companiesEntityCollectionForSelection) {
-        this.companiesEntityCollectionForSelection = companiesEntityCollectionForSelection;
+    public void setCompanyEntityCollectionForSelection(Collection<CompanyEntity> companyEntityCollectionForSelection) {
+        this.companyEntityCollectionForSelection = companyEntityCollectionForSelection;
     }
 
     public Collection<TaxEntity> getTaxEntityCollectionForSelection() {
@@ -651,11 +651,11 @@ public class InvoiceBean implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('content-image-2-dialog').show()");
     }
 
-    public Collection<ContractsEntity> getContractsEntityCollectionForSelection() {
-        return contractsEntityCollectionForSelection;
+    public Collection<ContractEntity> getContractEntityCollectionForSelection() {
+        return contractEntityCollectionForSelection;
     }
 
-    public void setContractsEntityCollectionForSelection(Collection<ContractsEntity> contractsEntityCollectionForSelection) {
-        this.contractsEntityCollectionForSelection = contractsEntityCollectionForSelection;
+    public void setContractEntityCollectionForSelection(Collection<ContractEntity> contractEntityCollectionForSelection) {
+        this.contractEntityCollectionForSelection = contractEntityCollectionForSelection;
     }
 }

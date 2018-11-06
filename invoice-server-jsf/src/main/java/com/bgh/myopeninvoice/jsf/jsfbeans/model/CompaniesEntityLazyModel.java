@@ -16,13 +16,11 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
+import com.bgh.myopeninvoice.db.model.CompanyEntity;
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.CompaniesEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,11 +32,11 @@ import java.util.Map;
 /**
  * Created by bcavlin on 17/03/17.
  */
-public class CompaniesEntityLazyModel extends LazyDataModel<CompaniesEntity> {
+public class CompaniesEntityLazyModel extends LazyDataModel<CompanyEntity> {
 
     //private static Logger logger = LoggerFactory.getLogger(CompaniesEntityLazyModel.class);
 
-    private List<CompaniesEntity> companiesEntityList;
+    private List<CompanyEntity> companyEntityList;
 
     private InvoiceDAO invoiceDAO;
 
@@ -47,9 +45,9 @@ public class CompaniesEntityLazyModel extends LazyDataModel<CompaniesEntity> {
     }
 
     @Override
-    public List<CompaniesEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<CompanyEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-        companiesEntityList = new ArrayList<>();
+        companyEntityList = new ArrayList<>();
 
         PageRequest pageRequest = new PageRequest(first * pageSize, pageSize);
 
@@ -72,7 +70,7 @@ public class CompaniesEntityLazyModel extends LazyDataModel<CompaniesEntity> {
 
         BooleanExpression predicate = null;
 
-        Page<CompaniesEntity> companiesEntityPage = null;
+        Page<CompanyEntity> companiesEntityPage = null;
 
         if (predicate == null) {
             companiesEntityPage = invoiceDAO.getCompaniesRepository().findAll(pageRequest);
@@ -83,24 +81,24 @@ public class CompaniesEntityLazyModel extends LazyDataModel<CompaniesEntity> {
         setRowCount((int) companiesEntityPage.getTotalElements());
         setPageSize(getPageSize());
 
-        for (CompaniesEntity companiesEntity : companiesEntityPage) {
-            companiesEntityList.add(companiesEntity);
+        for (CompanyEntity companyEntity : companiesEntityPage) {
+            companyEntityList.add(companyEntity);
         }
-        return companiesEntityList;
+        return companyEntityList;
     }
 
     @Override
-    public Object getRowKey(CompaniesEntity object) {
+    public Object getRowKey(CompanyEntity object) {
         return object.getCompanyId();
     }
 
     @Override
-    public CompaniesEntity getRowData(String rowKey) {
+    public CompanyEntity getRowData(String rowKey) {
         Integer id = Integer.valueOf(rowKey);
-        if (companiesEntityList != null) {
-            for (CompaniesEntity companiesEntity : companiesEntityList) {
-                if (id.equals(companiesEntity.getCompanyId())) {
-                    return companiesEntity;
+        if (companyEntityList != null) {
+            for (CompanyEntity companyEntity : companyEntityList) {
+                if (id.equals(companyEntity.getCompanyId())) {
+                    return companyEntity;
                 }
             }
         }

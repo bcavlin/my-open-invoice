@@ -31,15 +31,15 @@
                                  oncomplete="PF('contacts-form-dialog').show();"
                                  actionListener="#{contactsBean.newEntryListener}"
                                  update="main-form, contacts-form"/>
-                <p:commandButton value="Edit Contact (#{contactsBean.selectedContactsEntity.email})"
+                <p:commandButton value="Edit Contact (#{contactsBean.selectedContactEntity.email})"
                                  icon="ui-icon-pencil"
-                                 rendered="#{!empty contactsBean.selectedContactsEntity and contactsBean.selectedContactsEntity.contactId gt 0}"
+                                 rendered="#{!empty contactsBean.selectedContactEntity and contactsBean.selectedContactEntity.contactId gt 0}"
                                  style="margin-right: 15px;" oncomplete="PF('contacts-form-dialog').show();"
                                  update="main-form,contacts-form"/>
                 <p:commandButton
-                        value="Delete Contact (#{contactsBean.selectedContactsEntity.email})"
+                        value="Delete Contact (#{contactsBean.selectedContactEntity.email})"
                         icon="ui-icon-trash"
-                        rendered="#{!empty contactsBean.selectedContactsEntity and contactsBean.selectedContactsEntity.contactId gt 0}"
+                        rendered="#{!empty contactsBean.selectedContactEntity and contactsBean.selectedContactEntity.contactId gt 0}"
                         style="margin-right: 15px; background-color: rgba(229,8,5,0.63)" oncomplete="PF('confirmation1').show();"/>
 
                 <p:confirmDialog message="Do you want to remove this contact item?"
@@ -47,7 +47,7 @@
                                  header="Delete contact"
                                  severity="alert"
                                  widgetVar="confirmation1">
-                    <p:commandButton value="Remove (#{contactsBean.selectedContactsEntity.email})"
+                    <p:commandButton value="Remove (#{contactsBean.selectedContactEntity.email})"
                                      oncomplete="PF('confirmation1').hide()"
                                      actionListener="#{contactsBean.deleteEntryListener}"
                                      update="main-form, contacts-form" style="color: brown;"/>
@@ -56,7 +56,7 @@
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactsEntity"-->
+            <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactEntity"-->
             <p:dataTable id="contacts-table"
                          var="contact"
                          widgetVar="contacts-table"
@@ -65,7 +65,7 @@
                          paginator="true"
                          rows="#{contactsBean.pageSize}"
                          rowKey="#{contact.contactId}"
-                         selection="#{contactsBean.selectedContactsEntity}"
+                         selection="#{contactsBean.selectedContactEntity}"
                          selectionMode="single"
                          paginatorPosition="bottom"
                          emptyMessage="No items found with given criteria"
@@ -86,8 +86,8 @@
                                     rendered="#{not empty contact.companiesList}"/>
                     <p:graphicImage value="/images/user-silhouette.png"
                                     style="float: right; opacity: 0.7; margin-right: 3px;"
-                                    title="username: #{contact.usersByUserId.username}"
-                                    rendered="#{not empty contact.usersByUserId}"/>
+                                    title="username: #{contact.userByUserId.username}"
+                                    rendered="#{not empty contact.userByUserId}"/>
                 </p:column>
                 <p:column headerText="Email" sortBy="#{contact.email}" style="text-align:start;" width="330">
                     <f:facet name="filter">
@@ -124,11 +124,11 @@
                 <h:panelGrid id="contacts-form-grid1" columns="2" columnClasses="two-column-1,two-column-2"
                              style="padding-top: 3px;">
                     <p:outputLabel value="ID: " style="font-weight: bold;"/>
-                    <h:outputText value="#{contactsBean.selectedContactsEntity.contactId}"
+                    <h:outputText value="#{contactsBean.selectedContactEntity.contactId}"
                                   style="margin-left: 5px; font-weight: bold;"/>
 
                     <p:outputLabel value="Email: " id="email" styleClass="required"/>
-                    <p:inputText value="#{contactsBean.selectedContactsEntity.email}"
+                    <p:inputText value="#{contactsBean.selectedContactEntity.email}"
                                  style="margin-left: 5px;"
                                  maxlength="255"
                                  required="true"
@@ -139,24 +139,24 @@
                     </p:inputText>
 
                     <p:outputLabel value="First Name: " styleClass="required"/>
-                    <p:inputText value="#{contactsBean.selectedContactsEntity.firstName}" style="margin-left: 5px;"
+                    <p:inputText value="#{contactsBean.selectedContactEntity.firstName}" style="margin-left: 5px;"
                                  maxlength="100"
                                  required="true"
                                  requiredMessage="First name is required"/>
 
                     <p:outputLabel value="Last Name: " styleClass="required"/>
-                    <p:inputText value="#{contactsBean.selectedContactsEntity.lastName}" style="margin-left: 5px;"
+                    <p:inputText value="#{contactsBean.selectedContactEntity.lastName}" style="margin-left: 5px;"
                                  maxlength="100" required="true"/>
 
                     <p:outputLabel value="Phone: "/>
-                    <p:inputText value="#{contactsBean.selectedContactsEntity.phone1}" style="margin-left: 5px;"
+                    <p:inputText value="#{contactsBean.selectedContactEntity.phone1}" style="margin-left: 5px;"
                                  maxlength="20" validatorMessage="Phone number is not in correct format">
                         <f:validateRegex
                                 pattern="^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$"/>
                     </p:inputText>
 
                     <p:outputLabel value="Address: "/>
-                    <p:inputTextarea value="#{contactsBean.selectedContactsEntity.addressLine1}"
+                    <p:inputTextarea value="#{contactsBean.selectedContactEntity.addressLine1}"
                                      style="margin-left: 5px; width: 300px;"
                                      autoResize="false" maxlength="500"/>
 

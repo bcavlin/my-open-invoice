@@ -47,11 +47,11 @@ public class InvoiceEntity implements Serializable {
     private String rateUnit;
     private Integer ccyId;
     private Collection<AttachmentEntity> attachmentsByInvoiceId;
-    private CompaniesEntity companiesByCompanyTo;
+    private CompanyEntity companiesByCompanyTo;
     private CompanyContactEntity companyContactByCompanyContactFrom;
     private CurrencyEntity currencyByCcyId;
     private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
-    private ContractsEntity contractsByCompanyContractTo;
+    private ContractEntity contractsByCompanyContractTo;
     private Integer companyContractTo;
 
 
@@ -286,11 +286,11 @@ public class InvoiceEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "COMPANY_TO", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
-    public CompaniesEntity getCompaniesByCompanyTo() {
+    public CompanyEntity getCompaniesByCompanyTo() {
         return companiesByCompanyTo;
     }
 
-    public void setCompaniesByCompanyTo(CompaniesEntity companiesByCompanyTo) {
+    public void setCompaniesByCompanyTo(CompanyEntity companiesByCompanyTo) {
         this.companiesByCompanyTo = companiesByCompanyTo;
     }
 
@@ -327,11 +327,11 @@ public class InvoiceEntity implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "COMPANY_CONTRACT_TO", referencedColumnName = "CONTRACT_ID", insertable = false, updatable = false)
-    public ContractsEntity getContractsByCompanyContractTo() {
+    public ContractEntity getContractsByCompanyContractTo() {
         return contractsByCompanyContractTo;
     }
 
-    public void setContractsByCompanyContractTo(ContractsEntity contractsByCompanyContractTo) {
+    public void setContractsByCompanyContractTo(ContractEntity contractsByCompanyContractTo) {
         this.contractsByCompanyContractTo = contractsByCompanyContractTo;
     }
 

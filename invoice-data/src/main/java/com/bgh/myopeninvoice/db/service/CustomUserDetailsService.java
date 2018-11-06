@@ -21,8 +21,8 @@ package com.bgh.myopeninvoice.db.service;
  */
 
 
+import com.bgh.myopeninvoice.db.model.UserEntity;
 import com.bgh.myopeninvoice.db.model.UserRoleEntity;
-import com.bgh.myopeninvoice.db.model.UsersEntity;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         UserDetails userDetails = null;
 
-        final Optional<UsersEntity> user = usersRepository.findByUsername(username);
+        final Optional<UserEntity> user = usersRepository.findByUsername(username);
 
         if (!user.isPresent()) {
             log.error("Username [{}] not found!", username);
@@ -80,14 +80,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-            if (user.get().getUserRolesByUserId().size() == 0) {
+            if (user.get().getUserRoleByUserId().size() == 0) {
                 log.error("Username [{}] does not have any roles assigned", username);
                 throw new AuthenticationServiceException("User does not have any roles assigned");
             } else {
-                for (UserRoleEntity userRoleEntity : user.get().getUserRolesByUserId()) {
-                    log.info("Authority [{}] added for user [{}]", userRoleEntity.getRolesByRoleId()
+                for (UserRoleEntity userRoleEntity : user.get().getUserRoleByUserId()) {
+                    log.info("Authority [{}] added for user [{}]", userRoleEntity.getRoleByRoleId()
                             .getRoleName(), username);
-                    authorities.add(new SimpleGrantedAuthority(userRoleEntity.getRolesByRoleId().getRoleName()));
+                    authorities.add(new SimpleGrantedAuthority(userRoleEntity.getRoleByRoleId().getRoleName()));
                 }
             }
 
@@ -104,7 +104,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public void updateLastLoginDate(User user){
-        final Optional<UsersEntity> byUsername = usersRepository.findByUsername(user.getUsername());
+        final Optional<UserEntity> byUsername = usersRepository.findByUsername(user.getUsername());
         if(byUsername.isPresent()) {
             byUsername.get().setLastLogged(new Date());
             usersRepository.save(byUsername.get());

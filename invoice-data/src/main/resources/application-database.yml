@@ -1,14 +1,14 @@
- hibernate:
-   c3p0:
-     max_size: 10
-     initial_pool_size: 10
- spring:
+spring:
   datasource:
-    url: jdbc:h2:file:./invoice-db/invoiceDB;AUTO_SERVER=TRUE
+    hikari:
+      connection-test-query: SELECT 1 FROM DUAL
+      minimum-idle: 1
+      maximum-pool-size: 5
+    url: jdbc:h2:file:../invoice-db/invoiceDB;AUTO_SERVER=TRUE
     driver-class-name: org.h2.Driver
     platform: h2
-    initialize: false
     username: sa
+    type: com.zaxxer.hikari.HikariDataSource
   h2:
     console:
       enabled: false
@@ -16,5 +16,3 @@
     hibernate:
       ddl-auto: none
     show-sql: false
-
-

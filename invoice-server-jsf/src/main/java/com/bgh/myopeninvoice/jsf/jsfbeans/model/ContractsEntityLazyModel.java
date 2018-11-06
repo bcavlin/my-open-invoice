@@ -16,15 +16,13 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
+import com.bgh.myopeninvoice.db.model.CompanyEntity;
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.CompaniesEntity;
-import com.bgh.myopeninvoice.db.model.ContractsEntity;
+import com.bgh.myopeninvoice.db.model.ContractEntity;
 import com.bgh.myopeninvoice.db.model.QContractsEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,25 +34,25 @@ import java.util.Map;
 /**
  * Created by bcavlin on 17/03/17.
  */
-public class ContractsEntityLazyModel extends LazyDataModel<ContractsEntity> {
+public class ContractsEntityLazyModel extends LazyDataModel<ContractEntity> {
 
     //private static Logger logger = LoggerFactory.getLogger(ContractsEntityLazyModel.class);
 
-    private List<ContractsEntity> contractsEntityList;
+    private List<ContractEntity> contractEntityList;
 
     private InvoiceDAO invoiceDAO;
 
-    private CompaniesEntity selectedCompaniesEntity;
+    private CompanyEntity selectedCompanyEntity;
 
-    public ContractsEntityLazyModel(InvoiceDAO invoiceDAO, CompaniesEntity selectedCompaniesEntity) {
+    public ContractsEntityLazyModel(InvoiceDAO invoiceDAO, CompanyEntity selectedCompanyEntity) {
         this.invoiceDAO = invoiceDAO;
-        this.selectedCompaniesEntity = selectedCompaniesEntity;
+        this.selectedCompanyEntity = selectedCompanyEntity;
     }
 
     @Override
-    public List<ContractsEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<ContractEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-        contractsEntityList = new ArrayList<>();
+        contractEntityList = new ArrayList<>();
 
         PageRequest pageRequest = new PageRequest(first * pageSize, pageSize);
 
@@ -75,9 +73,9 @@ public class ContractsEntityLazyModel extends LazyDataModel<ContractsEntity> {
             e.printStackTrace();
         }
 
-        final BooleanExpression predicate = QContractsEntity.contractsEntity.contractSignedWith.eq(selectedCompaniesEntity.getCompanyId());
+        final BooleanExpression predicate = QContractsEntity.contractsEntity.contractSignedWith.eq(selectedCompanyEntity.getCompanyId());
 
-        Page<ContractsEntity> contractsEntityPage = null;
+        Page<ContractEntity> contractsEntityPage = null;
 
         if (predicate == null) {
             contractsEntityPage = invoiceDAO.getContractsRepository().findAll(pageRequest);
@@ -88,24 +86,24 @@ public class ContractsEntityLazyModel extends LazyDataModel<ContractsEntity> {
         setRowCount((int) contractsEntityPage.getTotalElements());
         setPageSize(getPageSize());
 
-        for (ContractsEntity contractsEntity : contractsEntityPage) {
-            contractsEntityList.add(contractsEntity);
+        for (ContractEntity contractEntity : contractsEntityPage) {
+            contractEntityList.add(contractEntity);
         }
-        return contractsEntityList;
+        return contractEntityList;
     }
 
     @Override
-    public Object getRowKey(ContractsEntity object) {
+    public Object getRowKey(ContractEntity object) {
         return object.getContractId();
     }
 
     @Override
-    public ContractsEntity getRowData(String rowKey) {
+    public ContractEntity getRowData(String rowKey) {
         Integer id = Integer.valueOf(rowKey);
-        if (contractsEntityList != null) {
-            for (ContractsEntity contractsEntity : contractsEntityList) {
-                if (id.equals(contractsEntity.getContractId())) {
-                    return contractsEntity;
+        if (contractEntityList != null) {
+            for (ContractEntity contractEntity : contractEntityList) {
+                if (id.equals(contractEntity.getContractId())) {
+                    return contractEntity;
                 }
             }
         }

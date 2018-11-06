@@ -16,14 +16,17 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.RolesEntity;
+import com.bgh.myopeninvoice.db.model.RoleEntity;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface RolesRepository extends CrudRepository<RolesEntity, Integer> {
+@Repository
+public interface RolesRepository extends CrudRepository<RoleEntity, Integer>, QuerydslPredicateExecutor<RoleEntity> {
 
-    RolesEntity findByRoleName(String roleName);
+    RoleEntity findByRoleName(String roleName);
 
 }

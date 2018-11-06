@@ -150,30 +150,30 @@ public class InvoiceDAOImpl implements InvoiceDAO {
 
     @Transactional
     @Override
-    public void saveUserRolesEntity(UsersEntity usersEntity, List<RolesEntity> targetRoles) {
+    public void saveUserRolesEntity(UserEntity userEntity, List<RoleEntity> targetRoles) {
         List<UserRoleEntity> add = new ArrayList<>();
         List<UserRoleEntity> remove = new ArrayList<>();
         //first add new roles if not already there
-        for (RolesEntity target : targetRoles) {
+        for (RoleEntity target : targetRoles) {
             boolean found = false;
-            for (UserRoleEntity currentRole : usersEntity.getUserRolesByUserId()) {
-                if (currentRole.getRolesByRoleId().getRoleId().equals(target.getRoleId())) {
+            for (UserRoleEntity currentRole : userEntity.getUserRoleByUserId()) {
+                if (currentRole.getRoleByRoleId().getRoleId().equals(target.getRoleId())) {
                     found = true;
                 }
             }
             if (!found) {
                 UserRoleEntity _new = new UserRoleEntity();
                 _new.setDateAssigned(new Date());
-                _new.setUsersByUserId(usersEntity);
-                _new.setRolesByRoleId(target);
+                _new.setUserByUserId(userEntity);
+                _new.setRoleByRoleId(target);
                 add.add(_new);
             }
         }
         //then delete those that are extra
-        for (UserRoleEntity current : usersEntity.getUserRolesByUserId()) {
+        for (UserRoleEntity current : userEntity.getUserRoleByUserId()) {
             boolean found = false;
-            for (RolesEntity targetRole : targetRoles) {
-                if (current.getRolesByRoleId().getRoleId().equals(targetRole.getRoleId())) {
+            for (RoleEntity targetRole : targetRoles) {
+                if (current.getRoleByRoleId().getRoleId().equals(targetRole.getRoleId())) {
                     found = true;
                 }
             }
@@ -183,34 +183,38 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         }
 
         for (UserRoleEntity entity : remove) {
-            userRoleRepository.delete(entity.getUserRoleId());
+            userRoleRepository.delete(entity);
         }
-        userRoleRepository.save(add);
+
+        for (UserRoleEntity entity : add) {
+            userRoleRepository.save(entity);
+        }
+
     }
 
     @Override
-    public void saveCompanyContactEntity(CompaniesEntity selectedCompaniesEntity, List<ContactsEntity> targetContacts) {
+    public void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts) {
         List<CompanyContactEntity> add = new ArrayList<>();
         List<CompanyContactEntity> remove = new ArrayList<>();
 
-        for (ContactsEntity target : targetContacts) {
+        for (ContactEntity target : targetContacts) {
             boolean found = false;
-            for (CompanyContactEntity current : selectedCompaniesEntity.getCompanyContactsByCompanyId()) {
+            for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
                 if (current.getContactsByContactId().getContactId().equals(target.getContactId())) {
                     found = true;
                 }
             }
             if (!found) {
                 CompanyContactEntity _new = new CompanyContactEntity();
-                _new.setCompaniesByCompanyId(selectedCompaniesEntity);
+                _new.setCompaniesByCompanyId(selectedCompanyEntity);
                 _new.setContactsByContactId(target);
                 add.add(_new);
             }
         }
         //then delete those that are extra
-        for (CompanyContactEntity current : selectedCompaniesEntity.getCompanyContactsByCompanyId()) {
+        for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
             boolean found = false;
-            for (ContactsEntity target : targetContacts) {
+            for (ContactEntity target : targetContacts) {
                 if (current.getContactsByContactId().getContactId().equals(target.getContactId())) {
                     found = true;
                 }
@@ -221,9 +225,13 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         }
 
         for (CompanyContactEntity entity : remove) {
-            companyContactRepository.delete(entity.getCompanyContactId());
+            companyContactRepository.delete(entity);
         }
-        companyContactRepository.save(add);
+
+        for (CompanyContactEntity entity : add) {
+            companyContactRepository.save(entity);
+        }
+
     }
 
     @Override
