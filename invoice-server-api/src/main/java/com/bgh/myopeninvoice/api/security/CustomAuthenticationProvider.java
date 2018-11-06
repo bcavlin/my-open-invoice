@@ -3,7 +3,7 @@ package com.bgh.myopeninvoice.api.security;
 import com.bgh.myopeninvoice.db.model.UserEntity;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -50,7 +50,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             log.info("User [{}] has been authenticated", username);
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
-            user.get().getUserRolesByUserId().forEach(r -> {
+            user.get().getUserRoleByUserId().forEach(r -> {
                 log.info("Adding role [{}] to user [{}]", r.getRoleByRoleId().getRoleName(), username);
                 authorities.add(new SimpleGrantedAuthority(r.getRoleByRoleId().getRoleName()));
             });
