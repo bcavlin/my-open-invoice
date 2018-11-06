@@ -17,12 +17,15 @@
 package com.bgh.myopeninvoice.db.repository;
 
 import com.bgh.myopeninvoice.db.model.TimeSheetEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface TimeSheetRepository extends PagingAndSortingRepository<TimeSheetEntity, Integer>, QueryDslPredicateExecutor<TimeSheetEntity> {
+@Repository
+public interface TimeSheetRepository
+        extends PagingAndSortingRepository<TimeSheetEntity, Integer>, QuerydslPredicateExecutor<TimeSheetEntity> {
 
 }

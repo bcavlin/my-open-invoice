@@ -16,13 +16,16 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.ContactsEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import com.bgh.myopeninvoice.db.model.ContactEntity;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface ContactsRepository extends PagingAndSortingRepository<ContactsEntity, Integer>, QueryDslPredicateExecutor<ContactsEntity> {
+@Repository
+public interface ContactsRepository
+        extends PagingAndSortingRepository<ContactEntity, Integer>, QuerydslPredicateExecutor<ContactEntity> {
 
 }

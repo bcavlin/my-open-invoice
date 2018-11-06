@@ -16,13 +16,11 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
+import com.bgh.myopeninvoice.db.model.UserEntity;
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.UsersEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,11 +32,11 @@ import java.util.Map;
 /**
  * Created by bcavlin on 17/03/17.
  */
-public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
+public class UsersEntityLazyModel extends LazyDataModel<UserEntity> {
 
     //private static Logger logger = LoggerFactory.getLogger(UsersEntityLazyModel.class);
 
-    private List<UsersEntity> UsersEntityList;
+    private List<UserEntity> userEntityList;
 
     private InvoiceDAO invoiceDAO;
 
@@ -47,9 +45,9 @@ public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
     }
 
     @Override
-    public List<UsersEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<UserEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-        UsersEntityList = new ArrayList<>();
+        userEntityList = new ArrayList<>();
 
         PageRequest pageRequest = new PageRequest(first * pageSize, pageSize);
 
@@ -76,7 +74,7 @@ public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
             for (Map.Entry<String, Object> stringObjectEntry : filters.entrySet()) {
                 BooleanExpression temp = null;
 
-//                if (QUsersEntity.usersEntity.identifier.toString().equalsIgnoreCase("UsersEntity." + stringObjectEntry.getKey())) {
+//                if (QUsersEntity.usersEntity.identifier.toString().equalsIgnoreCase("UserEntity." + stringObjectEntry.getKey())) {
 //                    temp = QUsersEntity.usersEntity.identifier.containsIgnoreCase(stringObjectEntry.getValue().toString());
 //                }
 //
@@ -90,7 +88,7 @@ public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
             }
         }
 
-        Page<UsersEntity> usersEntityPage = null;
+        Page<UserEntity> usersEntityPage = null;
 
         if (predicate == null) {
             usersEntityPage = invoiceDAO.getUsersRepository().findAll(pageRequest);
@@ -101,24 +99,24 @@ public class UsersEntityLazyModel extends LazyDataModel<UsersEntity> {
         setRowCount((int) usersEntityPage.getTotalElements());
         setPageSize(getPageSize());
 
-        for (UsersEntity UsersEntity : usersEntityPage) {
-            UsersEntityList.add(UsersEntity);
+        for (UserEntity UserEntity : usersEntityPage) {
+            userEntityList.add(UserEntity);
         }
-        return UsersEntityList;
+        return userEntityList;
     }
 
     @Override
-    public Object getRowKey(UsersEntity object) {
+    public Object getRowKey(UserEntity object) {
         return object.getUserId();
     }
 
     @Override
-    public UsersEntity getRowData(String rowKey) {
+    public UserEntity getRowData(String rowKey) {
         Integer id = Integer.valueOf(rowKey);
-        if (UsersEntityList != null) {
-            for (UsersEntity UsersEntity : UsersEntityList) {
-                if (id.equals(UsersEntity.getUserId())) {
-                    return UsersEntity;
+        if (userEntityList != null) {
+            for (UserEntity UserEntity : userEntityList) {
+                if (id.equals(UserEntity.getUserId())) {
+                    return UserEntity;
                 }
             }
         }

@@ -3,7 +3,9 @@
 
     <persistence-unit name="invoice-db-persistence">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
+        <class>com.bgh.myopeninvoice.db.model.RoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.UserRoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.model.UserEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

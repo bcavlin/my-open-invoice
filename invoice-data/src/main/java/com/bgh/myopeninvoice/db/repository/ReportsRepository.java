@@ -17,12 +17,15 @@
 package com.bgh.myopeninvoice.db.repository;
 
 import com.bgh.myopeninvoice.db.model.ReportsEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
-public interface ReportsRepository extends PagingAndSortingRepository<ReportsEntity, Integer>, QueryDslPredicateExecutor<ReportsEntity> {
+@Repository
+public interface ReportsRepository
+        extends PagingAndSortingRepository<ReportsEntity, Integer>, QuerydslPredicateExecutor<ReportsEntity> {
 
 }

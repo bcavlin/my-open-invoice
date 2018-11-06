@@ -16,10 +16,10 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans;
 
+import com.bgh.myopeninvoice.db.model.RoleEntity;
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.RolesEntity;
 import com.bgh.myopeninvoice.db.model.UserRoleEntity;
-import com.bgh.myopeninvoice.db.model.UsersEntity;
+import com.bgh.myopeninvoice.db.model.UserEntity;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.UsersEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.CustomUtils;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
@@ -28,8 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.LazyDataModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,11 +52,11 @@ public class UsersBean implements Serializable {
     @Autowired
     private InvoiceDAO invoiceDAO;
 
-    private LazyDataModel<UsersEntity> usersEntityList;
+    private LazyDataModel<UserEntity> usersEntityList;
 
-    private DualListModel<RolesEntity> rolesDualListModel;
+    private DualListModel<RoleEntity> rolesDualListModel;
 
-    private UsersEntity selectedUsersEntity;
+    private UserEntity selectedUserEntity;
 
     private String password;
     private String passwordRepeat;
@@ -69,7 +67,7 @@ public class UsersBean implements Serializable {
     private void init() {
         log.info("Initializing users entries");
         usersEntityList = new UsersEntityLazyModel(invoiceDAO);
-        selectedUsersEntity = null;
+        selectedUserEntity = null;
         setPassword(null);
         setPasswordRepeat(null);
 
@@ -77,18 +75,18 @@ public class UsersBean implements Serializable {
 
     private void refresh() {
         log.info("Loading users entries");
-        if (selectedUsersEntity != null) {
-            selectedUsersEntity = invoiceDAO.getUsersRepository().findOne(selectedUsersEntity.getUserId());
+        if (selectedUserEntity != null) {
+            selectedUserEntity = invoiceDAO.getUsersRepository().findOne(selectedUserEntity.getUserId());
         }
         setPassword(null);
         setPasswordRepeat(null);
 
     }
 
-    public boolean hasRole(UsersEntity user, String roleName) {
+    public boolean hasRole(UserEntity user, String roleName) {
         if (user != null) {
             for (UserRoleEntity userRoleEntity : user.getUserRolesByUserId()) {
-                if (roleName.equalsIgnoreCase(userRoleEntity.getRolesByRoleId().getRoleName())) {
+                if (roleName.equalsIgnoreCase(userRoleEntity.getRoleByRoleId().getRoleName())) {
                     return true;
                 }
             }
@@ -97,16 +95,16 @@ public class UsersBean implements Serializable {
     }
 
     private void fillDualList() {
-        final Iterable<RolesEntity> allRolesEntity = invoiceDAO.getRolesRepository().findAll();
-        final Collection<UserRoleEntity> assignedRolesEntity = selectedUsersEntity.getUserRolesByUserId();
+        final Iterable<RoleEntity> allRolesEntity = invoiceDAO.getRolesRepository().findAll();
+        final Collection<UserRoleEntity> assignedRolesEntity = selectedUserEntity.getUserRolesByUserId();
 
-        List<RolesEntity> sourceList = new ArrayList<>();
-        List<RolesEntity> targetList = new ArrayList<>();
+        List<RoleEntity> sourceList = new ArrayList<>();
+        List<RoleEntity> targetList = new ArrayList<>();
 
         rolesDualListModel = new DualListModel<>();
 
         allRolesEntity.forEach(sourceList::add);
-        assignedRolesEntity.forEach(r -> targetList.add(r.getRolesByRoleId()));
+        assignedRolesEntity.forEach(r -> targetList.add(r.getRoleByRoleId()));
 
         sourceList.removeAll(targetList);
 
@@ -124,8 +122,8 @@ public class UsersBean implements Serializable {
 
     public void newEntryListener(ActionEvent event) {
         log.info("Creating new entity");
-        selectedUsersEntity = new UsersEntity();
-        selectedUsersEntity.setUserRolesByUserId(new ArrayList<>()); //cannot be null
+        selectedUserEntity = new UserEntity();
+        selectedUserEntity.setUserRolesByUserId(new ArrayList<>()); //cannot be null
         fillDualList();
         setPassword(null);
         setPasswordRepeat(null);
@@ -133,11 +131,11 @@ public class UsersBean implements Serializable {
     }
 
     public void addOrEditEntryListener(ActionEvent event) throws Exception {
-        if (selectedUsersEntity != null) {
+        if (selectedUserEntity != null) {
             boolean success = true;
 
             if (StringUtils.isNotBlank(password) && password.length() > 5) {
-                selectedUsersEntity.setPassword(CustomUtils.encodePassword(password));
+                selectedUserEntity.setPassword(CustomUtils.encodePassword(password));
             }
 
             if (StringUtils.isNotBlank(password) && password.length() <= 5) {
@@ -145,7 +143,7 @@ public class UsersBean implements Serializable {
                 success = false;
             }
 
-            if (selectedUsersEntity.getEnabled() && selectedUsersEntity.getPassword() == null) {
+            if (selectedUserEntity.getEnabled() && selectedUserEntity.getPassword() == null) {
                 FacesUtils.addErrorMessage("You cannot enable user without a password");
                 success = false;
             }
@@ -153,8 +151,8 @@ public class UsersBean implements Serializable {
             if (success) {
                 RequestContext.getCurrentInstance().execute("PF('users-form-dialog').hide()");
 
-                log.info("Adding/editing entity {}", selectedUsersEntity.toString());
-                selectedUsersEntity = invoiceDAO.getUsersRepository().save(selectedUsersEntity);
+                log.info("Adding/editing entity {}", selectedUserEntity.toString());
+                selectedUserEntity = invoiceDAO.getUsersRepository().save(selectedUserEntity);
                 refresh();
                 FacesUtils.addSuccessMessage("Entity record updated");
                 setPassword(null);
@@ -167,11 +165,11 @@ public class UsersBean implements Serializable {
     }
 
     public void addOrEditEntryListener2(ActionEvent event) {
-        if (selectedUsersEntity != null && rolesDualListModel != null) {
+        if (selectedUserEntity != null && rolesDualListModel != null) {
             RequestContext.getCurrentInstance().execute("PF('roles-form-dialog').hide()");
 
             log.info("Adding/editing entity {}", rolesDualListModel.getTarget().toString());
-            invoiceDAO.saveUserRolesEntity(selectedUsersEntity, rolesDualListModel.getTarget());
+            invoiceDAO.saveUserRolesEntity(selectedUserEntity, rolesDualListModel.getTarget());
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
         } else {
@@ -180,12 +178,12 @@ public class UsersBean implements Serializable {
     }
 
     public void deleteEntryListener(ActionEvent event) {
-        if (selectedUsersEntity != null) {
-            log.info("Deleting entity {}", selectedUsersEntity.toString());
-            invoiceDAO.getUsersRepository().delete(selectedUsersEntity.getUserId());
+        if (selectedUserEntity != null) {
+            log.info("Deleting entity {}", selectedUserEntity.toString());
+            invoiceDAO.getUsersRepository().delete(selectedUserEntity.getUserId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
-            selectedUsersEntity = null;
+            selectedUserEntity = null;
         } else {
             FacesUtils.addErrorMessage("Selected users entity is null");
         }
@@ -201,27 +199,27 @@ public class UsersBean implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public LazyDataModel<UsersEntity> getUsersEntityList() {
+    public LazyDataModel<UserEntity> getUsersEntityList() {
         return usersEntityList;
     }
 
-    public void setUsersEntityList(LazyDataModel<UsersEntity> usersEntityList) {
+    public void setUsersEntityList(LazyDataModel<UserEntity> usersEntityList) {
         this.usersEntityList = usersEntityList;
     }
 
-    public UsersEntity getSelectedUsersEntity() {
-        return selectedUsersEntity;
+    public UserEntity getSelectedUserEntity() {
+        return selectedUserEntity;
     }
 
-    public void setSelectedUsersEntity(UsersEntity selectedUsersEntity) {
-        this.selectedUsersEntity = selectedUsersEntity;
+    public void setSelectedUserEntity(UserEntity selectedUserEntity) {
+        this.selectedUserEntity = selectedUserEntity;
     }
 
-    public DualListModel<RolesEntity> getRolesDualListModel() {
+    public DualListModel<RoleEntity> getRolesDualListModel() {
         return rolesDualListModel;
     }
 
-    public void setRolesDualListModel(DualListModel<RolesEntity> rolesDualListModel) {
+    public void setRolesDualListModel(DualListModel<RoleEntity> rolesDualListModel) {
         this.rolesDualListModel = rolesDualListModel;
     }
 

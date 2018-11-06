@@ -23,35 +23,43 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 /**
- * Created by bcavlin on 23/03/17.
+ * Created by bcavlin on 14/03/17.
  */
 @Data
 @Entity
-@Table(name = "COMPANY_CONTACT", schema = "INVOICE", catalog = "INVOICEDB")
-public class CompanyContactEntity implements Serializable {
+@Table(name = "USER", schema = "INVOICE", catalog = "INVOICEDB")
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "COMPANY_CONTACT_ID", nullable = false)
-    private Integer companyContactId;
+    @Column(name = "USER_ID", nullable = false)
+    private Integer userId;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID", nullable = false)
-    private CompanyEntity companiesByCompanyId;
+    @Basic
+    @Column(name = "USERNAME", nullable = false, length = 50)
+    private String username;
+
+    @Basic
+    @Column(name = "PASSWORD", nullable = true, length = 200)
+    private String password;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "LAST_LOGGED", nullable = false)
+    private Date lastLogged;
+
+    @Basic
+    @Column(name = "ENABLED", nullable = false)
+    private Boolean enabled;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "CONTACT_ID", referencedColumnName = "CONTACT_ID", nullable = false)
-    private ContactEntity contactsByContactId;
+    @OneToMany(mappedBy = "userByUserId")
+    private Collection<ContactEntity> contactByUserId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyContactByContractIsFor")
-    private Collection<ContractEntity> contractsByCompanyContactId;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyContactByCompanyContactFrom")
-    private Collection<InvoiceEntity> invoicesByCompanyContactId;
+    @OneToMany(mappedBy = "userByUserId")
+    private Collection<UserRoleEntity> userRoleByUserId;
 
 }

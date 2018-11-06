@@ -17,14 +17,12 @@
 package com.bgh.myopeninvoice.jsf.jsfbeans;
 
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.ContactsEntity;
+import com.bgh.myopeninvoice.db.model.ContactEntity;
 import com.bgh.myopeninvoice.jsf.jsfbeans.model.ContactsEntityLazyModel;
 import com.bgh.myopeninvoice.jsf.utils.FacesUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -48,9 +46,9 @@ public class ContactsBean implements Serializable {
     @Autowired
     private InvoiceDAO invoiceDAO;
 
-    private LazyDataModel<ContactsEntity> contactsEntityList;
+    private LazyDataModel<ContactEntity> contactsEntityList;
 
-    private ContactsEntity selectedContactsEntity;
+    private ContactEntity selectedContactEntity;
 
     private int pageSize = 20;
 
@@ -65,22 +63,22 @@ public class ContactsBean implements Serializable {
 
     private void refresh() {
         log.info("Loading contacts entries");
-        if (selectedContactsEntity != null) {
-            selectedContactsEntity = invoiceDAO.getContactsRepository().findOne(selectedContactsEntity.getContactId());
+        if (selectedContactEntity != null) {
+            selectedContactEntity = invoiceDAO.getContactsRepository().findOne(selectedContactEntity.getContactId());
         }
     }
 
     public void newEntryListener(ActionEvent event) {
         log.info("Creating new entity");
-        selectedContactsEntity = new ContactsEntity();
+        selectedContactEntity = new ContactEntity();
     }
 
     public void addOrEditEntryListener(ActionEvent event) {
-        if (selectedContactsEntity != null) {
+        if (selectedContactEntity != null) {
             RequestContext.getCurrentInstance().execute("PF('contacts-form-dialog').hide()");
 
-            log.info("Adding/editing entity {}", selectedContactsEntity.toString());
-            selectedContactsEntity = invoiceDAO.getContactsRepository().save(selectedContactsEntity);
+            log.info("Adding/editing entity {}", selectedContactEntity.toString());
+            selectedContactEntity = invoiceDAO.getContactsRepository().save(selectedContactEntity);
             refresh();
             FacesUtils.addSuccessMessage("Entity record updated");
         } else {
@@ -89,12 +87,12 @@ public class ContactsBean implements Serializable {
     }
 
     public void deleteEntryListener(ActionEvent event) {
-        if (selectedContactsEntity != null) {
-            log.info("Deleting entity {}", selectedContactsEntity.toString());
-            invoiceDAO.getContactsRepository().delete(selectedContactsEntity.getContactId());
+        if (selectedContactEntity != null) {
+            log.info("Deleting entity {}", selectedContactEntity.toString());
+            invoiceDAO.getContactsRepository().delete(selectedContactEntity.getContactId());
             refresh();
             FacesUtils.addSuccessMessage("Entity deleted");
-            selectedContactsEntity = null;
+            selectedContactEntity = null;
         } else {
             FacesUtils.addErrorMessage("Selected contacts entity is null");
         }
@@ -108,20 +106,20 @@ public class ContactsBean implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public LazyDataModel<ContactsEntity> getContactsEntityList() {
+    public LazyDataModel<ContactEntity> getContactsEntityList() {
         return contactsEntityList;
     }
 
-    public void setContactsEntityList(LazyDataModel<ContactsEntity> contactsEntityList) {
+    public void setContactsEntityList(LazyDataModel<ContactEntity> contactsEntityList) {
         this.contactsEntityList = contactsEntityList;
     }
 
-    public ContactsEntity getSelectedContactsEntity() {
-        return selectedContactsEntity;
+    public ContactEntity getSelectedContactEntity() {
+        return selectedContactEntity;
     }
 
-    public void setSelectedContactsEntity(ContactsEntity selectedContactsEntity) {
-        this.selectedContactsEntity = selectedContactsEntity;
+    public void setSelectedContactEntity(ContactEntity selectedContactEntity) {
+        this.selectedContactEntity = selectedContactEntity;
     }
 
 

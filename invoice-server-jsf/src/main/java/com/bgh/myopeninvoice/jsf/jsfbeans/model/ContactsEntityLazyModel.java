@@ -16,14 +16,12 @@
 
 package com.bgh.myopeninvoice.jsf.jsfbeans.model;
 
+import com.bgh.myopeninvoice.db.model.ContactEntity;
 import com.bgh.myopeninvoice.db.repository.InvoiceDAO;
-import com.bgh.myopeninvoice.db.model.ContactsEntity;
 import com.bgh.myopeninvoice.db.model.QContactsEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,11 +34,11 @@ import java.util.Set;
 /**
  * Created by bcavlin on 17/03/17.
  */
-public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
+public class ContactsEntityLazyModel extends LazyDataModel<ContactEntity> {
 
     //private static Logger logger = LoggerFactory.getLogger(ContactsEntityLazyModel.class);
 
-    private List<ContactsEntity> contactsEntityList;
+    private List<ContactEntity> contactEntityList;
 
     private InvoiceDAO invoiceDAO;
 
@@ -52,9 +50,9 @@ public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
     }
 
     @Override
-    public List<ContactsEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<ContactEntity> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
-        contactsEntityList = new ArrayList<>();
+        contactEntityList = new ArrayList<>();
 
         PageRequest pageRequest = new PageRequest(first * pageSize, pageSize);
 
@@ -87,7 +85,7 @@ public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
             }
         }
 
-        Page<ContactsEntity> contactsEntityPage = null;
+        Page<ContactEntity> contactsEntityPage = null;
 
         if (predicate == null) {
             contactsEntityPage = invoiceDAO.getContactsRepository().findAll(pageRequest);
@@ -98,24 +96,24 @@ public class ContactsEntityLazyModel extends LazyDataModel<ContactsEntity> {
         setRowCount((int) contactsEntityPage.getTotalElements());
         setPageSize(getPageSize());
 
-        for (ContactsEntity contactsEntity : contactsEntityPage) {
-            contactsEntityList.add(contactsEntity);
+        for (ContactEntity contactEntity : contactsEntityPage) {
+            contactEntityList.add(contactEntity);
         }
-        return contactsEntityList;
+        return contactEntityList;
     }
 
     @Override
-    public Object getRowKey(ContactsEntity object) {
+    public Object getRowKey(ContactEntity object) {
         return object.getContactId();
     }
 
     @Override
-    public ContactsEntity getRowData(String rowKey) {
+    public ContactEntity getRowData(String rowKey) {
         Integer id = Integer.valueOf(rowKey);
-        if (contactsEntityList != null) {
-            for (ContactsEntity contactsEntity : contactsEntityList) {
-                if (id.equals(contactsEntity.getContactId())) {
-                    return contactsEntity;
+        if (contactEntityList != null) {
+            for (ContactEntity contactEntity : contactEntityList) {
+                if (id.equals(contactEntity.getContactId())) {
+                    return contactEntity;
                 }
             }
         }

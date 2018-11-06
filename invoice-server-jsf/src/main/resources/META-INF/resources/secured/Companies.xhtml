@@ -36,23 +36,23 @@
                                  actionListener="#{companiesBean.newEntryListenerForCompany}"
                                  update="main-form,companies-form"/>
 
-                <p:commandButton value="Edit Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                <p:commandButton value="Edit Company (#{companiesBean.selectedCompanyEntity.shortName})"
                                  icon="ui-icon-pencil"
-                                 rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 rendered="#{!empty companiesBean.selectedCompanyEntity and companiesBean.selectedCompanyEntity.companyId gt 0}"
                                  style="margin-right: 15px;"
                                  oncomplete="PF('companies-form-dialog').show();"
                                  update="main-form,companies-form"/>
 
                 <p:commandButton
-                        value="Delete Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                        value="Delete Company (#{companiesBean.selectedCompanyEntity.shortName})"
                         icon="ui-icon-trash"
-                        rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                        rendered="#{!empty companiesBean.selectedCompanyEntity and companiesBean.selectedCompanyEntity.companyId gt 0}"
                         style="margin-right: 15px; background-color: rgba(229,8,5,0.63)"
                         oncomplete="PF('confirmation1').show();"/>
 
-                <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompaniesEntity.shortName})"
+                <p:commandButton value="Assign Contacts To (#{companiesBean.selectedCompanyEntity.shortName})"
                                  icon="my-custom-icon-address-book"
-                                 rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 rendered="#{!empty companiesBean.selectedCompanyEntity and companiesBean.selectedCompanyEntity.companyId gt 0}"
                                  style="margin-right: 15px; background-color: rgba(47,60,229,0.63)"
                                  oncomplete="PF('companies-contacts-form-dialog').show();"
                                  update="main-form,companies-contacts-form"/>
@@ -62,7 +62,7 @@
                                  header="Delete company"
                                  severity="alert"
                                  widgetVar="confirmation1">
-                    <p:commandButton value="Remove (#{companiesBean.selectedCompaniesEntity.shortName})"
+                    <p:commandButton value="Remove (#{companiesBean.selectedCompanyEntity.shortName})"
                                      oncomplete="PF('confirmation1').hide()"
                                      actionListener="#{companiesBean.deleteEntryListener}"
                                      update="main-form, companies-form" style="color: brown;"/>
@@ -71,14 +71,14 @@
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.model.CompaniesEntity"-->
+            <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.model.CompanyEntity"-->
             <p:dataTable id="companies-table"
                          var="company"
                          widgetVar="companies-table"
                          value="#{companiesBean.companiesEntityLazyDataModel}"
                          rows="#{companiesBean.pageSize}"
                          rowKey="#{company.companyId}"
-                         selection="#{companiesBean.selectedCompaniesEntity}"
+                         selection="#{companiesBean.selectedCompanyEntity}"
                          selectionMode="single"
                          emptyMessage="No items found with given criteria"
                          scrollable="true"
@@ -153,32 +153,32 @@
             </p:dataTable>
 
             <h:panelGroup id="contracts-buttons-layout" layout="block" style="margin: 15px 0 0 0"
-                          rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.ownedByMe eq false}">
-                <p:commandButton value="New Contract for #{companiesBean.selectedCompaniesEntity.shortName}"
+                          rendered="#{!empty companiesBean.selectedCompanyEntity and companiesBean.selectedCompanyEntity.ownedByMe eq false}">
+                <p:commandButton value="New Contract for #{companiesBean.selectedCompanyEntity.shortName}"
                                  icon="ui-icon-extlink"
                                  style="margin-right: 15px;"
                                  oncomplete="PF('contracts-form-dialog').show();"
-                                 rendered="#{!empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                                 rendered="#{!empty companiesBean.selectedCompanyEntity and companiesBean.selectedCompanyEntity.companyId gt 0}"
                                  actionListener="#{companiesBean.newEntryListenerForContract}"
                                  update="main-form,contracts-form"/>
 
                 <p:commandButton
-                        value="Edit Contract #{companiesBean.selectedContractsEntity.contractId} For Company (#{companiesBean.selectedCompaniesEntity.shortName})"
+                        value="Edit Contract #{companiesBean.selectedContractEntity.contractId} For Company (#{companiesBean.selectedCompanyEntity.shortName})"
                         icon="ui-icon-script"
-                        rendered="#{!empty companiesBean.selectedContractsEntity and companiesBean.selectedContractsEntity.contractId gt 0
-                                 and !empty companiesBean.selectedCompaniesEntity and companiesBean.selectedCompaniesEntity.companyId gt 0}"
+                        rendered="#{!empty companiesBean.selectedContractEntity and companiesBean.selectedContractEntity.contractId gt 0
+                                 and !empty companiesBean.selectedCompanyEntity and companiesBean.selectedCompanyEntity.companyId gt 0}"
                         style="margin-right: 15px;"
                         oncomplete="PF('contracts-form-dialog').show();"
                         update="main-form,contracts-form"/>
 
 
-                <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractsEntity"-->
+                <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractEntity"-->
                 <p:dataTable id="company-contracts-table"
                              var="companyContract"
                              rowKey="#{companyContract.contractId}"
                              widgetVar="company-contract-table"
                              value="#{companiesBean.contractsEntityLazyDataModel}"
-                             selection="#{companiesBean.selectedContractsEntity}"
+                             selection="#{companiesBean.selectedContractEntity}"
                              selectionMode="single"
                              scrollable="true"
                              scrollWidth="1280"
@@ -294,11 +294,11 @@
                     <h:panelGrid columns="2" columnClasses="two-column-1,two-column-2"
                                  style="padding-top: 3px;">
                         <p:outputLabel value="ID: "/>
-                        <h:outputText value="#{companiesBean.selectedCompaniesEntity.companyId}"
+                        <h:outputText value="#{companiesBean.selectedCompanyEntity.companyId}"
                                       style="margin-left: 5px;"/>
 
                         <p:outputLabel value="Company name: " styleClass="required"/>
-                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.companyName}"
+                        <p:inputText value="#{companiesBean.selectedCompanyEntity.companyName}"
                                      converter="capitalizeConverter"
                                      maxlength="255"
                                      id="company-name"
@@ -307,7 +307,7 @@
                                      style="margin-left: 5px; text-transform: capitalize;"/>
 
                         <p:outputLabel value="Short name: " styleClass="required"/>
-                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.shortName}"
+                        <p:inputText value="#{companiesBean.selectedCompanyEntity.shortName}"
                                      maxlength="10"
                                      size="20"
                                      required="true"
@@ -319,32 +319,32 @@
 
 
                         <p:outputLabel value="Phone: "/>
-                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.phone1}"
+                        <p:inputText value="#{companiesBean.selectedCompanyEntity.phone1}"
                                      maxlength="20"
                                      style="margin-left: 5px;">
                         </p:inputText>
 
                         <p:outputLabel value="BN: "/>
-                        <p:inputText value="#{companiesBean.selectedCompaniesEntity.businessNumber}"
+                        <p:inputText value="#{companiesBean.selectedCompanyEntity.businessNumber}"
                                      maxlength="30"
                                      style="margin-left: 5px;"/>
 
                         <p:outputLabel value="Address: " styleClass="required"/>
-                        <p:inputTextarea value="#{companiesBean.selectedCompaniesEntity.addressLine1}"
+                        <p:inputTextarea value="#{companiesBean.selectedCompanyEntity.addressLine1}"
                                          style="margin-left: 5px; width: 300px;"
                                          required="true"
                                          requiredMessage="Address line is required"
                                          autoResize="false" maxlength="500"/>
 
                         <p:outputLabel value="Owned: " style="color: red; font-weight: bold;"/>
-                        <p:selectBooleanButton value="#{companiesBean.selectedCompaniesEntity.ownedByMe}"
+                        <p:selectBooleanButton value="#{companiesBean.selectedCompanyEntity.ownedByMe}"
                                                id="owned-by-me"
                                                style="margin-left: 5px;"
                                                offLabel="No" onLabel="Yes"
-                                               disabled="#{companiesBean.selectedCompaniesEntity.companyId ne null}"/>
+                                               disabled="#{companiesBean.selectedCompanyEntity.companyId ne null}"/>
 
                         <p:outputLabel value="Week Start: "/>
-                        <p:selectOneMenu style="margin-left: 5px;" value="#{companiesBean.selectedCompaniesEntity.weekStart}">
+                        <p:selectOneMenu style="margin-left: 5px;" value="#{companiesBean.selectedCompanyEntity.weekStart}">
                             <f:selectItem itemLabel="Monday" itemValue="1"/>
                             <f:selectItem itemLabel="Tuesday" itemValue="2"/>
                             <f:selectItem itemLabel="Wednesday" itemValue="3"/>
@@ -355,7 +355,7 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Logo: "/>
-                        <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompaniesEntity)}"
+                        <h:graphicImage value="#{companiesBean.getImageLogo(companiesBean.selectedCompanyEntity)}"
                                         alt="logo" style="border: 1px; margin-left: 5px; height: 50px;" id="image-logo"/>
 
                         <p:outputLabel value="Upload: "/>
@@ -387,7 +387,7 @@
             <h:form id="companies-contacts-form">
                 <h:panelGroup
                         style="padding-top: 3px; align-content: center;" layout="block">
-                    <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactsEntity"-->
+                    <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactEntity"-->
                     <p:pickList id="contacts-pick-list"
                                 value="#{companiesBean.contactsEntityDualListModel}"
                                 var="contact"
@@ -423,7 +423,7 @@
             </f:facet>
 
             <p:outputLabel value="Contract Signed With: " for="cmpn1"/>
-            <h:outputText id="cmpn1" value="#{companiesBean.selectedCompaniesEntity.companyName}"
+            <h:outputText id="cmpn1" value="#{companiesBean.selectedCompanyEntity.companyName}"
                           style="font-weight: bold;"/>
             <p:separator style="margin-top: 10px; margin-bottom: 10px;"/>
 
@@ -433,11 +433,11 @@
 
 
                     <p:outputLabel value="ID: "/>
-                    <h:outputText value="#{companiesBean.selectedContractsEntity.contractId}"
+                    <h:outputText value="#{companiesBean.selectedContractEntity.contractId}"
                                   style="margin-left: 5px;"/>
 
                     <p:outputLabel value="Contract is For: " styleClass="required"/>
-                    <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractsEntity.contractIsFor}"
+                    <p:selectOneMenu id="contract-for" value="#{companiesBean.selectedContractEntity.contractIsFor}"
                                      style="margin-left: 5px;" required="true"
                                      requiredMessage="A person is needed for the contract">
                         <f:selectItem itemLabel="--- Select a Person ---" itemValue=""/>
@@ -448,26 +448,26 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Contract Number: "/>
-                    <p:inputText value="#{companiesBean.selectedContractsEntity.contractNumber}"
+                    <p:inputText value="#{companiesBean.selectedContractEntity.contractNumber}"
                                  maxlength="20"
                                  style="margin-left: 5px;">
                     </p:inputText>
 
                     <p:outputLabel value="Purchase Order: "/>
-                    <p:inputText value="#{companiesBean.selectedContractsEntity.purchaseOrder}"
+                    <p:inputText value="#{companiesBean.selectedContractEntity.purchaseOrder}"
                                  maxlength="20"
                                  style="margin-left: 5px;">
                     </p:inputText>
 
                     <p:outputLabel value="Rate: " styleClass="required"/>
                     <h:panelGrid columns="2" style="margin-left: 3px;" id="rate-grid">
-                        <p:inputNumber value="#{companiesBean.selectedContractsEntity.rate}"
+                        <p:inputNumber value="#{companiesBean.selectedContractEntity.rate}"
                                        maxlength="10"
                                        size="20"
                                        required="true"
                                        id="rate"
                                        requiredMessage="Rate is required"/>
-                        <p:selectOneMenu id="currency" value="#{companiesBean.selectedContractsEntity.ccyId}"
+                        <p:selectOneMenu id="currency" value="#{companiesBean.selectedContractEntity.ccyId}"
                                          required="true" style="margin-left: 5px;">
                             <f:selectItems var="selection2"
                                            value="#{companiesBean.currencyEntityCollectionForSelection}"
@@ -477,32 +477,32 @@
                     </h:panelGrid>
 
                     <p:outputLabel value="Rate Unit: " styleClass="required"/>
-                    <p:selectOneMenu value="#{companiesBean.selectedContractsEntity.rateUnit}"
+                    <p:selectOneMenu value="#{companiesBean.selectedContractEntity.rateUnit}"
                                      style="margin-left: 5px;" required="true">
                         <f:selectItem itemLabel="HOUR" itemValue="HOUR"/>
                         <f:selectItem itemLabel="DAY" itemValue="DAY"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Valid From: " styleClass="required"/>
-                    <p:calendar value="#{companiesBean.selectedContractsEntity.validFrom}" style="margin-left: 5px;"
+                    <p:calendar value="#{companiesBean.selectedContractEntity.validFrom}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10" id="valid-from-edit" required="true"/>
 
                     <p:outputLabel value="Valid To: "/>
-                    <p:calendar value="#{companiesBean.selectedContractsEntity.validTo}" style="margin-left: 5px;"
+                    <p:calendar value="#{companiesBean.selectedContractEntity.validTo}" style="margin-left: 5px;"
                                 pattern="yyyy-MM-dd" maxlength="10" id="valid-to-edit"/>
 
                     <p:outputLabel value="Description: "/>
-                    <p:inputTextarea value="#{companiesBean.selectedContractsEntity.description}"
+                    <p:inputTextarea value="#{companiesBean.selectedContractEntity.description}"
                                      style="margin-left: 5px; width: 300px;"
                                      autoResize="false" maxlength="100"/>
 
                     <p:outputLabel value="Subcontracting For: "/>
                     <p:selectOneMenu id="subcontract-for"
-                                     value="#{companiesBean.selectedContractsEntity.contractSignedWithSubcontract}"
+                                     value="#{companiesBean.selectedContractEntity.contractSignedWithSubcontract}"
                                      style="margin-left: 5px;">
                         <f:selectItem itemLabel="--- Select a Company ---" itemValue=""/>
                         <f:selectItems var="selection4"
-                                       value="#{companiesBean.companiesEntityCollectionForSelection}"
+                                       value="#{companiesBean.companyEntityCollectionForSelection}"
                                        itemLabel="#{selection4.companyName}"
                                        itemValue="#{selection4.companyId}"/>
                     </p:selectOneMenu>

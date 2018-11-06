@@ -16,103 +16,51 @@
 
 package com.bgh.myopeninvoice.db.model;
 
+import lombok.Data;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
+@Data
 @Entity
 @Table(name = "ATTACHMENT", schema = "INVOICE", catalog = "INVOICEDB")
 public class AttachmentEntity implements Serializable {
-    private Integer attachmentId;
-    private Integer invoiceId;
-    private byte[] content;
-    private String filename;
-    private InvoiceEntity invoiceByInvoiceId;
 
     @Id
     @GeneratedValue
     @Column(name = "ATTACHMENT_ID", nullable = false)
-    public Integer getAttachmentId() {
-        return attachmentId;
-    }
-
-    public void setAttachmentId(Integer attachmentId) {
-        this.attachmentId = attachmentId;
-    }
+    private Integer attachmentId;
 
     @Basic
     @Column(name = "INVOICE_ID", nullable = false)
-    public Integer getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(Integer invoiceId) {
-        this.invoiceId = invoiceId;
-    }
+    private Integer invoiceId;
 
     @Lob
     @Column(name = "CONTENT", nullable = false)
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
+    private byte[] content;
 
     @Basic
     @Column(name = "FILENAME", nullable = false, length = 255)
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AttachmentEntity that = (AttachmentEntity) o;
-
-        if (attachmentId != null ? !attachmentId.equals(that.attachmentId) : that.attachmentId != null) return false;
-        if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
-        if (!Arrays.equals(content, that.content)) return false;
-        if (filename != null ? !filename.equals(that.filename) : that.filename != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = attachmentId != null ? attachmentId.hashCode() : 0;
-        result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(content);
-        result = 31 * result + (filename != null ? filename.hashCode() : 0);
-        return result;
-    }
+    private String filename;
 
     @ManyToOne
     @JoinColumn(name = "INVOICE_ID", referencedColumnName = "INVOICE_ID", nullable = false, insertable = false, updatable = false)
-    public InvoiceEntity getInvoiceByInvoiceId() {
-        return invoiceByInvoiceId;
-    }
+    private InvoiceEntity invoiceByInvoiceId;
 
-    public void setInvoiceByInvoiceId(InvoiceEntity invoiceByInvoiceId) {
-        this.invoiceByInvoiceId = invoiceByInvoiceId;
-    }
+    @Transient
+    private byte[] imageData;
 
+    @Transient
     private Boolean loadProxy;
 
     @Transient
+    private String fileExtension;
+
     public Boolean getLoadProxy() {
         if (loadProxy == null) {
             loadProxy = Boolean.TRUE;
@@ -120,13 +68,6 @@ public class AttachmentEntity implements Serializable {
         return loadProxy;
     }
 
-    public void setLoadProxy(Boolean loadProxy) {
-        this.loadProxy = loadProxy;
-    }
-
-    private String fileExtension;
-
-    @Transient
     public String getFileExtension() {
         if (!StringUtils.isBlank(filename)) {
             this.fileExtension = FilenameUtils.getExtension(filename).toLowerCase();
@@ -134,29 +75,4 @@ public class AttachmentEntity implements Serializable {
         return fileExtension;
     }
 
-    public void setFileExtension(String fileExtension) {
-        this.fileExtension = fileExtension;
-    }
-
-    private byte[] imageData;
-
-    @Transient
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
-
-    @Override
-    public String toString() {
-        return "AttachmentEntity{" +
-                "attachmentId=" + attachmentId +
-                ", invoiceId=" + invoiceId +
-                ", filename='" + filename + '\'' +
-                ", loadProxy=" + loadProxy +
-                ", fileExtension='" + fileExtension + '\'' +
-                '}';
-    }
 }
