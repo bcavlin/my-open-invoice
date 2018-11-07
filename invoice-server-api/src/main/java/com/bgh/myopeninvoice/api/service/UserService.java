@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.api.service;
 
-import com.bgh.myopeninvoice.db.model.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import com.bgh.myopeninvoice.db.repository.UserRoleRepository;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;

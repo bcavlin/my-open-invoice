@@ -21,8 +21,8 @@ package com.bgh.myopeninvoice.db.service;
  */
 
 
-import com.bgh.myopeninvoice.db.model.UserEntity;
-import com.bgh.myopeninvoice.db.model.UserRoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
+import com.bgh.myopeninvoice.db.domain.UserRoleEntity;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

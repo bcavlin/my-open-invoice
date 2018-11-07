@@ -1,10 +1,13 @@
 spring:
+  liquibase:
+    change-log: classpath:config/liquibase/invoice-master.xml
+    default-schema: INVOICE
   datasource:
     hikari:
       connection-test-query: SELECT 1 FROM DUAL
       minimum-idle: 1
       maximum-pool-size: 5
-    url: jdbc:h2:file:../invoice-db/invoiceDB;AUTO_SERVER=TRUE
+    url: jdbc:h2:tcp://localhost:1521/default;INIT=CREATE SCHEMA IF NOT EXISTS INVOICE
     driver-class-name: org.h2.Driver
     platform: h2
     username: sa

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.LazyCollection;
@@ -30,7 +30,7 @@ import java.util.Date;
  * Created by bcavlin on 14/03/17.
  */
 @Entity
-@Table(name = "INVOICE", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "INVOICE", schema = "INVOICE")
 public class InvoiceEntity implements Serializable {
     private Integer invoiceId;
     private Integer companyTo;

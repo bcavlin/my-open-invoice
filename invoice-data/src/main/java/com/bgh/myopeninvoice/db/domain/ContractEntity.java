@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
@@ -23,7 +23,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -32,7 +31,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "CONTRACT", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "CONTRACT", schema = "INVOICE")
 public class ContractEntity implements Serializable {
 
     @GeneratedValue

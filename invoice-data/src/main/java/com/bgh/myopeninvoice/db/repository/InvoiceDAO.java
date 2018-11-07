@@ -16,10 +16,10 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.CompanyEntity;
-import com.bgh.myopeninvoice.db.model.ContactEntity;
-import com.bgh.myopeninvoice.db.model.RoleEntity;
-import com.bgh.myopeninvoice.db.model.UserEntity;
+import com.bgh.myopeninvoice.db.domain.CompanyEntity;
+import com.bgh.myopeninvoice.db.domain.ContactEntity;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
 
 import java.util.List;
 

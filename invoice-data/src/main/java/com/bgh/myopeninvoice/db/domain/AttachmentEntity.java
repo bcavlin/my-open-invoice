@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.apache.commons.io.FilenameUtils;
@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table(name = "ATTACHMENT", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "ATTACHMENT", schema = "INVOICE")
 public class AttachmentEntity implements Serializable {
 
     @Id

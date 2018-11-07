@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 
@@ -27,7 +27,7 @@ import java.math.BigDecimal;
  */
 @Data
 @Entity
-@Table(name = "TAX", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "TAX", schema = "INVOICE")
 public class TaxEntity implements Serializable {
 
     @Id

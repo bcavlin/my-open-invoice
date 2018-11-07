@@ -17,7 +17,7 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.service.UserService;
-import com.bgh.myopeninvoice.db.model.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
