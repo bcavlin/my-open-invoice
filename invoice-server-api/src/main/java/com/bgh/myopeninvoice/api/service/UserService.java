@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.service;
+package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.db.model.RoleEntity;
 import com.bgh.myopeninvoice.db.repository.UserRoleRepository;
