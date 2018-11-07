@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.controller;
+package com.bgh.myopeninvoice.api.service;
 
-import com.bgh.myopeninvoice.api.service.UserService;
+import com.bgh.myopeninvoice.db.DatabaseConfiguration;
 import com.bgh.myopeninvoice.db.model.RoleEntity;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class UserController {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes = DatabaseConfiguration.class)
+public class UserServiceTest {
 
     @Autowired
     private UserService userService;
 
-
-    @GetMapping(value = "/user/{username}/roles", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<RoleEntity> roles(@PathVariable("username") String username) {
-        return userService.findUserRoles(username);
+    @Test
+    public void findUserRoles() {
+        List<RoleEntity> userRoles = userService.findUserRoles("bcavlin@gmail.com");
     }
-
 }

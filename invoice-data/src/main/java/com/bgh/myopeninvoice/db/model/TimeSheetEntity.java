@@ -61,7 +61,7 @@ public class TimeSheetEntity implements Serializable {
 
     public Boolean getWeekend() {
         if (isWeekend == null && itemDate != null) {
-            LocalDate date = LocalDate.ofInstant(itemDate.toInstant(), ZoneId.systemDefault());
+            LocalDate date = itemDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             isWeekend = date.getDayOfWeek() == DayOfWeek.SATURDAY ||
                     date.getDayOfWeek() == DayOfWeek.SUNDAY ? Boolean.TRUE : Boolean.FALSE;
         }
