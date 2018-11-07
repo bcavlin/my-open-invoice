@@ -1,6 +1,6 @@
 package com.bgh.myopeninvoice.api.security;
 
-import com.bgh.myopeninvoice.db.model.UserEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;

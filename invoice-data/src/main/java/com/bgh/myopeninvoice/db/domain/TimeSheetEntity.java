@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 
@@ -31,7 +31,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "TIME_SHEET", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "TIME_SHEET", schema = "INVOICE")
 public class TimeSheetEntity implements Serializable {
 
     @Id

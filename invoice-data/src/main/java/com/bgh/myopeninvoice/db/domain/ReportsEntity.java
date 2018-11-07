@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 
@@ -27,7 +27,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "REPORTS", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "REPORTS", schema = "INVOICE")
 public class ReportsEntity implements Serializable {
 
     @Id

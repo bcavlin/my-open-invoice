@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
@@ -29,7 +29,7 @@ import java.util.Collection;
  */
 @Data
 @Entity
-@Table(name = "COMPANY_CONTACT", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "COMPANY_CONTACT", schema = "INVOICE")
 public class CompanyContactEntity implements Serializable {
 
     @Id

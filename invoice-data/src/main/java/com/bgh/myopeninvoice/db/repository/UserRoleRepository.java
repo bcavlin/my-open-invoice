@@ -16,8 +16,8 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.RoleEntity;
-import com.bgh.myopeninvoice.db.model.UserRoleEntity;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserRoleEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

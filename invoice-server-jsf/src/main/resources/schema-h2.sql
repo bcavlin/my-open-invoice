@@ -1,222 +1,222 @@
-DROP SCHEMA IF EXISTS INVOICE;
-CREATE SCHEMA IF NOT EXISTS INVOICE;
+drop schema if exists invoice;
+create schema if not exists invoice;
 
-CREATE TABLE IF NOT EXISTS INVOICE.USERS (
-  USER_ID     INT          NOT NULL IDENTITY,
-  USERNAME    VARCHAR2(50) NOT NULL,
-  PASSWORD    VARCHAR2(200),
-  LAST_LOGGED TIMESTAMP,
-  ENABLED     BOOLEAN      NOT NULL DEFAULT FALSE,
-  UNIQUE (USERNAME)
+create table if not exists invoice.users (
+  user_id     int          not null identity,
+  username    varchar2(50) not null,
+  password    varchar2(200),
+  last_logged timestamp,
+  enabled     boolean      not null default false,
+  unique (username)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.ROLES (
-  ROLE_ID   INT          NOT NULL PRIMARY KEY,
-  ROLE_NAME VARCHAR2(50) NOT NULL,
-  UNIQUE (ROLE_NAME)
+create table if not exists invoice.roles (
+  role_id   int          not null primary key,
+  role_name varchar2(50) not null,
+  unique (role_name)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.USER_ROLE (
-  USER_ROLE_ID  INT       NOT NULL IDENTITY,
-  USER_ID       INT       NOT NULL,
-  ROLE_ID       INT       NOT NULL,
-  DATE_ASSIGNED TIMESTAMP NOT NULL DEFAULT SYSTIMESTAMP,
-  FOREIGN KEY (USER_ID) REFERENCES INVOICE.USER (USER_ID),
-  FOREIGN KEY (ROLE_ID) REFERENCES INVOICE.ROLE (ROLE_ID),
-  UNIQUE (USER_ID, ROLE_ID)
+create table if not exists invoice.user_role (
+  user_role_id  int       not null identity,
+  user_id       int       not null,
+  role_id       int       not null,
+  date_assigned timestamp not null default systimestamp,
+  foreign key (user_id) references invoice.user (user_id),
+  foreign key (role_id) references invoice.role (role_id),
+  unique (user_id, role_id)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.COMPANIES (
-  COMPANY_ID      INT           NOT NULL IDENTITY,
-  COMPANY_NAME    VARCHAR2(255) NOT NULL,
-  SHORT_NAME      VARCHAR2(10)  NOT NULL
-  COMMENT 'Used for the invoice prefix',
-  ADDRESS_LINE1   VARCHAR2(500) NOT NULL,
-  ADDRESS_LINE2   VARCHAR2(500),
-  PHONE1          VARCHAR2(20),
-  OWNED_BY_ME     BOOLEAN       NOT NULL DEFAULT TRUE,
-  BUSINESS_NUMBER VARCHAR2(30),
-  CONTENT         BLOB COMMENT 'Company logo',
-  UNIQUE (COMPANY_NAME),
-  UNIQUE (SHORT_NAME)
+create table if not exists invoice.companies (
+  company_id      int           not null identity,
+  company_name    varchar2(255) not null,
+  short_name      varchar2(10)  not null
+  comment 'used for the invoice prefix',
+  address_line1   varchar2(500) not null,
+  address_line2   varchar2(500),
+  phone1          varchar2(20),
+  owned_by_me     boolean       not null default true,
+  business_number varchar2(30),
+  content         blob comment 'company logo',
+  unique (company_name),
+  unique (short_name)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.CONTACTS (
-  CONTACT_ID    INT           NOT NULL IDENTITY,
-  FIRST_NAME    VARCHAR2(100) NOT NULL,
-  LAST_NAME     VARCHAR2(100),
-  MIDDLE_NAME   VARCHAR2(100),
-  EMAIL         VARCHAR2(255) NOT NULL,
-  ADDRESS_LINE1 VARCHAR2(500),
-  ADDRESS_LINE2 VARCHAR2(500),
-  PHONE1        VARCHAR2(20),
-  USER_ID       INT,
-  FOREIGN KEY (USER_ID) REFERENCES INVOICE.USER (USER_ID),
-  UNIQUE (EMAIL)
+create table if not exists invoice.contacts (
+  contact_id    int           not null identity,
+  first_name    varchar2(100) not null,
+  last_name     varchar2(100),
+  middle_name   varchar2(100),
+  email         varchar2(255) not null,
+  address_line1 varchar2(500),
+  address_line2 varchar2(500),
+  phone1        varchar2(20),
+  user_id       int,
+  foreign key (user_id) references invoice.user (user_id),
+  unique (email)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.COMPANY_CONTACT (
-  COMPANY_CONTACT_ID INT NOT NULL IDENTITY,
-  CONTACT_ID         INT NOT NULL,
-  COMPANY_ID         INT NOT NULL,
-  FOREIGN KEY (CONTACT_ID) REFERENCES INVOICE.CONTACT (CONTACT_ID),
-  FOREIGN KEY (COMPANY_ID) REFERENCES INVOICE.COMPANY (COMPANY_ID),
-  UNIQUE (CONTACT_ID, COMPANY_ID)
+create table if not exists invoice.company_contact (
+  company_contact_id int not null identity,
+  contact_id         int not null,
+  company_id         int not null,
+  foreign key (contact_id) references invoice.contact (contact_id),
+  foreign key (company_id) references invoice.company (company_id),
+  unique (contact_id, company_id)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.CURRENCY (
-  CCY_ID      INT           NOT NULL IDENTITY,
-  NAME        VARCHAR2(10)  NOT NULL,
-  DESCRIPTION VARCHAR2(100) NOT NULL
+create table if not exists invoice.currency (
+  ccy_id      int           not null identity,
+  name        varchar2(10)  not null,
+  description varchar2(100) not null
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.CONTRACTS (
-  CONTRACT_ID                      INT          NOT NULL IDENTITY,
-  CONTRACT_IS_FOR                  INT          NOT NULL,
-  CONTRACT_SIGNED_WITH             INT          NOT NULL
-  COMMENT 'This indicates to which company we are billing to and signing contract with',
-  CONTRACT_SIGNED_WITH_SUBCONTRACT INT COMMENT 'This indicates to which company we are actually doing work with',
-  RATE                             DECIMAL      NOT NULL,
-  RATE_UNIT                        VARCHAR2(10) NOT NULL DEFAULT 'HOUR',
-  CCY_ID                           INT          NOT NULL,
-  VALID_FROM                       DATE         NOT NULL,
-  VALID_TO                         DATE,
-  DESCRIPTION                      VARCHAR2(100),
-  FOREIGN KEY (CONTRACT_IS_FOR) REFERENCES INVOICE.COMPANY_CONTACT (COMPANY_CONTACT_ID),
-  FOREIGN KEY (CONTRACT_SIGNED_WITH) REFERENCES INVOICE.COMPANY (COMPANY_ID),
-  FOREIGN KEY (CONTRACT_SIGNED_WITH_SUBCONTRACT) REFERENCES INVOICE.COMPANY (COMPANY_ID),
-  FOREIGN KEY (CCY_ID) REFERENCES INVOICE.CURRENCY (CCY_ID)
+create table if not exists invoice.contracts (
+  contract_id                      int          not null identity,
+  contract_is_for                  int          not null,
+  contract_signed_with             int          not null
+  comment 'this indicates to which company we are billing to and signing contract with',
+  contract_signed_with_subcontract int comment 'this indicates to which company we are actually doing work with',
+  rate                             decimal      not null,
+  rate_unit                        varchar2(10) not null default 'hour',
+  ccy_id                           int          not null,
+  valid_from                       date         not null,
+  valid_to                         date,
+  description                      varchar2(100),
+  foreign key (contract_is_for) references invoice.company_contact (company_contact_id),
+  foreign key (contract_signed_with) references invoice.company (company_id),
+  foreign key (contract_signed_with_subcontract) references invoice.company (company_id),
+  foreign key (ccy_id) references invoice.currency (ccy_id)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.TAX (
-  TAX_ID     INT          NOT NULL IDENTITY,
-  PERCENT    DECIMAL      NOT NULL,
-  IDENTIFIER VARCHAR2(50) NOT NULL,
-  UNIQUE (IDENTIFIER)
+create table if not exists invoice.tax (
+  tax_id     int          not null identity,
+  percent    decimal      not null,
+  identifier varchar2(50) not null,
+  unique (identifier)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.INVOICE (
-  INVOICE_ID           INT           NOT NULL IDENTITY,
-  COMPANY_TO           INT           NOT NULL,
-  COMPANY_CONTACT_FROM INT           NOT NULL,
-  FROM_DATE            DATE          NOT NULL,
-  TO_DATE              DATE          NOT NULL,
-  CREATED_DATE         DATE          NOT NULL DEFAULT SYSTIMESTAMP,
-  TITLE                VARCHAR2(255) NOT NULL DEFAULT 'Invoice',
-  DUE_DATE             DATE          NOT NULL,
-  TAX_PERCENT          DECIMAL       NOT NULL,
-  NOTE                 VARCHAR2(2000),
-  PAID_DATE            DATE,
-  RATE                 DECIMAL,
-  RATE_UNIT            VARCHAR2(10),
-  CCY_ID               INT           NOT NULL,
-  FOREIGN KEY (COMPANY_TO) REFERENCES INVOICE.COMPANY (COMPANY_ID),
-  FOREIGN KEY (COMPANY_CONTACT_FROM) REFERENCES INVOICE.COMPANY_CONTACT (COMPANY_CONTACT_ID),
-  FOREIGN KEY (CCY_ID) REFERENCES INVOICE.CURRENCY (CCY_ID)
+create table if not exists invoice.invoice (
+  invoice_id           int           not null identity,
+  company_to           int           not null,
+  company_contact_from int           not null,
+  from_date            date          not null,
+  to_date              date          not null,
+  created_date         date          not null default systimestamp,
+  title                varchar2(255) not null default 'invoice',
+  due_date             date          not null,
+  tax_percent          decimal       not null,
+  note                 varchar2(2000),
+  paid_date            date,
+  rate                 decimal,
+  rate_unit            varchar2(10),
+  ccy_id               int           not null,
+  foreign key (company_to) references invoice.company (company_id),
+  foreign key (company_contact_from) references invoice.company_contact (company_contact_id),
+  foreign key (ccy_id) references invoice.currency (ccy_id)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.ATTACHMENT (
-  ATTACHMENT_ID INT           NOT NULL IDENTITY,
-  INVOICE_ID    INT           NOT NULL,
-  CONTENT       BLOB          NOT NULL
-  COMMENT 'File content',
-  FILENAME      VARCHAR2(255) NOT NULL,
-  FOREIGN KEY (INVOICE_ID) REFERENCES INVOICE.INVOICE (INVOICE_ID),
-  UNIQUE (FILENAME)
+create table if not exists invoice.attachment (
+  attachment_id int           not null identity,
+  invoice_id    int           not null,
+  content       blob          not null
+  comment 'file content',
+  filename      varchar2(255) not null,
+  foreign key (invoice_id) references invoice.invoice (invoice_id),
+  unique (filename)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.INVOICE_ITEMS (
-  INVOICE_ITEM_ID INT           NOT NULL IDENTITY,
-  INVOICE_ID      INT           NOT NULL,
-  DESCRIPTION     VARCHAR2(255) NOT NULL,
-  CODE            VARCHAR2(255),
-  QUANTITY        DECIMAL       NOT NULL,
-  UNIT            VARCHAR2(20)  NOT NULL DEFAULT 'HOUR',
-  FOREIGN KEY (INVOICE_ID) REFERENCES INVOICE.INVOICE (INVOICE_ID)
+create table if not exists invoice.invoice_items (
+  invoice_item_id int           not null identity,
+  invoice_id      int           not null,
+  description     varchar2(255) not null,
+  code            varchar2(255),
+  quantity        decimal       not null,
+  unit            varchar2(20)  not null default 'hour',
+  foreign key (invoice_id) references invoice.invoice (invoice_id)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.TIME_SHEET (
-  TIMESHEET_ID    INT     NOT NULL IDENTITY,
-  INVOICE_ITEM_ID INT     NOT NULL,
-  ITEM_DATE       DATE    NOT NULL,
-  HOURS_WORKED    DECIMAL NOT NULL,
-  FOREIGN KEY (INVOICE_ITEM_ID) REFERENCES INVOICE.INVOICE_ITEMS (INVOICE_ITEM_ID)
+create table if not exists invoice.time_sheet (
+  timesheet_id    int     not null identity,
+  invoice_item_id int     not null,
+  item_date       date    not null,
+  hours_worked    decimal not null,
+  foreign key (invoice_item_id) references invoice.invoice_items (invoice_item_id)
 );
 
-CREATE TABLE IF NOT EXISTS INVOICE.REPORTS (
-  REPORT_ID    INT       NOT NULL IDENTITY,
-  INVOICE_ID   INT       NOT NULL,
-  CONTENT      BLOB      NOT NULL,
-  DATE_CREATED TIMESTAMP NOT NULL DEFAULT SYSTIMESTAMP,
-  REPORT_NAME  VARCHAR(255),
-  FOREIGN KEY (INVOICE_ID) REFERENCES INVOICE.INVOICE (INVOICE_ID)
+create table if not exists invoice.reports (
+  report_id    int       not null identity,
+  invoice_id   int       not null,
+  content      blob      not null,
+  date_created timestamp not null default systimestamp,
+  report_name  varchar(255),
+  foreign key (invoice_id) references invoice.invoice (invoice_id)
 );
 
-CREATE SEQUENCE INVOICE.INVOICE_COUNTER_SEQ
-  START WITH 1;
+create sequence invoice.invoice_counter_seq
+  start with 1;
 
-ALTER TABLE INVOICE.CONTRACT
-  ADD CONTRACT_NUMBER VARCHAR2(50);
-ALTER TABLE INVOICE.CONTRACT
-  ADD CONTENT BLOB COMMENT 'Contract document';
+alter table invoice.contract
+  add contract_number varchar2(50);
+alter table invoice.contract
+  add content blob comment 'contract document';
 
 --addon column for the purchase order
-ALTER TABLE INVOICE.CONTRACT
-  ADD PURCHASE_ORDER VARCHAR2(50);
+alter table invoice.contract
+  add purchase_order varchar2(50);
 
 --addon column for the week start
-ALTER TABLE INVOICE.COMPANY
-  ADD WEEK_START INT DEFAULT 1 NOT NULL;
+alter table invoice.company
+  add week_start int default 1 not null;
 
 --change link from company to active contract
-ALTER TABLE INVOICE.INVOICE
-  ADD COMPANY_CONTRACT_TO INT;
-ALTER TABLE INVOICE.INVOICE
-  ADD FOREIGN KEY (COMPANY_CONTRACT_TO) REFERENCES INVOICE.CONTRACT (CONTRACT_ID);
+alter table invoice.invoice
+  add company_contract_to int;
+alter table invoice.invoice
+  add foreign key (company_contract_to) references invoice.contract (contract_id);
 --to be added second after previous statement
-ALTER TABLE INVOICE.INVOICE
-  ALTER COLUMN COMPANY_CONTRACT_TO INT NOT NULL;
+alter table invoice.invoice
+  alter column company_contract_to int not null;
 
 --new from 0.2.0
-CREATE SEQUENCE INVOICE.CONTRACT_COUNTER_SEQ
-  START WITH 4
-  INCREMENT BY 2;
+create sequence invoice.contract_counter_seq
+  start with 4
+  increment by 2;
 
 --new from 0.2.3
-CREATE TABLE INVOICE.OAUTH_ACCESS_TOKEN
+create table invoice.oauth_access_token
 (
-  TOKEN_ID          VARCHAR(256) DEFAULT 'NULL',
-  TOKEN             BLOB,
-  AUTHENTICATION_ID VARCHAR(256) DEFAULT 'NULL',
-  USER_NAME         VARCHAR(256) DEFAULT 'NULL',
-  CLIENT_ID         VARCHAR(256) DEFAULT 'NULL',
-  AUTHENTICATION    BLOB,
-  REFRESH_TOKEN     VARCHAR(256) DEFAULT 'NULL'
+  token_id          varchar(256) default 'null',
+  token             blob,
+  authentication_id varchar(256) default 'null',
+  user_name         varchar(256) default 'null',
+  client_id         varchar(256) default 'null',
+  authentication    blob,
+  refresh_token     varchar(256) default 'null'
 );
 
 
-CREATE TABLE INVOICE.OAUTH_REFRESH_TOKEN
+create table invoice.oauth_refresh_token
 (
-  TOKEN_ID       VARCHAR(256) DEFAULT 'NULL',
-  TOKEN          BLOB,
-  AUTHENTICATION BLOB
+  token_id       varchar(256) default 'null',
+  token          blob,
+  authentication blob
 );
 
-CREATE TABLE INVOICE.OAUTH_CODE (
-  CODE           VARCHAR(255),
-  AUTHENTICATION BLOB
+create table invoice.oauth_code (
+  code           varchar(255),
+  authentication blob
 );
 
-CREATE TABLE INVOICE.OAUTH_CLIENT_DETAILS (
-  CLIENT_ID               VARCHAR(255) PRIMARY KEY,
-  RESOURCE_IDS            VARCHAR(255),
-  CLIENT_SECRET           VARCHAR(255),
-  SCOPE                   VARCHAR(255),
-  AUTHORIZED_GRANT_TYPES  VARCHAR(255),
-  WEB_SERVER_REDIRECT_URI VARCHAR(255),
-  AUTHORITIES             VARCHAR(255),
-  ACCESS_TOKEN_VALIDITY   INTEGER,
-  REFRESH_TOKEN_VALIDITY  INTEGER,
-  ADDITIONAL_INFORMATION  VARCHAR(4096),
-  AUTOAPPROVE             VARCHAR(255)
+create table invoice.oauth_client_details (
+  client_id               varchar(255) primary key,
+  resource_ids            varchar(255),
+  client_secret           varchar(255),
+  scope                   varchar(255),
+  authorized_grant_types  varchar(255),
+  web_server_redirect_uri varchar(255),
+  authorities             varchar(255),
+  access_token_validity   integer,
+  refresh_token_validity  integer,
+  additional_information  varchar(4096),
+  autoapprove             varchar(255)
 );

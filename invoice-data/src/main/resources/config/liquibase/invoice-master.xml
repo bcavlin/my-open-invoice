@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="autoIncrement" value="true"/>
+
+    <changeSet id="1" author="bcavlin">
+
+        <createTable tableName="user" schemaName="invoice">
+            <column name="user_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_username"/>
+            </column>
+            <column name="password_hash" type="varchar(80)"/>
+            <column name="first_name" type="varchar(50)"/>
+            <column name="last_name" type="varchar(50)"/>
+            <column name="enabled" type="boolean"/>
+            <column name="email" type="varchar(254)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_email"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reset_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+            <column name="last_logged_date" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="role" schemaName="invoice">
+            <column name="role_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_name" type="varchar(45)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_role_role_name"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="user_role" schemaName="invoice">
+            <column name="user_role_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assigned_date" type="timestamp" defaultValue="${now}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role_1"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="user"/>
+
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role_2"
+                                 referencedColumnNames="role_id"
+                                 referencedTableName="role"/>
+
+        <createTable tableName="company" schemaName="invoice">
+            <column name="company_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="company_name" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_company_company_name"/>
+            </column>
+            <column name="short_name" type="varchar(10)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_company_short_name"/>
+            </column>
+            <column name="address_line_1" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_line_2" type="varchar(500)">
+            </column>
+            <column name="phone_1" type="varchar(20)">
+            </column>
+            <column name="owned_by_me" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="business_number" type="varchar(30)">
+            </column>
+            <column name="content" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="week_start" type="int" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="contact" schemaName="invoice">
+            <column name="contact_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(100)">
+            </column>
+            <column name="middle_name" type="varchar(100)">
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_contact_email"/>
+            </column>
+            <column name="address_line1" type="varchar(500)">
+            </column>
+            <column name="address_line2" type="varchar(500)">
+            </column>
+            <column name="phone_1" type="varchar(20)">
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="contact"
+                                 constraintName="fk_contact_1"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="user"/>
+
+        <createTable tableName="company_contact" schemaName="invoice">
+            <column name="company_contact_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="contact_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="int">
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="contact_id"
+                                 baseTableName="company_contact"
+                                 constraintName="fk_company_contact_1"
+                                 referencedColumnNames="contact_id"
+                                 referencedTableName="contact"/>
+
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="company_contact"
+                                 constraintName="fk_company_contact_2"
+                                 referencedColumnNames="company_id"
+                                 referencedTableName="company"/>
+
+        <addUniqueConstraint tableName="company_contact"
+                             columnNames="contact_id, company_id"
+                             schemaName="invoice"/>
+
+        <createTable tableName="currency" schemaName="invoice">
+            <column name="ccy_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="contract" schemaName="invoice">
+            <column name="contract_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="contract_is_for" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_signed_with" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_signed_with_subcontract" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate_unit" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ccy_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valid_from" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valid_to" type="date">
+            </column>
+            <column name="description" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_number" type="varchar(50)">
+            </column>
+            <column name="content" type="blob">
+            </column>
+            <column name="purchase_order" type="varchar(50)">
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="contract_is_for"
+                                 baseTableName="contract"
+                                 constraintName="fk_contract_1"
+                                 referencedColumnNames="company_contact_id"
+                                 referencedTableName="company_contact"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_signed_with"
+                                 baseTableName="contract"
+                                 constraintName="fk_contract_2"
+                                 referencedColumnNames="company_id"
+                                 referencedTableName="company"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_signed_with_subcontract"
+                                 baseTableName="contract"
+                                 constraintName="fk_contract_3"
+                                 referencedColumnNames="company_id"
+                                 referencedTableName="company"/>
+
+        <addForeignKeyConstraint baseColumnNames="ccy_id"
+                                 baseTableName="contract"
+                                 constraintName="fk_contract_4"
+                                 referencedColumnNames="ccy_id"
+                                 referencedTableName="currency"/>
+
+    </changeSet>
+
+    <changeSet id="2" author="bcavlin">
+        <createTable tableName="tax" schemaName="invoice">
+            <column name="tax_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="percent" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identifier" type="varchar(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_tax_1"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="invoice" schemaName="invoice">
+            <column name="invoice_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="company_to" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_contact_from" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="from_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)" defaultValue="invoice">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax_percent" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(2000)">
+            </column>
+            <column name="paid_date" type="date">
+            </column>
+            <column name="rate" type="decimal">
+            </column>
+            <column name="rate_unit" type="varchar(10)">
+            </column>
+            <column name="ccy_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_contract_to" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="company_to"
+                                 baseTableName="invoice"
+                                 constraintName="fk_invoice_1"
+                                 referencedColumnNames="company_id"
+                                 referencedTableName="company"/>
+
+        <addForeignKeyConstraint baseColumnNames="company_contact_from"
+                                 baseTableName="invoice"
+                                 constraintName="fk_invoice_2"
+                                 referencedColumnNames="company_contact_id"
+                                 referencedTableName="company_contact"/>
+
+        <addForeignKeyConstraint baseColumnNames="ccy_id"
+                                 baseTableName="invoice"
+                                 constraintName="fk_invoice_3"
+                                 referencedColumnNames="ccy_id"
+                                 referencedTableName="currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="company_contract_to"
+                                 baseTableName="invoice"
+                                 constraintName="fk_invoice_4"
+                                 referencedColumnNames="contract_id"
+                                 referencedTableName="contract"/>
+    </changeSet>
+
+    <changeSet id="3" author="bcavlin">
+        <createTable tableName="attachment" schemaName="invoice">
+            <column name="attachment_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="invoice_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filename" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_attachment_1"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="invoice_id"
+                                 baseTableName="attachment"
+                                 constraintName="fk_attachment_1"
+                                 referencedColumnNames="invoice_id"
+                                 referencedTableName="invoice"/>
+
+        <createTable tableName="invoice_items" schemaName="invoice">
+            <column name="invoice_item_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="invoice_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(255)">
+            </column>
+            <column name="quantity" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="varchar(20)" defaultValue="hour">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="invoice_id"
+                                 baseTableName="invoice_items"
+                                 constraintName="fk_invoice_items_1"
+                                 referencedColumnNames="invoice_id"
+                                 referencedTableName="invoice"/>
+
+
+        <createTable tableName="time_sheet" schemaName="invoice">
+            <column name="timesheet_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="invoice_item_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hours_worked" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="invoice_item_id"
+                                 baseTableName="time_sheet"
+                                 constraintName="fk_time_sheet_1"
+                                 referencedColumnNames="invoice_item_id"
+                                 referencedTableName="invoice_items"/>
+
+        <createTable tableName="reports" schemaName="invoice">
+            <column name="report_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="invoice_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="invoice_id"
+                                 baseTableName="reports"
+                                 constraintName="fk_reports_1"
+                                 referencedColumnNames="invoice_id"
+                                 referencedTableName="invoice"/>
+
+
+        <createSequence sequenceName="invoice_counter_seq"
+                        schemaName="invoice"
+                        startValue="1"/>
+
+        <createSequence sequenceName="contract_counter_seq"
+                        schemaName="invoice"
+                        startValue="4"
+                        incrementBy="2"/>
+    </changeSet>
+
+</databaseChangeLog>

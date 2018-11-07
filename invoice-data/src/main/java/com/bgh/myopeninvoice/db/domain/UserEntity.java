@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
@@ -30,7 +30,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "USER", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "USER", schema = "INVOICE")
 public class UserEntity implements Serializable {
 
     @Id
@@ -43,11 +43,11 @@ public class UserEntity implements Serializable {
     private String username;
 
     @Basic
-    @Column(name = "PASSWORD", nullable = true, length = 200)
+    @Column(name = "PASSWORD_HASH", nullable = true, length = 200)
     private String password;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "LAST_LOGGED", nullable = false)
+    @Column(name = "LAST_LOGGED_DATE", nullable = false)
     private Date lastLogged;
 
     @Basic

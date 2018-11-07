@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.db.model;
+package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
@@ -22,7 +22,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Collection;
  */
 @Data
 @Entity
-@Table(name = "COMPANY", schema = "INVOICE", catalog = "INVOICEDB")
+@Table(name = "COMPANY", schema = "INVOICE")
 public class CompanyEntity implements Serializable {
 
     @Id
@@ -47,15 +46,15 @@ public class CompanyEntity implements Serializable {
     private String shortName;
 
     @Basic
-    @Column(name = "ADDRESS_LINE1", nullable = false, length = 500)
+    @Column(name = "ADDRESS_LINE_1", nullable = false, length = 500)
     private String addressLine1;
 
     @Basic
-    @Column(name = "ADDRESS_LINE2", nullable = true, length = 500)
+    @Column(name = "ADDRESS_LINE_2", nullable = true, length = 500)
     private String addressLine2;
 
     @Basic
-    @Column(name = "PHONE1", nullable = true, length = 20)
+    @Column(name = "PHONE_1", nullable = true, length = 20)
     private String phone1;
 
     @Basic
