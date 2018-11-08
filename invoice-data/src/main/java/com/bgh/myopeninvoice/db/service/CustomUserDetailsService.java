@@ -103,15 +103,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userDetails;
     }
 
-    public void updateLastLoginDate(User user){
-        final Optional<UserEntity> byUsername = usersRepository.findByUsername(user.getUsername());
-        if(byUsername.isPresent()) {
-            byUsername.get().setLastLogged(new Date());
-            usersRepository.save(byUsername.get());
-        }
-
-    }
-
     public String getPasswordHashForEncryption() {
         return passwordHashForEncryption;
     }

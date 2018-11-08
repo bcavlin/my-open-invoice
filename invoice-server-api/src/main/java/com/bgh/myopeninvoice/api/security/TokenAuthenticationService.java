@@ -1,9 +1,14 @@
 package com.bgh.myopeninvoice.api.security;
 
-import io.jsonwebtoken.*;
+import com.bgh.myopeninvoice.api.service.UserService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -15,10 +20,14 @@ import java.util.*;
 @Slf4j
 @Service
 public class TokenAuthenticationService {
+
     static final long EXPIRATIONTIME = 864_000_000; // 10 days
     static final char[] SECRET = "ThisIsASecret".toCharArray();
     static final String TOKEN_PREFIX = "Bearer";
     static final String HEADER_STRING = "Authorization";
+
+    @Autowired
+    private UserService userService;
 
     void addAuthentication(HttpServletResponse res, Authentication auth) {
         Map<String, Object> claims = new HashMap<>();
@@ -44,7 +53,7 @@ public class TokenAuthenticationService {
     }
 
     @SuppressWarnings("unchecked")
-    Authentication getAuthentication(HttpServletRequest request) {
+    Authentication getAuthentication(HttpServletRequest request) throws AuthenticationException {
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
             Map<String, Object> claims;
@@ -65,8 +74,17 @@ public class TokenAuthenticationService {
                     List<Map<String, String>> data = (List<Map<String, String>>) claims.get("authorities");
                     data.forEach(o -> authorities.add(new SimpleGrantedAuthority(o.get("authority"))));
 
-                    return new UsernamePasswordAuthenticationToken(
-                            principal, null, authorities);
+                    /**
+                     * Validate if user is still valid and in database
+                     */
+                    Boolean userValid = userService.isUserValid(principal);
+
+                    if (userValid) {
+                        return new UsernamePasswordAuthenticationToken(
+                                principal, null, authorities);
+                    } else {
+                        throw new AuthenticationServiceException("Username [" + principal + "] is not valid!");
+                    }
                 }
 
 
