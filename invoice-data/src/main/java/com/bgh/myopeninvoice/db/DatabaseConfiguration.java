@@ -33,8 +33,8 @@ import java.beans.PropertyVetoException;
  */
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.bgh.myopeninvoice.db.repository"})
-@EntityScan(basePackages = {"com.bgh.myopeninvoice.db.model"})
-@ComponentScan(basePackages = {"com.bgh.myopeninvoice.db.repository", "com.bgh.myopeninvoice.db.service"})
+@EntityScan(basePackages = {"com.bgh.myopeninvoice.db.domain"})
+@ComponentScan({"com.bgh.myopeninvoice.db.repository", "com.bgh.myopeninvoice.db.service"})
 @EnableAutoConfiguration
 @EnableTransactionManagement
 public class DatabaseConfiguration {

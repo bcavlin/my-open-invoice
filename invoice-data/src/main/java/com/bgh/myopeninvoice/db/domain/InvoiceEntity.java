@@ -16,6 +16,7 @@
 
 package com.bgh.myopeninvoice.db.domain;
 
+import lombok.Data;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -29,368 +30,113 @@ import java.util.Date;
 /**
  * Created by bcavlin on 14/03/17.
  */
+@Data
 @Entity
 @Table(name = "INVOICE", schema = "INVOICE")
 public class InvoiceEntity implements Serializable {
-    private Integer invoiceId;
-    private Integer companyTo;
-    private Integer companyContactFrom;
-    private Date fromDate;
-    private Date toDate;
-    private Date createdDate;
-    private String title;
-    private Date dueDate;
-    private BigDecimal taxPercent;
-    private String note;
-    private Date paidDate;
-    private BigDecimal rate;
-    private String rateUnit;
-    private Integer ccyId;
-    private Collection<AttachmentEntity> attachmentsByInvoiceId;
-    private CompanyEntity companiesByCompanyTo;
-    private CompanyContactEntity companyContactByCompanyContactFrom;
-    private CurrencyEntity currencyByCcyId;
-    private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
-    private ContractEntity contractsByCompanyContractTo;
-    private Integer companyContractTo;
-
 
     @Id
     @GeneratedValue
     @Column(name = "INVOICE_ID", nullable = false)
-    public Integer getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(Integer invoiceId) {
-        this.invoiceId = invoiceId;
-    }
+    private Integer invoiceId;
 
     @Basic
     @Column(name = "COMPANY_TO", nullable = false)
-    public Integer getCompanyTo() {
-        return companyTo;
-    }
-
-    public void setCompanyTo(Integer companyTo) {
-        this.companyTo = companyTo;
-    }
+    private Integer companyTo;
 
     @Basic
     @Column(name = "COMPANY_CONTACT_FROM", nullable = false)
-    public Integer getCompanyContactFrom() {
-        return companyContactFrom;
-    }
-
-    public void setCompanyContactFrom(Integer companyContactFrom) {
-        this.companyContactFrom = companyContactFrom;
-    }
+    private Integer companyContactFrom;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "FROM_DATE", nullable = false)
-    public Date getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
-    }
+    private Date fromDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "TO_DATE", nullable = false)
-    public Date getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
-    }
+    private Date toDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE", nullable = false)
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
+    private Date createdDate;
 
     @Basic
     @Column(name = "TITLE", nullable = false, length = 255)
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    private String title;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DUE_DATE", nullable = false)
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
+    private Date dueDate;
 
     @Basic
     @Column(name = "TAX_PERCENT", nullable = false, precision = 32767)
-    public BigDecimal getTaxPercent() {
-        return taxPercent;
-    }
-
-    public void setTaxPercent(BigDecimal taxPercent) {
-        this.taxPercent = taxPercent;
-    }
+    private BigDecimal taxPercent;
 
     @Basic
     @Column(name = "NOTE", nullable = true, length = 2000)
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
+    private String note;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "PAID_DATE", nullable = true)
-    public Date getPaidDate() {
-        return paidDate;
-    }
-
-    public void setPaidDate(Date paidDate) {
-        this.paidDate = paidDate;
-    }
+    private Date paidDate;
 
     @Basic
     @Column(name = "RATE", nullable = true, precision = 32767)
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
+    private BigDecimal rate;
 
     @Basic
     @Column(name = "RATE_UNIT", nullable = true, length = 10)
-    public String getRateUnit() {
-        return rateUnit;
-    }
-
-    public void setRateUnit(String rateUnit) {
-        this.rateUnit = rateUnit;
-    }
+    private String rateUnit;
 
     @Basic
     @Column(name = "CCY_ID", nullable = false)
-    public Integer getCcyId() {
-        return ccyId;
-    }
-
-    public void setCcyId(Integer ccyId) {
-        this.ccyId = ccyId;
-    }
-
-    @Basic
-    @Column(name = "COMPANY_CONTRACT_TO", nullable = true)
-    public Integer getCompanyContractTo() {
-        return companyContractTo;
-    }
-
-    public void setCompanyContractTo(Integer companyContractTo) {
-        this.companyContractTo = companyContractTo;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InvoiceEntity)) return false;
-
-        InvoiceEntity that = (InvoiceEntity) o;
-
-        if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
-        if (companyTo != null ? !companyTo.equals(that.companyTo) : that.companyTo != null) return false;
-        if (companyContactFrom != null ? !companyContactFrom.equals(that.companyContactFrom) : that.companyContactFrom != null)
-            return false;
-        if (fromDate != null ? !fromDate.equals(that.fromDate) : that.fromDate != null) return false;
-        if (toDate != null ? !toDate.equals(that.toDate) : that.toDate != null) return false;
-        if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (dueDate != null ? !dueDate.equals(that.dueDate) : that.dueDate != null) return false;
-        if (taxPercent != null ? !taxPercent.equals(that.taxPercent) : that.taxPercent != null) return false;
-        if (note != null ? !note.equals(that.note) : that.note != null) return false;
-        if (paidDate != null ? !paidDate.equals(that.paidDate) : that.paidDate != null) return false;
-        if (rate != null ? !rate.equals(that.rate) : that.rate != null) return false;
-        if (rateUnit != null ? !rateUnit.equals(that.rateUnit) : that.rateUnit != null) return false;
-        if (ccyId != null ? !ccyId.equals(that.ccyId) : that.ccyId != null) return false;
-        if (attachmentsByInvoiceId != null ? !attachmentsByInvoiceId.equals(that.attachmentsByInvoiceId) : that.attachmentsByInvoiceId != null)
-            return false;
-        if (companiesByCompanyTo != null ? !companiesByCompanyTo.equals(that.companiesByCompanyTo) : that.companiesByCompanyTo != null)
-            return false;
-        if (companyContactByCompanyContactFrom != null ? !companyContactByCompanyContactFrom.equals(that.companyContactByCompanyContactFrom) : that.companyContactByCompanyContactFrom != null)
-            return false;
-        if (currencyByCcyId != null ? !currencyByCcyId.equals(that.currencyByCcyId) : that.currencyByCcyId != null)
-            return false;
-        if (invoiceItemsByInvoiceId != null ? !invoiceItemsByInvoiceId.equals(that.invoiceItemsByInvoiceId) : that.invoiceItemsByInvoiceId != null)
-            return false;
-        if (contractsByCompanyContractTo != null ? !contractsByCompanyContractTo.equals(that.contractsByCompanyContractTo) : that.contractsByCompanyContractTo != null)
-            return false;
-        if (companyContractTo != null ? !companyContractTo.equals(that.companyContractTo) : that.companyContractTo != null)
-            return false;
-        if (totalValue != null ? !totalValue.equals(that.totalValue) : that.totalValue != null) return false;
-        return totalValueWithTax != null ? totalValueWithTax.equals(that.totalValueWithTax) : that.totalValueWithTax == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = invoiceId != null ? invoiceId.hashCode() : 0;
-        result = 31 * result + (companyTo != null ? companyTo.hashCode() : 0);
-        result = 31 * result + (companyContactFrom != null ? companyContactFrom.hashCode() : 0);
-        result = 31 * result + (fromDate != null ? fromDate.hashCode() : 0);
-        result = 31 * result + (toDate != null ? toDate.hashCode() : 0);
-        result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (dueDate != null ? dueDate.hashCode() : 0);
-        result = 31 * result + (taxPercent != null ? taxPercent.hashCode() : 0);
-        result = 31 * result + (note != null ? note.hashCode() : 0);
-        result = 31 * result + (paidDate != null ? paidDate.hashCode() : 0);
-        result = 31 * result + (rate != null ? rate.hashCode() : 0);
-        result = 31 * result + (rateUnit != null ? rateUnit.hashCode() : 0);
-        result = 31 * result + (ccyId != null ? ccyId.hashCode() : 0);
-        result = 31 * result + (attachmentsByInvoiceId != null ? attachmentsByInvoiceId.hashCode() : 0);
-        result = 31 * result + (companiesByCompanyTo != null ? companiesByCompanyTo.hashCode() : 0);
-        result = 31 * result + (companyContactByCompanyContactFrom != null ? companyContactByCompanyContactFrom.hashCode() : 0);
-        result = 31 * result + (currencyByCcyId != null ? currencyByCcyId.hashCode() : 0);
-        result = 31 * result + (invoiceItemsByInvoiceId != null ? invoiceItemsByInvoiceId.hashCode() : 0);
-        result = 31 * result + (contractsByCompanyContractTo != null ? contractsByCompanyContractTo.hashCode() : 0);
-        result = 31 * result + (companyContractTo != null ? companyContractTo.hashCode() : 0);
-        result = 31 * result + (totalValue != null ? totalValue.hashCode() : 0);
-        result = 31 * result + (totalValueWithTax != null ? totalValueWithTax.hashCode() : 0);
-        return result;
-    }
+    private Integer ccyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "invoiceByInvoiceId")
-    public Collection<AttachmentEntity> getAttachmentsByInvoiceId() {
-        return attachmentsByInvoiceId;
-    }
-
-    public void setAttachmentsByInvoiceId(Collection<AttachmentEntity> attachmentsByInvoiceId) {
-        this.attachmentsByInvoiceId = attachmentsByInvoiceId;
-    }
+    private Collection<AttachmentEntity> attachmentsByInvoiceId;
 
     @ManyToOne
-    @JoinColumn(name = "COMPANY_TO", referencedColumnName = "COMPANY_ID", nullable = false, insertable = false, updatable = false)
-    public CompanyEntity getCompaniesByCompanyTo() {
-        return companiesByCompanyTo;
-    }
-
-    public void setCompaniesByCompanyTo(CompanyEntity companiesByCompanyTo) {
-        this.companiesByCompanyTo = companiesByCompanyTo;
-    }
+    @JoinColumn(name = "COMPANY_TO", referencedColumnName = "COMPANY_ID", nullable = false,
+            insertable = false, updatable = false)
+    private CompanyEntity companiesByCompanyTo;
 
     @ManyToOne
-    @JoinColumn(name = "COMPANY_CONTACT_FROM", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false, insertable = false, updatable = false)
-    public CompanyContactEntity getCompanyContactByCompanyContactFrom() {
-        return companyContactByCompanyContactFrom;
-    }
-
-    public void setCompanyContactByCompanyContactFrom(CompanyContactEntity companyContactByCompanyContactFrom) {
-        this.companyContactByCompanyContactFrom = companyContactByCompanyContactFrom;
-    }
+    @JoinColumn(name = "COMPANY_CONTACT_FROM", referencedColumnName = "COMPANY_CONTACT_ID",
+            nullable = false, insertable = false, updatable = false)
+    private CompanyContactEntity companyContactByCompanyContactFrom;
 
     @ManyToOne
     @JoinColumn(name = "CCY_ID", referencedColumnName = "CCY_ID", nullable = false, insertable = false, updatable = false)
-    public CurrencyEntity getCurrencyByCcyId() {
-        return currencyByCcyId;
-    }
-
-    public void setCurrencyByCcyId(CurrencyEntity currencyByCcyId) {
-        this.currencyByCcyId = currencyByCcyId;
-    }
+    private CurrencyEntity currencyByCcyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "invoiceByInvoiceId")
-    public Collection<InvoiceItemsEntity> getInvoiceItemsByInvoiceId() {
-        return invoiceItemsByInvoiceId;
-    }
-
-    public void setInvoiceItemsByInvoiceId(Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId) {
-        this.invoiceItemsByInvoiceId = invoiceItemsByInvoiceId;
-    }
+    private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "COMPANY_CONTRACT_TO", referencedColumnName = "CONTRACT_ID", insertable = false, updatable = false)
-    public ContractEntity getContractsByCompanyContractTo() {
-        return contractsByCompanyContractTo;
-    }
+    private ContractEntity contractsByCompanyContractTo;
 
-    public void setContractsByCompanyContractTo(ContractEntity contractsByCompanyContractTo) {
-        this.contractsByCompanyContractTo = contractsByCompanyContractTo;
-    }
+    @Basic
+    @Column(name = "COMPANY_CONTRACT_TO", nullable = true)
+    private Integer companyContractTo;
 
-    private BigDecimal totalValue;
 
     @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) from invoice.invoice_items e where e.invoice_id = invoice_id)")
+    private BigDecimal totalValue;
+
     public BigDecimal getTotalValue() {
         return totalValue == null ? new BigDecimal(0) : totalValue;
     }
 
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
-    }
-
+    @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
     private BigDecimal totalValueWithTax;
 
-    @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
     public BigDecimal getTotalValueWithTax() {
         return totalValueWithTax == null ? new BigDecimal(0) : totalValueWithTax;
 
     }
 
-    public void setTotalValueWithTax(BigDecimal totalValueWithTax) {
-        this.totalValueWithTax = totalValueWithTax;
-    }
-
-    //    @Transient
-//    public BigDecimal getTotalValue() {
-//        return getInvoiceItemsByInvoiceId().stream().map(InvoiceItemsEntity::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-//    }
-//
-//    @Transient
-//    public BigDecimal getTotalValueWithTax() {
-//        return getInvoiceItemsByInvoiceId().stream().map(i -> i.getTotal()
-//                .multiply(i.getInvoiceByInvoiceId().getTaxPercent()
-//                        .add(new BigDecimal(1.0))))
-//                .reduce(BigDecimal.ZERO, BigDecimal::add);
-//    }
-
-    @Override
-    public String toString() {
-        return "InvoiceEntity{" +
-                "invoiceId=" + invoiceId +
-                ", companyTo=" + companyTo +
-                ", companyContactFrom=" + companyContactFrom +
-                ", fromDate=" + fromDate +
-                ", toDate=" + toDate +
-                ", createdDate=" + createdDate +
-                ", title='" + title + '\'' +
-                ", dueDate=" + dueDate +
-                ", taxPercent=" + taxPercent +
-                ", note='" + note + '\'' +
-                ", paidDate=" + paidDate +
-                ", rate=" + rate +
-                ", rateUnit='" + rateUnit + '\'' +
-                ", ccyId=" + ccyId +
-                ", companyContractTo=" + companyContractTo +
-                ", totalValue=" + totalValue +
-                ", totalValueWithTax=" + totalValueWithTax +
-                '}';
-    }
 }

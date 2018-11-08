@@ -1,20 +1,10 @@
-server:
-  port: 8080
-  context-path: /api
+management:
+  endpoint:
+    shutdown:
+      enabled: true
 spring:
-  thymeleaf:
-    cache: true
-    suffix: .xhtml
+  liquibase:
+    enabled: false
   profiles:
     include: database
-endpoints:
-  shutdown:
-    enabled: true
-springfox:
-  documentation:
-    swagger:
-      v2:
-        path: /api-docs
-security:
-  basic:
-    enabled: false
+    active: database

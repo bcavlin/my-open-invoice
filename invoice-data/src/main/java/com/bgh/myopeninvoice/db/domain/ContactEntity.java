@@ -74,8 +74,8 @@ public class ContactEntity implements Serializable {
     @OneToMany(mappedBy = "contactsByContactId")
     private Collection<CompanyContactEntity> companyContactsByContactId;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false, insertable = false, updatable = false)
     private UserEntity userByUserId;
 
 

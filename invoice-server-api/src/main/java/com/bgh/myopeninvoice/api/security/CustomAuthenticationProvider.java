@@ -33,18 +33,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication auth)
             throws AuthenticationException {
         String username = auth.getName();
-        String password = auth.getCredentials()
-                .toString();
+        CharSequence password = String.valueOf(auth.getCredentials());
 
         Optional<UserEntity> user = usersRepository.findByUsername(username);
 
-        if (user.isPresent()) {
+        if (user.isPresent() && StringUtils.isNotEmpty(String.valueOf(password))) {
 
-            if (StringUtils.isNotEmpty(password) && password.length() > 3) {
-                boolean matches = passwordEncoder.matches(password, user.get().getPassword());
-                if (!matches) {
-                    throw new BadCredentialsException("Username or password do not match!");
-                }
+            boolean matches = passwordEncoder.matches(password,
+                    user.get().getPassword());
+
+            if (!matches) {
+                throw new BadCredentialsException("Username or password do not match!");
             }
 
             log.info("User [{}] has been authenticated", username);
@@ -54,6 +53,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 log.info("Adding role [{}] to user [{}]", r.getRoleByRoleId().getRoleName(), username);
                 authorities.add(new SimpleGrantedAuthority(r.getRoleByRoleId().getRoleName()));
             });
+
             return new UsernamePasswordAuthenticationToken
                     (username, password, authorities);
         } else {
