@@ -30,6 +30,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.TimeZone;
+
 @Slf4j
 @SpringBootApplication
 @ComponentScan({
@@ -43,6 +45,7 @@ public class InvoiceServerApiApplication {
     private Environment env;
 
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Toronto"));
         System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(InvoiceServerApiApplication.class, args);
     }

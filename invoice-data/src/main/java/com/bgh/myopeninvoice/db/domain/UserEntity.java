@@ -22,6 +22,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 
@@ -46,7 +47,7 @@ public class UserEntity implements Serializable {
     @Column(name = "PASSWORD_HASH", nullable = true, length = 200)
     private String password;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_LOGGED_DATE", nullable = false)
     private Date lastLogged;
 

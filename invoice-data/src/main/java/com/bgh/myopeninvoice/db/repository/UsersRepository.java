@@ -17,12 +17,16 @@
 package com.bgh.myopeninvoice.db.repository;
 
 import com.bgh.myopeninvoice.db.domain.UserEntity;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -35,4 +39,10 @@ public interface UsersRepository
     @Query("select e from UserEntity e where e.username = :username")
     Optional<UserEntity> findByUsername(@Param("username") String username);
 
+    @Modifying(clearAutomatically = true)
+    @Query("update UserEntity e set e.lastLogged = :date where e.username = :username")
+    void updateLastLoggedDateByUsername(@Param("username") String username, @Param("date") Timestamp date);
+
+    @Query("select e.enabled from UserEntity e where e.username = :username")
+    Optional<Boolean> isUserValid(@Param("username") String username);
 }

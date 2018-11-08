@@ -1,5 +1,6 @@
 package com.bgh.myopeninvoice.api.security;
 
+import com.bgh.myopeninvoice.api.service.UserService;
 import com.bgh.myopeninvoice.db.domain.UserEntity;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.Optional;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserService userService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -35,9 +36,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = auth.getName();
         CharSequence password = String.valueOf(auth.getCredentials());
 
-        Optional<UserEntity> user = usersRepository.findByUsername(username);
+        Optional<UserEntity> user = userService.findUserByUsername(username);
 
-        if (user.isPresent() && StringUtils.isNotEmpty(String.valueOf(password))) {
+        if (user.isPresent()
+                && StringUtils.isNotEmpty(String.valueOf(password))
+                && user.get().getEnabled()) {
 
             boolean matches = passwordEncoder.matches(password,
                     user.get().getPassword());
@@ -45,6 +48,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             if (!matches) {
                 throw new BadCredentialsException("Username or password do not match!");
             }
+
+            userService.updateLastLoggedDate(username);
 
             log.info("User [{}] has been authenticated", username);
 

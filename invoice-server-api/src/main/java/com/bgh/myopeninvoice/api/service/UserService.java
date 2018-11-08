@@ -17,13 +17,17 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
 import com.bgh.myopeninvoice.db.repository.UserRoleRepository;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -37,6 +41,20 @@ public class UserService {
     @Transactional
     public List<RoleEntity> findUserRoles(String username) {
         return userRoleRepository.findRolesByUsername(username);
+    }
+
+    public Optional<UserEntity> findUserByUsername(String username) {
+        return usersRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public void updateLastLoggedDate(String username) {
+        Timestamp from = Timestamp.from(Instant.now());
+        usersRepository.updateLastLoggedDateByUsername(username, from);
+    }
+
+    public Boolean isUserValid(String username) {
+        return usersRepository.isUserValid(username).orElse(Boolean.FALSE);
     }
 
 }
