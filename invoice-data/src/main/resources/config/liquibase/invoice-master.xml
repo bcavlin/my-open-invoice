@@ -93,7 +93,6 @@
             <column name="business_number" type="varchar(30)">
             </column>
             <column name="content" type="blob">
-                <constraints nullable="false"/>
             </column>
             <column name="week_start" type="int" defaultValue="1">
                 <constraints nullable="false"/>
@@ -325,7 +324,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="content" type="blob">
-                <constraints nullable="false"/>
             </column>
             <column name="filename" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_attachment_1"/>
@@ -419,6 +417,57 @@
                         schemaName="invoice"
                         startValue="4"
                         incrementBy="2"/>
+    </changeSet>
+
+    <changeSet id="4" author="bcavlin">
+        <loadData tableName="user"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/user.csv"
+                  encoding="UTF-8"/>
+
+        <loadData tableName="role"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/role.csv"
+                  encoding="UTF-8"/>
+
+        <loadData tableName="user_role"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/user_role.csv"
+                  encoding="UTF-8"/>
+
+        <loadData tableName="currency"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/currency.csv"
+                  encoding="UTF-8"/>
+
+        <loadData tableName="tax"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/tax.csv"
+                  encoding="UTF-8"/>
+
+        <loadData tableName="contact"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/contact.csv"
+                  encoding="UTF-8"/>
+
+        <loadData tableName="company"
+                  schemaName="invoice"
+                  quotchar="'"
+                  separator=","
+                  file="config/liquibase/company.csv"
+                  encoding="UTF-8"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -6,6 +6,7 @@
         <module>invoice-data</module>
         <module>invoice-reporting</module>
         <module>invoice-server-api</module>
+        <module>invoice-common</module>
     </modules>
 
     <groupId>com.bgh.myopeninvoice</groupId>
@@ -37,6 +38,7 @@
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <liquibase-slf4j.version>RELEASE</liquibase-slf4j.version>
         <jjwt.version>0.9.0</jjwt.version>
+        <jackson.version>2.9.7</jackson.version>
     </properties>
 
     <dependencies>
@@ -58,6 +60,11 @@
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.verison}</version>
@@ -72,6 +79,16 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>

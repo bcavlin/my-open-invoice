@@ -16,21 +16,27 @@
 
 package com.bgh.myopeninvoice.api;
 
+import com.bgh.myopeninvoice.db.DatabaseConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Slf4j
 @SpringBootApplication
 @ComponentScan({
         "com.bgh.myopeninvoice.api",
         "com.bgh.myopeninvoice.db",
-        "com.bgh.myopeninvoice.reporting"})
+        "com.bgh.myopeninvoice.reporting",
+        "com.bgh.myopeninvoice.common"})
 public class InvoiceServerApiApplication {
 
     @Autowired

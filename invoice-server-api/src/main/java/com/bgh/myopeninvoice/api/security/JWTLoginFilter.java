@@ -44,7 +44,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                     jb.append(line);
             } catch (Exception e) { /*report an error*/ }
 
-            log.info("Request data: {}", jb.toString());
+            log.info("Request data: {}", jb.toString().replaceFirst(",\"password\":\".*\"",""));
 
             creds = new ObjectMapper()
                     .readValue(jb.toString(), AccountCredentials.class);

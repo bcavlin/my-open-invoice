@@ -34,7 +34,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping(value = "/user/{username}/roles", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<RoleEntity> roles(@PathVariable("username") String username) {
         return userService.findUserRoles(username);
