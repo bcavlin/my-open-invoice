@@ -26,6 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -39,6 +40,7 @@ import java.util.TimeZone;
         "com.bgh.myopeninvoice.db",
         "com.bgh.myopeninvoice.reporting",
         "com.bgh.myopeninvoice.common"})
+@EnableAspectJAutoProxy
 public class InvoiceServerApiApplication {
 
     @Autowired

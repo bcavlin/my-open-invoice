@@ -59,7 +59,7 @@
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <!--@elvariable id="user" type="com.bgh.myopeninvoice.db.model.UserEntity"-->
+            <!--@elvariable id="user" type="com.bgh.myopeninvoice.db.domain.UserEntity"-->
             <p:dataTable id="users-table"
                          var="user"
                          widgetVar="users-table"
@@ -142,7 +142,7 @@
                                  update="main-form, users-form, roles-form"/>
             </h:panelGroup>
 
-            <!--@elvariable id="userRole" type="com.bgh.myopeninvoice.db.model.UserRoleEntity"-->
+            <!--@elvariable id="userRole" type="com.bgh.myopeninvoice.db.domain.UserRoleEntity"-->
             <p:dataTable id="user-roles-table"
                          var="userRole"
                          rowKey="#{userRole.userRoleId}"
@@ -232,7 +232,7 @@
                 <p:messages autoUpdate="true"/>
                 <h:panelGroup id="roles-form-grid1"
                               style="padding-top: 3px;">
-                    <!--@elvariable id="roledl" type="com.bgh.myopeninvoice.db.model.RoleEntity"-->
+                    <!--@elvariable id="roledl" type="com.bgh.myopeninvoice.db.domain.RoleEntity"-->
                     <p:pickList id="roles-pick-list" value="#{usersBean.rolesDualListModel}" var="roledl"
                                 itemValue="#{roledl}" converter="#{rolesEntityConverter}">
                         <f:facet name="sourceCaption">Available</f:facet>

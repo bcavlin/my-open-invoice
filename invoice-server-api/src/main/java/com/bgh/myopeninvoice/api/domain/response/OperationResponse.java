@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.model.user;
+package com.bgh.myopeninvoice.api.domain.response;
 
-import com.bgh.myopeninvoice.api.model.response.OperationResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class LogoutRespose extends OperationResponse {
+import java.time.Instant;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Data //for getters and setters
+public abstract class OperationResponse {
+    @ApiModelProperty(required = true)
+    private OperationResponseStatus operationStatus;
+
+    private String operationMessage;
+
+    private Instant operationDate = Instant.now();
+
+    public enum OperationResponseStatus {SUCCESS, ERROR, WARNING, NO_ACCESS}
 }

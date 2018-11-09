@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.model.user;
+package com.bgh.myopeninvoice.api.domain.user;
 
-import com.bgh.myopeninvoice.api.model.response.OperationResponse;
-import io.swagger.annotations.ApiModelProperty;
+import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.security.core.Authentication;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LoggedUserDetailsResponse extends OperationResponse {
-
-    public LoggedUserDetailsResponse() {
-    }
-
-    public LoggedUserDetailsResponse(Authentication authentication) {
-        this.authentication = authentication;
-    }
-
-    @ApiModelProperty(required = true, value = "")
-    private Authentication authentication;
+public class LogoutRespose extends OperationResponse {
 }

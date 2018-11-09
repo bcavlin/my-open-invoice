@@ -71,7 +71,7 @@
                 </p:confirmDialog>
             </h:panelGroup>
 
-            <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.model.CompanyEntity"-->
+            <!--@elvariable id="company" type="com.bgh.myopeninvoice.db.domain.CompanyEntity"-->
             <p:dataTable id="companies-table"
                          var="company"
                          widgetVar="companies-table"
@@ -172,7 +172,7 @@
                         update="main-form,contracts-form"/>
 
 
-                <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.model.ContractEntity"-->
+                <!--@elvariable id="companyContract" type="com.bgh.myopeninvoice.db.domain.ContractEntity"-->
                 <p:dataTable id="company-contracts-table"
                              var="companyContract"
                              rowKey="#{companyContract.contractId}"
@@ -387,7 +387,7 @@
             <h:form id="companies-contacts-form">
                 <h:panelGroup
                         style="padding-top: 3px; align-content: center;" layout="block">
-                    <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.model.ContactEntity"-->
+                    <!--@elvariable id="contact" type="com.bgh.myopeninvoice.db.domain.ContactEntity"-->
                     <p:pickList id="contacts-pick-list"
                                 value="#{companiesBean.contactsEntityDualListModel}"
                                 var="contact"

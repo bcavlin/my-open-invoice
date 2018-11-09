@@ -27,12 +27,6 @@
 
     <artifactId>invoice-server-api</artifactId>
 
-    <properties>
-        <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
-        <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
-        <java.version>1.8</java.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -75,11 +69,11 @@
             <artifactId>invoice-data</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.bgh.myopeninvoice</groupId>
-            <artifactId>invoice-reporting</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.bgh.myopeninvoice</groupId>-->
+            <!--<artifactId>invoice-reporting</artifactId>-->
+            <!--<version>${project.parent.version}</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -87,6 +81,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>

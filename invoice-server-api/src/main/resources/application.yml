@@ -8,3 +8,5 @@ spring:
   profiles:
     include: database
     active: database
+  application:
+    name: my-open-invoice

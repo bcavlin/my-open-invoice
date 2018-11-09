@@ -1,6 +1,4 @@
 *.iml
 **/target
 **/.idea
-*.versionsBackup
-**/logs
-**/invoice-db
+/log/

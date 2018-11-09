@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.model.response;
+package com.bgh.myopeninvoice.api.domain.user;
 
+import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.security.core.Authentication;
 
-@Data //for getters and setters
-public abstract class OperationResponse {
-    @ApiModelProperty(required = true)
-    private ResponseStatusEnum operationStatus;
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class LoggedUserDetailsResponse extends OperationResponse {
 
-    private String operationMessage;
+    public LoggedUserDetailsResponse() {
+    }
 
-    public enum ResponseStatusEnum {SUCCESS, ERROR, WARNING, NO_ACCESS}
+    public LoggedUserDetailsResponse(Authentication authentication) {
+        this.authentication = authentication;
+    }
+
+    @ApiModelProperty(required = true, value = "")
+    private Authentication authentication;
 }
