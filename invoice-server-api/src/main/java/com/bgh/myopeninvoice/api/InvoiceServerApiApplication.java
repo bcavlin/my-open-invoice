@@ -16,21 +16,17 @@
 
 package com.bgh.myopeninvoice.api;
 
-import com.bgh.myopeninvoice.db.DatabaseConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.Objects;
 import java.util.TimeZone;
 
 @Slf4j
@@ -55,8 +51,8 @@ public class InvoiceServerApiApplication {
     @Bean
     public StandardPBEStringEncryptor getStandardPBEStringEncryptor() {
         StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
-//        standardPBEStringEncryptor.setPassword(env.getProperty("jasypt.encryptor.password"));
-//        standardPBEStringEncryptor.setAlgorithm(env.getProperty("jasypt.encryptor.algorithm"));
+        standardPBEStringEncryptor.setPassword(Objects.requireNonNull(env.getProperty("jasypt.encryptor.password")));
+        standardPBEStringEncryptor.setAlgorithm(Objects.requireNonNull(env.getProperty("jasypt.encryptor.algorithm")));
         return standardPBEStringEncryptor;
     }
 

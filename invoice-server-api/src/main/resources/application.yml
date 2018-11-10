@@ -10,3 +10,7 @@ spring:
     active: database
   application:
     name: my-open-invoice
+jasypt:
+  encryptor:
+    password: mypassword
+    algorithm: PBEWITHMD5ANDDES

@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -33,18 +32,16 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(
             HttpServletRequest req, HttpServletResponse res)
-            throws AuthenticationException, IOException, ServletException {
-        AccountCredentials creds = null;
-        try {
-            StringBuilder jb = new StringBuilder();
-            String line = null;
-            try {
-                BufferedReader reader = req.getReader();
-                while ((line = reader.readLine()) != null)
-                    jb.append(line);
-            } catch (Exception e) { /*report an error*/ }
+            throws IOException, ServletException {
 
-            log.info("Request data: {}", jb.toString().replaceFirst(",\"password\":\".*\"",""));
+        AccountCredentials creds = null;
+        StringBuilder jb = new StringBuilder();
+
+        try {
+
+            readLines(req, jb);
+
+            log.info("Request data: {}", jb.toString().replaceFirst(",\"password\":\".*\"", ""));
 
             creds = new ObjectMapper()
                     .readValue(jb.toString(), AccountCredentials.class);
@@ -62,6 +59,15 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         throw new AuthenticationCredentialsNotFoundException("Invalid data input");
     }
 
+    private void readLines(HttpServletRequest req, StringBuilder jb) {
+        String line;
+        try {
+            BufferedReader reader = req.getReader();
+            while ((line = reader.readLine()) != null)
+                jb.append(line);
+        } catch (Exception e) { /*report an error*/ }
+    }
+
     @Override
     protected void successfulAuthentication(
             HttpServletRequest req,
@@ -75,4 +81,5 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         res.getWriter().flush();
         res.getWriter().close();
     }
+
 }

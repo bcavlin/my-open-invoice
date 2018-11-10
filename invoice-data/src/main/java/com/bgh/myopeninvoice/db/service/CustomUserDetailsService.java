@@ -38,7 +38,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -58,7 +57,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         log.info("Verifying username [{}]", username);
 
         UserDetails userDetails = null;
@@ -80,7 +79,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-            if (user.get().getUserRoleByUserId().size() == 0) {
+            if (user.get().getUserRoleByUserId().isEmpty()) {
                 log.error("Username [{}] does not have any roles assigned", username);
                 throw new AuthenticationServiceException("User does not have any roles assigned");
             } else {
@@ -110,5 +109,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void setPasswordHashForEncryption(String passwordHashForEncryption) {
         this.passwordHashForEncryption = passwordHashForEncryption;
     }
+
 }
 

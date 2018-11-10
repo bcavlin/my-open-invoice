@@ -5,12 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
-import java.util.Map;
 
 @Data
 public class SearchParameters implements Serializable {
 
-    Map<String, String> filters;
+    String filter;
 
     PageRequest pageRequest;
 

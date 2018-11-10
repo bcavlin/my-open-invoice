@@ -25,8 +25,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -45,4 +43,5 @@ public interface UsersRepository
 
     @Query("select e.enabled from UserEntity e where e.username = :username")
     Optional<Boolean> isUserValid(@Param("username") String username);
+
 }

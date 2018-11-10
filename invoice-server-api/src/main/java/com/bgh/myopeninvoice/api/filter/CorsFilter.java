@@ -25,6 +25,12 @@ import java.io.IOException;
  * Taken from the https://github.com/mrin9/Angular-SpringBoot-REST-JWT
  */
 public class CorsFilter implements Filter {
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        //No need for implementation
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse res = (HttpServletResponse) response;
@@ -44,9 +50,7 @@ public class CorsFilter implements Filter {
 
     @Override
     public void destroy() {
+        //No need for implementation
     }
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
 }
