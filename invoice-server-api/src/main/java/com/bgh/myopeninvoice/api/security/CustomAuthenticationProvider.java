@@ -2,7 +2,6 @@ package com.bgh.myopeninvoice.api.security;
 
 import com.bgh.myopeninvoice.api.service.UserService;
 import com.bgh.myopeninvoice.db.domain.UserEntity;
-import com.bgh.myopeninvoice.db.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,8 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public Authentication authenticate(Authentication auth)
-            throws AuthenticationException {
+    public Authentication authenticate(Authentication auth) {
         String username = auth.getName();
         CharSequence password = String.valueOf(auth.getCredentials());
 
@@ -72,4 +69,5 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> auth) {
         return auth.equals(UsernamePasswordAuthenticationToken.class);
     }
+
 }

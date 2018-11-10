@@ -49,7 +49,5 @@ public class CurrencyEntity implements Serializable {
     @OneToMany(mappedBy = "currencyByCcyId")
     private Collection<InvoiceEntity> invoicesByCcyId;
 
-//    private Collection<InvoiceItemsEntity> invoiceItemsByCcyId;
-
 
 }

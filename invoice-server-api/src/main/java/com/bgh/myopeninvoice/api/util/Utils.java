@@ -13,8 +13,13 @@ import java.util.Map;
 
 public class Utils {
 
-    public static <E> List<E> makeList(Iterable<E> iter) {
-        List<E> list = new ArrayList<E>();
+    public static final String SORT_ORDER = "sortOrder";
+
+    private Utils() {
+    }
+
+    public static <E> List<E> convertIterableToList(Iterable<E> iter) {
+        List<E> list = new ArrayList<>();
         if (iter != null) {
             for (E item : iter) {
                 list.add(item);
@@ -27,48 +32,69 @@ public class Utils {
         SearchParameters searchParameters = new SearchParameters();
 
         if (queryParameters != null) {
-            if (queryParameters.get("sortField") != null && queryParameters.get("sortOrder") != null) {
-                String sortField = queryParameters.get("sortField");
-                SortOrder sortOrder = null;
+            parseSort(queryParameters, searchParameters);
 
-                if (sortField.length() > 30 || !sortField.matches("[a-zA-Z0-9_]+")) {
-                    throw new InvalidParameterException("Invalid parameters 'sortField' or 'sortOrder'. Rule: sortField.length() > 30 || !sortField.matches('[a-zA-Z0-9_]') and sortOrder in (ASC,DESC)");
-                }
+            parsePage(queryParameters, searchParameters);
 
-                if (queryParameters.get("sortOrder") != null) {
-                    sortOrder = SortOrder.valueOf(queryParameters.get("sortOrder"));
-
-                    if (sortOrder.equals(SortOrder.ASC)) {
-                        searchParameters.setSort(Sort.by(sortField).ascending());
-                    } else if (sortOrder.equals(SortOrder.DESC)) {
-                        searchParameters.setSort(Sort.by(sortField).descending());
-                    } else {
-                        searchParameters.setSort(Sort.by(sortField));
-                    }
-                } else {
-                    searchParameters.setSort(Sort.by(sortField));
-                }
-            }
-
-            if (queryParameters.get("page") != null && queryParameters.get("size") != null) {
-                int page = NumberUtils.parseNumber(queryParameters.get("page"), Integer.class);
-                int size = NumberUtils.parseNumber(queryParameters.get("size"), Integer.class);
-                if (page < 0 || size > 1000) {
-                    throw new InvalidParameterException("Invalid parameters 'page' or 'size'. Rule: page < 0 || size > 1000");
-                }
-
-                if (searchParameters.getSort() != null) {
-                    searchParameters.setPageRequest(PageRequest.of(page, size, searchParameters.getSort()));
-                } else {
-                    searchParameters.setPageRequest(PageRequest.of(page, size));
-                }
-
-            }
+            parseFilter(queryParameters, searchParameters);
 
             return searchParameters;
         }
 
         return null;
+    }
+
+    private static void parseFilter(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
+        if (queryParameters.get("filter") != null){
+            String filter = queryParameters.get("filter");
+            if(filter.length() > 20){
+                throw new InvalidParameterException("Invalid parameters 'filter. Size cannot be more than 20");
+            }
+
+            searchParameters.setFilter(filter);
+        }
+    }
+
+    private static void parsePage(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
+        if (queryParameters.get("page") != null && queryParameters.get("size") != null) {
+            int page = NumberUtils.parseNumber(queryParameters.get("page"), Integer.class);
+            int size = NumberUtils.parseNumber(queryParameters.get("size"), Integer.class);
+            if (page < 0 || size > 1000) {
+                throw new InvalidParameterException("Invalid parameters 'page' or 'size'. Rule: page < 0 || size > 1000");
+            }
+
+            if (searchParameters.getSort() != null) {
+                searchParameters.setPageRequest(PageRequest.of(page, size, searchParameters.getSort()));
+            } else {
+                searchParameters.setPageRequest(PageRequest.of(page, size));
+            }
+
+        }
+    }
+
+    private static void parseSort(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
+        if (queryParameters.get("sortField") != null && queryParameters.get(SORT_ORDER) != null) {
+            String sortField = queryParameters.get("sortField");
+            SortOrder sortOrder = null;
+
+            if (sortField.length() > 30 || !sortField.matches("[a-zA-Z0-9_]+")) {
+                throw new InvalidParameterException("Invalid parameters 'sortField' or 'sortOrder'. Rule: sortField.length() > 30 || !sortField.matches('[a-zA-Z0-9_]') and sortOrder in (ASC,DESC)");
+            }
+
+            if (queryParameters.get(SORT_ORDER) != null) {
+                sortOrder = SortOrder.valueOf(queryParameters.get(SORT_ORDER));
+
+                if (sortOrder.equals(SortOrder.ASC)) {
+                    searchParameters.setSort(Sort.by(sortField).ascending());
+                } else if (sortOrder.equals(SortOrder.DESC)) {
+                    searchParameters.setSort(Sort.by(sortField).descending());
+                } else {
+                    searchParameters.setSort(Sort.by(sortField));
+                }
+            } else {
+                searchParameters.setSort(Sort.by(sortField));
+            }
+        }
     }
 
 }

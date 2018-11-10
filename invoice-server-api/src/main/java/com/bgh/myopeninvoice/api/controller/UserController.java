@@ -18,7 +18,6 @@ package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.service.UserService;
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
-import com.bgh.myopeninvoice.db.domain.TaxEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

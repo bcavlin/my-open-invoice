@@ -33,8 +33,8 @@ public class TaxController {
         long taxEntitiesCount;
 
         try {
-            taxEntitiesCount = taxService.countTaxEntity(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            taxEntities = taxService.findTaxEntity(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            taxEntitiesCount = taxService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            taxEntities = taxService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
 
         } catch (Exception e) {
             log.error(e.toString(), e);

@@ -79,7 +79,7 @@ public class CompanyEntity implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "companiesByContractSignedWithSubcontract")
-    private Collection<ContractEntity> contractsByCompanyId_0;
+    private Collection<ContractEntity> contractsByCompanyId0;
 
     @OneToMany(mappedBy = "companiesByCompanyTo")
     private Collection<InvoiceEntity> invoicesByCompanyId;

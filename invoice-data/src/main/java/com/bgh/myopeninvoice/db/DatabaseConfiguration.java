@@ -16,17 +16,12 @@
 
 package com.bgh.myopeninvoice.db;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.beans.PropertyVetoException;
 
 /**
  * Created by bcavlin on 20/06/17.
@@ -38,4 +33,5 @@ import java.beans.PropertyVetoException;
 @EnableAutoConfiguration
 @EnableTransactionManagement
 public class DatabaseConfiguration {
+
 }

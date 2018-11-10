@@ -1,6 +1,5 @@
 package com.bgh.myopeninvoice.api.domain.response;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
