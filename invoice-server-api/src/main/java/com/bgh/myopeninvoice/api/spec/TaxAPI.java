@@ -46,14 +46,32 @@ public interface TaxAPI {
     @GetMapping(value = "/tax/{id}")
     ResponseEntity<DefaultResponse<TaxEntity>> findById(@PathVariable("id") Integer id);
 
+    @ApiOperation(value = "Save tax",
+            notes = "Saves TaxEntity",
+            response = DefaultResponseTaxEntity.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseTaxEntity.class)
+    })
     @PostMapping(value = "/tax")
     ResponseEntity<DefaultResponse<TaxEntity>> save(@Valid @NotNull @RequestBody TaxEntity taxEntity,
                                                     BindingResult bindingResult);
 
+    @ApiOperation(value = "Update tax",
+            notes = "Updates TaxEntity",
+            response = DefaultResponseTaxEntity.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseTaxEntity.class)
+    })
     @PutMapping(value = "/tax")
     ResponseEntity<DefaultResponse<TaxEntity>> update(@Valid @NotNull @RequestBody TaxEntity taxEntity,
                                                       BindingResult bindingResult);
 
+    @ApiOperation(value = "Delete tax by ID",
+            notes = "Deletes TaxEntity",
+            response = Boolean.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
+    })
     @DeleteMapping(value = "/tax/{id}")
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
 }

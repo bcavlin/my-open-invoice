@@ -16,6 +16,7 @@
 
 package com.bgh.myopeninvoice.db.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -43,9 +44,11 @@ public class CurrencyEntity implements Serializable {
     @Column(name = "DESCRIPTION", nullable = false, length = 100)
     private String description;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "currencyByCcyId")
     private Collection<ContractEntity> contractsByCcyId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "currencyByCcyId")
     private Collection<InvoiceEntity> invoicesByCcyId;
 
