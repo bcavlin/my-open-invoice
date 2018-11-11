@@ -1,19 +1,26 @@
 package com.bgh.myopeninvoice.api.domain.response;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DefaultResponse<T> extends OperationResponse {
 
-    private long count;
+    @SuppressWarnings("unchecked")
+    public DefaultResponse(Class<T> objectType) {
+        this.objectType = objectType.getSimpleName();
+    }
 
-    private String objectType;
+    private Long count;
 
-    private List<T> details = new ArrayList<>();
+    @Setter(AccessLevel.NONE)
+    private final String objectType;
+
+    private List<T> details;
 
 }

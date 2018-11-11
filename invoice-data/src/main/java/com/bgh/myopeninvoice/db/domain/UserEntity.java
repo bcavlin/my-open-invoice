@@ -34,8 +34,8 @@ import java.util.Date;
 public class UserEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Integer userId;
 
     @Basic

@@ -33,8 +33,8 @@ import java.util.Date;
 public class UserRoleEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ROLE_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ROLE_ID")
     private Integer userRoleId;
 
     @Temporal(TemporalType.DATE)

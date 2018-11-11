@@ -34,8 +34,8 @@ import java.util.Collection;
 public class InvoiceItemsEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "INVOICE_ITEM_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "INVOICE_ITEM_ID")
     private Integer invoiceItemId;
 
     @Basic

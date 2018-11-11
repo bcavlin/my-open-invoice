@@ -33,8 +33,8 @@ import java.util.Collection;
 public class CompanyContactEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "COMPANY_CONTACT_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "COMPANY_CONTACT_ID")
     private Integer companyContactId;
 
     @ManyToOne(cascade = CascadeType.MERGE)

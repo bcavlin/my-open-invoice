@@ -31,8 +31,8 @@ import java.math.BigDecimal;
 public class TaxEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "TAX_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TAX_ID")
     private Integer taxId;
 
     @Basic

@@ -35,8 +35,8 @@ import java.util.Date;
 public class TimeSheetEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "TIMESHEET_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TIMESHEET_ID")
     private Integer timesheetId;
 
     @Basic

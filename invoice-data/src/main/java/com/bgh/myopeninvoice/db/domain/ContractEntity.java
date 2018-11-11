@@ -34,9 +34,9 @@ import java.util.Date;
 @Table(name = "CONTRACT", schema = "INVOICE")
 public class ContractEntity implements Serializable {
 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "CONTRACT_ID", nullable = false)
+    @Column(name = "CONTRACT_ID")
     private Integer contractId;
 
     @Basic
