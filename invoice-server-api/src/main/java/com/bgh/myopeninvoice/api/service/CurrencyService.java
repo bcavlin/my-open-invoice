@@ -2,9 +2,9 @@ package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
-import com.bgh.myopeninvoice.db.domain.QTaxEntity;
-import com.bgh.myopeninvoice.db.domain.TaxEntity;
-import com.bgh.myopeninvoice.db.repository.TaxRepository;
+import com.bgh.myopeninvoice.db.domain.QCurrencyEntity;
+import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
+import com.bgh.myopeninvoice.db.repository.CurrencyRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
@@ -19,10 +19,10 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class TaxService implements CommonService<TaxEntity> {
+public class CurrencyService implements CommonService<CurrencyEntity> {
 
     @Autowired
-    private TaxRepository taxRepository;
+    private CurrencyRepository currencyRepository;
 
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
@@ -31,8 +31,8 @@ public class TaxService implements CommonService<TaxEntity> {
 
         if (searchParameters.getFilter() != null) {
 
-            builder.andAnyOf(QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
-                    QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+            builder.andAnyOf(QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter()),
+                    QCurrencyEntity.currencyEntity.description.stringValue().contains(searchParameters.getFilter()));
 
         }
         return builder;
@@ -47,33 +47,33 @@ public class TaxService implements CommonService<TaxEntity> {
         long count;
 
         if (predicate != null) {
-            count = taxRepository.count(predicate);
+            count = currencyRepository.count(predicate);
         } else {
-            count = taxRepository.count();
+            count = currencyRepository.count();
         }
 
         return count;
     }
 
     @Override
-    public List<TaxEntity> findAll(SearchParameters searchParameters) {
+    public List<CurrencyEntity> findAll(SearchParameters searchParameters) {
         log.info("findAll");
 
-        List<TaxEntity> entities;
+        List<CurrencyEntity> entities;
 
         Predicate predicate = getPredicate(searchParameters);
 
         if (searchParameters.getPageRequest() != null) {
             if (predicate != null) {
-                entities = Utils.convertIterableToList(taxRepository.findAll(predicate, searchParameters.getPageRequest()));
+                entities = Utils.convertIterableToList(currencyRepository.findAll(predicate, searchParameters.getPageRequest()));
             } else {
-                entities = Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
+                entities = Utils.convertIterableToList(currencyRepository.findAll(searchParameters.getPageRequest()));
             }
         } else {
             if (predicate != null) {
-                entities = Utils.convertIterableToList(taxRepository.findAll(predicate));
+                entities = Utils.convertIterableToList(currencyRepository.findAll(predicate));
             } else {
-                entities = Utils.convertIterableToList(taxRepository.findAll());
+                entities = Utils.convertIterableToList(currencyRepository.findAll());
             }
         }
 
@@ -81,12 +81,12 @@ public class TaxService implements CommonService<TaxEntity> {
     }
 
     @Override
-    public List<TaxEntity> findById(Integer id) {
+    public List<CurrencyEntity> findById(Integer id) {
         log.info("findById: {}", id);
 
-        List<TaxEntity> entities = new ArrayList<>();
+        List<CurrencyEntity> entities = new ArrayList<>();
 
-        Optional<TaxEntity> byId = taxRepository.findById(id);
+        Optional<CurrencyEntity> byId = currencyRepository.findById(id);
 
         byId.ifPresent(entities::add);
 
@@ -95,12 +95,12 @@ public class TaxService implements CommonService<TaxEntity> {
 
     @Transactional
     @Override
-    public List<TaxEntity> save(TaxEntity entity) {
+    public List<CurrencyEntity> save(CurrencyEntity entity) {
         log.info("Saving entity");
 
-        List<TaxEntity> entities = new ArrayList<>();
+        List<CurrencyEntity> entities = new ArrayList<>();
 
-        TaxEntity saved = taxRepository.save(entity);
+        CurrencyEntity saved = currencyRepository.save(entity);
 
         log.info("Saved entity: {}", entity);
 
@@ -109,14 +109,14 @@ public class TaxService implements CommonService<TaxEntity> {
         return entities;
     }
 
-    @Transactional
+
     @Override
     public void delete(Integer id) {
-        log.info("Deleting TaxEntity with id [{}]", id);
+        log.info("Deleting CurrencyEntity with id [{}]", id);
 
         Assert.notNull(id, "ID cannot be empty when deleting data");
 
-        taxRepository.deleteById(id);
+        currencyRepository.deleteById(id);
     }
 
 }
