@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
 public class ContactEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "CONTACT_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CONTACT_ID")
     private Integer contactId;
 
     @Basic

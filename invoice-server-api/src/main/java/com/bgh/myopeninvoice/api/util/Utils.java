@@ -2,18 +2,22 @@ package com.bgh.myopeninvoice.api.util;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.SortOrder;
+import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
+import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.exception.InvalidParameterException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.NumberUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Slf4j
 public class Utils {
 
-    public static final String SORT_ORDER = "sortOrder";
+    private static final String SORT_ORDER = "sortOrder";
 
     private Utils() {
     }
@@ -45,9 +49,9 @@ public class Utils {
     }
 
     private static void parseFilter(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
-        if (queryParameters.get("filter") != null){
+        if (queryParameters.get("filter") != null) {
             String filter = queryParameters.get("filter");
-            if(filter.length() > 20){
+            if (filter.length() > 20) {
                 throw new InvalidParameterException("Invalid parameters 'filter. Size cannot be more than 20");
             }
 
@@ -75,7 +79,7 @@ public class Utils {
     private static void parseSort(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
         if (queryParameters.get("sortField") != null && queryParameters.get(SORT_ORDER) != null) {
             String sortField = queryParameters.get("sortField");
-            SortOrder sortOrder = null;
+            SortOrder sortOrder;
 
             if (sortField.length() > 30 || !sortField.matches("[a-zA-Z0-9_]+")) {
                 throw new InvalidParameterException("Invalid parameters 'sortField' or 'sortOrder'. Rule: sortField.length() > 30 || !sortField.matches('[a-zA-Z0-9_]') and sortOrder in (ASC,DESC)");
@@ -95,6 +99,23 @@ public class Utils {
                 searchParameters.setSort(Sort.by(sortField));
             }
         }
+    }
+
+    public static <T> ResponseEntity<DefaultResponse<T>> getErrorResponse(Class<T> clazz, Exception e) {
+        log.error(e.toString(), e);
+        @SuppressWarnings("unchecked") DefaultResponse<T> defaultResponse = new DefaultResponse<>(clazz);
+        defaultResponse.setOperationMessage(e.toString());
+        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.ERROR);
+        return new ResponseEntity<DefaultResponse<T>>(defaultResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    public static <T> ResponseEntity<DefaultResponse<T>> getErrorResponse(Class<T> clazz, Exception e, T element) {
+        log.error(e.toString(), e);
+        @SuppressWarnings("unchecked") DefaultResponse<T> defaultResponse = new DefaultResponse<>(clazz);
+        defaultResponse.setOperationMessage(e.toString());
+        defaultResponse.setDetails(Collections.singletonList(element));
+        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.ERROR);
+        return new ResponseEntity<DefaultResponse<T>>(defaultResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

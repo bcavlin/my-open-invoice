@@ -31,8 +31,8 @@ import java.util.Collection;
 public class CurrencyEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "CCY_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CCY_ID")
     private Integer ccyId;
 
     @Basic

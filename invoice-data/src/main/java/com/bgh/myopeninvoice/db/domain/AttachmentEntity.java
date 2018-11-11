@@ -32,8 +32,8 @@ import java.io.Serializable;
 public class AttachmentEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "ATTACHMENT_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ATTACHMENT_ID")
     private Integer attachmentId;
 
     @Basic

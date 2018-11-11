@@ -31,8 +31,8 @@ import java.util.Date;
 public class ReportsEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "REPORT_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "REPORT_ID")
     private Integer reportId;
 
     @Lob

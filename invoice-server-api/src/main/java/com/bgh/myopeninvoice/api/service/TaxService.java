@@ -7,21 +7,41 @@ import com.bgh.myopeninvoice.db.domain.TaxEntity;
 import com.bgh.myopeninvoice.db.repository.TaxRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
-public class TaxService implements CommonService<TaxEntity>{
+public class TaxService implements CommonService<TaxEntity> {
 
     @Autowired
     private TaxRepository taxRepository;
 
     @Override
+    public Predicate getPredicate(SearchParameters searchParameters) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (searchParameters.getFilter() != null) {
+
+            builder.andAnyOf(QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
+                    QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+
+        }
+        return builder;
+    }
+
+    @Override
     public long count(SearchParameters searchParameters) {
+        log.info("count");
+
         Predicate predicate = getPredicate(searchParameters);
 
         long count;
@@ -37,41 +57,64 @@ public class TaxService implements CommonService<TaxEntity>{
 
     @Override
     public List<TaxEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAllTaxEntities");
+        log.info("findAll");
 
-        List<TaxEntity> taxEntities = null;
+        List<TaxEntity> entities;
 
         Predicate predicate = getPredicate(searchParameters);
 
         if (searchParameters.getPageRequest() != null) {
             if (predicate != null) {
-                taxEntities = Utils.convertIterableToList(taxRepository.findAll(predicate, searchParameters.getPageRequest()));
+                entities = Utils.convertIterableToList(taxRepository.findAll(predicate, searchParameters.getPageRequest()));
             } else {
-                taxEntities = Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
+                entities = Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
             }
         } else {
             if (predicate != null) {
-                taxEntities = Utils.convertIterableToList(taxRepository.findAll(predicate));
+                entities = Utils.convertIterableToList(taxRepository.findAll(predicate));
             } else {
-                taxEntities = Utils.convertIterableToList(taxRepository.findAll());
+                entities = Utils.convertIterableToList(taxRepository.findAll());
             }
         }
 
-        return taxEntities;
+        return entities;
     }
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+    public List<TaxEntity> findById(Integer id) {
+        log.info("findById: {}", id);
 
-        if (searchParameters.getFilter() != null) {
+        List<TaxEntity> entities = new ArrayList<>();
 
-            builder.andAnyOf(QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
-                    QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+        Optional<TaxEntity> byId = taxRepository.findById(id);
 
-        }
-        return builder;
+        byId.ifPresent(entities::add);
+
+        return entities;
+    }
+
+    @Transactional
+    public List<TaxEntity> save(TaxEntity entity) {
+        log.info("Saving entity");
+
+        List<TaxEntity> entities = new ArrayList<>();
+
+        TaxEntity saved = taxRepository.save(entity);
+
+        log.info("Saved entity: {}", entity);
+
+        entities.add(saved);
+
+        return entities;
+    }
+
+    @Transactional
+    public void delete(Integer id) {
+        log.info("Deleting TaxEntity with id [{}]", id);
+
+        Assert.notNull(id, "ID cannot be empty when deleting data");
+
+        taxRepository.deleteById(id);
     }
 
 }
