@@ -38,7 +38,7 @@ public interface UsersRepository
     Optional<UserEntity> findByUsername(@Param("username") String username);
 
     @Modifying(clearAutomatically = true)
-    @Query("update UserEntity e set e.lastLogged = :date where e.username = :username")
+    @Query("update UserEntity e set e.lastLoggedDate = :date where e.username = :username")
     void updateLastLoggedDateByUsername(@Param("username") String username, @Param("date") Timestamp date);
 
     @Query("select e.enabled from UserEntity e where e.username = :username")

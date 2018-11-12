@@ -16,16 +16,22 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.domain.ContactEntity;
+import com.bgh.myopeninvoice.db.domain.ContentEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by bcavlin on 14/03/17.
  */
 @Repository
-public interface ContactsRepository
-        extends PagingAndSortingRepository<ContactEntity, Integer>, QuerydslPredicateExecutor<ContactEntity> {
+public interface ContentRepository
+        extends PagingAndSortingRepository<ContentEntity, Integer>, QuerydslPredicateExecutor<ContentEntity> {
+
+
+    @Query("select c.contentByContentId from CompanyEntity c where c.companyId = :companyId")
+    ContentEntity findContentByCompanyId(@Param("companyId") Integer companyId);
 
 }

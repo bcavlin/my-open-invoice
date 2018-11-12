@@ -16,10 +16,6 @@
 
 package com.bgh.myopeninvoice.db.service;
 
-/**
- * Created by bcavlin on 23/10/16.
- */
-
 
 import com.bgh.myopeninvoice.db.domain.UserEntity;
 import com.bgh.myopeninvoice.db.domain.UserRoleEntity;
@@ -49,8 +45,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private UsersRepository usersRepository;
 
-    private String passwordHashForEncryption;
-
     @Autowired
     public CustomUserDetailsService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
@@ -60,7 +54,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         log.info("Verifying username [{}]", username);
 
-        UserDetails userDetails = null;
+        UserDetails userDetails;
 
         final Optional<UserEntity> user = usersRepository.findByUsername(username);
 
@@ -79,11 +73,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-            if (user.get().getUserRoleByUserId().isEmpty()) {
+            if (user.get().getUserRolesByUserId().isEmpty()) {
                 log.error("Username [{}] does not have any roles assigned", username);
                 throw new AuthenticationServiceException("User does not have any roles assigned");
             } else {
-                for (UserRoleEntity userRoleEntity : user.get().getUserRoleByUserId()) {
+                for (UserRoleEntity userRoleEntity : user.get().getUserRolesByUserId()) {
                     log.info("Authority [{}] added for user [{}]", userRoleEntity.getRoleByRoleId()
                             .getRoleName(), username);
                     authorities.add(new SimpleGrantedAuthority(userRoleEntity.getRoleByRoleId().getRoleName()));
@@ -91,7 +85,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
 
             userDetails = new User(user.get().getUsername(),
-                    user.get().getPassword(),
+                    user.get().getPasswordHash(),
                     user.get().getEnabled(),
                     true,
                     true,
@@ -100,14 +94,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         return userDetails;
-    }
-
-    public String getPasswordHashForEncryption() {
-        return passwordHashForEncryption;
-    }
-
-    public void setPasswordHashForEncryption(String passwordHashForEncryption) {
-        this.passwordHashForEncryption = passwordHashForEncryption;
     }
 
 }

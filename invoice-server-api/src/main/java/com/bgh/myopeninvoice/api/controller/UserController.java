@@ -19,7 +19,7 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.service.UserService;
-import com.bgh.myopeninvoice.api.spec.UserAPI;
+import com.bgh.myopeninvoice.api.controller.spec.UserAPI;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import lombok.extern.slf4j.Slf4j;

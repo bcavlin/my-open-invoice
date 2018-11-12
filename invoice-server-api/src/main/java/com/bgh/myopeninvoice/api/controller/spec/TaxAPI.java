@@ -1,4 +1,4 @@
-package com.bgh.myopeninvoice.api.spec;
+package com.bgh.myopeninvoice.api.controller.spec;
 
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.db.domain.TaxEntity;

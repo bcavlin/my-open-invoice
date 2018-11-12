@@ -40,7 +40,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 && user.get().getEnabled()) {
 
             boolean matches = passwordEncoder.matches(password,
-                    user.get().getPassword());
+                    user.get().getPasswordHash());
 
             if (!matches) {
                 throw new BadCredentialsException("Username or password do not match!");
@@ -51,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             log.info("User [{}] has been authenticated", username);
 
             Collection<GrantedAuthority> authorities = new ArrayList<>();
-            user.get().getUserRoleByUserId().forEach(r -> {
+            user.get().getUserRolesByUserId().forEach(r -> {
                 log.info("Adding role [{}] to user [{}]", r.getRoleByRoleId().getRoleName(), username);
                 authorities.add(new SimpleGrantedAuthority(r.getRoleByRoleId().getRoleName()));
             });

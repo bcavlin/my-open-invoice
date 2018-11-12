@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
  * Created by bcavlin on 14/03/17.
  */
 @Repository
-public interface CompaniesRepository
+public interface CompanyRepository
         extends PagingAndSortingRepository<CompanyEntity, Integer>, QuerydslPredicateExecutor<CompanyEntity> {
 
 }

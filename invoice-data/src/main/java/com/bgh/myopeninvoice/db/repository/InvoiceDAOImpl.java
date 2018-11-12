@@ -40,9 +40,9 @@ public class InvoiceDAOImpl implements InvoiceDAO {
 
     private UserRoleRepository userRoleRepository;
 
-    private ContactsRepository contactsRepository;
+    private ContactRepository contactRepository;
 
-    private CompaniesRepository companiesRepository;
+    private CompanyRepository companyRepository;
 
     private CompanyContactRepository companyContactRepository;
 
@@ -79,8 +79,8 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Autowired
-    public void setContactsRepository(ContactsRepository contactsRepository) {
-        this.contactsRepository = contactsRepository;
+    public void setContactRepository(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 
     @Override
@@ -94,8 +94,8 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Autowired
-    public void setCompaniesRepository(CompaniesRepository companiesRepository) {
-        this.companiesRepository = companiesRepository;
+    public void setCompanyRepository(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
     }
 
     @Autowired
@@ -124,13 +124,13 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Override
-    public ContactsRepository getContactsRepository() {
-        return contactsRepository;
+    public ContactRepository getContactRepository() {
+        return contactRepository;
     }
 
     @Override
-    public CompaniesRepository getCompaniesRepository() {
-        return companiesRepository;
+    public CompanyRepository getCompanyRepository() {
+        return companyRepository;
     }
 
     @Override
@@ -169,7 +169,7 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     private void iterateUserEntity(UserEntity userEntity, List<RoleEntity> targetRoles, List<UserRoleEntity> remove) {
-        for (UserRoleEntity current : userEntity.getUserRoleByUserId()) {
+        for (UserRoleEntity current : userEntity.getUserRolesByUserId()) {
             boolean found = false;
             for (RoleEntity targetRole : targetRoles) {
                 if (current.getRoleByRoleId().getRoleId().equals(targetRole.getRoleId())) {
@@ -185,14 +185,14 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     private void iterateTargetRoles(UserEntity userEntity, List<RoleEntity> targetRoles, List<UserRoleEntity> add) {
         for (RoleEntity target : targetRoles) {
             boolean found = false;
-            for (UserRoleEntity currentRole : userEntity.getUserRoleByUserId()) {
+            for (UserRoleEntity currentRole : userEntity.getUserRolesByUserId()) {
                 if (currentRole.getRoleByRoleId().getRoleId().equals(target.getRoleId())) {
                     found = true;
                 }
             }
             if (!found) {
                 UserRoleEntity newUserRoleEntity = new UserRoleEntity();
-                newUserRoleEntity.setDateAssigned(new Date());
+                newUserRoleEntity.setAssignedDate(new Date());
                 newUserRoleEntity.setUserByUserId(userEntity);
                 newUserRoleEntity.setRoleByRoleId(target);
                 add.add(newUserRoleEntity);
@@ -223,7 +223,7 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
             boolean found = false;
             for (ContactEntity target : targetContacts) {
-                if (current.getContactsByContactId().getContactId().equals(target.getContactId())) {
+                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
                     found = true;
                 }
             }
@@ -237,14 +237,14 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         for (ContactEntity target : targetContacts) {
             boolean found = false;
             for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
-                if (current.getContactsByContactId().getContactId().equals(target.getContactId())) {
+                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
                     found = true;
                 }
             }
             if (!found) {
                 CompanyContactEntity newCompanyContEnt = new CompanyContactEntity();
-                newCompanyContEnt.setCompaniesByCompanyId(selectedCompanyEntity);
-                newCompanyContEnt.setContactsByContactId(target);
+                newCompanyContEnt.setCompanyByCompanyId(selectedCompanyEntity);
+                newCompanyContEnt.setContactByContactId(target);
                 add.add(newCompanyContEnt);
             }
         }

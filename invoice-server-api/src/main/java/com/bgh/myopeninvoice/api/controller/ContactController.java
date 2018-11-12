@@ -1,12 +1,12 @@
 package com.bgh.myopeninvoice.api.controller;
 
+import com.bgh.myopeninvoice.api.controller.spec.ContactAPI;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.service.TaxService;
-import com.bgh.myopeninvoice.api.controller.spec.TaxAPI;
+import com.bgh.myopeninvoice.api.service.ContactService;
 import com.bgh.myopeninvoice.api.util.Utils;
-import com.bgh.myopeninvoice.db.domain.TaxEntity;
+import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,25 +27,25 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-public class TaxController implements TaxAPI {
+public class ContactController implements ContactAPI {
 
     @Autowired
-    private TaxService taxService;
+    private ContactService contactService;
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<TaxEntity> result;
+    public ResponseEntity<DefaultResponse<ContactEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
+        List<ContactEntity> result;
         long count;
 
         try {
-            count = taxService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = taxService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            count = contactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            result = contactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(ContactEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<ContactEntity> defaultResponse = new DefaultResponse<>(ContactEntity.class);
         defaultResponse.setCount(count);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -53,18 +53,18 @@ public class TaxController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> findById(@PathVariable("id") Integer id) {
-        List<TaxEntity> result;
+    public ResponseEntity<DefaultResponse<ContactEntity>> findById(@PathVariable("id") Integer id) {
+        List<ContactEntity> result;
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            result = taxService.findById(id);
+            result = contactService.findById(id);
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(ContactEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<ContactEntity> defaultResponse = new DefaultResponse<>(ContactEntity.class);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -72,9 +72,9 @@ public class TaxController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> save(@Valid @NotNull @RequestBody TaxEntity taxEntity,
+    public ResponseEntity<DefaultResponse<ContactEntity>> save(@Valid @NotNull @RequestBody ContactEntity contactEntity,
                                                            BindingResult bindingResult) {
-        List<TaxEntity> result;
+        List<ContactEntity> result;
 
         try {
 
@@ -84,21 +84,21 @@ public class TaxController implements TaxAPI {
                 throw new InvalidDataException(collect);
             }
 
-            if (taxEntity.getTaxId() != null) {
+            if (contactEntity.getContactId() != null) {
                 throw new InvalidDataException("When saving, data entity cannot have ID");
             }
 
-            result = taxService.save(taxEntity);
+            result = contactService.save(contactEntity);
 
             if (result.size() == 0) {
                 throw new Exception("Data not saved");
             }
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(ContactEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<ContactEntity> defaultResponse = new DefaultResponse<>(ContactEntity.class);
         defaultResponse.setCount(1L);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -106,10 +106,10 @@ public class TaxController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> update(@Valid @NotNull @RequestBody TaxEntity taxEntity,
+    public ResponseEntity<DefaultResponse<ContactEntity>> update(@Valid @NotNull @RequestBody ContactEntity contactEntity,
                                                              BindingResult bindingResult) {
 
-        List<TaxEntity> result;
+        List<ContactEntity> result;
 
         try {
 
@@ -118,21 +118,21 @@ public class TaxController implements TaxAPI {
                         .collect(Collectors.joining(", "));
                 throw new InvalidDataException(collect);
             }
-            if (taxEntity.getTaxId() == null) {
+            if (contactEntity.getContactId() == null) {
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            result = taxService.save(taxEntity);
+            result = contactService.save(contactEntity);
 
             if (result.size() == 0) {
                 throw new Exception("Data not saved");
             }
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(ContactEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<ContactEntity> defaultResponse = new DefaultResponse<>(ContactEntity.class);
         defaultResponse.setCount(1L);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -144,7 +144,7 @@ public class TaxController implements TaxAPI {
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            taxService.delete(id);
+            contactService.delete(id);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(Boolean.class, e, false);
