@@ -1,7 +1,6 @@
 package com.bgh.myopeninvoice.api.util;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.api.domain.SortOrder;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.exception.InvalidParameterException;
@@ -12,12 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.NumberUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class Utils {
-
-    private static final String SORT_ORDER = "sortOrder";
 
     private Utils() {
     }
@@ -77,28 +77,37 @@ public class Utils {
     }
 
     private static void parseSort(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
-        if (queryParameters.get("sortField") != null && queryParameters.get(SORT_ORDER) != null) {
-            String sortField = queryParameters.get("sortField");
-            SortOrder sortOrder;
+        if (queryParameters.get("sort") != null) {
+            String[] fields = queryParameters.get("sort").trim().split("\\s*,\\s*");
+            Sort finalSort = null;
+            for (String field : fields) {
 
-            if (sortField.length() > 30 || !sortField.matches("[a-zA-Z0-9_]+")) {
-                throw new InvalidParameterException("Invalid parameters 'sortField' or 'sortOrder'. Rule: sortField.length() > 30 || !sortField.matches('[a-zA-Z0-9_]') and sortOrder in (ASC,DESC)");
+                if (!field.matches("([+-]?)([a-zA-Z0-9_]{1,20})")) {
+                    throw new InvalidParameterException("Invalid parameters 'sort'. " +
+                            "Rule: field.length() <= 20 and field.matches([+-]?)([a-zA-Z0-9_]{1,20})");
+                }
+
+                finalSort = assignSortField(finalSort, field);
             }
 
-            if (queryParameters.get(SORT_ORDER) != null) {
-                sortOrder = SortOrder.valueOf(queryParameters.get(SORT_ORDER));
-
-                if (sortOrder.equals(SortOrder.ASC)) {
-                    searchParameters.setSort(Sort.by(sortField).ascending());
-                } else if (sortOrder.equals(SortOrder.DESC)) {
-                    searchParameters.setSort(Sort.by(sortField).descending());
-                } else {
-                    searchParameters.setSort(Sort.by(sortField));
-                }
-            } else {
-                searchParameters.setSort(Sort.by(sortField));
+            if (finalSort != null) {
+                searchParameters.setSort(finalSort);
             }
         }
+    }
+
+    private static Sort assignSortField(Sort finalSort, String field) {
+        Sort sort;
+        if (field.startsWith("+")) {
+            sort = Sort.by(field.substring(1)).ascending();
+        } else if (field.startsWith("-")) {
+            sort = Sort.by(field.substring(1)).descending();
+        } else {
+            sort = Sort.by(field);
+        }
+
+        finalSort = finalSort == null ? sort : finalSort.and(sort);
+        return finalSort;
     }
 
     public static <T> ResponseEntity<DefaultResponse<T>> getErrorResponse(Class<T> clazz, Exception e) {
@@ -106,7 +115,7 @@ public class Utils {
         @SuppressWarnings("unchecked") DefaultResponse<T> defaultResponse = new DefaultResponse<>(clazz);
         defaultResponse.setOperationMessage(e.toString());
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.ERROR);
-        return new ResponseEntity<DefaultResponse<T>>(defaultResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(defaultResponse, HttpStatus.BAD_REQUEST);
     }
 
     public static <T> ResponseEntity<DefaultResponse<T>> getErrorResponse(Class<T> clazz, Exception e, T element) {
@@ -115,7 +124,7 @@ public class Utils {
         defaultResponse.setOperationMessage(e.toString());
         defaultResponse.setDetails(Collections.singletonList(element));
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.ERROR);
-        return new ResponseEntity<DefaultResponse<T>>(defaultResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(defaultResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
