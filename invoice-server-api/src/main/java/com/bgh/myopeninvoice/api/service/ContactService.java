@@ -2,6 +2,8 @@ package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.db.domain.CompanyEntity;
+import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.repository.ContactRepository;
@@ -9,6 +11,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,6 +124,16 @@ public class ContactService implements CommonService<ContactEntity> {
         Assert.notNull(id, "ID cannot be empty when deleting data");
 
         contactRepository.deleteById(id);
+    }
+
+    @Override
+    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
+        throw new NotImplementedException();
     }
 
 }

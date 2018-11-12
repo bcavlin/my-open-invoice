@@ -173,7 +173,7 @@ public class CompanyController implements CompanyAPI {
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            ContentEntity content = companyService.findContentByCompanyId(id, ContentEntity.ContentEntityTable.COMPANY);
+            ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
@@ -202,7 +202,7 @@ public class CompanyController implements CompanyAPI {
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            ContentEntity content = companyService.findContentByCompanyId(id, ContentEntity.ContentEntityTable.COMPANY);
+            ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
             if (content == null) {
                 content = new ContentEntity();
             }
