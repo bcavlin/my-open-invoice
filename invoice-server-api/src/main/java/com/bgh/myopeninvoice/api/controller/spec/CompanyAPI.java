@@ -80,7 +80,8 @@ public interface CompanyAPI {
     @GetMapping(value = "/company/{id}/content")
     ResponseEntity<InputStreamResource> findContentByCompanyId(@PathVariable("id") Integer id);
 
-//    @PostMapping(value = "/company/{id}/content")
-//    ResponseEntity<InputStreamResource> saveContentById(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file);
+    @PostMapping(value = "/company/{id}/content")
+    ResponseEntity<DefaultResponse<CompanyEntity>> saveContentByCompanyId(@PathVariable("id") Integer id,
+                                                               @RequestParam("file") MultipartFile file);
 
 }

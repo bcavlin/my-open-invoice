@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,7 @@ public class CompanyController implements CompanyAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<CompanyEntity> result;
+        List<CompanyEntity> result = new ArrayList<>();
         long count;
 
         try {
@@ -59,7 +61,7 @@ public class CompanyController implements CompanyAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyEntity>> findById(@PathVariable("id") Integer id) {
-        List<CompanyEntity> result;
+        List<CompanyEntity> result = new ArrayList<>();
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
@@ -79,7 +81,7 @@ public class CompanyController implements CompanyAPI {
     @Override
     public ResponseEntity<DefaultResponse<CompanyEntity>> save(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
                                                                BindingResult bindingResult) {
-        List<CompanyEntity> result;
+        List<CompanyEntity> result = new ArrayList<>();
 
         try {
 
@@ -104,7 +106,7 @@ public class CompanyController implements CompanyAPI {
         }
 
         DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
@@ -114,7 +116,7 @@ public class CompanyController implements CompanyAPI {
     public ResponseEntity<DefaultResponse<CompanyEntity>> update(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
                                                                  BindingResult bindingResult) {
 
-        List<CompanyEntity> result;
+        List<CompanyEntity> result = new ArrayList<>();
 
         try {
 
@@ -138,7 +140,7 @@ public class CompanyController implements CompanyAPI {
         }
 
         DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
@@ -171,7 +173,7 @@ public class CompanyController implements CompanyAPI {
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            ContentEntity content = companyService.findContentByCompanyId(id);
+            ContentEntity content = companyService.findContentByCompanyId(id, ContentEntity.ContentEntityTable.COMPANY);
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
@@ -193,11 +195,31 @@ public class CompanyController implements CompanyAPI {
                 .body(result);
     }
 
-//    @Override
-//    public ResponseEntity<InputStreamResource> saveContentById(@PathVariable("id") Integer id,
-//                                                               @RequestParam("file") MultipartFile file) {
-//        //TODO write bytes to content
-//        return null;
-//    }
+    @Override
+    public ResponseEntity<DefaultResponse<CompanyEntity>> saveContentByCompanyId(@PathVariable("id") Integer id,
+                                                                                 @RequestParam("file") MultipartFile file) {
+        List<CompanyEntity> result = new ArrayList<>();
+
+        try {
+            Assert.notNull(id, "Entity id cannot be null");
+            ContentEntity content = companyService.findContentByCompanyId(id, ContentEntity.ContentEntityTable.COMPANY);
+            if (content == null) {
+                content = new ContentEntity();
+            }
+            content.setContent(file.getBytes());
+            content.setFilename(file.getOriginalFilename());
+            content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
+            result = companyService.saveContent(id, content);
+
+        } catch (Exception e) {
+            return Utils.getErrorResponse(CompanyEntity.class, e);
+        }
+
+        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
+        defaultResponse.setCount((long) result.size());
+        defaultResponse.setDetails(result);
+        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    }
 
 }

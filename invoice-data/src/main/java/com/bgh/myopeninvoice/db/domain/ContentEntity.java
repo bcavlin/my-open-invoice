@@ -12,6 +12,10 @@ import java.util.Date;
 @Table(name = "CONTENT", schema = "INVOICE")
 public class ContentEntity implements java.io.Serializable {
 
+    public enum ContentEntityTable {
+        COMPANY
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONTENT_ID", nullable = false)

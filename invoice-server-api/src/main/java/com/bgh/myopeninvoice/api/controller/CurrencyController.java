@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class CurrencyController implements CurrencyAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<CurrencyEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<CurrencyEntity> result;
+        List<CurrencyEntity> result = new ArrayList<>();
         long count;
 
         try {
@@ -54,7 +55,7 @@ public class CurrencyController implements CurrencyAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<CurrencyEntity>> findById(@PathVariable("id") Integer id) {
-        List<CurrencyEntity> result;
+        List<CurrencyEntity> result = new ArrayList<>();
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
@@ -74,7 +75,7 @@ public class CurrencyController implements CurrencyAPI {
     @Override
     public ResponseEntity<DefaultResponse<CurrencyEntity>> save(@Valid @NotNull @RequestBody CurrencyEntity currencyEntity,
                                                                 BindingResult bindingResult) {
-        List<CurrencyEntity> result;
+        List<CurrencyEntity> result = new ArrayList<>();
 
         try {
 
@@ -99,7 +100,7 @@ public class CurrencyController implements CurrencyAPI {
         }
 
         DefaultResponse<CurrencyEntity> defaultResponse = new DefaultResponse<>(CurrencyEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
@@ -109,7 +110,7 @@ public class CurrencyController implements CurrencyAPI {
     public ResponseEntity<DefaultResponse<CurrencyEntity>> update(@Valid @NotNull @RequestBody CurrencyEntity currencyEntity,
                                                                   BindingResult bindingResult) {
 
-        List<CurrencyEntity> result;
+        List<CurrencyEntity> result = new ArrayList<>();
 
         try {
 
@@ -133,7 +134,7 @@ public class CurrencyController implements CurrencyAPI {
         }
 
         DefaultResponse<CurrencyEntity> defaultResponse = new DefaultResponse<>(CurrencyEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
