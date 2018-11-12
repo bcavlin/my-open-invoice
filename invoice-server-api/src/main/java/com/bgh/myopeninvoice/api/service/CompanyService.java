@@ -98,12 +98,16 @@ public class CompanyService implements CommonService<CompanyEntity> {
         return entities;
     }
 
-    public ContentEntity findContentByCompanyId(Integer id, ContentEntity.ContentEntityTable table) {
+    @Override
+    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
         log.info("Find content for company {}", id);
         return contentRepository.findContentByCompanyId(id, table.name());
     }
 
+    @Transactional
+    @Override
     public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
+        log.info("Save content to company {}, file {}", id, content.getFilename());
         List<CompanyEntity> save = null;
         List<CompanyEntity> entityList = this.findById(id);
         if (entityList.size() == 1) {

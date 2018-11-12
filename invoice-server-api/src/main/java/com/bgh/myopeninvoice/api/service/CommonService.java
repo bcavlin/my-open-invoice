@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.db.domain.CompanyEntity;
+import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.querydsl.core.types.Predicate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,4 +24,8 @@ public interface CommonService<T> {
     @Transactional
     void delete(Integer id);
 
+    ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table);
+
+    @Transactional
+    List<CompanyEntity> saveContent(Integer id, ContentEntity content);
 }
