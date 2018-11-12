@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class TaxController implements TaxAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<TaxEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<TaxEntity> result;
+        List<TaxEntity> result = new ArrayList<>();
         long count;
 
         try {
@@ -54,7 +55,7 @@ public class TaxController implements TaxAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<TaxEntity>> findById(@PathVariable("id") Integer id) {
-        List<TaxEntity> result;
+        List<TaxEntity> result = new ArrayList<>();
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
@@ -74,7 +75,7 @@ public class TaxController implements TaxAPI {
     @Override
     public ResponseEntity<DefaultResponse<TaxEntity>> save(@Valid @NotNull @RequestBody TaxEntity taxEntity,
                                                            BindingResult bindingResult) {
-        List<TaxEntity> result;
+        List<TaxEntity> result = new ArrayList<>();
 
         try {
 
@@ -99,7 +100,7 @@ public class TaxController implements TaxAPI {
         }
 
         DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
@@ -109,7 +110,7 @@ public class TaxController implements TaxAPI {
     public ResponseEntity<DefaultResponse<TaxEntity>> update(@Valid @NotNull @RequestBody TaxEntity taxEntity,
                                                              BindingResult bindingResult) {
 
-        List<TaxEntity> result;
+        List<TaxEntity> result = new ArrayList<>();
 
         try {
 
@@ -133,7 +134,7 @@ public class TaxController implements TaxAPI {
         }
 
         DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);

@@ -35,7 +35,6 @@ public class CompanyService implements CommonService<CompanyEntity> {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (searchParameters.getFilter() != null) {
-
             builder.andAnyOf(
                     QCompanyEntity.companyEntity.companyName.contains(searchParameters.getFilter()),
                     QCompanyEntity.companyEntity.phone1.contains(searchParameters.getFilter()),
@@ -53,9 +52,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @Override
     public long count(SearchParameters searchParameters) {
         log.info("count");
-
         Predicate predicate = getPredicate(searchParameters);
-
         long count;
 
         if (predicate != null) {
@@ -95,35 +92,36 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @Override
     public List<CompanyEntity> findById(Integer id) {
         log.info("findById: {}", id);
-
         List<CompanyEntity> entities = new ArrayList<>();
-
         Optional<CompanyEntity> byId = companyRepository.findById(id);
-
         byId.ifPresent(entities::add);
-
         return entities;
     }
 
-    public ContentEntity findContentByCompanyId(Integer id){
+    public ContentEntity findContentByCompanyId(Integer id, ContentEntity.ContentEntityTable table) {
         log.info("Find content for company {}", id);
+        return contentRepository.findContentByCompanyId(id, table.name());
+    }
 
-        return contentRepository.findContentByCompanyId(id);
+    public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
+        List<CompanyEntity> save = null;
+        List<CompanyEntity> entityList = this.findById(id);
+        if (entityList.size() == 1) {
+            CompanyEntity companyEntity = entityList.get(0);
+            companyEntity.setContentByContentId(content);
+            save = this.save(companyEntity);
+        }
+        return save;
     }
 
     @Transactional
     @Override
     public List<CompanyEntity> save(CompanyEntity entity) {
         log.info("Saving entity");
-
         List<CompanyEntity> entities = new ArrayList<>();
-
         CompanyEntity saved = companyRepository.save(entity);
-
         log.info("Saved entity: {}", entity);
-
         entities.add(saved);
-
         return entities;
     }
 
@@ -131,9 +129,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @Override
     public void delete(Integer id) {
         log.info("Deleting CompanyEntity with id [{}]", id);
-
         Assert.notNull(id, "ID cannot be empty when deleting data");
-
         companyRepository.deleteById(id);
     }
 

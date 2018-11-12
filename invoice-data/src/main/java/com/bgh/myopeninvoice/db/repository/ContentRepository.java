@@ -31,7 +31,9 @@ public interface ContentRepository
         extends PagingAndSortingRepository<ContentEntity, Integer>, QuerydslPredicateExecutor<ContentEntity> {
 
 
-    @Query("select c.contentByContentId from CompanyEntity c where c.companyId = :companyId")
-    ContentEntity findContentByCompanyId(@Param("companyId") Integer companyId);
+    @Query("select c.contentByContentId from CompanyEntity c where c.companyId = :companyId " +
+            "and c.contentByContentId.contentTable = :table")
+    ContentEntity findContentByCompanyId(@Param("companyId") Integer companyId,
+                                         @Param("table") String table);
 
 }

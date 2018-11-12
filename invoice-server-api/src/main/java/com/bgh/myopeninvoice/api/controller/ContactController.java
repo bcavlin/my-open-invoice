@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class ContactController implements ContactAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<ContactEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<ContactEntity> result;
+        List<ContactEntity> result = new ArrayList<>();
         long count;
 
         try {
@@ -54,7 +55,7 @@ public class ContactController implements ContactAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<ContactEntity>> findById(@PathVariable("id") Integer id) {
-        List<ContactEntity> result;
+        List<ContactEntity> result = new ArrayList<>();
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
@@ -74,7 +75,7 @@ public class ContactController implements ContactAPI {
     @Override
     public ResponseEntity<DefaultResponse<ContactEntity>> save(@Valid @NotNull @RequestBody ContactEntity contactEntity,
                                                            BindingResult bindingResult) {
-        List<ContactEntity> result;
+        List<ContactEntity> result = new ArrayList<>();
 
         try {
 
@@ -99,7 +100,7 @@ public class ContactController implements ContactAPI {
         }
 
         DefaultResponse<ContactEntity> defaultResponse = new DefaultResponse<>(ContactEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
@@ -109,7 +110,7 @@ public class ContactController implements ContactAPI {
     public ResponseEntity<DefaultResponse<ContactEntity>> update(@Valid @NotNull @RequestBody ContactEntity contactEntity,
                                                              BindingResult bindingResult) {
 
-        List<ContactEntity> result;
+        List<ContactEntity> result = new ArrayList<>();
 
         try {
 
@@ -133,7 +134,7 @@ public class ContactController implements ContactAPI {
         }
 
         DefaultResponse<ContactEntity> defaultResponse = new DefaultResponse<>(ContactEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
