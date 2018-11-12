@@ -1,15 +1,19 @@
 package com.bgh.myopeninvoice.api.controller;
 
+import com.bgh.myopeninvoice.api.controller.spec.CompanyAPI;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.service.TaxService;
-import com.bgh.myopeninvoice.api.controller.spec.TaxAPI;
+import com.bgh.myopeninvoice.api.service.CompanyService;
 import com.bgh.myopeninvoice.api.util.Utils;
-import com.bgh.myopeninvoice.db.domain.TaxEntity;
+import com.bgh.myopeninvoice.db.domain.CompanyEntity;
+import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,25 +32,25 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-public class TaxController implements TaxAPI {
+public class CompanyController implements CompanyAPI {
 
     @Autowired
-    private TaxService taxService;
+    private CompanyService companyService;
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<TaxEntity> result;
+    public ResponseEntity<DefaultResponse<CompanyEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
+        List<CompanyEntity> result;
         long count;
 
         try {
-            count = taxService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = taxService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            count = companyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            result = companyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(CompanyEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
         defaultResponse.setCount(count);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -53,18 +58,18 @@ public class TaxController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> findById(@PathVariable("id") Integer id) {
-        List<TaxEntity> result;
+    public ResponseEntity<DefaultResponse<CompanyEntity>> findById(@PathVariable("id") Integer id) {
+        List<CompanyEntity> result;
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            result = taxService.findById(id);
+            result = companyService.findById(id);
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(CompanyEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -72,9 +77,9 @@ public class TaxController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> save(@Valid @NotNull @RequestBody TaxEntity taxEntity,
-                                                           BindingResult bindingResult) {
-        List<TaxEntity> result;
+    public ResponseEntity<DefaultResponse<CompanyEntity>> save(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
+                                                               BindingResult bindingResult) {
+        List<CompanyEntity> result;
 
         try {
 
@@ -84,21 +89,21 @@ public class TaxController implements TaxAPI {
                 throw new InvalidDataException(collect);
             }
 
-            if (taxEntity.getTaxId() != null) {
+            if (companyEntity.getCompanyId() != null) {
                 throw new InvalidDataException("When saving, data entity cannot have ID");
             }
 
-            result = taxService.save(taxEntity);
+            result = companyService.save(companyEntity);
 
             if (result.size() == 0) {
                 throw new Exception("Data not saved");
             }
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(CompanyEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
         defaultResponse.setCount(1L);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -106,10 +111,10 @@ public class TaxController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxEntity>> update(@Valid @NotNull @RequestBody TaxEntity taxEntity,
-                                                             BindingResult bindingResult) {
+    public ResponseEntity<DefaultResponse<CompanyEntity>> update(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
+                                                                 BindingResult bindingResult) {
 
-        List<TaxEntity> result;
+        List<CompanyEntity> result;
 
         try {
 
@@ -118,21 +123,21 @@ public class TaxController implements TaxAPI {
                         .collect(Collectors.joining(", "));
                 throw new InvalidDataException(collect);
             }
-            if (taxEntity.getTaxId() == null) {
+            if (companyEntity.getCompanyId() == null) {
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            result = taxService.save(taxEntity);
+            result = companyService.save(companyEntity);
 
             if (result.size() == 0) {
                 throw new Exception("Data not saved");
             }
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(TaxEntity.class, e);
+            return Utils.getErrorResponse(CompanyEntity.class, e);
         }
 
-        DefaultResponse<TaxEntity> defaultResponse = new DefaultResponse<>(TaxEntity.class);
+        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
         defaultResponse.setCount(1L);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -144,7 +149,7 @@ public class TaxController implements TaxAPI {
 
         try {
             Assert.notNull(id, "Entity id cannot be null");
-            taxService.delete(id);
+            companyService.delete(id);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(Boolean.class, e, false);
@@ -156,5 +161,43 @@ public class TaxController implements TaxAPI {
         defaultResponse.setDetails(Collections.singletonList(true));
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<InputStreamResource> findContentByCompanyId(@PathVariable("id") Integer id) {
+
+        InputStreamResource result = null;
+        byte[] source;
+        String contentType = "image/png";
+
+        try {
+            Assert.notNull(id, "Entity id cannot be null");
+            ContentEntity content = companyService.findContentByCompanyId(id);
+            if (content != null) {
+                source = content.getContent();
+                if (source.length > 0) {
+                    contentType = new Tika().detect(source);
+                    result = new InputStreamResource(new ByteArrayInputStream(source));
+                }
+            } else {
+                throw new InvalidDataException("Content not found for the entity " + id);
+            }
+
+        } catch (Exception e) {
+            log.error(e.toString(), e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok()
+                .contentLength(source.length)
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(result);
+    }
+
+//    @Override
+//    public ResponseEntity<InputStreamResource> saveContentById(@PathVariable("id") Integer id,
+//                                                               @RequestParam("file") MultipartFile file) {
+//        //TODO write bytes to content
+//        return null;
+//    }
 
 }

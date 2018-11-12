@@ -41,10 +41,10 @@ public class RepositoriesTest {
     @Autowired
     private ReportsRepository reportsRepository;
 
-    @Test
-    public void testReportsRepository(){
-        Assert.assertNotNull(reportsRepository);
-        final ArrayList<ReportsEntity> reportsEntities = Lists.newArrayList(reportsRepository.findAll());
-        Assert.assertNotNull(reportsEntities);
-    }
+//    @Test
+//    public void testReportsRepository(){
+//        Assert.assertNotNull(reportsRepository);
+//        final ArrayList<ReportsEntity> reportsEntities = Lists.newArrayList(reportsRepository.findAll());
+//        Assert.assertNotNull(reportsEntities);
+//    }
 }

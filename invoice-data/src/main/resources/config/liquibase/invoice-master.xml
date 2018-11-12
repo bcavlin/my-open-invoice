@@ -58,6 +58,24 @@
             </column>
         </createTable>
 
+        <createTable tableName="content" schemaName="invoice">
+            <column name="content_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content_table" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filename" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="blob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="user_role"
                                  constraintName="fk_user_role_1"
@@ -92,12 +110,18 @@
             </column>
             <column name="business_number" type="varchar(30)">
             </column>
-            <column name="content" type="blob">
+            <column name="content_id" type="int">
             </column>
             <column name="week_start" type="int" defaultValue="1">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="content_id"
+                                 baseTableName="company"
+                                 constraintName="fk_company_1"
+                                 referencedColumnNames="content_id"
+                                 referencedTableName="content"/>
 
         <createTable tableName="contact" schemaName="invoice">
             <column name="contact_id" type="int" autoIncrement="${autoIncrement}">
@@ -201,7 +225,7 @@
             </column>
             <column name="contract_number" type="varchar(50)">
             </column>
-            <column name="content" type="blob">
+            <column name="content_id" type="int">
             </column>
             <column name="purchase_order" type="varchar(50)">
             </column>
@@ -230,6 +254,12 @@
                                  constraintName="fk_contract_4"
                                  referencedColumnNames="ccy_id"
                                  referencedTableName="currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="content_id"
+                                 baseTableName="contract"
+                                 constraintName="fk_contract_5"
+                                 referencedColumnNames="content_id"
+                                 referencedTableName="content"/>
 
     </changeSet>
 
@@ -316,6 +346,7 @@
     </changeSet>
 
     <changeSet id="3" author="bcavlin">
+
         <createTable tableName="attachment" schemaName="invoice">
             <column name="attachment_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -323,10 +354,8 @@
             <column name="invoice_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="content" type="blob">
-            </column>
-            <column name="filename" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_attachment_1"/>
+            <column name="content_id" type="int">
+                <constraints nullable="false"/>
             </column>
         </createTable>
 
@@ -335,6 +364,12 @@
                                  constraintName="fk_attachment_1"
                                  referencedColumnNames="invoice_id"
                                  referencedTableName="invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="content_id"
+                                 baseTableName="attachment"
+                                 constraintName="fk_attachment_2"
+                                 referencedColumnNames="content_id"
+                                 referencedTableName="content"/>
 
         <createTable tableName="invoice_items" schemaName="invoice">
             <column name="invoice_item_id" type="int" autoIncrement="${autoIncrement}">
@@ -391,7 +426,7 @@
             <column name="invoice_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="content" type="blob">
+            <column name="content_id" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="date_created" type="timestamp" defaultValueDate="${now}">
@@ -408,7 +443,19 @@
                                  referencedColumnNames="invoice_id"
                                  referencedTableName="invoice"/>
 
+        <addForeignKeyConstraint baseColumnNames="content_id"
+                                 baseTableName="reports"
+                                 constraintName="fk_reports_2"
+                                 referencedColumnNames="content_id"
+                                 referencedTableName="content"/>
 
+
+
+
+
+    </changeSet>
+
+    <changeSet id="4" author="bcavlin">
         <createSequence sequenceName="invoice_counter_seq"
                         schemaName="invoice"
                         startValue="1"/>
@@ -419,7 +466,7 @@
                         incrementBy="2"/>
     </changeSet>
 
-    <changeSet id="4" author="bcavlin">
+    <changeSet id="5" author="bcavlin">
         <loadData tableName="user"
                   schemaName="invoice"
                   quotchar="'"

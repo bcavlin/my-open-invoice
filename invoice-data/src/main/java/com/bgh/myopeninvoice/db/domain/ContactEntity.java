@@ -1,41 +1,23 @@
-/*
- * Copyright 2017 Branislav Cavlin
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.bgh.myopeninvoice.db.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-/**
- * Created by bcavlin on 23/03/17.
- */
 @Data
 @Entity
 @Table(name = "CONTACT", schema = "INVOICE")
-public class ContactEntity implements Serializable {
+public class ContactEntity implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CONTACT_ID")
+    @Column(name = "CONTACT_ID", nullable = false)
     private Integer contactId;
 
     @Basic
@@ -43,11 +25,11 @@ public class ContactEntity implements Serializable {
     private String firstName;
 
     @Basic
-    @Column(name = "LAST_NAME", nullable = true, length = 100)
+    @Column(name = "LAST_NAME", length = 100)
     private String lastName;
 
     @Basic
-    @Column(name = "MIDDLE_NAME", nullable = true, length = 100)
+    @Column(name = "MIDDLE_NAME", length = 100)
     private String middleName;
 
     @Basic
@@ -55,36 +37,40 @@ public class ContactEntity implements Serializable {
     private String email;
 
     @Basic
-    @Column(name = "ADDRESS_LINE1", nullable = true, length = 500)
+    @Column(name = "ADDRESS_LINE1", length = 500)
     private String addressLine1;
 
     @Basic
-    @Column(name = "ADDRESS_LINE2", nullable = true, length = 500)
+    @Column(name = "ADDRESS_LINE2", length = 500)
     private String addressLine2;
 
     @Basic
-    @Column(name = "PHONE_1", nullable = true, length = 20)
+    @Column(name = "PHONE_1", length = 20)
     private String phone1;
 
     @Basic
-    @Column(name = "USER_ID", nullable = true)
+    @Column(name = "USER_ID", nullable = false)
     private Integer userId;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "contactsByContactId")
+    @JsonIgnore
+    @OneToMany(mappedBy = "contactByContactId")
     private Collection<CompanyContactEntity> companyContactsByContactId;
 
+    @JsonIgnoreProperties({"passwordHash"})
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false,
+            insertable = false, updatable = false)
     private UserEntity userByUserId;
 
-
+    @JsonIgnore
     @Transient
     public String getCompaniesList() {
         if (companyContactsByContactId != null) {
-            return companyContactsByContactId.stream().map(
-                    CompanyContactEntity::getCompaniesByCompanyId).
-                    map(CompanyEntity::getCompanyName).collect(Collectors.joining(", "));
+            return companyContactsByContactId.stream()
+                    .map(CompanyContactEntity::getCompanyByCompanyId)
+                    .map(CompanyEntity::getCompanyName)
+                    .collect(Collectors.joining(", "));
         }
         return null;
     }

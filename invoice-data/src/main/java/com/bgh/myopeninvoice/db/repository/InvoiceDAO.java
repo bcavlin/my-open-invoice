@@ -34,9 +34,9 @@ public interface InvoiceDAO {
 
     RolesRepository getRolesRepository();
 
-    ContactsRepository getContactsRepository();
+    ContactRepository getContactRepository();
 
-    CompaniesRepository getCompaniesRepository();
+    CompanyRepository getCompanyRepository();
 
     CurrencyRepository getCurrencyRepository();
 

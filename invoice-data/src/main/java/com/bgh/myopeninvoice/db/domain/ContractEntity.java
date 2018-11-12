@@ -1,42 +1,20 @@
-/*
- * Copyright 2017 Branislav Cavlin
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
-/**
- * Created by bcavlin on 01/04/17.
- */
 @Data
 @Entity
 @Table(name = "CONTRACT", schema = "INVOICE")
-public class ContractEntity implements Serializable {
+public class ContractEntity implements java.io.Serializable {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "CONTRACT_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CONTRACT_ID", nullable = false)
     private Integer contractId;
 
     @Basic
@@ -48,7 +26,7 @@ public class ContractEntity implements Serializable {
     private Integer contractSignedWith;
 
     @Basic
-    @Column(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", nullable = true)
+    @Column(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", nullable = false)
     private Integer contractSignedWithSubcontract;
 
     @Basic
@@ -64,18 +42,28 @@ public class ContractEntity implements Serializable {
     private Integer ccyId;
 
     @Temporal(TemporalType.DATE)
-    @Basic
     @Column(name = "VALID_FROM", nullable = false)
     private Date validFrom;
 
     @Temporal(TemporalType.DATE)
-    @Basic
-    @Column(name = "VALID_TO", nullable = true)
+    @Column(name = "VALID_TO")
     private Date validTo;
 
     @Basic
-    @Column(name = "DESCRIPTION", nullable = true, length = 100)
+    @Column(name = "DESCRIPTION", nullable = false, length = 100)
     private String description;
+
+    @Basic
+    @Column(name = "CONTRACT_NUMBER", length = 50)
+    private String contractNumber;
+
+    @Basic
+    @Column(name = "CONTENT_ID")
+    private Integer contentId;
+
+    @Basic
+    @Column(name = "PURCHASE_ORDER", length = 50)
+    private String purchaseOrder;
 
     @ManyToOne
     @JoinColumn(name = "CONTRACT_IS_FOR", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false,
@@ -85,33 +73,24 @@ public class ContractEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "CONTRACT_SIGNED_WITH", referencedColumnName = "COMPANY_ID", nullable = false,
             insertable = false, updatable = false)
-    private CompanyEntity companiesByContractSignedWith;
+    private CompanyEntity companyByContractSignedWith;
 
     @ManyToOne
-    @JoinColumn(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", referencedColumnName = "COMPANY_ID",
+    @JoinColumn(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", referencedColumnName = "COMPANY_ID", nullable = false,
             insertable = false, updatable = false)
-    private CompanyEntity companiesByContractSignedWithSubcontract;
+    private CompanyEntity companyByContractSignedWithSubcontract;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CCY_ID", referencedColumnName = "CCY_ID", nullable = false,
             insertable = false, updatable = false)
     private CurrencyEntity currencyByCcyId;
 
-    @Basic
-    @Column(name = "CONTRACT_NUMBER", nullable = true, length = 50)
-    private String contractNumber;
+    @ManyToOne
+    @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID",
+            insertable = false, updatable = false)
+    private ContentEntity contentByContentId;
 
-    @Basic
-    @Column(name = "PURCHASE_ORDER", nullable = true, length = 50)
-    private String purchaseOrder;
-
-    @Lob
-    @Column(name = "CONTENT", nullable = true)
-    private byte[] content;
-
-    @OneToMany(mappedBy = "contractsByCompanyContractTo")
+    @OneToMany(mappedBy = "contractByCompanyContractTo")
     private Collection<InvoiceEntity> invoicesByContractId;
-
 
 }

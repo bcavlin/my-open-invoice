@@ -4,7 +4,7 @@ import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.service.CurrencyService;
-import com.bgh.myopeninvoice.api.spec.CurrencyAPI;
+import com.bgh.myopeninvoice.api.controller.spec.CurrencyAPI;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ public class CurrencyController implements CurrencyAPI {
         }
 
         DefaultResponse<CurrencyEntity> defaultResponse = new DefaultResponse<>(CurrencyEntity.class);
-        defaultResponse.setCount(1L);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);

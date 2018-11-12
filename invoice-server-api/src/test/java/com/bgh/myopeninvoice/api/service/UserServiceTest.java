@@ -35,8 +35,8 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    @Test
-    public void findUserRoles() {
-        List<RoleEntity> userRoles = userService.findUserRoles("bcavlin@gmail.com");
-    }
+//    @Test
+//    public void findUserRoles() {
+//        List<RoleEntity> userRoles = userService.findUserRoles("bcavlin@gmail.com");
+//    }
 }
