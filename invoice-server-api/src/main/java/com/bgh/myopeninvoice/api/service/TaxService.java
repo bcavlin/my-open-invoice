@@ -2,7 +2,6 @@ package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
-import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QTaxEntity;
 import com.bgh.myopeninvoice.db.domain.TaxEntity;
@@ -33,9 +32,10 @@ public class TaxService implements CommonService<TaxEntity> {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (searchParameters.getFilter() != null) {
-
-            builder.andAnyOf(QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
-                    QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+            builder.andAnyOf(
+                    QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
+                    QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter())
+            );
 
         }
         return builder;
@@ -44,9 +44,7 @@ public class TaxService implements CommonService<TaxEntity> {
     @Override
     public long count(SearchParameters searchParameters) {
         log.info("count");
-
         Predicate predicate = getPredicate(searchParameters);
-
         long count;
 
         if (predicate != null) {
@@ -86,52 +84,41 @@ public class TaxService implements CommonService<TaxEntity> {
     @Override
     public List<TaxEntity> findById(Integer id) {
         log.info("findById: {}", id);
-
         List<TaxEntity> entities = new ArrayList<>();
-
         Optional<TaxEntity> byId = taxRepository.findById(id);
-
         byId.ifPresent(entities::add);
-
         return entities;
+    }
+
+    @Override
+    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
+        throw new NotImplementedException();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    @Override
+    public List<TaxEntity> saveContent(Integer id, ContentEntity content) {
+        throw new NotImplementedException();
     }
 
     @Transactional
     @Override
     public List<TaxEntity> save(TaxEntity entity) {
         log.info("Saving entity");
-
         List<TaxEntity> entities = new ArrayList<>();
-
         TaxEntity saved = taxRepository.save(entity);
-
         log.info("Saved entity: {}", entity);
-
         entities.add(saved);
-
         return entities;
     }
 
     @Transactional
     @Override
     public void delete(Integer id) {
-        log.info("Deleting TaxEntity with id [{}]", id);
-
+        log.info("Deleting TaxDTO with id [{}]", id);
         Assert.notNull(id, "ID cannot be empty when deleting data");
-
         taxRepository.deleteById(id);
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new NotImplementedException();
-
-    }
-
-    @Override
-    public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
-        throw new NotImplementedException();
-
     }
 
 }

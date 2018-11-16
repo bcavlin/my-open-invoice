@@ -82,7 +82,7 @@ public class Utils {
             Sort finalSort = null;
             for (String field : fields) {
 
-                if (!field.matches("([+-]?)([a-zA-Z0-9_]{1,20})")) {
+                if (!field.matches("^([+-]?)([a-zA-Z0-9_]{1,20})$")) {
                     throw new InvalidParameterException("Invalid parameters 'sort'. " +
                             "Rule: field.length() <= 20 and field.matches([+-]?)([a-zA-Z0-9_]{1,20})");
                 }

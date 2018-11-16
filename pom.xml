@@ -80,6 +80,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>ma.glasnost.orika</groupId>
+                <artifactId>orika-core</artifactId>
+                <version>1.5.2</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.tika</groupId>
                 <artifactId>tika-core</artifactId>
                 <version>1.19.1</version>
@@ -138,12 +143,6 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>${HikariCP.version}</version>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.ulisesbocchio</groupId>

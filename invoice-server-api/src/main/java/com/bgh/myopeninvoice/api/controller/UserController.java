@@ -16,10 +16,12 @@
 
 package com.bgh.myopeninvoice.api.controller;
 
+import com.bgh.myopeninvoice.api.controller.spec.UserAPI;
+import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.service.UserService;
-import com.bgh.myopeninvoice.api.controller.spec.UserAPI;
+import com.bgh.myopeninvoice.api.transformer.RoleTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -29,29 +31,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RestController
-public class UserController implements UserAPI {
+public class UserController extends AbstractController implements UserAPI {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleTransformer roleTransformer;
+
     @Override
-    public ResponseEntity<DefaultResponse<RoleEntity>> getUserRoles(@PathVariable("username") String username) {
-        List<RoleEntity> roleEntities;
+    public ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username) {
+        List<RoleDTO> result = new ArrayList<>();
 
         try {
-            roleEntities = userService.findUserRoles(username);
+            List<RoleEntity> userRoles = userService.findUserRoles(username);
+            result = roleTransformer.transformEntityToDTO(userRoles);
+
         } catch (Exception e) {
-            return Utils.getErrorResponse(RoleEntity.class, e);
+            return Utils.getErrorResponse(RoleDTO.class, e);
 
         }
 
-        DefaultResponse<RoleEntity> defaultResponse = new DefaultResponse<>(RoleEntity.class);
-        defaultResponse.setDetails(roleEntities);
-        defaultResponse.setCount((long) roleEntities.size());
+        DefaultResponse<RoleDTO> defaultResponse = new DefaultResponse<>(RoleDTO.class);
+        defaultResponse.setDetails(result);
+        defaultResponse.setCount((long) result.size());
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
     }

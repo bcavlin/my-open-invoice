@@ -46,7 +46,7 @@ public class InvoiceDAOImpl implements InvoiceDAO {
 
     private CompanyContactRepository companyContactRepository;
 
-    private ContractsRepository contractsRepository;
+    private ContractRepository contractRepository;
 
     private CurrencyRepository currencyRepository;
 
@@ -104,8 +104,8 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Autowired
-    public void setContractsRepository(ContractsRepository contractsRepository) {
-        this.contractsRepository = contractsRepository;
+    public void setContractRepository(ContractRepository contractRepository) {
+        this.contractRepository = contractRepository;
     }
 
     @Autowired
@@ -251,8 +251,8 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Override
-    public ContractsRepository getContractsRepository() {
-        return contractsRepository;
+    public ContractRepository getContractRepository() {
+        return contractRepository;
     }
 
     @Override

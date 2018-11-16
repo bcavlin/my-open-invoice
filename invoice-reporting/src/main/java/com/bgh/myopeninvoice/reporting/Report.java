@@ -20,6 +20,11 @@ package com.bgh.myopeninvoice.reporting;
  * Created by bcavlin on 07/05/17.
  */
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
@@ -27,45 +32,33 @@ import java.util.Map;
  * A Report object has a byte representation of the report output that can be
  * used to write to any output stream. This class is designed around the concept
  * of using ByteArrayOutputStreams to write PDFs to an output stream.
- *
- *
  */
+@Getter
+@RequiredArgsConstructor
 public abstract class Report {
 
+    @NonNull
     protected String name;
+
+    @NonNull
     protected byte[] template;
+
+    @NonNull
     protected Map<String, Object> parameters;
+
     protected ByteArrayOutputStream reportContent;
+
+    @NonNull
     protected ReportRunner reportRunner;
 
-    public Report(String name, Map<String, Object> parameters, byte[] template, ReportRunner reportRunner) {
-        this.name = name;
-        this.parameters = parameters;
-        this.reportRunner = reportRunner;
-        this.template = template;
-    }
 
     /**
      * This is the processing method for a Report. Once the report is ran it
      * populates an internal field with a ByteArrayOutputStream of the
      * report content generated during the run process.
+     *
      * @return Returns itself with the report content output stream created.
      */
     public abstract Report runReport();
 
-    public ByteArrayOutputStream getReportContent() {
-        return this.reportContent;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Map<String, Object> getParameters() {
-        return parameters;
-    }
-
-    public byte[] getTemplate() {
-        return template;
-    }
 }

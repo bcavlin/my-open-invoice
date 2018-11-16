@@ -23,8 +23,9 @@ import java.util.Map;
  */
 public class BIRTReport extends Report {
 
-    public BIRTReport(String name, Map<String, Object> reportParameters, byte[] template, ReportRunner reportRunner) {
-        super(name, reportParameters, template, reportRunner);
+    public BIRTReport(String name, Map<String, Object> reportParameters,
+                      byte[] template, ReportRunner reportRunner) {
+        super(name, template, reportParameters, reportRunner);
     }
 
     @Override
@@ -32,4 +33,5 @@ public class BIRTReport extends Report {
         this.reportContent = reportRunner.runReport(this);
         return this;
     }
+
 }

@@ -1,12 +1,14 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
+import com.bgh.myopeninvoice.api.domain.dto.ContactDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import io.swagger.annotations.*;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,61 +19,81 @@ import java.util.Map;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface ContactAPI {
 
-    class DefaultResponseContactEntity extends DefaultResponse<ContactEntity> {
+    class DefaultResponseContactDTO extends DefaultResponse<ContactDTO> {
 
-        public DefaultResponseContactEntity() {
-            super(ContactEntity.class);
+        public DefaultResponseContactDTO() {
+            super(ContactDTO.class);
         }
 
     }
 
     @ApiOperation(value = "Find all contact data",
-            notes = "Returns a list of ContactEntity",
-            response = DefaultResponseContactEntity.class)
+            notes = "Returns a list of ContactDTO",
+            response = DefaultResponseContactDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactDTO.class)
     })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
     @GetMapping(value = "/contact")
-    ResponseEntity<DefaultResponse<ContactEntity>> findAll(@RequestParam Map<String, String> queryParameters);
+    ResponseEntity<DefaultResponse<ContactDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find contact by ID",
-            notes = "Returns a list of ContactEntity",
-            response = DefaultResponseContactEntity.class)
+            notes = "Returns a list of ContactDTO",
+            response = DefaultResponseContactDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactDTO.class)
     })
     @GetMapping(value = "/contact/{id}")
-    ResponseEntity<DefaultResponse<ContactEntity>> findById(@PathVariable("id") Integer id);
+    ResponseEntity<DefaultResponse<ContactDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save contact",
-            notes = "Saves ContactEntity",
-            response = DefaultResponseContactEntity.class)
+            notes = "Saves ContactDTO",
+            response = DefaultResponseContactDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactDTO.class)
     })
     @PostMapping(value = "/contact")
-    ResponseEntity<DefaultResponse<ContactEntity>> save(@Valid @NotNull @RequestBody ContactEntity contactEntity,
-                                                    BindingResult bindingResult);
+    ResponseEntity<DefaultResponse<ContactDTO>> save(@Valid @NotNull @RequestBody ContactDTO contactDTO,
+                                                        BindingResult bindingResult);
 
     @ApiOperation(value = "Update contact",
-            notes = "Updates ContactEntity",
-            response = DefaultResponseContactEntity.class)
+            notes = "Updates ContactDTO",
+            response = DefaultResponseContactDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactDTO.class)
     })
     @PutMapping(value = "/contact")
-    ResponseEntity<DefaultResponse<ContactEntity>> update(@Valid @NotNull @RequestBody ContactEntity contactEntity,
-                                                      BindingResult bindingResult);
+    ResponseEntity<DefaultResponse<ContactDTO>> update(@Valid @NotNull @RequestBody ContactDTO contactDTO,
+                                                          BindingResult bindingResult);
 
     @ApiOperation(value = "Delete contact by ID",
-            notes = "Deletes ContactEntity",
+            notes = "Deletes ContactDTO",
             response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
     @DeleteMapping(value = "/contact/{id}")
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
+         
+    @ApiOperation(value = "Find contact content by ID",
+            notes = "Find content for ContactDTO",
+            response = Boolean.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
+    })                    
+    @GetMapping(value = "/contact/{id}/content")
+    ResponseEntity<InputStreamResource> findContentByContactId(@PathVariable("id") Integer id);
+
+	@ApiOperation(value = "Save content for contact by ID",
+            notes = "Saves content for ContactDTO",
+            response = Boolean.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
+    })
+    @PostMapping(value = "/contact/{id}/content")
+    ResponseEntity<DefaultResponse<ContactDTO>> saveContentByContactId(@PathVariable("id") Integer id,
+                                                               @RequestParam("file") MultipartFile file);
+
 }

@@ -1,10 +1,13 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.CompanyAPI;
+import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
 import com.bgh.myopeninvoice.api.exception.InvalidDataException;
+import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.api.service.CompanyService;
+import com.bgh.myopeninvoice.api.transformer.CompanyTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,25 +38,31 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-public class CompanyController implements CompanyAPI {
+public class CompanyController extends AbstractController implements CompanyAPI {
+
+    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private CompanyTransformer companyTransformer;
+
     @Override
-    public ResponseEntity<DefaultResponse<CompanyEntity>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<CompanyEntity> result = new ArrayList<>();
+    public ResponseEntity<DefaultResponse<CompanyDTO>> findAll(@RequestParam Map<String, String> queryParameters) {
+        List<CompanyDTO> result = new ArrayList<>();
         long count;
 
         try {
             count = companyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = companyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            List<CompanyEntity> entities = companyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            result = companyTransformer.transformEntityToDTO(entities);
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyEntity.class, e);
+            return Utils.getErrorResponse(CompanyDTO.class, e);
         }
 
-        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
+        DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
         defaultResponse.setCount(count);
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -60,18 +70,19 @@ public class CompanyController implements CompanyAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<CompanyEntity>> findById(@PathVariable("id") Integer id) {
-        List<CompanyEntity> result = new ArrayList<>();
+    public ResponseEntity<DefaultResponse<CompanyDTO>> findById(@PathVariable("id") Integer id) {
+        List<CompanyDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, "Entity id cannot be null");
-            result = companyService.findById(id);
+            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            List<CompanyEntity> entities = companyService.findById(id);
+            result = companyTransformer.transformEntityToDTO(entities);
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyEntity.class, e);
+            return Utils.getErrorResponse(CompanyDTO.class, e);
         }
 
-        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
+        DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -79,9 +90,9 @@ public class CompanyController implements CompanyAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<CompanyEntity>> save(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
-                                                               BindingResult bindingResult) {
-        List<CompanyEntity> result = new ArrayList<>();
+    public ResponseEntity<DefaultResponse<CompanyDTO>> save(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
+                                                            BindingResult bindingResult) {
+        List<CompanyDTO> result = new ArrayList<>();
 
         try {
 
@@ -91,21 +102,24 @@ public class CompanyController implements CompanyAPI {
                 throw new InvalidDataException(collect);
             }
 
-            if (companyEntity.getCompanyId() != null) {
-                throw new InvalidDataException("When saving, data entity cannot have ID");
+            if (companyDTO.getCompanyId() != null) {
+                throw new InvalidDataException(
+                        getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            result = companyService.save(companyEntity);
+            List<CompanyEntity> entities = companyService.save(companyTransformer.transformDTOToEntity(companyDTO));
+            result = companyTransformer.transformEntityToDTO(entities);
 
-            if (result.size() == 0) {
-                throw new Exception("Data not saved");
+
+            if (CollectionUtils.isEmpty(result)) {
+                throw new InvalidResultDataException("Data not saved");
             }
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyEntity.class, e);
+            return Utils.getErrorResponse(CompanyDTO.class, e);
         }
 
-        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
+        DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -113,10 +127,10 @@ public class CompanyController implements CompanyAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<CompanyEntity>> update(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
-                                                                 BindingResult bindingResult) {
+    public ResponseEntity<DefaultResponse<CompanyDTO>> update(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
+                                                              BindingResult bindingResult) {
 
-        List<CompanyEntity> result = new ArrayList<>();
+        List<CompanyDTO> result = new ArrayList<>();
 
         try {
 
@@ -125,21 +139,22 @@ public class CompanyController implements CompanyAPI {
                         .collect(Collectors.joining(", "));
                 throw new InvalidDataException(collect);
             }
-            if (companyEntity.getCompanyId() == null) {
+            if (companyDTO.getCompanyId() == null) {
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            result = companyService.save(companyEntity);
+            List<CompanyEntity> entities = companyService.save(companyTransformer.transformDTOToEntity(companyDTO));
+            result = companyTransformer.transformEntityToDTO(entities);
 
-            if (result.size() == 0) {
-                throw new Exception("Data not saved");
+            if (CollectionUtils.isEmpty(result)) {
+                throw new InvalidResultDataException("Data not saved");
             }
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyEntity.class, e);
+            return Utils.getErrorResponse(CompanyDTO.class, e);
         }
 
-        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
+        DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
@@ -150,7 +165,7 @@ public class CompanyController implements CompanyAPI {
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, "Entity id cannot be null");
+            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
             companyService.delete(id);
 
         } catch (Exception e) {
@@ -172,7 +187,7 @@ public class CompanyController implements CompanyAPI {
         String contentType = "image/png";
 
         try {
-            Assert.notNull(id, "Entity id cannot be null");
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
             if (content != null) {
                 source = content.getContent();
@@ -196,12 +211,12 @@ public class CompanyController implements CompanyAPI {
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<CompanyEntity>> saveContentByCompanyId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
-        List<CompanyEntity> result = new ArrayList<>();
+    public ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
+                                                                              @RequestParam("file") MultipartFile file) {
+        List<CompanyDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, "Entity id cannot be null");
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
             if (content == null) {
                 content = new ContentEntity();
@@ -209,13 +224,15 @@ public class CompanyController implements CompanyAPI {
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
             content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
-            result = companyService.saveContent(id, content);
+
+            List<CompanyEntity> entities = companyService.saveContent(id, content);
+            result = companyTransformer.transformEntityToDTO(entities);
 
         } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyEntity.class, e);
+            return Utils.getErrorResponse(CompanyDTO.class, e);
         }
 
-        DefaultResponse<CompanyEntity> defaultResponse = new DefaultResponse<>(CompanyEntity.class);
+        DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);

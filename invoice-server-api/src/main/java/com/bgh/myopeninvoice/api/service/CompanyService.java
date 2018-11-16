@@ -104,6 +104,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
         return contentRepository.findContentByCompanyId(id, table.name());
     }
 
+    @SuppressWarnings("unchecked")
     @Transactional
     @Override
     public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
@@ -132,7 +133,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @Transactional
     @Override
     public void delete(Integer id) {
-        log.info("Deleting CompanyEntity with id [{}]", id);
+        log.info("Deleting CompanyDTO with id [{}]", id);
         Assert.notNull(id, "ID cannot be empty when deleting data");
         companyRepository.deleteById(id);
     }
