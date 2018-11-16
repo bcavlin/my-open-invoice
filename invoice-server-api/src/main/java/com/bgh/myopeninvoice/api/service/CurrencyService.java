@@ -2,10 +2,10 @@ package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
-import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.QCurrencyEntity;
 import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
+import com.bgh.myopeninvoice.db.domain.QCurrencyEntity;
+import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.bgh.myopeninvoice.db.repository.CurrencyRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -33,9 +33,10 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (searchParameters.getFilter() != null) {
-
-            builder.andAnyOf(QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter()),
-                    QCurrencyEntity.currencyEntity.description.stringValue().contains(searchParameters.getFilter()));
+            builder.andAnyOf(
+                    QCurrencyEntity.currencyEntity.description.contains(searchParameters.getFilter()),
+                    QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter())
+            );
 
         }
         return builder;
@@ -44,9 +45,7 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
     @Override
     public long count(SearchParameters searchParameters) {
         log.info("count");
-
         Predicate predicate = getPredicate(searchParameters);
-
         long count;
 
         if (predicate != null) {
@@ -86,52 +85,41 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
     @Override
     public List<CurrencyEntity> findById(Integer id) {
         log.info("findById: {}", id);
-
         List<CurrencyEntity> entities = new ArrayList<>();
-
         Optional<CurrencyEntity> byId = currencyRepository.findById(id);
-
         byId.ifPresent(entities::add);
-
         return entities;
+    }
+
+    @Override
+    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
+        throw new NotImplementedException();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    @Override
+    public List<CurrencyEntity> saveContent(Integer id, ContentEntity content) {
+        throw new NotImplementedException();
     }
 
     @Transactional
     @Override
     public List<CurrencyEntity> save(CurrencyEntity entity) {
         log.info("Saving entity");
-
         List<CurrencyEntity> entities = new ArrayList<>();
-
         CurrencyEntity saved = currencyRepository.save(entity);
-
         log.info("Saved entity: {}", entity);
-
         entities.add(saved);
-
         return entities;
     }
 
-
+    @Transactional
     @Override
     public void delete(Integer id) {
-        log.info("Deleting CurrencyEntity with id [{}]", id);
-
+        log.info("Deleting CurrencyDTO with id [{}]", id);
         Assert.notNull(id, "ID cannot be empty when deleting data");
-
         currencyRepository.deleteById(id);
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new NotImplementedException();
-
-    }
-
-    @Override
-    public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
-        throw new NotImplementedException();
-
     }
 
 }

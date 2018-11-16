@@ -26,7 +26,7 @@ import org.springframework.stereotype.Repository;
  * Created by bcavlin on 14/03/17.
  */
 @Repository
-public interface ContractsRepository
+public interface ContractRepository
             extends PagingAndSortingRepository<ContractEntity, Integer>, QuerydslPredicateExecutor<ContractEntity> {
 
     @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)

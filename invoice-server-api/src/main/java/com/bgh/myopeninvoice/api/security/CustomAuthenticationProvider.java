@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -56,12 +57,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 authorities.add(new SimpleGrantedAuthority(r.getRoleByRoleId().getRoleName()));
             });
 
-            return new UsernamePasswordAuthenticationToken
-                    (username, password, authorities);
+            return new CustomUPAToken(username, password, authorities, Locale.US);
         } else {
             log.warn("User [{}] does not exist or password is invalid", username);
-            throw new
-                    BadCredentialsException("External system authentication failed");
+            throw new BadCredentialsException("External system authentication failed");
         }
     }
 

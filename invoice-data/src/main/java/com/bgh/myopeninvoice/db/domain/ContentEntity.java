@@ -13,7 +13,7 @@ import java.util.Date;
 public class ContentEntity implements java.io.Serializable {
 
     public enum ContentEntityTable {
-        COMPANY
+        COMPANY, REPORTS, CONTRACT, ATTACHMENT
     }
 
     @Id

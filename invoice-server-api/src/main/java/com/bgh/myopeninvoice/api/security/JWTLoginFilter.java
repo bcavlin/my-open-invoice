@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Locale;
 
 @Slf4j
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -47,10 +47,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                     .readValue(jb.toString(), AccountCredentials.class);
 
             return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(
+                    new CustomUPAToken(
                             creds.getUsername(),
                             creds.getPassword(),
-                            Collections.emptyList()
+                            Collections.emptyList(),
+                            Locale.US
                     )
             );
         } catch (IOException e) {

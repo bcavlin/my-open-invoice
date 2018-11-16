@@ -1,7 +1,7 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
+import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import io.swagger.annotations.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -19,57 +19,57 @@ import java.util.Map;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface CompanyAPI {
 
-    class DefaultResponseCompanyEntity extends DefaultResponse<CompanyEntity> {
+    class DefaultResponseCompanyDTO extends DefaultResponse<CompanyDTO> {
 
-        public DefaultResponseCompanyEntity() {
-            super(CompanyEntity.class);
+        public DefaultResponseCompanyDTO() {
+            super(CompanyDTO.class);
         }
 
     }
 
     @ApiOperation(value = "Find all company data",
-            notes = "Returns a list of CompanyEntity",
-            response = DefaultResponseCompanyEntity.class)
+            notes = "Returns a list of CompanyDTO",
+            response = DefaultResponseCompanyDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
     @GetMapping(value = "/company")
-    ResponseEntity<DefaultResponse<CompanyEntity>> findAll(@RequestParam Map<String, String> queryParameters);
+    ResponseEntity<DefaultResponse<CompanyDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find company by ID",
-            notes = "Returns a list of CompanyEntity",
-            response = DefaultResponseCompanyEntity.class)
+            notes = "Returns a list of CompanyDTO",
+            response = DefaultResponseCompanyDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
     @GetMapping(value = "/company/{id}")
-    ResponseEntity<DefaultResponse<CompanyEntity>> findById(@PathVariable("id") Integer id);
+    ResponseEntity<DefaultResponse<CompanyDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save company",
-            notes = "Saves CompanyEntity",
-            response = DefaultResponseCompanyEntity.class)
+            notes = "Saves CompanyDTO",
+            response = DefaultResponseCompanyDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
     @PostMapping(value = "/company")
-    ResponseEntity<DefaultResponse<CompanyEntity>> save(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
-                                                        BindingResult bindingResult);
+    ResponseEntity<DefaultResponse<CompanyDTO>> save(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
+                                                     BindingResult bindingResult);
 
     @ApiOperation(value = "Update company",
-            notes = "Updates CompanyEntity",
-            response = DefaultResponseCompanyEntity.class)
+            notes = "Updates CompanyDTO",
+            response = DefaultResponseCompanyDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
     @PutMapping(value = "/company")
-    ResponseEntity<DefaultResponse<CompanyEntity>> update(@Valid @NotNull @RequestBody CompanyEntity companyEntity,
-                                                          BindingResult bindingResult);
+    ResponseEntity<DefaultResponse<CompanyDTO>> update(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
+                                                       BindingResult bindingResult);
 
     @ApiOperation(value = "Delete company by ID",
-            notes = "Deletes CompanyEntity",
+            notes = "Deletes CompanyDTO",
             response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
@@ -77,11 +77,23 @@ public interface CompanyAPI {
     @DeleteMapping(value = "/company/{id}")
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
 
+    @ApiOperation(value = "Find company content by ID",
+            notes = "Find content for CompanyDTO",
+            response = Boolean.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
+    })
     @GetMapping(value = "/company/{id}/content")
     ResponseEntity<InputStreamResource> findContentByCompanyId(@PathVariable("id") Integer id);
 
+    @ApiOperation(value = "Save content for company by ID",
+            notes = "Saves content for CompanyDTO",
+            response = Boolean.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
+    })
     @PostMapping(value = "/company/{id}/content")
-    ResponseEntity<DefaultResponse<CompanyEntity>> saveContentByCompanyId(@PathVariable("id") Integer id,
-                                                               @RequestParam("file") MultipartFile file);
+    ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
+                                                                       @RequestParam("file") MultipartFile file);
 
 }

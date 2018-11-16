@@ -46,7 +46,7 @@ public interface InvoiceDAO {
 
     void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> target);
 
-    ContractsRepository getContractsRepository();
+    ContractRepository getContractRepository();
 
     CompanyContactRepository getCompanyContactRepository();
 

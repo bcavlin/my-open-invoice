@@ -1,7 +1,7 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
+import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface UserAPI {
 
     @ApiOperation(value = "Find user roles",
-            response = DefaultResponseRoleEntity.class)
+            response = DefaultResponseRoleDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseRoleEntity.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseRoleDTO.class)
     })
     @GetMapping(value = "/user/{username}/roles")
-    ResponseEntity<DefaultResponse<RoleEntity>> getUserRoles(@PathVariable("username") String username);
+    ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username);
 
-    class DefaultResponseRoleEntity extends DefaultResponse<RoleEntity> {
+    class DefaultResponseRoleDTO extends DefaultResponse<RoleDTO> {
 
-        public DefaultResponseRoleEntity() {
-            super(RoleEntity.class);
+        public DefaultResponseRoleDTO() {
+            super(RoleDTO.class);
         }
 
     }

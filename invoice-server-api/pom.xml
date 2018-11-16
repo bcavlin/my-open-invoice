@@ -29,6 +29,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
         </dependency>
@@ -73,11 +77,11 @@
             <artifactId>invoice-data</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.bgh.myopeninvoice</groupId>-->
-        <!--<artifactId>invoice-reporting</artifactId>-->
-        <!--<version>${project.parent.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.bgh.myopeninvoice</groupId>
+            <artifactId>invoice-reporting</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

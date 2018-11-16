@@ -6,7 +6,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -84,8 +83,8 @@ public class TokenAuthenticationService {
                     Boolean userValid = userService.isUserValid(principal);
 
                     if (userValid) {
-                        return new UsernamePasswordAuthenticationToken(
-                                principal, null, authorities);
+                        return new CustomUPAToken(
+                                principal, null, authorities, Locale.US);
                     } else {
                         throw new AuthenticationServiceException("Username [" + principal + "] is not valid!");
                     }
