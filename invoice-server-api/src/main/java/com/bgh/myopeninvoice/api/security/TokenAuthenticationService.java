@@ -98,7 +98,8 @@ public class TokenAuthenticationService {
 
 
         }
-        return null;
+        throw new AuthenticationServiceException("Authentication exception");
+//        return null;
     }
 
 }
