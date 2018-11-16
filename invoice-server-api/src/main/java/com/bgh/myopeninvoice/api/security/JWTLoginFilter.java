@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +58,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         } catch (IOException e) {
             log.error(e.toString());
         }
-        throw new AuthenticationCredentialsNotFoundException("Invalid data input");
+        throw new AuthenticationException("Invalid data input");
     }
 
     private void readLines(HttpServletRequest req, StringBuilder jb) {
@@ -78,7 +79,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         tokenAuthenticationService.addAuthentication(res, auth);
 
-        res.getWriter().write("{\"username\":\"" + auth.getPrincipal() + "\"}");
+        res.setHeader("Content-Type","application/json");
+        res.getWriter().write("{\"message\":\"Successfully authenticated user: " + auth.getPrincipal() + "\"}");
         res.getWriter().flush();
         res.getWriter().close();
     }
