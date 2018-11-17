@@ -1,5 +1,6 @@
 package com.bgh.myopeninvoice.api.config;
 
+import com.bgh.myopeninvoice.api.filter.CorsFilter;
 import com.bgh.myopeninvoice.api.security.CustomAuthenticationProvider;
 import com.bgh.myopeninvoice.api.security.JWTAuthenticationFilter;
 import com.bgh.myopeninvoice.api.security.JWTLoginFilter;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -42,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS);
+//        web.ignoring().antMatchers(HttpMethod.OPTIONS);
     }
 
     @Override
@@ -52,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
                 // We filter the api/login requests
                 .addFilterBefore(new JWTLoginFilter("/login",
                                 authenticationManager(),

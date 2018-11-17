@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "USER_ROLE", schema = "INVOICE")
+@ToString(exclude = {"userByUserId"})
 public class UserRoleEntity implements java.io.Serializable {
 
     @Id

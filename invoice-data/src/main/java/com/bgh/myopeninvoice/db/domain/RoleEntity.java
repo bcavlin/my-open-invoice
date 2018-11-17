@@ -2,6 +2,7 @@ package com.bgh.myopeninvoice.db.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -11,6 +12,7 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "ROLE", schema = "INVOICE")
+@ToString(exclude = {"userRolesByRoleId"})
 public class RoleEntity implements java.io.Serializable {
 
     @Id
