@@ -6,7 +6,6 @@ import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QContactEntity;
 import com.bgh.myopeninvoice.db.repository.ContactRepository;
-import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;

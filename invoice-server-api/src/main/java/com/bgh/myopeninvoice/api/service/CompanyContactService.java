@@ -5,7 +5,6 @@ import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
-import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;

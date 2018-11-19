@@ -20,7 +20,6 @@ package com.bgh.myopeninvoice.reporting;
  * Created by bcavlin on 07/05/17.
  */
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

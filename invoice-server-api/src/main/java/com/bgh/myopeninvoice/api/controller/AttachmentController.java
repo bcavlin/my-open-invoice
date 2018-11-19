@@ -74,7 +74,7 @@ public class AttachmentController extends AbstractController implements Attachme
         List<AttachmentDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<AttachmentEntity> entities = attachmentService.findById(id);
             result = attachmentTransformer.transformEntityToDTO(entities);
 
@@ -165,7 +165,7 @@ public class AttachmentController extends AbstractController implements Attachme
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             attachmentService.delete(id);
 
         } catch (Exception e) {

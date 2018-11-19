@@ -71,7 +71,7 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
         List<InvoiceDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<InvoiceEntity> entities = invoiceService.findById(id);
             result = invoiceTransformer.transformEntityToDTO(entities);
 
@@ -162,7 +162,7 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             invoiceService.delete(id);
 
         } catch (Exception e) {

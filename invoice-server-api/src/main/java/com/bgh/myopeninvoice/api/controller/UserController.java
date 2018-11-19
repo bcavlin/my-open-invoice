@@ -61,7 +61,11 @@ public class UserController extends AbstractController implements UserAPI {
         defaultResponse.setDetails(result);
         defaultResponse.setCount((long) result.size());
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+        ResponseEntity<DefaultResponse<RoleDTO>> responseEntity = new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+
+        log.debug("Returning: {}", responseEntity);
+
+        return responseEntity;
     }
 
 }

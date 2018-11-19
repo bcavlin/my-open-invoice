@@ -1,12 +1,8 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collection;
 
 @Data
 public class InvoiceItemsDTO implements java.io.Serializable {

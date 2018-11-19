@@ -2,7 +2,6 @@ package com.bgh.myopeninvoice.api.domain.dto;
 
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data

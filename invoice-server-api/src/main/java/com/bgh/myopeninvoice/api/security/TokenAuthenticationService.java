@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.security;
 
 import com.bgh.myopeninvoice.api.service.UserService;
+import com.bgh.myopeninvoice.api.util.Utils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 @Slf4j
@@ -25,39 +29,41 @@ public class TokenAuthenticationService {
 
     static final String TOKEN_PREFIX = "Bearer";
 
-    static final String HEADER_STRING = "Authorization";
+    public static final String HEADER_STRING_AUTHORIZATION = "Authorization";
+
+    public static final String HEADER_STRING_EXPIRATION = "Token Expiration";
 
     public static final String PRINCIPAL = "principal";
 
     @Autowired
     private UserService userService;
 
-    void addAuthentication(HttpServletResponse res, Authentication auth) {
+    public void addAuthentication(HttpServletResponse res, Authentication auth) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("auth", auth);
 
+        log.debug("Adding authentication object for user: {}", auth.getName());
+
+
+        Instant instant = Instant.now().plus(EXPIRATIONTIME, ChronoUnit.MILLIS);
         String jwt = Jwts.builder()
                 .setSubject(auth.getName())
                 .setClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
+                .setExpiration(Date.from(instant))
                 .signWith(SignatureAlgorithm.HS512, Arrays.toString(SECRET))
                 .compact();
 
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwt);
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
-        res.setHeader("Access-Control-Max-Age", "3600");
-        res.setHeader("Access-Control-Allow-Headers", "Authorization, x-xsrf-token, " +
-                "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +
-                "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-        res.setHeader("Access-Control-Expose-Headers", "*");
+        res.addHeader(HEADER_STRING_AUTHORIZATION, TOKEN_PREFIX + " " + jwt);
+        res.addHeader(HEADER_STRING_EXPIRATION, instant.toString());
+
+        Utils.addCorsHeaders(res);
 
         res.setContentType("application/json");
     }
 
     @SuppressWarnings("unchecked")
-    Authentication getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(HEADER_STRING);
+    public Authentication getAuthentication(HttpServletRequest request) {
+        String token = request.getHeader(HEADER_STRING_AUTHORIZATION);
         if (token != null) {
             Map<String, Object> claims;
             try {
@@ -83,11 +89,14 @@ public class TokenAuthenticationService {
                     Boolean userValid = userService.isUserValid(principal);
 
                     if (userValid) {
+                        log.debug("Found valid user: {}", principal);
                         return new CustomUPAToken(
                                 principal, null, authorities, Locale.US);
                     } else {
                         throw new AuthenticationServiceException("Username [" + principal + "] is not valid!");
                     }
+                } else {
+                    log.warn("Cannot find claims!");
                 }
 
 
@@ -99,7 +108,6 @@ public class TokenAuthenticationService {
 
         }
         throw new AuthenticationServiceException("Authentication exception");
-//        return null;
     }
 
 }

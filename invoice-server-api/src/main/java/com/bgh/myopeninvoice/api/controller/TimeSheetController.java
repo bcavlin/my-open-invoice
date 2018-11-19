@@ -71,7 +71,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
         List<TimeSheetDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<TimeSheetEntity> entities = timesheetService.findById(id);
             result = timesheetTransformer.transformEntityToDTO(entities);
 

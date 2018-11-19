@@ -1,11 +1,7 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
-import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data

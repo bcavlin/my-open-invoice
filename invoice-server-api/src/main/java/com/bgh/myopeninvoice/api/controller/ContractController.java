@@ -74,7 +74,7 @@ public class ContractController extends AbstractController implements ContractAP
         List<ContractDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<ContractEntity> entities = contractService.findById(id);
             result = contractTransformer.transformEntityToDTO(entities);
 
@@ -165,7 +165,7 @@ public class ContractController extends AbstractController implements ContractAP
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             contractService.delete(id);
 
         } catch (Exception e) {

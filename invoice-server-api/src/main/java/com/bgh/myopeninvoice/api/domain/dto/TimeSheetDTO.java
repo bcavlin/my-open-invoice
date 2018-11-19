@@ -2,11 +2,7 @@ package com.bgh.myopeninvoice.api.domain.dto;
 
 import lombok.Data;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 @Data

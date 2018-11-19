@@ -71,7 +71,7 @@ public class TaxController extends AbstractController implements TaxAPI {
         List<TaxDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<TaxEntity> entities = taxService.findById(id);
             result = taxTransformer.transformEntityToDTO(entities);
 
