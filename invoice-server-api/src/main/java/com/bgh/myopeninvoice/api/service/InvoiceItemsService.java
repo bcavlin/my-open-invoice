@@ -5,7 +5,6 @@ import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity;
 import com.bgh.myopeninvoice.db.domain.QInvoiceItemsEntity;
-import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.bgh.myopeninvoice.db.repository.InvoiceItemsRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;

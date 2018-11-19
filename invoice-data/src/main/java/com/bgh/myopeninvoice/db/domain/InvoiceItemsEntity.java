@@ -6,7 +6,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.math.BigDecimal;
 import java.util.Collection;
 
 @Data

@@ -71,7 +71,7 @@ public class CurrencyController extends AbstractController implements CurrencyAP
         List<CurrencyDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<CurrencyEntity> entities = currencyService.findById(id);
             result = currencyTransformer.transformEntityToDTO(entities);
 
@@ -162,7 +162,7 @@ public class CurrencyController extends AbstractController implements CurrencyAP
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             currencyService.delete(id);
 
         } catch (Exception e) {

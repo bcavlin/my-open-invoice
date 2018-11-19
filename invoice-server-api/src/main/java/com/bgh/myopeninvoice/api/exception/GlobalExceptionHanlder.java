@@ -22,7 +22,7 @@ public class GlobalExceptionHanlder extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Throwable.class)
     @ResponseBody
     ResponseEntity<Object> handleControllerException(HttpServletRequest req, Throwable ex) {
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GlobalExceptionHanlder extends ResponseEntityExceptionHandler {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("path", request.getContextPath());
         responseBody.put("message", "The URL you have reached is not in service at this time (404).");
-        return new ResponseEntity<Object>(responseBody, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
     }
 
 }

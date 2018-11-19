@@ -74,7 +74,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         List<CompanyDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<CompanyEntity> entities = companyService.findById(id);
             result = companyTransformer.transformEntityToDTO(entities);
 
@@ -165,7 +165,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             companyService.delete(id);
 
         } catch (Exception e) {

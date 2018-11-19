@@ -16,13 +16,12 @@
 
 package com.bgh.myopeninvoice.reporting;
 
+import com.bgh.myopeninvoice.reporting.exception.BirtReportException;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.Platform;
 import org.eclipse.birt.report.engine.api.*;
 import org.eclipse.core.internal.registry.RegistryProviderFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,16 +43,8 @@ public class BIRTReportRunner implements ReportRunner {
 
     private IReportEngine birtReportEngine = null;
 
-    private DataSource dataSource;
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    private DataSource dataSource;
 
     /**
      * Starts up and configures the BIRT Report Engine
@@ -116,20 +107,20 @@ public class BIRTReportRunner implements ReportRunner {
 
             PDFRenderOption pdfRenderOption = new PDFRenderOption();
             pdfRenderOption.setOption(IPDFRenderOption.REPAGINATE_FOR_PDF, Boolean.TRUE);
-//            pdfRenderOption.setEmbededFont(true);
             pdfRenderOption.setOutputFormat("pdf");
             pdfRenderOption.setOutputStream(byteArrayOutputStream);
 
             runAndRenderTask.setRenderOption(pdfRenderOption);
-            runAndRenderTask.getAppContext().put("OdaJDBCDriverPassInConnection", getDataSource().getConnection());
+            runAndRenderTask.getAppContext().put("OdaJDBCDriverPassInConnection", dataSource.getConnection());
             runAndRenderTask.run();
             runAndRenderTask.close();
 
         } catch (Exception e) {
             log.error("Error while running report task: {}.", e.getMessage());
-            throw new RuntimeException();
+            throw new BirtReportException(e.getMessage(), e);
         }
 
         return byteArrayOutputStream;
     }
+
 }

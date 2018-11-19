@@ -1,5 +1,7 @@
-package com.bgh.myopeninvoice.api.security;
+package com.bgh.myopeninvoice.api.filter;
 
+import com.bgh.myopeninvoice.api.security.TokenAuthenticationService;
+import com.bgh.myopeninvoice.api.util.Utils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -21,30 +23,33 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest req,
-                         ServletResponse res,
+    public void doFilter(ServletRequest request,
+                         ServletResponse response,
                          FilterChain filterChain)
             throws IOException, ServletException {
 
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
 
         Authentication authentication = null;
         try {
-            authentication = tokenAuthenticationService.getAuthentication(request);
+            authentication = tokenAuthenticationService.getAuthentication(req);
+
         } catch (Exception e) {
-            response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Content-Type","application/json");
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-            response.getWriter().write("{\"message\":\"" + e.getMessage() + "\"}");
-            response.getWriter().flush();
-            response.getWriter().close();
+
+            Utils.addCorsHeaders(res);
+
+            res.setHeader("Content-Type","application/json");
+            res.getWriter().write("{\"message\":\"" + e.getMessage() + "\"}");
+            res.getWriter().flush();
+            res.getWriter().close();
+
             return;
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        filterChain.doFilter(req, res);
+        filterChain.doFilter(request, response);
     }
 
 }

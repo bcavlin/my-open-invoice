@@ -1,8 +1,10 @@
-package com.bgh.myopeninvoice.api.security;
+package com.bgh.myopeninvoice.api.filter;
 
+import com.bgh.myopeninvoice.api.security.AccountCredentials;
+import com.bgh.myopeninvoice.api.security.CustomUPAToken;
+import com.bgh.myopeninvoice.api.security.TokenAuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -79,8 +81,22 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         tokenAuthenticationService.addAuthentication(res, auth);
 
-        res.setHeader("Content-Type","application/json");
-        res.getWriter().write("{\"message\":\"Successfully authenticated user: " + auth.getPrincipal() + "\"}");
+        StringBuilder builder = new StringBuilder();
+        builder
+                .append("{")
+                .append("\"").append("message").append("\"").append(":")
+                .append("\"").append("Successfully authenticated user: ").append(auth.getPrincipal()).append("\"")
+                .append(",")
+                .append("\"").append("token").append("\"").append(":")
+                .append("\"").append(res.getHeader(TokenAuthenticationService.HEADER_STRING_AUTHORIZATION)).append("\"")
+                .append(",")
+                .append("\"").append("token_expiration").append("\"").append(":")
+                .append("\"").append(res.getHeader(TokenAuthenticationService.HEADER_STRING_EXPIRATION)).append("\"")
+                .append("}");
+
+
+        res.setHeader("Content-Type", "application/json");
+        res.getWriter().write(builder.toString());
         res.getWriter().flush();
         res.getWriter().close();
     }

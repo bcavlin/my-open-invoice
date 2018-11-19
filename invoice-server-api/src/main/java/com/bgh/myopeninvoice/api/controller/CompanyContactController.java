@@ -71,7 +71,7 @@ public class CompanyContactController extends AbstractController implements Comp
         List<CompanyContactDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<CompanyContactEntity> entities = companycontactService.findById(id);
             result = companycontactTransformer.transformEntityToDTO(entities);
 
@@ -162,7 +162,7 @@ public class CompanyContactController extends AbstractController implements Comp
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             companycontactService.delete(id);
 
         } catch (Exception e) {

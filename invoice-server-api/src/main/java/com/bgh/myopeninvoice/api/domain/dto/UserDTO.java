@@ -1,12 +1,7 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
 
 @Data

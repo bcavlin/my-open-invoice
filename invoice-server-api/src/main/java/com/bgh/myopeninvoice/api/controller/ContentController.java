@@ -71,7 +71,7 @@ public class ContentController extends AbstractController implements ContentAPI 
         List<ContentDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<ContentEntity> entities = contentService.findById(id);
             result = contentTransformer.transformEntityToDTO(entities);
 
@@ -162,7 +162,7 @@ public class ContentController extends AbstractController implements ContentAPI 
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             contentService.delete(id);
 
         } catch (Exception e) {
