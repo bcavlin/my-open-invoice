@@ -10,6 +10,9 @@ spring:
     active: database
   application:
     name: my-open-invoice
+  jackson:
+    time-zone: America/Toronto
+    date-format: yyyy-MM-dd'T'HH:mm:ssZ
 jasypt:
   encryptor:
     password: mypassword
