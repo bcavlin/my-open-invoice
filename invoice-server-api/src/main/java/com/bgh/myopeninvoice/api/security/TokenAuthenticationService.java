@@ -101,11 +101,9 @@ public class TokenAuthenticationService {
 
 
             } catch (Exception e) {
-                log.error("Cannot validate token [{}]", token);
-                log.error(e.toString());
+                log.error(e.getMessage(), e);
+                throw new AuthenticationServiceException("Authentication exception - token invalid", e);
             }
-
-
         }
         throw new AuthenticationServiceException("Authentication exception");
     }
