@@ -1,7 +1,5 @@
 package com.bgh.myopeninvoice.db.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.annotation.MatchesPattern;
@@ -56,29 +54,22 @@ public class CompanyEntity implements java.io.Serializable {
     @Column(name = "WEEK_START", nullable = false)
     private Integer weekStart;
 
-    @JsonIgnoreProperties({"content"})
-    @ManyToOne
-    @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID",
-            insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID")
     private ContentEntity contentByContentId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "companyByCompanyId")
     private Collection<CompanyContactEntity> companyContactsByCompanyId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "companyByContractSignedWith")
     private Collection<ContractEntity> contractsByCompanyId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "companyByContractSignedWithSubcontract")
     private Collection<ContractEntity> contractsByCompanyId_0;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "companyByCompanyTo")
     private Collection<InvoiceEntity> invoicesByCompanyId;
 
-    @JsonIgnore
     @Transient
     public String getContactsToList() {
         StringBuilder sb = new StringBuilder();

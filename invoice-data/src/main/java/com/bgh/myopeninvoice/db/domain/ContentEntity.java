@@ -1,6 +1,5 @@
 package com.bgh.myopeninvoice.db.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,26 +29,22 @@ public class ContentEntity implements java.io.Serializable {
     private String filename;
 
     @Lob
-    @Column(name = "CONTENT", nullable = false)
+    @Column(name = "CONTENT")
     private byte[] content;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "DATE_CREATED", nullable = false)
     private Date dateCreated;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "contentByContentId")
     private Collection<AttachmentEntity> attachmentsByContentId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "contentByContentId")
     private Collection<CompanyEntity> companiesByContentId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "contentByContentId")
     private Collection<ContractEntity> contractsByContentId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "contentByContentId")
     private Collection<ReportsEntity> reportsByContentId;
 

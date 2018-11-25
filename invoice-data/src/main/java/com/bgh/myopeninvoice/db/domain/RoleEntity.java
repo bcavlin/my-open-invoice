@@ -1,6 +1,5 @@
 package com.bgh.myopeninvoice.db.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
@@ -24,7 +23,6 @@ public class RoleEntity implements java.io.Serializable {
     @Column(name = "ROLE_NAME", nullable = false, length = 45)
     private String roleName;
 
-    @JsonIgnore
     @LazyCollection(LazyCollectionOption.TRUE)
     @OneToMany(mappedBy = "roleByRoleId")
     private Collection<UserRoleEntity> userRolesByRoleId;
