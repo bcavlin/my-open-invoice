@@ -1,7 +1,5 @@
 package com.bgh.myopeninvoice.db.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
@@ -54,18 +52,15 @@ public class ContactEntity implements java.io.Serializable {
     @Column(name = "USER_ID", nullable = false)
     private Integer userId;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "contactByContactId")
     private Collection<CompanyContactEntity> companyContactsByContactId;
 
-    @JsonIgnoreProperties({"passwordHash"})
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false,
             insertable = false, updatable = false)
     private UserEntity userByUserId;
 
-    @JsonIgnore
     @Transient
     public String getCompaniesList() {
         if (companyContactsByContactId != null) {

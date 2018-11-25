@@ -11,6 +11,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,6 +125,18 @@ public class CompanyService implements CommonService<CompanyEntity> {
     public List<CompanyEntity> save(CompanyEntity entity) {
         log.info("Saving entity");
         List<CompanyEntity> entities = new ArrayList<>();
+
+        //content check
+        if (entity.getContentByContentId() != null
+                && entity.getContentByContentId().getContentId() != null
+                && ArrayUtils.isEmpty(entity.getContentByContentId().getContent())) {
+            /** this is the case where we are updating empty content and
+             * this is not allowed. We should update content separately.
+             */
+            log.warn("Removing content as we detected update request without content");
+            entity.setContentByContentId(null);
+        }
+
         CompanyEntity saved = companyRepository.save(entity);
         log.info("Saved entity: {}", entity);
         entities.add(saved);

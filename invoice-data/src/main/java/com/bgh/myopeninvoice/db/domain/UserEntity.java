@@ -1,6 +1,5 @@
 package com.bgh.myopeninvoice.db.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
@@ -65,12 +64,10 @@ public class UserEntity implements java.io.Serializable {
     @Column(name = "LAST_LOGGED_DATE")
     private Date lastLoggedDate;
 
-    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "userByUserId")
     private Collection<ContactEntity> contactsByUserId;
 
-    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "userByUserId")
     private Collection<UserRoleEntity> userRolesByUserId;

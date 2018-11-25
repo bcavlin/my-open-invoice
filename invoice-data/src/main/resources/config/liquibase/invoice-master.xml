@@ -69,7 +69,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="content" type="blob">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="date_created" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>

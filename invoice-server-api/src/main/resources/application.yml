@@ -12,7 +12,7 @@ spring:
     name: my-open-invoice
   jackson:
     time-zone: America/Toronto
-    date-format: yyyy-MM-dd'T'HH:mm:ssZ
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
 jasypt:
   encryptor:
     password: mypassword

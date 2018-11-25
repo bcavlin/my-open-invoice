@@ -92,7 +92,7 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/company/{id}/content")
+    @PostMapping(value = "/company/{id}/content", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
                                                                        @RequestParam("file") MultipartFile file);
 

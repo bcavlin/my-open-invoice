@@ -30,10 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -223,6 +220,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
             }
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
+            content.setDateCreated(new Date());
             content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
 
             List<CompanyEntity> entities = companyService.saveContent(id, content);
