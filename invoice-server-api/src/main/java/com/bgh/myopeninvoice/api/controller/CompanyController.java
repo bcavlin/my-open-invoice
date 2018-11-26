@@ -177,7 +177,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByCompanyId(@PathVariable("id") Integer id) {
+    public ResponseEntity<byte[]> findContentByCompanyId(@PathVariable("id") Integer id) {
 
         InputStreamResource result = null;
         byte[] source;
@@ -204,7 +204,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         return ResponseEntity.ok()
                 .contentLength(source.length)
                 .contentType(MediaType.parseMediaType(contentType))
-                .body(result);
+                .body(source);
     }
 
     @Override
@@ -214,10 +214,11 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
-            if (content == null) {
-                content = new ContentEntity();
-            }
+//            ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
+//            log.debug("Loaded content: {}", content);
+//            if (content == null) {
+            ContentEntity content = new ContentEntity();
+//            }
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
             content.setDateCreated(new Date());

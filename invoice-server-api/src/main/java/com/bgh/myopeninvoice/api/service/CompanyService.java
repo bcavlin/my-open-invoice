@@ -90,6 +90,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
         return entities;
     }
 
+    @Transactional
     @Override
     public List<CompanyEntity> findById(Integer id) {
         log.info("findById: {}", id);
@@ -110,13 +111,23 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @Override
     public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
         log.info("Save content to company {}, file {}", id, content.getFilename());
-        List<CompanyEntity> save = null;
-        List<CompanyEntity> entityList = this.findById(id);
-        if (entityList.size() == 1) {
-            CompanyEntity companyEntity = entityList.get(0);
-            companyEntity.setContentByContentId(content);
-            save = this.save(companyEntity);
-        }
+        List<CompanyEntity> save = new ArrayList<>();
+
+        Optional<CompanyEntity> byId = companyRepository.findById(id);
+        byId.ifPresent(companyEntity -> {
+            if (companyEntity.getContentByContentId() == null) {
+                log.debug("Adding new content");
+                companyEntity.setContentByContentId(content);
+            } else {
+                log.debug("Updating content: {}", companyEntity.getContentByContentId().getContentId());
+                companyEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+                companyEntity.getContentByContentId().setContentTable(content.getContentTable());
+                companyEntity.getContentByContentId().setContent(content.getContent());
+                companyEntity.getContentByContentId().setFilename(content.getFilename());
+            }
+            save.addAll(this.save(companyEntity));
+        });
+
         return save;
     }
 
@@ -126,16 +137,16 @@ public class CompanyService implements CommonService<CompanyEntity> {
         log.info("Saving entity");
         List<CompanyEntity> entities = new ArrayList<>();
 
-        //content check
-        if (entity.getContentByContentId() != null
-                && entity.getContentByContentId().getContentId() != null
-                && ArrayUtils.isEmpty(entity.getContentByContentId().getContent())) {
-            /** this is the case where we are updating empty content and
-             * this is not allowed. We should update content separately.
-             */
-            log.warn("Removing content as we detected update request without content");
-            entity.setContentByContentId(null);
-        }
+//        //content check
+//        if (entity.getContentByContentId() != null
+//                && entity.getContentByContentId().getContentId() != null
+//                && ArrayUtils.isEmpty(entity.getContentByContentId().getContent())) {
+//            /** this is the case where we are updating empty content and
+//             * this is not allowed. We should update content separately.
+//             */
+//            log.warn("Removing content as we detected update request without content");
+//            entity.setContentByContentId(null);
+//        }
 
         CompanyEntity saved = companyRepository.save(entity);
         log.info("Saved entity: {}", entity);

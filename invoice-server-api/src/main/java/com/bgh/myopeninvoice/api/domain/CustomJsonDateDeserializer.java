@@ -19,7 +19,7 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JsonProcessingException {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse("2018-11-24T23:08:07.148Z", timeFormatter);
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(jsonParser.getText(), timeFormatter);
         return Date.from(Instant.from(offsetDateTime));
     }
 
