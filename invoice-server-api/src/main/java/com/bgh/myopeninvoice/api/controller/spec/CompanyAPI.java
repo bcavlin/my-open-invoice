@@ -15,8 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "Company Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface CompanyAPI {
 
     class DefaultResponseCompanyDTO extends DefaultResponse<CompanyDTO> {
@@ -36,7 +35,8 @@ public interface CompanyAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/company")
+    @GetMapping(value = "/company",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find company by ID",
@@ -45,7 +45,8 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
-    @GetMapping(value = "/company/{id}")
+    @GetMapping(value = "/company/{id}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save company",
@@ -54,7 +55,8 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
-    @PostMapping(value = "/company")
+    @PostMapping(value = "/company",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> save(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
                                                      BindingResult bindingResult);
 
@@ -64,7 +66,8 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
-    @PutMapping(value = "/company")
+    @PutMapping(value = "/company",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> update(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
                                                        BindingResult bindingResult);
 
@@ -74,7 +77,8 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/company/{id}")
+    @DeleteMapping(value = "/company/{id}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Find company content by ID",
@@ -84,7 +88,8 @@ public interface CompanyAPI {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
     @GetMapping(value = "/company/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByCompanyId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByCompanyId(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save content for company by ID",
             notes = "Saves content for CompanyDTO",
@@ -92,7 +97,9 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/company/{id}/content", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/company/{id}/content",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
                                                                        @RequestParam("file") MultipartFile file);
 

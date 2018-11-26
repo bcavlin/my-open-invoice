@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import javax.annotation.MatchesPattern;
 import javax.persistence.*;
@@ -45,16 +47,12 @@ public class CompanyEntity implements java.io.Serializable {
     @Column(name = "BUSINESS_NUMBER", length = 30)
     private String businessNumber;
 
-    @Basic
-    @Column(name = "CONTENT_ID")
-    private Integer contentId;
-
     @MatchesPattern("[1-7]")
     @Basic
     @Column(name = "WEEK_START", nullable = false)
     private Integer weekStart;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID")
     private ContentEntity contentByContentId;
 

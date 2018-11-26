@@ -22,14 +22,13 @@ public class CompanyDTO implements java.io.Serializable {
 
     private String addressLine2;
 
+    @MatchesPattern("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$")
     private String phone1;
 
     @NotNull
     private Boolean ownedByMe;
 
     private String businessNumber;
-
-    private Integer contentId;
 
     @NotNull
     @MatchesPattern("[1-7]")

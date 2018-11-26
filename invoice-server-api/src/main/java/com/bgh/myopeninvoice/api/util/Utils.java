@@ -130,7 +130,7 @@ public class Utils {
 
     public static void addCorsHeaders(HttpServletResponse res){
         res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Expose-Headers", "Authorization");
+        res.setHeader("Access-Control-Expose-Headers", "Authorization,Content-Type");
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Authorization, x-xsrf-token, " +
                 "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +

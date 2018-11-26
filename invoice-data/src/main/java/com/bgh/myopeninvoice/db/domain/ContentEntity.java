@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@ToString(exclude = {"content"})
 @Table(name = "CONTENT", schema = "INVOICE")
 public class ContentEntity implements java.io.Serializable {
 
@@ -35,17 +37,5 @@ public class ContentEntity implements java.io.Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "DATE_CREATED", nullable = false)
     private Date dateCreated;
-
-    @OneToMany(mappedBy = "contentByContentId")
-    private Collection<AttachmentEntity> attachmentsByContentId;
-
-    @OneToMany(mappedBy = "contentByContentId")
-    private Collection<CompanyEntity> companiesByContentId;
-
-    @OneToMany(mappedBy = "contentByContentId")
-    private Collection<ContractEntity> contractsByContentId;
-
-    @OneToMany(mappedBy = "contentByContentId")
-    private Collection<ReportsEntity> reportsByContentId;
 
 }
