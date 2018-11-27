@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.CompanyContactDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "CompanyContact Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface CompanyContactAPI {
 
     class DefaultResponseCompanyContactDTO extends DefaultResponse<CompanyContactDTO> {
@@ -36,7 +34,7 @@ public interface CompanyContactAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/companycontact")
+    @GetMapping(value = "/companycontact", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyContactDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find companycontact by ID",
@@ -45,7 +43,7 @@ public interface CompanyContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyContactDTO.class)
     })
-    @GetMapping(value = "/companycontact/{id}")
+    @GetMapping(value = "/companycontact/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyContactDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save companycontact",
@@ -56,7 +54,7 @@ public interface CompanyContactAPI {
     })
     @PostMapping(value = "/companycontact")
     ResponseEntity<DefaultResponse<CompanyContactDTO>> save(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                            BindingResult bindingResult);
+                                                        BindingResult bindingResult);
 
     @ApiOperation(value = "Update companycontact",
             notes = "Updates CompanyContactDTO",
@@ -64,9 +62,9 @@ public interface CompanyContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyContactDTO.class)
     })
-    @PutMapping(value = "/companycontact")
+    @PutMapping(value = "/companycontact", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyContactDTO>> update(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                              BindingResult bindingResult);
+                                                          BindingResult bindingResult);
 
     @ApiOperation(value = "Delete companycontact by ID",
             notes = "Deletes CompanyContactDTO",
@@ -74,26 +72,29 @@ public interface CompanyContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/companycontact/{id}")
+    @DeleteMapping(value = "/companycontact/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
-
+         
     @ApiOperation(value = "Find companycontact content by ID",
             notes = "Find content for CompanyContactDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
-    })
+    })                    
     @GetMapping(value = "/companycontact/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByCompanyContactId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByCompanyContactId(@PathVariable("id") Integer id);
 
-    @ApiOperation(value = "Save content for companycontact by ID",
+	@ApiOperation(value = "Save content for companycontact by ID",
             notes = "Saves content for CompanyContactDTO",
             response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/companycontact/{id}/content")
+    @PostMapping(value = "/companycontact/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(@PathVariable("id") Integer id,
-                                                                                     @RequestParam("file") MultipartFile file);
+                                                               @RequestParam("file") MultipartFile file);
 
 }

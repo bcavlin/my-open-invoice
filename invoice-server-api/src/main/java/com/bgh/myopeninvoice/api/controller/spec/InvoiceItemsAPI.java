@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.InvoiceItemsDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "InvoiceItems Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface InvoiceItemsAPI {
 
     class DefaultResponseInvoiceItemsDTO extends DefaultResponse<InvoiceItemsDTO> {
@@ -36,7 +34,7 @@ public interface InvoiceItemsAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/invoiceitems")
+    @GetMapping(value = "/invoiceitems", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<InvoiceItemsDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find invoiceitems by ID",
@@ -45,7 +43,7 @@ public interface InvoiceItemsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseInvoiceItemsDTO.class)
     })
-    @GetMapping(value = "/invoiceitems/{id}")
+    @GetMapping(value = "/invoiceitems/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<InvoiceItemsDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save invoiceitems",
@@ -64,7 +62,7 @@ public interface InvoiceItemsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseInvoiceItemsDTO.class)
     })
-    @PutMapping(value = "/invoiceitems")
+    @PutMapping(value = "/invoiceitems", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<InvoiceItemsDTO>> update(@Valid @NotNull @RequestBody InvoiceItemsDTO invoiceitemsDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface InvoiceItemsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/invoiceitems/{id}")
+    @DeleteMapping(value = "/invoiceitems/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find invoiceitems content by ID",
             notes = "Find content for InvoiceItemsDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/invoiceitems/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByInvoiceItemsId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByInvoiceItemsId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for invoiceitems by ID",
             notes = "Saves content for InvoiceItemsDTO",
@@ -92,7 +91,9 @@ public interface InvoiceItemsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/invoiceitems/{id}/content")
+    @PostMapping(value = "/invoiceitems/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<InvoiceItemsDTO>> saveContentByInvoiceItemsId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

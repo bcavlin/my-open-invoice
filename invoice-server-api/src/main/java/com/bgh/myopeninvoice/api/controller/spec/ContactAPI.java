@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.ContactDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "Contact Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface ContactAPI {
 
     class DefaultResponseContactDTO extends DefaultResponse<ContactDTO> {
@@ -36,7 +34,7 @@ public interface ContactAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/contact")
+    @GetMapping(value = "/contact", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ContactDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find contact by ID",
@@ -45,7 +43,7 @@ public interface ContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactDTO.class)
     })
-    @GetMapping(value = "/contact/{id}")
+    @GetMapping(value = "/contact/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ContactDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save contact",
@@ -64,7 +62,7 @@ public interface ContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseContactDTO.class)
     })
-    @PutMapping(value = "/contact")
+    @PutMapping(value = "/contact", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ContactDTO>> update(@Valid @NotNull @RequestBody ContactDTO contactDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface ContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/contact/{id}")
+    @DeleteMapping(value = "/contact/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find contact content by ID",
             notes = "Find content for ContactDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/contact/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByContactId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByContactId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for contact by ID",
             notes = "Saves content for ContactDTO",
@@ -92,7 +91,9 @@ public interface ContactAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/contact/{id}/content")
+    @PostMapping(value = "/contact/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ContactDTO>> saveContentByContactId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

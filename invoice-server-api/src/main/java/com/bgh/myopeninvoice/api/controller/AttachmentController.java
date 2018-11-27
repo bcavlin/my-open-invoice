@@ -29,11 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -91,7 +87,7 @@ public class AttachmentController extends AbstractController implements Attachme
 
     @Override
     public ResponseEntity<DefaultResponse<AttachmentDTO>> save(@Valid @NotNull @RequestBody AttachmentDTO attachmentDTO,
-                                                               BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<AttachmentDTO> result = new ArrayList<>();
 
         try {
@@ -128,7 +124,7 @@ public class AttachmentController extends AbstractController implements Attachme
 
     @Override
     public ResponseEntity<DefaultResponse<AttachmentDTO>> update(@Valid @NotNull @RequestBody AttachmentDTO attachmentDTO,
-                                                                 BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<AttachmentDTO> result = new ArrayList<>();
 
@@ -180,7 +176,7 @@ public class AttachmentController extends AbstractController implements Attachme
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByAttachmentId(@PathVariable("id") Integer id) {
+    public ResponseEntity<byte[]> findContentByAttachmentId(@PathVariable("id") Integer id) {
 
         InputStreamResource result = null;
         byte[] source;
@@ -192,8 +188,7 @@ public class AttachmentController extends AbstractController implements Attachme
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);
-                    result = new InputStreamResource(new ByteArrayInputStream(source));
+                    contentType = new Tika().detect(source);                    
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -207,22 +202,20 @@ public class AttachmentController extends AbstractController implements Attachme
         return ResponseEntity.ok()
                 .contentLength(source.length)
                 .contentType(MediaType.parseMediaType(contentType))
-                .body(result);
+                .body(source);
     }
 
     @Override
     public ResponseEntity<DefaultResponse<AttachmentDTO>> saveContentByAttachmentId(@PathVariable("id") Integer id,
-                                                                                    @RequestParam("file") MultipartFile file) {
+                                                                                 @RequestParam("file") MultipartFile file) {
         List<AttachmentDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            ContentEntity content = attachmentService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.ATTACHMENT);
-            if (content == null) {
-                content = new ContentEntity();
-            }
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
+            ContentEntity content = new ContentEntity();
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
+            content.setDateCreated(new Date());
             content.setContentTable(ContentEntity.ContentEntityTable.ATTACHMENT.name());
 
             List<AttachmentEntity> entities = attachmentService.saveContent(id, content);

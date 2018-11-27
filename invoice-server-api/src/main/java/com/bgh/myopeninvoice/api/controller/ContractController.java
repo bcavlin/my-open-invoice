@@ -29,11 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -91,7 +87,7 @@ public class ContractController extends AbstractController implements ContractAP
 
     @Override
     public ResponseEntity<DefaultResponse<ContractDTO>> save(@Valid @NotNull @RequestBody ContractDTO contractDTO,
-                                                             BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<ContractDTO> result = new ArrayList<>();
 
         try {
@@ -128,7 +124,7 @@ public class ContractController extends AbstractController implements ContractAP
 
     @Override
     public ResponseEntity<DefaultResponse<ContractDTO>> update(@Valid @NotNull @RequestBody ContractDTO contractDTO,
-                                                               BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<ContractDTO> result = new ArrayList<>();
 
@@ -180,8 +176,7 @@ public class ContractController extends AbstractController implements ContractAP
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByContractId(@PathVariable("id") Integer id) {
-
+    public ResponseEntity<byte[]> findContentByContractId(@PathVariable("id") Integer id) {
         InputStreamResource result = null;
         byte[] source;
         String contentType = "image/png";
@@ -192,8 +187,7 @@ public class ContractController extends AbstractController implements ContractAP
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);
-                    result = new InputStreamResource(new ByteArrayInputStream(source));
+                    contentType = new Tika().detect(source);                    
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -207,22 +201,20 @@ public class ContractController extends AbstractController implements ContractAP
         return ResponseEntity.ok()
                 .contentLength(source.length)
                 .contentType(MediaType.parseMediaType(contentType))
-                .body(result);
+                .body(source);
     }
 
     @Override
     public ResponseEntity<DefaultResponse<ContractDTO>> saveContentByContractId(@PathVariable("id") Integer id,
-                                                                                @RequestParam("file") MultipartFile file) {
+                                                                                 @RequestParam("file") MultipartFile file) {
         List<ContractDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            ContentEntity content = contractService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.CONTRACT);
-            if (content == null) {
-                content = new ContentEntity();
-            }
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
+            ContentEntity content = new ContentEntity();
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
+            content.setDateCreated(new Date());
             content.setContentTable(ContentEntity.ContentEntityTable.CONTRACT.name());
 
             List<ContractEntity> entities = contractService.saveContent(id, content);

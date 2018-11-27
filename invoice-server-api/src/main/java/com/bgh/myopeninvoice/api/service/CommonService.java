@@ -27,4 +27,5 @@ public interface CommonService<T> {
 
     @Transactional
     <T> List<T> saveContent(Integer id, ContentEntity content);
+
 }

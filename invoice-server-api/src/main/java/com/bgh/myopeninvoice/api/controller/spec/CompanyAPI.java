@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -35,8 +34,7 @@ public interface CompanyAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/company",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/company", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find company by ID",
@@ -45,8 +43,7 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
-    @GetMapping(value = "/company/{id}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/company/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save company",
@@ -55,10 +52,9 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
-    @PostMapping(value = "/company",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/company")
     ResponseEntity<DefaultResponse<CompanyDTO>> save(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
-                                                     BindingResult bindingResult);
+                                                        BindingResult bindingResult);
 
     @ApiOperation(value = "Update company",
             notes = "Updates CompanyDTO",
@@ -66,10 +62,9 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyDTO.class)
     })
-    @PutMapping(value = "/company",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/company", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> update(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
-                                                       BindingResult bindingResult);
+                                                          BindingResult bindingResult);
 
     @ApiOperation(value = "Delete company by ID",
             notes = "Deletes CompanyDTO",
@@ -77,30 +72,29 @@ public interface CompanyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/company/{id}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/company/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
-
+         
     @ApiOperation(value = "Find company content by ID",
             notes = "Find content for CompanyDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
-    })
+    })                    
     @GetMapping(value = "/company/{id}/content")
     @ResponseBody
     ResponseEntity<byte[]> findContentByCompanyId(@PathVariable("id") Integer id);
 
-    @ApiOperation(value = "Save content for company by ID",
+	@ApiOperation(value = "Save content for company by ID",
             notes = "Saves content for CompanyDTO",
             response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
     @PostMapping(value = "/company/{id}/content",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
-                                                                       @RequestParam("file") MultipartFile file);
+                                                               @RequestParam("file") MultipartFile file);
 
 }

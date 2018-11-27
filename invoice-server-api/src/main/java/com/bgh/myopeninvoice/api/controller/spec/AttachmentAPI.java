@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.AttachmentDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "Attachment Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface AttachmentAPI {
 
     class DefaultResponseAttachmentDTO extends DefaultResponse<AttachmentDTO> {
@@ -36,7 +34,7 @@ public interface AttachmentAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/attachment")
+    @GetMapping(value = "/attachment", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<AttachmentDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find attachment by ID",
@@ -45,7 +43,7 @@ public interface AttachmentAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseAttachmentDTO.class)
     })
-    @GetMapping(value = "/attachment/{id}")
+    @GetMapping(value = "/attachment/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<AttachmentDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save attachment",
@@ -64,7 +62,7 @@ public interface AttachmentAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseAttachmentDTO.class)
     })
-    @PutMapping(value = "/attachment")
+    @PutMapping(value = "/attachment", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<AttachmentDTO>> update(@Valid @NotNull @RequestBody AttachmentDTO attachmentDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface AttachmentAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/attachment/{id}")
+    @DeleteMapping(value = "/attachment/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find attachment content by ID",
             notes = "Find content for AttachmentDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/attachment/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByAttachmentId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByAttachmentId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for attachment by ID",
             notes = "Saves content for AttachmentDTO",
@@ -92,7 +91,9 @@ public interface AttachmentAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/attachment/{id}/content")
+    @PostMapping(value = "/attachment/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<AttachmentDTO>> saveContentByAttachmentId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

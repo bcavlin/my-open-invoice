@@ -11,9 +11,7 @@ import com.bgh.myopeninvoice.api.transformer.TimeSheetTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.TimeSheetEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -88,7 +86,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
 
     @Override
     public ResponseEntity<DefaultResponse<TimeSheetDTO>> save(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
-                                                              BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<TimeSheetDTO> result = new ArrayList<>();
 
         try {
@@ -125,7 +123,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
 
     @Override
     public ResponseEntity<DefaultResponse<TimeSheetDTO>> update(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
-                                                                BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<TimeSheetDTO> result = new ArrayList<>();
 
@@ -162,7 +160,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             timesheetService.delete(id);
 
         } catch (Exception e) {
@@ -177,13 +175,14 @@ public class TimeSheetController extends AbstractController implements TimeSheet
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByTimeSheetId(Integer id) {
-        throw new NotImplementedException();
+    public ResponseEntity<byte[]> findContentByTimeSheetId(@PathVariable("id") Integer id) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(Integer id, MultipartFile file) {
-        throw new NotImplementedException();
+    public ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(@PathVariable("id") Integer id,
+                                                                                 @RequestParam("file") MultipartFile file) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
 }

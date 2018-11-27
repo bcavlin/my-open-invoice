@@ -93,13 +93,23 @@ public class AttachmentService implements CommonService<AttachmentEntity> {
     @Override
     public List<AttachmentEntity> saveContent(Integer id, ContentEntity content) {
         log.info("Save content to attachment {}, file {}", id, content.getFilename());
-        List<AttachmentEntity> save = null;
-        List<AttachmentEntity> entityList = this.findById(id);
-        if (entityList.size() == 1) {
-            AttachmentEntity attachmentEntity = entityList.get(0);
-            attachmentEntity.setContentByContentId(content);
-            save = this.save(attachmentEntity);
-        }
+        List<AttachmentEntity> save = new ArrayList<>();
+
+        Optional<AttachmentEntity> byId = attachmentRepository.findById(id);
+        byId.ifPresent(attachmentEntity -> {
+            if (attachmentEntity.getContentByContentId() == null) {
+                log.debug("Adding new content");
+                attachmentEntity.setContentByContentId(content);
+            } else {
+                log.debug("Updating content: {}", attachmentEntity.getContentByContentId().getContentId());
+                attachmentEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+                attachmentEntity.getContentByContentId().setContentTable(content.getContentTable());
+                attachmentEntity.getContentByContentId().setContent(content.getContent());
+                attachmentEntity.getContentByContentId().setFilename(content.getFilename());
+            }
+            save.addAll(this.save(attachmentEntity));
+        });
+
         return save;
     }
 

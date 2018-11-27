@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.TaxDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "Tax Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface TaxAPI {
 
     class DefaultResponseTaxDTO extends DefaultResponse<TaxDTO> {
@@ -36,7 +34,7 @@ public interface TaxAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/tax")
+    @GetMapping(value = "/tax", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TaxDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find tax by ID",
@@ -45,7 +43,7 @@ public interface TaxAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseTaxDTO.class)
     })
-    @GetMapping(value = "/tax/{id}")
+    @GetMapping(value = "/tax/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TaxDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save tax",
@@ -64,7 +62,7 @@ public interface TaxAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseTaxDTO.class)
     })
-    @PutMapping(value = "/tax")
+    @PutMapping(value = "/tax", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TaxDTO>> update(@Valid @NotNull @RequestBody TaxDTO taxDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface TaxAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/tax/{id}")
+    @DeleteMapping(value = "/tax/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find tax content by ID",
             notes = "Find content for TaxDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/tax/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByTaxId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByTaxId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for tax by ID",
             notes = "Saves content for TaxDTO",
@@ -92,7 +91,9 @@ public interface TaxAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/tax/{id}/content")
+    @PostMapping(value = "/tax/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TaxDTO>> saveContentByTaxId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

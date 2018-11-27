@@ -11,9 +11,7 @@ import com.bgh.myopeninvoice.api.transformer.InvoiceTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -88,7 +86,7 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<InvoiceDTO>> save(@Valid @NotNull @RequestBody InvoiceDTO invoiceDTO,
-                                                            BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<InvoiceDTO> result = new ArrayList<>();
 
         try {
@@ -125,7 +123,7 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<InvoiceDTO>> update(@Valid @NotNull @RequestBody InvoiceDTO invoiceDTO,
-                                                              BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<InvoiceDTO> result = new ArrayList<>();
 
@@ -177,13 +175,14 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByInvoiceId(Integer id) {
-        throw new NotImplementedException();
+    public ResponseEntity<byte[]> findContentByInvoiceId(@PathVariable("id") Integer id) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<InvoiceDTO>> saveContentByInvoiceId(Integer id, MultipartFile file) {
-        throw new NotImplementedException();
+    public ResponseEntity<DefaultResponse<InvoiceDTO>> saveContentByInvoiceId(@PathVariable("id") Integer id,
+                                                                                 @RequestParam("file") MultipartFile file) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
 }

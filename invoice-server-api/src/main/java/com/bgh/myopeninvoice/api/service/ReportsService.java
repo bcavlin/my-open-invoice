@@ -104,13 +104,23 @@ public class ReportsService implements CommonService<ReportsEntity> {
     @Override
     public List<ReportsEntity> saveContent(Integer id, ContentEntity content) {
         log.info("Save content to reports {}, file {}", id, content.getFilename());
-        List<ReportsEntity> save = null;
-        List<ReportsEntity> entityList = this.findById(id);
-        if (entityList.size() == 1) {
-            ReportsEntity reportsEntity = entityList.get(0);
-            reportsEntity.setContentByContentId(content);
-            save = this.save(reportsEntity);
-        }
+        List<ReportsEntity> save = new ArrayList<>();
+
+        Optional<ReportsEntity> byId = reportsRepository.findById(id);
+        byId.ifPresent(reportsEntity -> {
+            if (reportsEntity.getContentByContentId() == null) {
+                log.debug("Adding new content");
+                reportsEntity.setContentByContentId(content);
+            } else {
+                log.debug("Updating content: {}", reportsEntity.getContentByContentId().getContentId());
+                reportsEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+                reportsEntity.getContentByContentId().setContentTable(content.getContentTable());
+                reportsEntity.getContentByContentId().setContent(content.getContent());
+                reportsEntity.getContentByContentId().setFilename(content.getFilename());
+            }
+            save.addAll(this.save(reportsEntity));
+        });
+
         return save;
     }
 
