@@ -8,7 +8,6 @@ import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,7 @@ public class CompanyContactService implements CommonService<CompanyContactEntity
 
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
-        throw new NotImplementedException();
+        return null;
     }
 
     @Override
@@ -80,14 +79,14 @@ public class CompanyContactService implements CommonService<CompanyContactEntity
 
     @Override
     public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new NotImplementedException();
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @SuppressWarnings("unchecked")
     @Transactional
     @Override
     public List<CompanyContactEntity> saveContent(Integer id, ContentEntity content) {
-        throw new NotImplementedException();
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Transactional

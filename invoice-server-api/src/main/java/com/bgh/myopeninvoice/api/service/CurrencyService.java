@@ -10,7 +10,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,14 +91,14 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
 
     @Override
     public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new NotImplementedException();
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @SuppressWarnings("unchecked")
     @Transactional
     @Override
     public List<CurrencyEntity> saveContent(Integer id, ContentEntity content) {
-        throw new NotImplementedException();
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Transactional

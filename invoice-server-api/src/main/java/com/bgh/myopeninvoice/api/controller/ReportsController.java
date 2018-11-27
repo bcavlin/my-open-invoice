@@ -29,11 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -165,7 +161,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             reportsService.delete(id);
 
         } catch (Exception e) {
@@ -180,8 +176,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByReportsId(@PathVariable("id") Integer id) {
-
+    public ResponseEntity<byte[]> findContentByReportsId(@PathVariable("id") Integer id) {
         InputStreamResource result = null;
         byte[] source;
         String contentType = "image/png";
@@ -192,8 +187,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);
-                    result = new InputStreamResource(new ByteArrayInputStream(source));
+                    contentType = new Tika().detect(source);                    
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -207,22 +201,20 @@ public class ReportsController extends AbstractController implements ReportsAPI 
         return ResponseEntity.ok()
                 .contentLength(source.length)
                 .contentType(MediaType.parseMediaType(contentType))
-                .body(result);
+                .body(source);
     }
 
     @Override
     public ResponseEntity<DefaultResponse<ReportsDTO>> saveContentByReportsId(@PathVariable("id") Integer id,
-                                                                              @RequestParam("file") MultipartFile file) {
+                                                                                 @RequestParam("file") MultipartFile file) {
         List<ReportsDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            ContentEntity content = reportsService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.REPORTS);
-            if (content == null) {
-                content = new ContentEntity();
-            }
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
+            ContentEntity content = new ContentEntity();
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
+            content.setDateCreated(new Date());
             content.setContentTable(ContentEntity.ContentEntityTable.REPORTS.name());
 
             List<ReportsEntity> entities = reportsService.saveContent(id, content);

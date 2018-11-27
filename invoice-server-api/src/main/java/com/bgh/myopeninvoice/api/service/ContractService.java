@@ -109,13 +109,23 @@ public class ContractService implements CommonService<ContractEntity> {
     @Override
     public List<ContractEntity> saveContent(Integer id, ContentEntity content) {
         log.info("Save content to contract {}, file {}", id, content.getFilename());
-        List<ContractEntity> save = null;
-        List<ContractEntity> entityList = this.findById(id);
-        if (entityList.size() == 1) {
-            ContractEntity contractEntity = entityList.get(0);
-            contractEntity.setContentByContentId(content);
-            save = this.save(contractEntity);
-        }
+        List<ContractEntity> save = new ArrayList<>();
+
+        Optional<ContractEntity> byId = contractRepository.findById(id);
+        byId.ifPresent(contractEntity -> {
+            if (contractEntity.getContentByContentId() == null) {
+                log.debug("Adding new content");
+                contractEntity.setContentByContentId(content);
+            } else {
+                log.debug("Updating content: {}", contractEntity.getContentByContentId().getContentId());
+                contractEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+                contractEntity.getContentByContentId().setContentTable(content.getContentTable());
+                contractEntity.getContentByContentId().setContent(content.getContent());
+                contractEntity.getContentByContentId().setFilename(content.getFilename());
+            }
+            save.addAll(this.save(contractEntity));
+        });
+
         return save;
     }
 

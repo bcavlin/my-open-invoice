@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.ReportsDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "Reports Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface ReportsAPI {
 
     class DefaultResponseReportsDTO extends DefaultResponse<ReportsDTO> {
@@ -36,7 +34,7 @@ public interface ReportsAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/reports")
+    @GetMapping(value = "/reports", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ReportsDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find reports by ID",
@@ -45,7 +43,7 @@ public interface ReportsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseReportsDTO.class)
     })
-    @GetMapping(value = "/reports/{id}")
+    @GetMapping(value = "/reports/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ReportsDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save reports",
@@ -64,7 +62,7 @@ public interface ReportsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseReportsDTO.class)
     })
-    @PutMapping(value = "/reports")
+    @PutMapping(value = "/reports", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ReportsDTO>> update(@Valid @NotNull @RequestBody ReportsDTO reportsDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface ReportsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/reports/{id}")
+    @DeleteMapping(value = "/reports/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find reports content by ID",
             notes = "Find content for ReportsDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/reports/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByReportsId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByReportsId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for reports by ID",
             notes = "Saves content for ReportsDTO",
@@ -92,7 +91,9 @@ public interface ReportsAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/reports/{id}/content")
+    @PostMapping(value = "/reports/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<ReportsDTO>> saveContentByReportsId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

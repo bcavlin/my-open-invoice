@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.CurrencyDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "Currency Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface CurrencyAPI {
 
     class DefaultResponseCurrencyDTO extends DefaultResponse<CurrencyDTO> {
@@ -36,7 +34,7 @@ public interface CurrencyAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/currency")
+    @GetMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CurrencyDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find currency by ID",
@@ -45,7 +43,7 @@ public interface CurrencyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCurrencyDTO.class)
     })
-    @GetMapping(value = "/currency/{id}")
+    @GetMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CurrencyDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save currency",
@@ -64,7 +62,7 @@ public interface CurrencyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCurrencyDTO.class)
     })
-    @PutMapping(value = "/currency")
+    @PutMapping(value = "/currency", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CurrencyDTO>> update(@Valid @NotNull @RequestBody CurrencyDTO currencyDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface CurrencyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/currency/{id}")
+    @DeleteMapping(value = "/currency/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find currency content by ID",
             notes = "Find content for CurrencyDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/currency/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByCurrencyId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByCurrencyId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for currency by ID",
             notes = "Saves content for CurrencyDTO",
@@ -92,7 +91,9 @@ public interface CurrencyAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/currency/{id}/content")
+    @PostMapping(value = "/currency/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<CurrencyDTO>> saveContentByCurrencyId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

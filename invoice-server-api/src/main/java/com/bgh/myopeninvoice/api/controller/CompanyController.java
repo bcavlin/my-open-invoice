@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,7 +87,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyDTO>> save(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
-                                                            BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<CompanyDTO> result = new ArrayList<>();
 
         try {
@@ -125,7 +124,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyDTO>> update(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
-                                                              BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<CompanyDTO> result = new ArrayList<>();
 
@@ -140,7 +139,8 @@ public class CompanyController extends AbstractController implements CompanyAPI 
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<CompanyEntity> entities = companyService.save(companyTransformer.transformDTOToEntity(companyDTO));
+            CompanyEntity entity = companyTransformer.transformDTOToEntity(companyDTO);
+            List<CompanyEntity> entities = companyService.save(entity);
             result = companyTransformer.transformEntityToDTO(entities);
 
             if (CollectionUtils.isEmpty(result)) {
@@ -189,8 +189,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);
-                    result = new InputStreamResource(new ByteArrayInputStream(source));
+                    contentType = new Tika().detect(source);                    
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -209,16 +208,12 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
-                                                                              @RequestParam("file") MultipartFile file) {
+                                                                                 @RequestParam("file") MultipartFile file) {
         List<CompanyDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-//            ContentEntity content = companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
-//            log.debug("Loaded content: {}", content);
-//            if (content == null) {
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
             ContentEntity content = new ContentEntity();
-//            }
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
             content.setDateCreated(new Date());

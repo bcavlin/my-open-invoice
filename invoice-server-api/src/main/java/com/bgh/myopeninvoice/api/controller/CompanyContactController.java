@@ -11,9 +11,7 @@ import com.bgh.myopeninvoice.api.transformer.CompanyContactTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -88,7 +86,7 @@ public class CompanyContactController extends AbstractController implements Comp
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyContactDTO>> save(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                                   BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<CompanyContactDTO> result = new ArrayList<>();
 
         try {
@@ -125,7 +123,7 @@ public class CompanyContactController extends AbstractController implements Comp
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyContactDTO>> update(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                                     BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<CompanyContactDTO> result = new ArrayList<>();
 
@@ -177,13 +175,14 @@ public class CompanyContactController extends AbstractController implements Comp
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByCompanyContactId(Integer id) {
-        throw new NotImplementedException();
+    public ResponseEntity<byte[]> findContentByCompanyContactId(@PathVariable("id") Integer id) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(Integer id, MultipartFile file) {
-        throw new NotImplementedException();
+    public ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(@PathVariable("id") Integer id,
+                                                                                 @RequestParam("file") MultipartFile file) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
 }

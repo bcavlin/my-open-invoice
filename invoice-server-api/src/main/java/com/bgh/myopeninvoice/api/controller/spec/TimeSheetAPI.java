@@ -3,7 +3,6 @@ package com.bgh.myopeninvoice.api.controller.spec;
 import com.bgh.myopeninvoice.api.domain.dto.TimeSheetDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Api(value = "TimeSheet Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1")
 public interface TimeSheetAPI {
 
     class DefaultResponseTimeSheetDTO extends DefaultResponse<TimeSheetDTO> {
@@ -36,7 +34,7 @@ public interface TimeSheetAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "queryParameters", value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
     })
-    @GetMapping(value = "/timesheet")
+    @GetMapping(value = "/timesheet", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TimeSheetDTO>> findAll(@RequestParam Map<String, String> queryParameters);
 
     @ApiOperation(value = "Find timesheet by ID",
@@ -45,7 +43,7 @@ public interface TimeSheetAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseTimeSheetDTO.class)
     })
-    @GetMapping(value = "/timesheet/{id}")
+    @GetMapping(value = "/timesheet/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TimeSheetDTO>> findById(@PathVariable("id") Integer id);
 
     @ApiOperation(value = "Save timesheet",
@@ -64,7 +62,7 @@ public interface TimeSheetAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseTimeSheetDTO.class)
     })
-    @PutMapping(value = "/timesheet")
+    @PutMapping(value = "/timesheet", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TimeSheetDTO>> update(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
                                                           BindingResult bindingResult);
 
@@ -74,17 +72,18 @@ public interface TimeSheetAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @DeleteMapping(value = "/timesheet/{id}")
+    @DeleteMapping(value = "/timesheet/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
          
     @ApiOperation(value = "Find timesheet content by ID",
             notes = "Find content for TimeSheetDTO",
-            response = Boolean.class)
+            response = Byte[].class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })                    
     @GetMapping(value = "/timesheet/{id}/content")
-    ResponseEntity<InputStreamResource> findContentByTimeSheetId(@PathVariable("id") Integer id);
+    @ResponseBody
+    ResponseEntity<byte[]> findContentByTimeSheetId(@PathVariable("id") Integer id);
 
 	@ApiOperation(value = "Save content for timesheet by ID",
             notes = "Saves content for TimeSheetDTO",
@@ -92,7 +91,9 @@ public interface TimeSheetAPI {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
     })
-    @PostMapping(value = "/timesheet/{id}/content")
+    @PostMapping(value = "/timesheet/{id}/content",
+              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 

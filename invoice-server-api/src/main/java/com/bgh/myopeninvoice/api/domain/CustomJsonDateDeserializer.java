@@ -18,8 +18,11 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JsonProcessingException {
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(jsonParser.getText(), timeFormatter);
+
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("[yyyy-MM-dd'T'HH:mm:ss.SSSZ][yyyy-MM-dd'T'HH:mm:ss.SSSX]");
+
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(jsonParser.getText(), formatter);
         return Date.from(Instant.from(offsetDateTime));
     }
 

@@ -11,9 +11,7 @@ import com.bgh.myopeninvoice.api.transformer.TaxTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.TaxEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -162,7 +160,7 @@ public class TaxController extends AbstractController implements TaxAPI {
     public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage("entity.id-cannot-be-null", null, getContextLocale()));
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             taxService.delete(id);
 
         } catch (Exception e) {
@@ -177,13 +175,14 @@ public class TaxController extends AbstractController implements TaxAPI {
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByTaxId(Integer id) {
-        throw new NotImplementedException();
+    public ResponseEntity<byte[]> findContentByTaxId(@PathVariable("id") Integer id) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<TaxDTO>> saveContentByTaxId(Integer id, MultipartFile file) {
-        throw new NotImplementedException();
+    public ResponseEntity<DefaultResponse<TaxDTO>> saveContentByTaxId(@PathVariable("id") Integer id,
+                                                                                 @RequestParam("file") MultipartFile file) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
 }

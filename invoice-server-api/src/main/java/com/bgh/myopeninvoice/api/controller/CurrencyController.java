@@ -11,9 +11,7 @@ import com.bgh.myopeninvoice.api.transformer.CurrencyTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -88,7 +86,7 @@ public class CurrencyController extends AbstractController implements CurrencyAP
 
     @Override
     public ResponseEntity<DefaultResponse<CurrencyDTO>> save(@Valid @NotNull @RequestBody CurrencyDTO currencyDTO,
-                                                             BindingResult bindingResult) {
+                                                        BindingResult bindingResult) {
         List<CurrencyDTO> result = new ArrayList<>();
 
         try {
@@ -125,7 +123,7 @@ public class CurrencyController extends AbstractController implements CurrencyAP
 
     @Override
     public ResponseEntity<DefaultResponse<CurrencyDTO>> update(@Valid @NotNull @RequestBody CurrencyDTO currencyDTO,
-                                                               BindingResult bindingResult) {
+                                                          BindingResult bindingResult) {
 
         List<CurrencyDTO> result = new ArrayList<>();
 
@@ -177,13 +175,14 @@ public class CurrencyController extends AbstractController implements CurrencyAP
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> findContentByCurrencyId(Integer id) {
-        throw new NotImplementedException();
+    public ResponseEntity<byte[]> findContentByCurrencyId(@PathVariable("id") Integer id) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
     @Override
-    public ResponseEntity<DefaultResponse<CurrencyDTO>> saveContentByCurrencyId(Integer id, MultipartFile file) {
-        throw new NotImplementedException();
+    public ResponseEntity<DefaultResponse<CurrencyDTO>> saveContentByCurrencyId(@PathVariable("id") Integer id,
+                                                                                 @RequestParam("file") MultipartFile file) {
+        throw new org.apache.commons.lang.NotImplementedException();
     }
 
 }
