@@ -20,6 +20,10 @@ import com.bgh.myopeninvoice.api.controller.spec.UserAPI;
 import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
+import com.bgh.myopeninvoice.api.exception.InvalidDataException;
+import com.bgh.myopeninvoice.api.security.AccountCredentials;
+import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
+import com.bgh.myopeninvoice.api.security.JwtTokenProvider;
 import com.bgh.myopeninvoice.api.service.UserService;
 import com.bgh.myopeninvoice.api.transformer.RoleTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
@@ -28,11 +32,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -43,6 +55,12 @@ public class UserController extends AbstractController implements UserAPI {
 
     @Autowired
     private RoleTransformer roleTransformer;
+
+    @Autowired
+    JwtTokenProvider tokenProvider;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Override
     public ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username) {
@@ -66,6 +84,39 @@ public class UserController extends AbstractController implements UserAPI {
         log.debug("Returning: {}", responseEntity);
 
         return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<?> login(@Valid @RequestBody AccountCredentials credentials,
+                                   BindingResult bindingResult) {
+
+        try {
+            if (bindingResult.hasErrors()) {
+                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
+                        .collect(Collectors.joining(", "));
+                throw new InvalidDataException(collect);
+            }
+
+            log.info("Logging in user: {}", credentials.getUsername());
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            credentials.getUsername(),
+                            credentials.getPassword()
+                    )
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = tokenProvider.generateToken(authentication);
+
+            userService.updateLastLoggedDate(credentials.getUsername());
+
+            return ResponseEntity.ok(JwtAuthenticationResponse.builder().accessToken(jwt).build());
+
+        } catch (Exception e) {
+            log.error(e.toString(), e);
+        }
+        return ResponseEntity.badRequest().body("{\"message\":\"There was a problem logging in. Please call technical support.\"}");
     }
 
 }

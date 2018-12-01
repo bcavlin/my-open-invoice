@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.db.domain;
 
+import com.bgh.myopeninvoice.db.domain.audit.UserDateAudit;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -13,7 +15,8 @@ import java.util.Date;
 @Entity
 @Table(name = "USER", schema = "INVOICE")
 @ToString(exclude = {"contactsByUserId"})
-public class UserEntity implements java.io.Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class UserEntity extends UserDateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,22 +46,6 @@ public class UserEntity implements java.io.Serializable {
     @Basic
     @Column(name = "EMAIL", nullable = false, length = 254)
     private String email;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_DATE", nullable = false)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "RESET_DATE")
-    private Date resetDate;
-
-    @Basic
-    @Column(name = "LAST_MODIFIED_BY", length = 50)
-    private String lastModifiedBy;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "LAST_MODIFIED_DATE")
-    private Date lastModifiedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_LOGGED_DATE")

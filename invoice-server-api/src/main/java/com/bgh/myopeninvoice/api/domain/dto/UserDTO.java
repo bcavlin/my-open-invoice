@@ -1,8 +1,14 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -26,14 +32,12 @@ public class UserDTO implements java.io.Serializable {
     @NotNull
     private String email;
 
-    private Date createdDate;
+    private Instant createdAt;
 
-    private Date resetDate;
+    private Instant updatedAt;
 
-    private String lastModifiedBy;
+    private Integer createdBy;
 
-    private Date lastModifiedDate;
-
-    private Date lastLoggedDate;
+    private Integer updatedBy;
 
 }

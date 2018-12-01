@@ -2,15 +2,18 @@ package com.bgh.myopeninvoice.api.controller.spec;
 
 import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
+import com.bgh.myopeninvoice.api.security.AccountCredentials;
+import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Api(value = "User Controller")
 @RequestMapping(value = "/api/v1",
@@ -26,11 +29,18 @@ public interface UserAPI {
     ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username);
 
     class DefaultResponseRoleDTO extends DefaultResponse<RoleDTO> {
-
         public DefaultResponseRoleDTO() {
             super(RoleDTO.class);
         }
-
     }
+
+    @ApiOperation(value = "Login",
+            response = JwtAuthenticationResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = JwtAuthenticationResponse.class)
+    })
+    @PostMapping(value = "/login")
+    ResponseEntity<?> login(@Valid @RequestBody AccountCredentials credentials,
+                                                    BindingResult bindingResult);
 
 }

@@ -27,6 +27,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -47,6 +48,11 @@ public class InvoiceServerApiApplication {
         TimeZone.setDefault(TimeZone.getTimeZone("America/Toronto"));
         System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(InvoiceServerApiApplication.class, args);
+    }
+
+    @PostConstruct
+    void init() {
+        TimeZone.setDefault(TimeZone.getTimeZone(env.getRequiredProperty("spring.jackson.time-zone")));
     }
 
     @Bean
