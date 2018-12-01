@@ -23,15 +23,16 @@
             <column name="email" type="varchar(254)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_email"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+            <column name="last_logged_date" type="timestamp"/>
+
+            <column name="created_at" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
-            <column name="reset_date" type="timestamp">
-                <constraints nullable="true"/>
+            <column name="updated_at" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
-            <column name="last_logged_date" type="timestamp"/>
+            <column name="created_by" type="int"/>
+            <column name="updated_by" type="int"/>
         </createTable>
 
         <createTable tableName="role" schemaName="invoice">

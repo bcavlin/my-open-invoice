@@ -22,7 +22,7 @@ public class CompanyDTO implements java.io.Serializable {
 
     private String addressLine2;
 
-    @MatchesPattern("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$")
+    @MatchesPattern("^(\\+\\d{1,3})?(-|\\s|\\()?(\\d{3})(\\))?(-|\\s)?(\\d{3})(-|\\s)?(\\d{4})$")
     private String phone1;
 
     @NotNull
@@ -31,7 +31,7 @@ public class CompanyDTO implements java.io.Serializable {
     private String businessNumber;
 
     @NotNull
-    @MatchesPattern("[1-7]")
+    @MatchesPattern("^[1-7]$")
     private Integer weekStart;
 
     @JsonIgnoreProperties({"content"})

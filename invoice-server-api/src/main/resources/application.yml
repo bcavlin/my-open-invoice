@@ -13,7 +13,12 @@ spring:
   jackson:
     time-zone: America/Toronto
     date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 jasypt:
   encryptor:
     password: mypassword
     algorithm: PBEWITHMD5ANDDES
+app:
+  jwtSecret: secret
+  jwtExpirationInMs: 604800000
