@@ -52,24 +52,21 @@ public class ContactEntity implements java.io.Serializable {
     @Column(name = "USER_ID", nullable = false)
     private Integer userId;
 
-    @OneToMany(mappedBy = "contactByContactId")
-    private Collection<CompanyContactEntity> companyContactsByContactId;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "COMPANY_CONTACT", schema = "INVOICE",
+            joinColumns = {
+                    @JoinColumn(name = "COMPANY_ID", nullable = false, updatable = false)
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "CONTACT_ID", nullable = false, updatable = false)
+            })
+    private Collection<CompanyEntity> contactsByCompanyEntity;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false,
             insertable = false, updatable = false)
     private UserEntity userByUserId;
-
-    @Transient
-    public String getCompaniesList() {
-        if (companyContactsByContactId != null) {
-            return companyContactsByContactId.stream()
-                    .map(CompanyContactEntity::getCompanyByCompanyId)
-                    .map(CompanyEntity::getCompanyName)
-                    .collect(Collectors.joining(", "));
-        }
-        return null;
-    }
 
 }

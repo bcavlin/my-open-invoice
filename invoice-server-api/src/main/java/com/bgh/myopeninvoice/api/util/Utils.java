@@ -43,10 +43,10 @@ public class Utils {
 
             parseFilter(queryParameters, searchParameters);
 
-            return searchParameters;
+//            return searchParameters;
         }
 
-        return null;
+        return searchParameters;
     }
 
     private static void parseFilter(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {

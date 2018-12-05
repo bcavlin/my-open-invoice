@@ -32,10 +32,8 @@ public class ContractService implements CommonService<ContractEntity> {
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
+        if (searchParameters.getFilter() != null && !searchParameters.getBuilder().hasValue()) {
+            searchParameters.getBuilder().andAnyOf(
                     QContractEntity.contractEntity.contractNumber.contains(searchParameters.getFilter()),
                     QContractEntity.contractEntity.description.contains(searchParameters.getFilter()),
                     QContractEntity.contractEntity.purchaseOrder.contains(searchParameters.getFilter()),
@@ -46,7 +44,7 @@ public class ContractService implements CommonService<ContractEntity> {
             );
 
         }
-        return builder;
+        return searchParameters.getBuilder();
     }
 
     @Override

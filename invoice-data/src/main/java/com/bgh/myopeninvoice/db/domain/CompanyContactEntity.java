@@ -35,14 +35,14 @@ public class CompanyContactEntity implements java.io.Serializable {
     @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID",
             insertable = false, updatable = false)
     private CompanyEntity companyByCompanyId;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyContactByContractIsFor")
-    private Collection<ContractEntity> contractsByCompanyContactId;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyContactByCompanyContactFrom")
-    private Collection<InvoiceEntity> invoicesByCompanyContactId;
+//
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    @OneToMany(mappedBy = "companyContactByContractIsFor")
+//    private Collection<ContractEntity> contractsByCompanyContactId;
+//
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    @OneToMany(mappedBy = "companyContactByCompanyContactFrom")
+//    private Collection<InvoiceEntity> invoicesByCompanyContactId;
 
 
 }

@@ -44,7 +44,7 @@ public interface InvoiceDAO {
 
     void saveUserRolesEntity(UserEntity user, List<RoleEntity> targetRoles);
 
-    void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> target);
+//    void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> target);
 
     ContractRepository getContractRepository();
 

@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.ContractAPI;
+import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.ContractDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
@@ -11,7 +12,11 @@ import com.bgh.myopeninvoice.api.transformer.ContractTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
+import com.bgh.myopeninvoice.db.domain.QContractEntity;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -50,8 +55,10 @@ public class ContractController extends AbstractController implements ContractAP
         long count;
 
         try {
-            count = contractService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            List<ContractEntity> entities = contractService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+            validateSpecialFilter(queryParameters, searchParameters);
+            count = contractService.count(searchParameters);
+            List<ContractEntity> entities = contractService.findAll(searchParameters);
             result = contractTransformer.transformEntityToDTO(entities);
 
         } catch (Exception e) {
@@ -63,6 +70,22 @@ public class ContractController extends AbstractController implements ContractAP
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    }
+
+    private void validateSpecialFilter(@RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
+        if (StringUtils.isNotEmpty(queryParameters.get("filter")) &&
+                queryParameters.get("filter").startsWith("#companyId:")) {
+            String[] parts = queryParameters.get("filter").split(":");
+            if (StringUtils.isNotEmpty(parts[1]) && parts[1].length() < 10 && NumberUtils.isDigits(parts[0])) {
+                BooleanBuilder and = searchParameters.getBuilder().and(
+                        QContractEntity.contractEntity
+                                .companyByContractSignedWith.companyId.eq(NumberUtils.toInt(parts[1]))
+                );
+                searchParameters.setBuilder(and);
+            }
+            //reset the filter
+            searchParameters.setFilter(null);
+        }
     }
 
     @Override
@@ -87,7 +110,7 @@ public class ContractController extends AbstractController implements ContractAP
 
     @Override
     public ResponseEntity<DefaultResponse<ContractDTO>> save(@Valid @NotNull @RequestBody ContractDTO contractDTO,
-                                                        BindingResult bindingResult) {
+                                                             BindingResult bindingResult) {
         List<ContractDTO> result = new ArrayList<>();
 
         try {
@@ -124,7 +147,7 @@ public class ContractController extends AbstractController implements ContractAP
 
     @Override
     public ResponseEntity<DefaultResponse<ContractDTO>> update(@Valid @NotNull @RequestBody ContractDTO contractDTO,
-                                                          BindingResult bindingResult) {
+                                                               BindingResult bindingResult) {
 
         List<ContractDTO> result = new ArrayList<>();
 
@@ -187,7 +210,7 @@ public class ContractController extends AbstractController implements ContractAP
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);                    
+                    contentType = new Tika().detect(source);
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -206,11 +229,11 @@ public class ContractController extends AbstractController implements ContractAP
 
     @Override
     public ResponseEntity<DefaultResponse<ContractDTO>> saveContentByContractId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                                @RequestParam("file") MultipartFile file) {
         List<ContractDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             ContentEntity content = new ContentEntity();
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());

@@ -1,11 +1,13 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.annotations.*;
 
 import javax.annotation.MatchesPattern;
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Collection;
 
 @Data
@@ -56,26 +58,25 @@ public class CompanyEntity implements java.io.Serializable {
     @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID")
     private ContentEntity contentByContentId;
 
-    @OneToMany(mappedBy = "companyByCompanyId")
-    private Collection<CompanyContactEntity> companyContactsByCompanyId;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(mappedBy = "contactsByCompanyEntity")
+    private Collection<ContactEntity> contactsByContactEntity;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "companyByContractSignedWith")
     private Collection<ContractEntity> contractsByCompanyId;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "companyByContractSignedWithSubcontract")
     private Collection<ContractEntity> contractsByCompanyId_0;
 
     @OneToMany(mappedBy = "companyByCompanyTo")
     private Collection<InvoiceEntity> invoicesByCompanyId;
 
-    @Transient
-    public String getContactsToList() {
-        StringBuilder sb = new StringBuilder();
-        for (CompanyContactEntity companyContactEntity : companyContactsByCompanyId) {
-            if (sb.length() > 0) sb.append(",");
-            sb.append(companyContactEntity.getContactByContactId().getContactId());
-        }
-        return sb.toString();
-    }
+    @Formula("(select count(*) from invoice.company_contact cc where cc.company_id = company_id)")
+    private Integer numberOfContacts;
+
+    @Formula("(select count(*) from invoice.contract cc where cc.contract_is_for = company_id)")
+    private Integer numberOfContracts;
 
 }

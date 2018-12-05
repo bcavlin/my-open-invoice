@@ -200,55 +200,55 @@ public class InvoiceDAOImpl implements InvoiceDAO {
         }
     }
 
-    @Override
-    public void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts) {
-        List<CompanyContactEntity> add = new ArrayList<>();
-        List<CompanyContactEntity> remove = new ArrayList<>();
+//    @Override
+//    public void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts) {
+//        List<CompanyContactEntity> add = new ArrayList<>();
+//        List<CompanyContactEntity> remove = new ArrayList<>();
+//
+//        prepareContactEntity(selectedCompanyEntity, targetContacts, add);
+//        //then delete those that are extra
+//        prepareCompanyContactEntity(selectedCompanyEntity, targetContacts, remove);
+//
+//        for (CompanyContactEntity entity : remove) {
+//            companyContactRepository.delete(entity);
+//        }
+//
+//        for (CompanyContactEntity entity : add) {
+//            companyContactRepository.save(entity);
+//        }
+//
+//    }
 
-        prepareContactEntity(selectedCompanyEntity, targetContacts, add);
-        //then delete those that are extra
-        prepareCompanyContactEntity(selectedCompanyEntity, targetContacts, remove);
+//    private void prepareCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts, List<CompanyContactEntity> remove) {
+//        for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
+//            boolean found = false;
+//            for (ContactEntity target : targetContacts) {
+//                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
+//                    found = true;
+//                }
+//            }
+//            if (!found) {
+//                remove.add(current);
+//            }
+//        }
+//    }
 
-        for (CompanyContactEntity entity : remove) {
-            companyContactRepository.delete(entity);
-        }
-
-        for (CompanyContactEntity entity : add) {
-            companyContactRepository.save(entity);
-        }
-
-    }
-
-    private void prepareCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts, List<CompanyContactEntity> remove) {
-        for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
-            boolean found = false;
-            for (ContactEntity target : targetContacts) {
-                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                remove.add(current);
-            }
-        }
-    }
-
-    private void prepareContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts, List<CompanyContactEntity> add) {
-        for (ContactEntity target : targetContacts) {
-            boolean found = false;
-            for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
-                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                CompanyContactEntity newCompanyContEnt = new CompanyContactEntity();
-                newCompanyContEnt.setCompanyByCompanyId(selectedCompanyEntity);
-                newCompanyContEnt.setContactByContactId(target);
-                add.add(newCompanyContEnt);
-            }
-        }
-    }
+//    private void prepareContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts, List<CompanyContactEntity> add) {
+//        for (ContactEntity target : targetContacts) {
+//            boolean found = false;
+//            for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
+//                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
+//                    found = true;
+//                }
+//            }
+//            if (!found) {
+//                CompanyContactEntity newCompanyContEnt = new CompanyContactEntity();
+//                newCompanyContEnt.setCompanyByCompanyId(selectedCompanyEntity);
+//                newCompanyContEnt.setContactByContactId(target);
+//                add.add(newCompanyContEnt);
+//            }
+//        }
+//    }
 
     @Override
     public ContractRepository getContractRepository() {

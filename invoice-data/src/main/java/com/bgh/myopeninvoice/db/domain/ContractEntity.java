@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -65,26 +67,31 @@ public class ContractEntity implements java.io.Serializable {
     @Column(name = "PURCHASE_ORDER", length = 50)
     private String purchaseOrder;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CONTRACT_IS_FOR", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false,
             insertable = false, updatable = false)
     private CompanyContactEntity companyContactByContractIsFor;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CONTRACT_SIGNED_WITH", referencedColumnName = "COMPANY_ID", nullable = false,
             insertable = false, updatable = false)
     private CompanyEntity companyByContractSignedWith;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", referencedColumnName = "COMPANY_ID", nullable = false,
             insertable = false, updatable = false)
     private CompanyEntity companyByContractSignedWithSubcontract;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CCY_ID", referencedColumnName = "CCY_ID", nullable = false,
             insertable = false, updatable = false)
     private CurrencyEntity currencyByCcyId;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
     @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID",
             insertable = false, updatable = false)
