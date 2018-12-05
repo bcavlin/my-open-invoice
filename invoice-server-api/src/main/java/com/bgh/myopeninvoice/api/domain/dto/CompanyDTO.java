@@ -1,10 +1,16 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
+import com.bgh.myopeninvoice.db.domain.ContactEntity;
+import com.bgh.myopeninvoice.db.domain.ContractEntity;
+import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
 import javax.annotation.MatchesPattern;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 @Data
 public class CompanyDTO implements java.io.Serializable {
@@ -36,5 +42,12 @@ public class CompanyDTO implements java.io.Serializable {
 
     @JsonIgnoreProperties({"content"})
     private ContentDTO contentByContentId;
+
+    private Collection<ContactDTO> contactsByContactEntity;
+
+    private Integer numberOfContacts;
+
+    private Integer numberOfContracts;
+
 
 }

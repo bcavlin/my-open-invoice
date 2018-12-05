@@ -145,7 +145,6 @@
             <column name="phone_1" type="varchar(20)">
             </column>
             <column name="user_id" type="int">
-                <constraints nullable="false"/>
             </column>
         </createTable>
 
@@ -205,7 +204,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="contract_signed_with_subcontract" type="int">
-                <constraints nullable="false"/>
             </column>
             <column name="rate" type="decimal">
                 <constraints nullable="false"/>
