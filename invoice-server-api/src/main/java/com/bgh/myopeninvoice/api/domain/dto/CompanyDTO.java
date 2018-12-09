@@ -4,7 +4,10 @@ import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import javax.annotation.MatchesPattern;
@@ -43,7 +46,8 @@ public class CompanyDTO implements java.io.Serializable {
     @JsonIgnoreProperties({"content"})
     private ContentDTO contentByContentId;
 
-    private Collection<ContactDTO> contactsByContactEntity;
+    @JsonIgnoreProperties({"companyByCompanyId"})
+    private Collection<CompanyContactDTO> companyContactsByCompanyId;
 
     private Integer numberOfContacts;
 

@@ -26,16 +26,17 @@ public class CompanyContactEntity implements java.io.Serializable {
     private Integer companyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CONTACT_ID", referencedColumnName = "CONTACT_ID", nullable = false,
             insertable = false, updatable = false)
     private ContactEntity contactByContactId;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID",
             insertable = false, updatable = false)
     private CompanyEntity companyByCompanyId;
-//
+
 //    @LazyCollection(LazyCollectionOption.FALSE)
 //    @OneToMany(mappedBy = "companyContactByContractIsFor")
 //    private Collection<ContractEntity> contractsByCompanyContactId;

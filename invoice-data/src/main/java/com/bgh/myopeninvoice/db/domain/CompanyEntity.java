@@ -1,6 +1,9 @@
 package com.bgh.myopeninvoice.db.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 
 import javax.annotation.MatchesPattern;
@@ -59,8 +62,8 @@ public class CompanyEntity implements java.io.Serializable {
     private ContentEntity contentByContentId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(mappedBy = "contactsByCompanyEntity")
-    private Collection<ContactEntity> contactsByContactEntity;
+    @OneToMany(mappedBy = "companyByCompanyId")
+    private Collection<CompanyContactEntity> companyContactsByCompanyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "companyByContractSignedWith")

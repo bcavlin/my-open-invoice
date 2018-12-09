@@ -74,15 +74,14 @@ public class ContractController extends AbstractController implements ContractAP
 
     private void validateSpecialFilter(@RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
         if (StringUtils.isNotEmpty(queryParameters.get("filter")) &&
-                queryParameters.get("filter").startsWith("#companyId:")) {
+                queryParameters.get("filter").matches("^#(?i:companyId):.*")) {
             String[] parts = queryParameters.get("filter").split(":");
-            if (StringUtils.isNotEmpty(parts[1]) && parts[1].length() < 10 && NumberUtils.isDigits(parts[0])) {
-                BooleanBuilder and = searchParameters.getBuilder().and(
-                        QContractEntity.contractEntity
-                                .companyByContractSignedWith.companyId.eq(NumberUtils.toInt(parts[1]))
-                );
-                searchParameters.setBuilder(and);
-            }
+            int companyId = NumberUtils.toInt(parts[1].trim());
+            BooleanBuilder and = searchParameters.getBuilder().and(
+                    QContractEntity.contractEntity
+                            .contractSignedWith.eq(companyId)
+            );
+            searchParameters.setBuilder(and);
             //reset the filter
             searchParameters.setFilter(null);
         }

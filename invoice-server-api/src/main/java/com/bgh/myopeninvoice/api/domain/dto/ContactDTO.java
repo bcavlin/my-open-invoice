@@ -1,15 +1,17 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
+import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 @Data
-public class ContactDTO implements java.io.Serializable {
+public class ContactDTO implements Serializable {
 
     private Integer contactId;
 
@@ -29,9 +31,7 @@ public class ContactDTO implements java.io.Serializable {
 
     private Integer userId;
 
-    @JsonIgnoreProperties({"passwordHash"})
-    private UserDTO userByUserId;
-
-    private Collection<CompanyDTO> contactsByCompanyEntity;
+    @JsonIgnoreProperties({"contactByContactId"})
+    private Collection<CompanyContactDTO> companyContactsByContactId;
 
 }
