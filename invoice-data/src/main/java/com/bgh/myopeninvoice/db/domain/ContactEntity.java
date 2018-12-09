@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Table(name = "CONTACT", schema = "INVOICE")
-@ToString(exclude = {"userByUserId"})
+//@ToString(exclude = {"userByUserId"})
 public class ContactEntity implements java.io.Serializable {
 
     @Id
@@ -52,21 +52,12 @@ public class ContactEntity implements java.io.Serializable {
     @Column(name = "USER_ID", nullable = false)
     private Integer userId;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "COMPANY_CONTACT", schema = "INVOICE",
-            joinColumns = {
-                    @JoinColumn(name = "COMPANY_ID", nullable = false, updatable = false)
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "CONTACT_ID", nullable = false, updatable = false)
-            })
-    private Collection<CompanyEntity> contactsByCompanyEntity;
+    @OneToMany(mappedBy = "contactByContactId")
+    private Collection<CompanyContactEntity> companyContactsByContactId;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false,
-            insertable = false, updatable = false)
-    private UserEntity userByUserId;
+//    @ManyToOne
+//    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false,
+//            insertable = false, updatable = false)
+//    private UserEntity userByUserId;
 
 }

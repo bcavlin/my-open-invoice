@@ -51,9 +51,9 @@ public class UserEntity extends UserDateAudit {
     @Column(name = "LAST_LOGGED_DATE")
     private Date lastLoggedDate;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<ContactEntity> contactsByUserId;
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    @OneToMany(mappedBy = "userByUserId")
+//    private Collection<ContactEntity> contactsByUserId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "userByUserId")

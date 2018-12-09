@@ -4,6 +4,7 @@ import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.stereotype.Component;
 

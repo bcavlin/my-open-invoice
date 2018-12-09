@@ -24,10 +24,10 @@ public class CompanyContactDTO implements java.io.Serializable {
 
     private Integer companyId;
 
-    @JsonIgnoreProperties({"userByUserId","contactsByCompanyEntity"})
+    @JsonIgnoreProperties({"companyContactsByContactId"})
     private ContactDTO contactByContactId;
 
-    @JsonIgnoreProperties({"contentByContentId","contactsByContactEntity"})
+    @JsonIgnoreProperties({"contentByContentId","companyContactsByCompanyId"})
     private CompanyDTO companyByCompanyId;
 
 }
