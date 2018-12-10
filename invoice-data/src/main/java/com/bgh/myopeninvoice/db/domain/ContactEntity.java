@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Table(name = "CONTACT", schema = "INVOICE")
-//@ToString(exclude = {"userByUserId"})
 public class ContactEntity implements java.io.Serializable {
 
     @Id
@@ -52,12 +51,7 @@ public class ContactEntity implements java.io.Serializable {
     @Column(name = "USER_ID", nullable = false)
     private Integer userId;
 
-    @OneToMany(mappedBy = "contactByContactId")
+    @OneToMany(mappedBy = "contactByContactId", cascade = CascadeType.ALL)
     private Collection<CompanyContactEntity> companyContactsByContactId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false,
-//            insertable = false, updatable = false)
-//    private UserEntity userByUserId;
 
 }

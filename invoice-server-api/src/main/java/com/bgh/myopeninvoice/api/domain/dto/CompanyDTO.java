@@ -4,6 +4,7 @@ import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class CompanyDTO implements java.io.Serializable {
 

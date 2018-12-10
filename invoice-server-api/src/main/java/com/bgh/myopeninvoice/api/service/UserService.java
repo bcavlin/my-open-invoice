@@ -16,6 +16,7 @@
 
 package com.bgh.myopeninvoice.api.service;
 
+import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import com.bgh.myopeninvoice.db.domain.UserEntity;
 import com.bgh.myopeninvoice.db.repository.UserRoleRepository;
@@ -45,6 +46,10 @@ public class UserService {
 
     public Optional<UserEntity> findUserByUsername(String username) {
         return usersRepository.findByUsername(username);
+    }
+
+    public List<UserEntity> getUsers() {
+        return Utils.convertIterableToList(usersRepository.findAll());
     }
 
     @Transactional

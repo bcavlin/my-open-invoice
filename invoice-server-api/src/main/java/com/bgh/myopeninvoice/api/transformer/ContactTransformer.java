@@ -11,29 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ContactTransformer implements Transformer<ContactEntity, ContactDTO> {
+public class ContactTransformer extends CustomAbstractTransformer<ContactEntity, ContactDTO> {
 
-    @Override
-    public ContactDTO transformEntityToDTO(ContactEntity entity) {
-        return getMapper().map(entity);
-    }
-
-    @Override
-    public ContactEntity transformDTOToEntity(ContactDTO dto) {
-        return getMapper().mapReverse(dto);
-    }
-
-    @Override
-    public List<ContactDTO> transformEntityToDTO(List<ContactEntity> entity) {
-        return entity.stream().map(this::transformEntityToDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ContactEntity> transformDTOToEntity(List<ContactDTO> dto) {
-        return dto.stream().map(this::transformDTOToEntity).collect(Collectors.toList());
-    }
-
-    private BoundMapperFacade<ContactEntity, ContactDTO> getMapper() {
+    @Override protected BoundMapperFacade<ContactEntity, ContactDTO> getMapper() {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         return mapperFactory.getMapperFacade(ContactEntity.class, ContactDTO.class);
     }

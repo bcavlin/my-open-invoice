@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "USER", schema = "INVOICE")
-@ToString(exclude = {"contactsByUserId"})
+@ToString(exclude = {"passwordHash"})
 @EqualsAndHashCode(callSuper = true)
 public class UserEntity extends UserDateAudit {
 
@@ -50,10 +50,6 @@ public class UserEntity extends UserDateAudit {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_LOGGED_DATE")
     private Date lastLoggedDate;
-
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    @OneToMany(mappedBy = "userByUserId")
-//    private Collection<ContactEntity> contactsByUserId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "userByUserId")

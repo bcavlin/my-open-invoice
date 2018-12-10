@@ -1,5 +1,8 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
+import com.bgh.myopeninvoice.db.domain.UserRoleEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,8 +12,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class UserDTO implements java.io.Serializable {
 
@@ -19,7 +24,6 @@ public class UserDTO implements java.io.Serializable {
     @NotNull
     private String username;
 
-    @NotNull
     private String passwordHash;
 
     private String firstName;
@@ -40,4 +44,5 @@ public class UserDTO implements java.io.Serializable {
 
     private Integer updatedBy;
 
+    private Collection<UserRoleDTO> userRolesByUserId;
 }
