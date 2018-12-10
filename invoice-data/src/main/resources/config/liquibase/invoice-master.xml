@@ -99,10 +99,8 @@
             <column name="short_name" type="varchar(10)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_company_short_name"/>
             </column>
-            <column name="address_line_1" type="varchar(500)">
+            <column name="address_1" type="varchar(500)">
                 <constraints nullable="false"/>
-            </column>
-            <column name="address_line_2" type="varchar(500)">
             </column>
             <column name="phone_1" type="varchar(20)">
             </column>
@@ -138,9 +136,7 @@
             <column name="email" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_contact_email"/>
             </column>
-            <column name="address_line1" type="varchar(500)">
-            </column>
-            <column name="address_line2" type="varchar(500)">
+            <column name="address_1" type="varchar(500)">
             </column>
             <column name="phone_1" type="varchar(20)">
             </column>

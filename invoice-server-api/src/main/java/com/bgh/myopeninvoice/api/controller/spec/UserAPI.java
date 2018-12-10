@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
 import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
+import com.bgh.myopeninvoice.api.domain.dto.UserDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.security.AccountCredentials;
 import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
@@ -42,5 +43,19 @@ public interface UserAPI {
     @PostMapping(value = "/login")
     ResponseEntity<?> login(@Valid @RequestBody AccountCredentials credentials,
                                                     BindingResult bindingResult);
+
+    @ApiOperation(value = "List users",
+            response = DefaultResponseUserDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseUserDTO.class)
+    })
+    @GetMapping(value = "/user")
+    ResponseEntity<DefaultResponse<UserDTO>> getUsers();
+
+    class DefaultResponseUserDTO extends DefaultResponse<UserDTO> {
+        public DefaultResponseUserDTO() {
+            super(UserDTO.class);
+        }
+    }
 
 }
