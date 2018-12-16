@@ -43,6 +43,8 @@ public class ContractController extends AbstractController implements ContractAP
 
     private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
+    public static final String FILTER = "filter";
+
     @Autowired
     private ContractService contractService;
 
@@ -73,9 +75,9 @@ public class ContractController extends AbstractController implements ContractAP
     }
 
     private void validateSpecialFilter(@RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
-        if (StringUtils.isNotEmpty(queryParameters.get("filter")) &&
-                queryParameters.get("filter").matches("^#(?i:companyId):.*")) {
-            String[] parts = queryParameters.get("filter").split(":");
+        if (StringUtils.isNotEmpty(queryParameters.get(FILTER)) &&
+                queryParameters.get(FILTER).matches("^#(?i:companyId):.*")) {
+            String[] parts = queryParameters.get(FILTER).split(":");
             int companyId = NumberUtils.toInt(parts[1].trim());
             BooleanBuilder and = searchParameters.getBuilder().and(
                     QContractEntity.contractEntity
@@ -201,7 +203,6 @@ public class ContractController extends AbstractController implements ContractAP
 
     @Override
     public ResponseEntity<byte[]> findContentByContractId(@PathVariable("id") Integer id) {
-        InputStreamResource result = null;
         byte[] source;
         String contentType = "image/png";
 

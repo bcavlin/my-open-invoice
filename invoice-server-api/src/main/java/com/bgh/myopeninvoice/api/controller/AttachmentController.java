@@ -180,7 +180,6 @@ public class AttachmentController extends AbstractController implements Attachme
     @Override
     public ResponseEntity<byte[]> findContentByAttachmentId(@PathVariable("id") Integer id) {
 
-        InputStreamResource result = null;
         byte[] source;
         String contentType = "image/png";
 

@@ -4,15 +4,10 @@ import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
 import com.bgh.myopeninvoice.api.domain.dto.ContractDTO;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
-import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ContractTransformer extends CustomAbstractTransformer<ContractEntity, ContractDTO> {

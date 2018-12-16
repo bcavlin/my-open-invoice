@@ -2,16 +2,12 @@ package com.bgh.myopeninvoice.api.domain.dto;
 
 import com.bgh.myopeninvoice.common.util.EnumValidator;
 import com.bgh.myopeninvoice.common.util.RateType;
-import com.bgh.myopeninvoice.db.domain.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -1,18 +1,10 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
-import com.bgh.myopeninvoice.db.domain.ContactEntity;
-import com.bgh.myopeninvoice.db.domain.ContractEntity;
-import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Formula;
 
 import javax.annotation.MatchesPattern;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 

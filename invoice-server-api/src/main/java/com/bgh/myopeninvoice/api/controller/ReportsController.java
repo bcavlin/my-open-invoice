@@ -14,7 +14,6 @@ import com.bgh.myopeninvoice.db.domain.ReportsEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -179,7 +178,6 @@ public class ReportsController extends AbstractController implements ReportsAPI 
 
     @Override
     public ResponseEntity<byte[]> findContentByReportsId(@PathVariable("id") Integer id) {
-        InputStreamResource result = null;
         byte[] source;
         String contentType = "image/png";
 
