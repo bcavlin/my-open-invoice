@@ -1,9 +1,5 @@
 package com.bgh.myopeninvoice.api.transformer;
 
-import com.bgh.myopeninvoice.api.domain.dto.CompanyContactDTO;
-import com.bgh.myopeninvoice.api.domain.dto.ContactDTO;
-import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
-import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
@@ -18,10 +14,6 @@ public abstract class CustomAbstractTransformer<R, K> implements Transformer<R, 
 
     protected CustomAbstractTransformer() {
         this.factory = new DefaultMapperFactory.Builder().build();
-
-//        if (getMapper() != null && getBoundMapper() != null) {
-//            throw new RuntimeException("Cannot have both mapper and bound mapper defined!");
-//        }
     }
 
     @Override

@@ -41,7 +41,7 @@ public interface UserAPI {
             @ApiResponse(code = 200, message = "Successful operation", response = JwtAuthenticationResponse.class)
     })
     @PostMapping(value = "/login")
-    ResponseEntity<?> login(@Valid @RequestBody AccountCredentials credentials,
+    ResponseEntity login(@Valid @RequestBody AccountCredentials credentials,
                                                     BindingResult bindingResult);
 
     @ApiOperation(value = "List users",

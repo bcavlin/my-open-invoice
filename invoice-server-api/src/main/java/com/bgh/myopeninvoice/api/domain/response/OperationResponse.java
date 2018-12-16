@@ -16,13 +16,10 @@
 
 package com.bgh.myopeninvoice.api.domain.response;
 
-import com.bgh.myopeninvoice.common.util.Constants;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

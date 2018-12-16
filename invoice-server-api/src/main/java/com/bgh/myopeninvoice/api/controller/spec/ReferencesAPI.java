@@ -1,19 +1,12 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
-import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.security.AccountCredentials;
-import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Api(value = "References Controller")
 @RequestMapping(value = "/api/v1",

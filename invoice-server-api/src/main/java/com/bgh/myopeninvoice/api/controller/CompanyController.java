@@ -180,7 +180,6 @@ public class CompanyController extends AbstractController implements CompanyAPI 
     @Override
     public ResponseEntity<byte[]> findContentByCompanyId(@PathVariable("id") Integer id) {
 
-        InputStreamResource result = null;
         byte[] source;
         String contentType = "image/png";
 

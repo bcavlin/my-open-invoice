@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.ReferencesAPI;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
+import com.bgh.myopeninvoice.api.exception.InvalidParameterException;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.common.util.RateType;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +48,7 @@ public class ReferenceController extends AbstractController implements Reference
                         .map(v -> v.name().toUpperCase()).collect(Collectors.toList());
 
             } else {
-                throw new Exception("Type does not exist");
+                throw new InvalidParameterException("Type does not exist");
             }
 
         } catch (Exception e) {

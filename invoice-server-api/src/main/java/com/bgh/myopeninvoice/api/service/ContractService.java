@@ -7,7 +7,6 @@ import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import com.bgh.myopeninvoice.db.domain.QContractEntity;
 import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.bgh.myopeninvoice.db.repository.ContractRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;

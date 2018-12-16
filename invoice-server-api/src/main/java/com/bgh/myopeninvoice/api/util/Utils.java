@@ -43,7 +43,6 @@ public class Utils {
 
             parseFilter(queryParameters, searchParameters);
 
-//            return searchParameters;
         }
 
         return searchParameters;

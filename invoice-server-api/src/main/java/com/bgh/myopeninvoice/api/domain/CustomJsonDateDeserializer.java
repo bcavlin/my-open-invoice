@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +15,7 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
 
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter
                 .ofPattern("[yyyy-MM-dd'T'HH:mm:ss.SSSZ][yyyy-MM-dd'T'HH:mm:ss.SSSX]");

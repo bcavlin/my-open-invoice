@@ -9,6 +9,6 @@ public class JwtAuthenticationResponse {
 
     private final String accessToken;
 
-    private final String tokenType = "Bearer";
+    private static final String tokenType = "Bearer";
 
 }
