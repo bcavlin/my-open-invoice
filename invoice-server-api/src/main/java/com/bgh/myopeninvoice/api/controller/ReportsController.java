@@ -52,7 +52,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
         try {
             count = reportsService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<ReportsEntity> entities = reportsService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = reportsTransformer.transformEntityToDTO(entities);
+            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ReportsDTO.class, e);
@@ -72,7 +72,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<ReportsEntity> entities = reportsService.findById(id);
-            result = reportsTransformer.transformEntityToDTO(entities);
+            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ReportsDTO.class, e);
@@ -103,8 +103,9 @@ public class ReportsController extends AbstractController implements ReportsAPI 
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<ReportsEntity> entities = reportsService.save(reportsTransformer.transformDTOToEntity(reportsDTO));
-            result = reportsTransformer.transformEntityToDTO(entities);
+            List<ReportsEntity> entities = reportsService.save(
+                    reportsTransformer.transformDTOToEntity(reportsDTO, ReportsEntity.class));
+            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -139,8 +140,9 @@ public class ReportsController extends AbstractController implements ReportsAPI 
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<ReportsEntity> entities = reportsService.save(reportsTransformer.transformDTOToEntity(reportsDTO));
-            result = reportsTransformer.transformEntityToDTO(entities);
+            List<ReportsEntity> entities = reportsService.save(
+                    reportsTransformer.transformDTOToEntity(reportsDTO, ReportsEntity.class));
+            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -187,7 +189,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);                    
+                    contentType = new Tika().detect(source);
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -206,11 +208,11 @@ public class ReportsController extends AbstractController implements ReportsAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<ReportsDTO>> saveContentByReportsId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                              @RequestParam("file") MultipartFile file) {
         List<ReportsDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             ContentEntity content = new ContentEntity();
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
@@ -218,7 +220,7 @@ public class ReportsController extends AbstractController implements ReportsAPI 
             content.setContentTable(ContentEntity.ContentEntityTable.REPORTS.name());
 
             List<ReportsEntity> entities = reportsService.saveContent(id, content);
-            result = reportsTransformer.transformEntityToDTO(entities);
+            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ReportsDTO.class, e);

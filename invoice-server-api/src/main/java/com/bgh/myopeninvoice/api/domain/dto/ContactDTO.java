@@ -33,7 +33,7 @@ public class ContactDTO implements Serializable {
 
     private Integer userId;
 
-    @JsonIgnoreProperties({"contactByContactId"})
-    private Collection<CompanyContactDTO> companyContactsByContactId;
+    @JsonIgnoreProperties({"contact"})
+    private Collection<CompanyContactDTO> companyContacts;
 
 }

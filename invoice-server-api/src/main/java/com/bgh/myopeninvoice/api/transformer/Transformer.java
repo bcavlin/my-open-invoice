@@ -2,14 +2,14 @@ package com.bgh.myopeninvoice.api.transformer;
 
 import java.util.List;
 
-public interface Transformer<F, T> {
+public interface Transformer<E, D> {
 
-    T transformEntityToDTO(F entity);
+    D transformEntityToDTO(E entity, Class<D> dto);
 
-    F transformDTOToEntity(T dto);
+    E transformDTOToEntity(D dto, Class<E> entity);
 
-    List<T> transformEntityToDTO(List<F> entity);
+    List<D> transformEntityToDTO(List<E> entity, Class<D> dto);
 
-    List<F> transformDTOToEntity(List<T> dto);
+    List<E> transformDTOToEntity(List<D> dto, Class<E> entity);
 
 }

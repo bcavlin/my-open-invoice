@@ -46,10 +46,10 @@ public class CompanyDTO implements java.io.Serializable {
     private Integer weekStart;
 
     @JsonIgnoreProperties({"content"})
-    private ContentDTO contentByContentId;
+    private ContentDTO content;
 
-    @JsonIgnoreProperties({"companyByCompanyId"})
-    private Collection<CompanyContactDTO> companyContactsByCompanyId;
+    @JsonIgnoreProperties({"company"})
+    private Collection<CompanyContactDTO> companyContacts;
 
     private Integer numberOfContacts;
 

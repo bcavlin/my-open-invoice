@@ -51,7 +51,7 @@ public class ContactController extends AbstractController implements ContactAPI 
         try {
             count = contactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<ContactEntity> entities = contactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = contactTransformer.transformEntityToDTO(entities);
+            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ContactDTO.class, e);
@@ -71,7 +71,7 @@ public class ContactController extends AbstractController implements ContactAPI 
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<ContactEntity> entities = contactService.findById(id);
-            result = contactTransformer.transformEntityToDTO(entities);
+            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ContactDTO.class, e);
@@ -86,7 +86,7 @@ public class ContactController extends AbstractController implements ContactAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<ContactDTO>> save(@Valid @NotNull @RequestBody ContactDTO contactDTO,
-                                                        BindingResult bindingResult) {
+                                                            BindingResult bindingResult) {
         List<ContactDTO> result = new ArrayList<>();
 
         try {
@@ -102,8 +102,9 @@ public class ContactController extends AbstractController implements ContactAPI 
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<ContactEntity> entities = contactService.save(contactTransformer.transformDTOToEntity(contactDTO));
-            result = contactTransformer.transformEntityToDTO(entities);
+            List<ContactEntity> entities = contactService.save(
+                    contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
+            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -123,7 +124,7 @@ public class ContactController extends AbstractController implements ContactAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<ContactDTO>> update(@Valid @NotNull @RequestBody ContactDTO contactDTO,
-                                                          BindingResult bindingResult) {
+                                                              BindingResult bindingResult) {
 
         List<ContactDTO> result = new ArrayList<>();
 
@@ -138,8 +139,9 @@ public class ContactController extends AbstractController implements ContactAPI 
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<ContactEntity> entities = contactService.save(contactTransformer.transformDTOToEntity(contactDTO));
-            result = contactTransformer.transformEntityToDTO(entities);
+            List<ContactEntity> entities = contactService.save(
+                    contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
+            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -181,7 +183,7 @@ public class ContactController extends AbstractController implements ContactAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<ContactDTO>> saveContentByContactId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                              @RequestParam("file") MultipartFile file) {
         throw new org.apache.commons.lang.NotImplementedException();
     }
 

@@ -53,16 +53,16 @@ public class ContractDTO implements java.io.Serializable {
     private String purchaseOrder;
 
     @JsonIgnoreProperties({"content"})
-    private ContentDTO contentByContentId;
+    private ContentDTO content;
 
     private CompanyContactDTO companyContactByContractIsFor;
 
-    @JsonIgnoreProperties({"contentByContentId","companyContactsByCompanyId"})
+    @JsonIgnoreProperties({"content","companyContacts"})
     private CompanyDTO companyByContractSignedWith;
 
-    @JsonIgnoreProperties({"contentByContentId","companyContactsByCompanyId"})
+    @JsonIgnoreProperties({"content","companyContacts"})
     private CompanyDTO companyByContractSignedWithSubcontract;
 
-    private CurrencyDTO currencyByCcyId;
+    private CurrencyDTO currency;
 
 }

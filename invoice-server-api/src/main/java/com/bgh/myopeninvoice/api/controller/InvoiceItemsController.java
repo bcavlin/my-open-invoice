@@ -51,7 +51,7 @@ public class InvoiceItemsController extends AbstractController implements Invoic
         try {
             count = invoiceitemsService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<InvoiceItemsEntity> entities = invoiceitemsService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = invoiceitemsTransformer.transformEntityToDTO(entities);
+            result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(InvoiceItemsDTO.class, e);
@@ -71,7 +71,7 @@ public class InvoiceItemsController extends AbstractController implements Invoic
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<InvoiceItemsEntity> entities = invoiceitemsService.findById(id);
-            result = invoiceitemsTransformer.transformEntityToDTO(entities);
+            result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(InvoiceItemsDTO.class, e);
@@ -86,7 +86,7 @@ public class InvoiceItemsController extends AbstractController implements Invoic
 
     @Override
     public ResponseEntity<DefaultResponse<InvoiceItemsDTO>> save(@Valid @NotNull @RequestBody InvoiceItemsDTO invoiceitemsDTO,
-                                                        BindingResult bindingResult) {
+                                                                 BindingResult bindingResult) {
         List<InvoiceItemsDTO> result = new ArrayList<>();
 
         try {
@@ -102,8 +102,9 @@ public class InvoiceItemsController extends AbstractController implements Invoic
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<InvoiceItemsEntity> entities = invoiceitemsService.save(invoiceitemsTransformer.transformDTOToEntity(invoiceitemsDTO));
-            result = invoiceitemsTransformer.transformEntityToDTO(entities);
+            List<InvoiceItemsEntity> entities = invoiceitemsService.save(
+                    invoiceitemsTransformer.transformDTOToEntity(invoiceitemsDTO, InvoiceItemsEntity.class));
+            result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -123,7 +124,7 @@ public class InvoiceItemsController extends AbstractController implements Invoic
 
     @Override
     public ResponseEntity<DefaultResponse<InvoiceItemsDTO>> update(@Valid @NotNull @RequestBody InvoiceItemsDTO invoiceitemsDTO,
-                                                          BindingResult bindingResult) {
+                                                                   BindingResult bindingResult) {
 
         List<InvoiceItemsDTO> result = new ArrayList<>();
 
@@ -138,8 +139,9 @@ public class InvoiceItemsController extends AbstractController implements Invoic
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<InvoiceItemsEntity> entities = invoiceitemsService.save(invoiceitemsTransformer.transformDTOToEntity(invoiceitemsDTO));
-            result = invoiceitemsTransformer.transformEntityToDTO(entities);
+            List<InvoiceItemsEntity> entities = invoiceitemsService.save(
+                    invoiceitemsTransformer.transformDTOToEntity(invoiceitemsDTO, InvoiceItemsEntity.class));
+            result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -181,7 +183,7 @@ public class InvoiceItemsController extends AbstractController implements Invoic
 
     @Override
     public ResponseEntity<DefaultResponse<InvoiceItemsDTO>> saveContentByInvoiceItemsId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                                        @RequestParam("file") MultipartFile file) {
         throw new org.apache.commons.lang.NotImplementedException();
     }
 

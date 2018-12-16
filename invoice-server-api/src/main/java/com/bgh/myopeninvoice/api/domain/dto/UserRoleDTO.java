@@ -18,6 +18,6 @@ public class UserRoleDTO implements java.io.Serializable {
 
     private Date assignedDate;
 
-    private RoleDTO roleByRoleId;
+    private RoleDTO role;
 
 }

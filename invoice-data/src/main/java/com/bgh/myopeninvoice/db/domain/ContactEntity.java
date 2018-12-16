@@ -51,7 +51,7 @@ public class ContactEntity implements java.io.Serializable {
     @Column(name = "USER_ID", nullable = false)
     private Integer userId;
 
-    @OneToMany(mappedBy = "contactByContactId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contactByContactId")
     private Collection<CompanyContactEntity> companyContactsByContactId;
 
 }

@@ -51,7 +51,7 @@ public class TaxController extends AbstractController implements TaxAPI {
         try {
             count = taxService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<TaxEntity> entities = taxService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = taxTransformer.transformEntityToDTO(entities);
+            result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(TaxDTO.class, e);
@@ -71,7 +71,7 @@ public class TaxController extends AbstractController implements TaxAPI {
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<TaxEntity> entities = taxService.findById(id);
-            result = taxTransformer.transformEntityToDTO(entities);
+            result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(TaxDTO.class, e);
@@ -102,8 +102,8 @@ public class TaxController extends AbstractController implements TaxAPI {
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<TaxEntity> entities = taxService.save(taxTransformer.transformDTOToEntity(taxDTO));
-            result = taxTransformer.transformEntityToDTO(entities);
+            List<TaxEntity> entities = taxService.save(taxTransformer.transformDTOToEntity(taxDTO, TaxEntity.class));
+            result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -138,8 +138,8 @@ public class TaxController extends AbstractController implements TaxAPI {
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<TaxEntity> entities = taxService.save(taxTransformer.transformDTOToEntity(taxDTO));
-            result = taxTransformer.transformEntityToDTO(entities);
+            List<TaxEntity> entities = taxService.save(taxTransformer.transformDTOToEntity(taxDTO, TaxEntity.class));
+            result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -181,7 +181,7 @@ public class TaxController extends AbstractController implements TaxAPI {
 
     @Override
     public ResponseEntity<DefaultResponse<TaxDTO>> saveContentByTaxId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                      @RequestParam("file") MultipartFile file) {
         throw new org.apache.commons.lang.NotImplementedException();
     }
 

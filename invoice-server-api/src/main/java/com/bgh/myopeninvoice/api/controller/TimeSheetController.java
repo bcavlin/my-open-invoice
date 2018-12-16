@@ -51,7 +51,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
         try {
             count = timesheetService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<TimeSheetEntity> entities = timesheetService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = timesheetTransformer.transformEntityToDTO(entities);
+            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(TimeSheetDTO.class, e);
@@ -71,7 +71,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<TimeSheetEntity> entities = timesheetService.findById(id);
-            result = timesheetTransformer.transformEntityToDTO(entities);
+            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(TimeSheetDTO.class, e);
@@ -86,7 +86,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
 
     @Override
     public ResponseEntity<DefaultResponse<TimeSheetDTO>> save(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
-                                                        BindingResult bindingResult) {
+                                                              BindingResult bindingResult) {
         List<TimeSheetDTO> result = new ArrayList<>();
 
         try {
@@ -102,8 +102,9 @@ public class TimeSheetController extends AbstractController implements TimeSheet
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<TimeSheetEntity> entities = timesheetService.save(timesheetTransformer.transformDTOToEntity(timesheetDTO));
-            result = timesheetTransformer.transformEntityToDTO(entities);
+            List<TimeSheetEntity> entities = timesheetService.save(
+                    timesheetTransformer.transformDTOToEntity(timesheetDTO, TimeSheetEntity.class));
+            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -123,7 +124,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
 
     @Override
     public ResponseEntity<DefaultResponse<TimeSheetDTO>> update(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
-                                                          BindingResult bindingResult) {
+                                                                BindingResult bindingResult) {
 
         List<TimeSheetDTO> result = new ArrayList<>();
 
@@ -138,8 +139,9 @@ public class TimeSheetController extends AbstractController implements TimeSheet
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<TimeSheetEntity> entities = timesheetService.save(timesheetTransformer.transformDTOToEntity(timesheetDTO));
-            result = timesheetTransformer.transformEntityToDTO(entities);
+            List<TimeSheetEntity> entities = timesheetService.save(
+                    timesheetTransformer.transformDTOToEntity(timesheetDTO, TimeSheetEntity.class));
+            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -181,7 +183,7 @@ public class TimeSheetController extends AbstractController implements TimeSheet
 
     @Override
     public ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                                  @RequestParam("file") MultipartFile file) {
         throw new org.apache.commons.lang.NotImplementedException();
     }
 

@@ -44,5 +44,5 @@ public class UserDTO implements java.io.Serializable {
 
     private Integer updatedBy;
 
-    private Collection<UserRoleDTO> userRolesByUserId;
+    private Collection<UserRoleDTO> userRoles;
 }

@@ -52,7 +52,7 @@ public class AttachmentController extends AbstractController implements Attachme
         try {
             count = attachmentService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<AttachmentEntity> entities = attachmentService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = attachmentTransformer.transformEntityToDTO(entities);
+            result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(AttachmentDTO.class, e);
@@ -72,7 +72,7 @@ public class AttachmentController extends AbstractController implements Attachme
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<AttachmentEntity> entities = attachmentService.findById(id);
-            result = attachmentTransformer.transformEntityToDTO(entities);
+            result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(AttachmentDTO.class, e);
@@ -103,8 +103,9 @@ public class AttachmentController extends AbstractController implements Attachme
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<AttachmentEntity> entities = attachmentService.save(attachmentTransformer.transformDTOToEntity(attachmentDTO));
-            result = attachmentTransformer.transformEntityToDTO(entities);
+            List<AttachmentEntity> entities = attachmentService.save(
+                    attachmentTransformer.transformDTOToEntity(attachmentDTO, AttachmentEntity.class));
+            result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -139,8 +140,9 @@ public class AttachmentController extends AbstractController implements Attachme
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<AttachmentEntity> entities = attachmentService.save(attachmentTransformer.transformDTOToEntity(attachmentDTO));
-            result = attachmentTransformer.transformEntityToDTO(entities);
+            List<AttachmentEntity> entities = attachmentService.save(
+                    attachmentTransformer.transformDTOToEntity(attachmentDTO, AttachmentEntity.class));
+            result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -219,7 +221,7 @@ public class AttachmentController extends AbstractController implements Attachme
             content.setContentTable(ContentEntity.ContentEntityTable.ATTACHMENT.name());
 
             List<AttachmentEntity> entities = attachmentService.saveContent(id, content);
-            result = attachmentTransformer.transformEntityToDTO(entities);
+            result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(AttachmentDTO.class, e);

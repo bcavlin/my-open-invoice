@@ -59,7 +59,7 @@ public class ContractController extends AbstractController implements ContractAP
             validateSpecialFilter(queryParameters, searchParameters);
             count = contractService.count(searchParameters);
             List<ContractEntity> entities = contractService.findAll(searchParameters);
-            result = contractTransformer.transformEntityToDTO(entities);
+            result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ContractDTO.class, e);
@@ -94,7 +94,7 @@ public class ContractController extends AbstractController implements ContractAP
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<ContractEntity> entities = contractService.findById(id);
-            result = contractTransformer.transformEntityToDTO(entities);
+            result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ContractDTO.class, e);
@@ -125,8 +125,9 @@ public class ContractController extends AbstractController implements ContractAP
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<ContractEntity> entities = contractService.save(contractTransformer.transformDTOToEntity(contractDTO));
-            result = contractTransformer.transformEntityToDTO(entities);
+            List<ContractEntity> entities = contractService.save(
+                    contractTransformer.transformDTOToEntity(contractDTO, ContractEntity.class));
+            result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -161,8 +162,9 @@ public class ContractController extends AbstractController implements ContractAP
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<ContractEntity> entities = contractService.save(contractTransformer.transformDTOToEntity(contractDTO));
-            result = contractTransformer.transformEntityToDTO(entities);
+            List<ContractEntity> entities = contractService.save(
+                    contractTransformer.transformDTOToEntity(contractDTO, ContractEntity.class));
+            result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -240,7 +242,7 @@ public class ContractController extends AbstractController implements ContractAP
             content.setContentTable(ContentEntity.ContentEntityTable.CONTRACT.name());
 
             List<ContractEntity> entities = contractService.saveContent(id, content);
-            result = contractTransformer.transformEntityToDTO(entities);
+            result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(ContractDTO.class, e);
