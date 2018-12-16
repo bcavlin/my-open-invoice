@@ -51,7 +51,7 @@ public class CurrencyController extends AbstractController implements CurrencyAP
         try {
             count = currencyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<CurrencyEntity> entities = currencyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = currencyTransformer.transformEntityToDTO(entities);
+            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CurrencyDTO.class, e);
@@ -71,7 +71,7 @@ public class CurrencyController extends AbstractController implements CurrencyAP
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<CurrencyEntity> entities = currencyService.findById(id);
-            result = currencyTransformer.transformEntityToDTO(entities);
+            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CurrencyDTO.class, e);
@@ -102,8 +102,9 @@ public class CurrencyController extends AbstractController implements CurrencyAP
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<CurrencyEntity> entities = currencyService.save(currencyTransformer.transformDTOToEntity(currencyDTO));
-            result = currencyTransformer.transformEntityToDTO(entities);
+            List<CurrencyEntity> entities = currencyService.save(
+                    currencyTransformer.transformDTOToEntity(currencyDTO, CurrencyEntity.class));
+            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -138,8 +139,9 @@ public class CurrencyController extends AbstractController implements CurrencyAP
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<CurrencyEntity> entities = currencyService.save(currencyTransformer.transformDTOToEntity(currencyDTO));
-            result = currencyTransformer.transformEntityToDTO(entities);
+            List<CurrencyEntity> entities = currencyService.save(
+                    currencyTransformer.transformDTOToEntity(currencyDTO, CurrencyEntity.class));
+            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");

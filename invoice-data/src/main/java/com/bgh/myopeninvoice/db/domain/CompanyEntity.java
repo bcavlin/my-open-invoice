@@ -62,7 +62,7 @@ public class CompanyEntity implements java.io.Serializable {
     private ContentEntity contentByContentId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyByCompanyId")
+    @OneToMany(mappedBy = "companyByCompanyId", cascade = CascadeType.ALL)
     private Collection<CompanyContactEntity> companyContactsByCompanyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)

@@ -51,7 +51,7 @@ public class CompanyContactController extends AbstractController implements Comp
         try {
             count = companycontactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<CompanyContactEntity> entities = companycontactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = companycontactTransformer.transformEntityToDTO(entities);
+            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CompanyContactDTO.class, e);
@@ -71,7 +71,7 @@ public class CompanyContactController extends AbstractController implements Comp
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<CompanyContactEntity> entities = companycontactService.findById(id);
-            result = companycontactTransformer.transformEntityToDTO(entities);
+            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CompanyContactDTO.class, e);
@@ -102,8 +102,9 @@ public class CompanyContactController extends AbstractController implements Comp
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<CompanyContactEntity> entities = companycontactService.save(companycontactTransformer.transformDTOToEntity(companycontactDTO));
-            result = companycontactTransformer.transformEntityToDTO(entities);
+            List<CompanyContactEntity> entities = companycontactService.save(
+                    companycontactTransformer.transformDTOToEntity(companycontactDTO, CompanyContactEntity.class));
+            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -138,8 +139,9 @@ public class CompanyContactController extends AbstractController implements Comp
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            List<CompanyContactEntity> entities = companycontactService.save(companycontactTransformer.transformDTOToEntity(companycontactDTO));
-            result = companycontactTransformer.transformEntityToDTO(entities);
+            List<CompanyContactEntity> entities = companycontactService.save(
+                    companycontactTransformer.transformDTOToEntity(companycontactDTO, CompanyContactEntity.class));
+            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");

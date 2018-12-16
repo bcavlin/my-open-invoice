@@ -52,7 +52,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         try {
             count = companyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
             List<CompanyEntity> entities = companyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = companyTransformer.transformEntityToDTO(entities);
+            result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CompanyDTO.class, e);
@@ -72,7 +72,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         try {
             Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             List<CompanyEntity> entities = companyService.findById(id);
-            result = companyTransformer.transformEntityToDTO(entities);
+            result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CompanyDTO.class, e);
@@ -87,7 +87,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyDTO>> save(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
-                                                        BindingResult bindingResult) {
+                                                            BindingResult bindingResult) {
         List<CompanyDTO> result = new ArrayList<>();
 
         try {
@@ -103,8 +103,9 @@ public class CompanyController extends AbstractController implements CompanyAPI 
                         getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
             }
 
-            List<CompanyEntity> entities = companyService.save(companyTransformer.transformDTOToEntity(companyDTO));
-            result = companyTransformer.transformEntityToDTO(entities);
+            List<CompanyEntity> entities = companyService.save(
+                    companyTransformer.transformDTOToEntity(companyDTO, CompanyEntity.class));
+            result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
 
             if (CollectionUtils.isEmpty(result)) {
@@ -124,7 +125,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyDTO>> update(@Valid @NotNull @RequestBody CompanyDTO companyDTO,
-                                                          BindingResult bindingResult) {
+                                                              BindingResult bindingResult) {
 
         List<CompanyDTO> result = new ArrayList<>();
 
@@ -139,9 +140,9 @@ public class CompanyController extends AbstractController implements CompanyAPI 
                 throw new InvalidDataException("When updating, data entity must have ID");
             }
 
-            CompanyEntity entity = companyTransformer.transformDTOToEntity(companyDTO);
+            CompanyEntity entity = companyTransformer.transformDTOToEntity(companyDTO, CompanyEntity.class);
             List<CompanyEntity> entities = companyService.save(entity);
-            result = companyTransformer.transformEntityToDTO(entities);
+            result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
             if (CollectionUtils.isEmpty(result)) {
                 throw new InvalidResultDataException("Data not saved");
@@ -189,7 +190,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
             if (content != null) {
                 source = content.getContent();
                 if (source.length > 0) {
-                    contentType = new Tika().detect(source);                    
+                    contentType = new Tika().detect(source);
                 }
             } else {
                 throw new InvalidDataException("Content not found for the entity " + id);
@@ -208,11 +209,11 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                              @RequestParam("file") MultipartFile file) {
         List<CompanyDTO> result = new ArrayList<>();
 
         try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));            
+            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
             ContentEntity content = new ContentEntity();
             content.setContent(file.getBytes());
             content.setFilename(file.getOriginalFilename());
@@ -220,7 +221,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
             content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
 
             List<CompanyEntity> entities = companyService.saveContent(id, content);
-            result = companyTransformer.transformEntityToDTO(entities);
+            result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(CompanyDTO.class, e);

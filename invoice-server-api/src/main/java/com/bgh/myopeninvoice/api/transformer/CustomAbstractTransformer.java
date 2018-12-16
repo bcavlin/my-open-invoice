@@ -1,36 +1,63 @@
 package com.bgh.myopeninvoice.api.transformer;
 
-import com.bgh.myopeninvoice.api.domain.dto.UserDTO;
-import com.bgh.myopeninvoice.db.domain.UserEntity;
+import com.bgh.myopeninvoice.api.domain.dto.CompanyContactDTO;
+import com.bgh.myopeninvoice.api.domain.dto.ContactDTO;
+import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
+import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import ma.glasnost.orika.BoundMapperFacade;
+import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
-import ma.glasnost.orika.metadata.Type;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class CustomAbstractTransformer<R, K> implements Transformer<R, K>{
+public abstract class CustomAbstractTransformer<R, K> implements Transformer<R, K> {
 
-    @Override
-    public K transformEntityToDTO(R entity) {
-        return getMapper().map(entity);
+    protected MapperFactory factory;
+
+    protected CustomAbstractTransformer() {
+        this.factory = new DefaultMapperFactory.Builder().build();
+
+//        if (getMapper() != null && getBoundMapper() != null) {
+//            throw new RuntimeException("Cannot have both mapper and bound mapper defined!");
+//        }
     }
 
     @Override
-    public R transformDTOToEntity(K dto) {
-        return getMapper().mapReverse(dto);
+    public K transformEntityToDTO(R entity, Class<K> dto) {
+        if (getBoundMapper() != null) {
+            return getBoundMapper().map(entity);
+        } else {
+            return getMapper().map(entity, dto);
+        }
     }
 
     @Override
-    public List<K> transformEntityToDTO(List<R> entity) {
-        return entity.stream().map(this::transformEntityToDTO).collect(Collectors.toList());
+    public R transformDTOToEntity(K dto, Class<R> entity) {
+        if (getBoundMapper() != null) {
+            return getBoundMapper().mapReverse(dto);
+        } else {
+            return getMapper().map(dto, entity);
+        }
     }
 
     @Override
-    public List<R> transformDTOToEntity(List<K> dto) {
-        return dto.stream().map(this::transformDTOToEntity).collect(Collectors.toList());
+    public List<K> transformEntityToDTO(List<R> entity, Class<K> dto) {
+        return entity.stream().map(m -> transformEntityToDTO(m, dto)).collect(Collectors.toList());
     }
 
-    protected abstract BoundMapperFacade<R, K> getMapper();
+    @Override
+    public List<R> transformDTOToEntity(List<K> dto, Class<R> entity) {
+        return dto.stream().map(m -> transformDTOToEntity(m, entity)).collect(Collectors.toList());
+    }
+
+    protected BoundMapperFacade<R, K> getBoundMapper() {
+        return null;
+    }
+
+    public abstract MapperFactory mapFields(MapperFactory mapperFactory);
+
+    protected abstract MapperFacade getMapper();
+
 }

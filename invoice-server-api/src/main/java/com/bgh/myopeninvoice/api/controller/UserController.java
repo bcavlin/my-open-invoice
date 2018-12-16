@@ -74,7 +74,7 @@ public class UserController extends AbstractController implements UserAPI {
 
         try {
             List<RoleEntity> userRoles = userService.findUserRoles(username);
-            result = roleTransformer.transformEntityToDTO(userRoles);
+            result = roleTransformer.transformEntityToDTO(userRoles, RoleDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(RoleDTO.class, e);
@@ -131,7 +131,7 @@ public class UserController extends AbstractController implements UserAPI {
 
         try {
             List<UserEntity> users = userService.getUsers();
-            result = userTransformer.transformEntityToDTO(users);
+            result = userTransformer.transformEntityToDTO(users, UserDTO.class);
 
         } catch (Exception e) {
             return Utils.getErrorResponse(UserDTO.class, e);

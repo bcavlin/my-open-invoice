@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.api.transformer;
 import com.bgh.myopeninvoice.api.domain.dto.CompanyContactDTO;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import ma.glasnost.orika.BoundMapperFacade;
+import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,20 @@ import java.util.stream.Collectors;
 @Component
 public class CompanyContactTransformer extends CustomAbstractTransformer<CompanyContactEntity, CompanyContactDTO> {
 
-    @Override protected BoundMapperFacade<CompanyContactEntity, CompanyContactDTO> getMapper() {
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        return mapperFactory.getMapperFacade(CompanyContactEntity.class, CompanyContactDTO.class);
+    @Override
+    public MapperFactory mapFields(MapperFactory mapperFactory) {
+        mapperFactory.classMap(CompanyContactDTO.class, CompanyContactEntity.class)
+                .field("contact", "contactByContactId")
+                .field("company", "companyByCompanyId")
+                .byDefault()
+                .register();
+        return mapperFactory;
+    }
+
+    @Override
+    protected MapperFacade getMapper() {
+        factory = this.mapFields(factory);
+        return factory.getMapperFacade();
     }
 
 }

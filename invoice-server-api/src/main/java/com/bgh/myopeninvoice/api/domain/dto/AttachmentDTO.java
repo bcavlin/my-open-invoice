@@ -13,8 +13,8 @@ public class AttachmentDTO implements java.io.Serializable {
 
     private Integer contentId;
 
-    private InvoiceDTO invoiceByInvoiceId;
+    private InvoiceDTO invoice;
 
-    private ContentDTO contentByContentId;
+    private ContentDTO content;
 
 }
