@@ -24,4 +24,4 @@ spring:
           time_zone: America/Toronto
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false

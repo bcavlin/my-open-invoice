@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrencyTransformer extends CustomAbstractTransformer<CurrencyEntity, CurrencyDTO> {
 
-    @Override protected BoundMapperFacade<CurrencyEntity, CurrencyDTO> getBoundMapper() {
+    @Override
+    protected BoundMapperFacade<CurrencyEntity, CurrencyDTO> getBoundMapper() {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         return mapperFactory.getMapperFacade(CurrencyEntity.class, CurrencyDTO.class);
     }
