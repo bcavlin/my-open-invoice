@@ -36,12 +36,8 @@ public class ContactEntity implements java.io.Serializable {
     private String email;
 
     @Basic
-    @Column(name = "ADDRESS_LINE1", length = 500)
-    private String addressLine1;
-
-    @Basic
-    @Column(name = "ADDRESS_LINE2", length = 500)
-    private String addressLine2;
+    @Column(name = "ADDRESS_1", length = 500)
+    private String address1;
 
     @Basic
     @Column(name = "PHONE_1", length = 20)

@@ -42,7 +42,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
                     QCompanyEntity.companyEntity.weekStart.stringValue().contains(searchParameters.getFilter()),
                     QCompanyEntity.companyEntity.businessNumber.contains(searchParameters.getFilter()),
                     QCompanyEntity.companyEntity.companyName.contains(searchParameters.getFilter()),
-                    QCompanyEntity.companyEntity.addressLine1.stringValue().contains(searchParameters.getFilter())
+                    QCompanyEntity.companyEntity.address1.stringValue().contains(searchParameters.getFilter())
             );
 
         }
