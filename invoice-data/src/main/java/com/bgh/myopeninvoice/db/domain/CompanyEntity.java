@@ -33,12 +33,8 @@ public class CompanyEntity implements java.io.Serializable {
     private String shortName;
 
     @Basic
-    @Column(name = "ADDRESS_LINE_1", nullable = false, length = 500)
-    private String addressLine1;
-
-    @Basic
-    @Column(name = "ADDRESS_LINE_2", length = 500)
-    private String addressLine2;
+    @Column(name = "ADDRESS_1", nullable = false, length = 500)
+    private String address1;
 
     @Basic
     @Column(name = "PHONE_1", length = 20)

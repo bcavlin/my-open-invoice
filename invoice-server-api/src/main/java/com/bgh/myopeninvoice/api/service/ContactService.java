@@ -36,8 +36,7 @@ public class ContactService implements CommonService<ContactEntity> {
                     QContactEntity.contactEntity.email.contains(searchParameters.getFilter()),
                     QContactEntity.contactEntity.phone1.contains(searchParameters.getFilter()),
                     QContactEntity.contactEntity.firstName.stringValue().contains(searchParameters.getFilter()),
-                    QContactEntity.contactEntity.addressLine1.contains(searchParameters.getFilter()),
-                    QContactEntity.contactEntity.addressLine2.contains(searchParameters.getFilter())
+                    QContactEntity.contactEntity.address1.contains(searchParameters.getFilter())
             );
 
         }
