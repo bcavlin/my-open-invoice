@@ -51,8 +51,8 @@ public class Utils {
     private static void parseFilter(Map<String, String> queryParameters, SearchParameters searchParameters) throws InvalidParameterException {
         if (queryParameters.get("filter") != null) {
             String filter = queryParameters.get("filter");
-            if (filter.length() > 20) {
-                throw new InvalidParameterException("Invalid parameters 'filter. Size cannot be more than 20");
+            if (filter.length() > 100) {
+                throw new InvalidParameterException("Invalid parameters: 'filter'. Size cannot be more than 100");
             }
 
             searchParameters.setFilter(filter);

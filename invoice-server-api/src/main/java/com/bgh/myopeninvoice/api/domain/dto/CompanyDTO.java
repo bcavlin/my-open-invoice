@@ -21,9 +21,7 @@ public class CompanyDTO implements java.io.Serializable {
     @MatchesPattern("[A-Z0-9]+")
     private String shortName;
 
-    private String addressLine1;
-
-    private String addressLine2;
+    private String address1;
 
     @MatchesPattern("^(\\+\\d{1,3})?(-|\\s|\\()?(\\d{3})(\\))?(-|\\s)?(\\d{3})(-|\\s)?(\\d{4})$")
     private String phone1;

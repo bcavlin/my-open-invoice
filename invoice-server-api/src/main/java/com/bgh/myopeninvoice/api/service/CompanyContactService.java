@@ -5,7 +5,9 @@ import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.PredicateTemplate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class CompanyContactService implements CommonService<CompanyContactEntity
 
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
-        return null;
+        return searchParameters.getBuilder();
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.bgh.myopeninvoice.api.transformer.ContractTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
+import com.bgh.myopeninvoice.db.domain.QCompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.QContractEntity;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +36,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 public class ContractController extends AbstractController implements ContractAPI {
-
-    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
-
-    public static final String FILTER = "filter";
 
     @Autowired
     private ContractService contractService;
@@ -74,18 +72,26 @@ public class ContractController extends AbstractController implements ContractAP
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
     }
 
-    private void validateSpecialFilter(@RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
-        if (StringUtils.isNotEmpty(queryParameters.get(FILTER)) &&
-                queryParameters.get(FILTER).matches("^#(?i:companyId):.*")) {
-            String[] parts = queryParameters.get(FILTER).split(":");
-            int companyId = NumberUtils.toInt(parts[1].trim());
-            BooleanBuilder and = searchParameters.getBuilder().and(
-                    QContractEntity.contractEntity
-                            .contractSignedWith.eq(companyId)
-            );
-            searchParameters.setBuilder(and);
-            //reset the filter
-            searchParameters.setFilter(null);
+    @Override
+    protected void validateSpecialFilter(@RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
+        if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
+            Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
+            BooleanBuilder builder = searchParameters.getBuilder();
+
+            while (matcher.find()){
+                String[] split = matcher.group(1).split(":");
+                if ("companyId".equalsIgnoreCase(split[0])){
+                    searchParameters.getBuilder().and(
+                            QContractEntity.contractEntity
+                                    .contractSignedWith.eq(NumberUtils.toInt(split[1]))
+                    );
+                }
+            }
+
+            if(searchParameters.getBuilder().hasValue()){
+                //reset the filter
+                searchParameters.setFilter(null);
+            }
         }
     }
 

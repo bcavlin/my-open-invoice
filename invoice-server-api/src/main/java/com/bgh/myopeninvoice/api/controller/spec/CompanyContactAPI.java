@@ -53,8 +53,9 @@ public interface CompanyContactAPI {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyContactDTO.class)
     })
     @PostMapping(value = "/companycontact")
-    ResponseEntity<DefaultResponse<CompanyContactDTO>> save(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                        BindingResult bindingResult);
+    ResponseEntity<DefaultResponse<CompanyContactDTO>> save(
+            @Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
+            BindingResult bindingResult);
 
     @ApiOperation(value = "Update companycontact",
             notes = "Updates CompanyContactDTO",
@@ -63,8 +64,9 @@ public interface CompanyContactAPI {
             @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyContactDTO.class)
     })
     @PutMapping(value = "/companycontact", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    ResponseEntity<DefaultResponse<CompanyContactDTO>> update(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                          BindingResult bindingResult);
+    ResponseEntity<DefaultResponse<CompanyContactDTO>> update(
+            @Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
+            BindingResult bindingResult);
 
     @ApiOperation(value = "Delete companycontact by ID",
             notes = "Deletes CompanyContactDTO",
@@ -74,27 +76,28 @@ public interface CompanyContactAPI {
     })
     @DeleteMapping(value = "/companycontact/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") Integer id);
-         
-    @ApiOperation(value = "Find companycontact content by ID",
-            notes = "Find content for CompanyContactDTO",
+
+    @ApiOperation(value = "Find companycontact by company ID",
+            notes = "ind companycontact by company ID",
             response = Byte[].class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
-    })                    
+            @ApiResponse(code = 200, message = "Successful operation", response = Byte[].class)
+    })
     @GetMapping(value = "/companycontact/{id}/content")
     @ResponseBody
     ResponseEntity<byte[]> findContentByCompanyContactId(@PathVariable("id") Integer id);
 
-	@ApiOperation(value = "Save content for companycontact by ID",
+    @ApiOperation(value = "Save content for companycontact by ID",
             notes = "Saves content for CompanyContactDTO",
-            response = Boolean.class)
+            response = DefaultResponseCompanyContactDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class)
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyContactDTO.class)
     })
     @PostMapping(value = "/companycontact/{id}/content",
-              consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-              produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(@PathVariable("id") Integer id,
-                                                               @RequestParam("file") MultipartFile file);
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(
+            @PathVariable("id") Integer id,
+            @RequestParam("file") MultipartFile file);
 
 }
