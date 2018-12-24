@@ -21,9 +21,7 @@ public class ContactDTO implements Serializable {
 
     private String email;
 
-    private String addressLine1;
-
-    private String addressLine2;
+    private String address1;
 
     private String phone1;
 

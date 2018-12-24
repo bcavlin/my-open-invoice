@@ -1,15 +1,19 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.api.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QCompanyEntity;
+import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
 import com.bgh.myopeninvoice.db.repository.CompanyRepository;
 import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
+import io.jsonwebtoken.lang.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,6 +33,9 @@ public class CompanyService implements CommonService<CompanyEntity> {
 
     @Autowired
     private ContentRepository contentRepository;
+
+    @Autowired
+    private CompanyContactRepository companyContactRepository;
 
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
@@ -107,12 +115,13 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @SuppressWarnings("unchecked")
     @Transactional
     @Override
-    public List<CompanyEntity> saveContent(Integer id, ContentEntity content) {
+    public List<CompanyEntity> saveContent(Integer id, ContentEntity content) throws InvalidDataException {
         log.info("Save content to company {}, file {}", id, content.getFilename());
         List<CompanyEntity> save = new ArrayList<>();
 
         Optional<CompanyEntity> byId = companyRepository.findById(id);
-        byId.ifPresent(companyEntity -> {
+        if (byId.isPresent()) {
+            CompanyEntity companyEntity = byId.get();
             if (companyEntity.getContentByContentId() == null) {
                 log.debug("Adding new content");
                 companyEntity.setContentByContentId(content);
@@ -124,15 +133,19 @@ public class CompanyService implements CommonService<CompanyEntity> {
                 companyEntity.getContentByContentId().setFilename(content.getFilename());
             }
             save.addAll(this.save(companyEntity));
-        });
+        }
 
         return save;
     }
 
     @Transactional
     @Override
-    public List<CompanyEntity> save(CompanyEntity entity) {
+    public List<CompanyEntity> save(CompanyEntity entity) throws InvalidDataException {
         log.info("Saving entity");
+
+        //delete missing contacts - orphan removal is making problems with update
+        removeMissingContacts(entity);
+
         List<CompanyEntity> entities = new ArrayList<>();
         if (entity.getCompanyId() != null) {
             //update (we are missing image)
@@ -140,11 +153,43 @@ public class CompanyService implements CommonService<CompanyEntity> {
                     contentRepository.findContentByCompanyId(
                             entity.getCompanyId(),
                             ContentEntity.ContentEntityTable.COMPANY.name().toUpperCase()));
+        } else if (entity.getContentByContentId() != null
+                && entity.getContentByContentId().getContentId() == null
+                && entity.getContentByContentId().getFilename() == null) {
+            entity.setContentByContentId(null);
         }
         CompanyEntity saved = companyRepository.save(entity);
+
         log.info("Saved entity: {}", entity);
         entities.add(saved);
         return entities;
+    }
+
+    private void removeMissingContacts(CompanyEntity entity) throws InvalidDataException {
+        if (entity.getCompanyId() != null) {
+            log.debug("CompanyId found... checking owned change");
+            Optional<CompanyEntity> byId = companyRepository.findById(entity.getCompanyId());
+            if (byId.isPresent()) {
+                if (!Collections.isEmpty(byId.get().getContractsByCompanyId())
+                        && !entity.getOwnedByMe()
+                        && byId.get().getOwnedByMe()) {
+                    throw new InvalidDataException("To change company from owned to not owned you have to remove contracts!");
+                }
+                if (entity.getCompanyContactsByCompanyId()!=null &&
+                        !entity.getCompanyContactsByCompanyId().equals(byId.get().getCompanyContactsByCompanyId())) {
+                    log.debug("Deleting missing data");
+                    List<Integer> toDelete = new ArrayList<>();
+                    if (!Collections.isEmpty(entity.getCompanyContactsByCompanyId())) {
+                        toDelete = entity.getCompanyContactsByCompanyId().stream()
+                                .map(CompanyContactEntity::getCompanyContactId).collect(Collectors.toList());
+                    }
+                    companyContactRepository.deleteAllByCompanyContactIdIsNotInAndCompanyIdEquals(
+                            toDelete,
+                            entity.getCompanyId()
+                    );
+                }
+            }
+        }
     }
 
     @Transactional

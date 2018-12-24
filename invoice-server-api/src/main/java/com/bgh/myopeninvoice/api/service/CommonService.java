@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.api.exception.InvalidDataException;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.querydsl.core.types.Predicate;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public interface CommonService<T> {
     List<T> findById(Integer id);
 
     @Transactional
-    List<T> save(T entity);
+    List<T> save(T entity) throws InvalidDataException;
 
     @Transactional
     void delete(Integer id);
@@ -26,6 +27,6 @@ public interface CommonService<T> {
     ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table);
 
     @Transactional
-    <T> List<T> saveContent(Integer id, ContentEntity content);
+    <T> List<T> saveContent(Integer id, ContentEntity content) throws InvalidDataException;
 
 }
