@@ -3,6 +3,40 @@
 
     <persistence-unit name="invoice-db-persistence">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.bgh.myopeninvoice.db.domain2.CompanyEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.CompanyContactEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.ContractEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.UserEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.InvoiceEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.ContactEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.ContractEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.TimeSheetEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.RoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.UserRoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.CompanyContactEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.ContentEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.TaxEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.ReportsEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.CurrencyEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.AttachmentEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.CompanyEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.audit.UserDateAudit</class>
+        <class>org.springframework.data.jpa.domain.AbstractPersistable</class>
+        <class>org.springframework.data.jpa.domain.AbstractAuditable</class>
+        <class>com.bgh.myopeninvoice.db.domain.audit.DateAudit</class>
+        <class>com.bgh.myopeninvoice.db.domain2.AttachmentEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.ContactEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.ContentEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.CurrencyEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.InvoiceEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.InvoiceItemsEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.ReportsEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.RoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.TaxEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.TimeSheetEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.UserEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain2.UserRoleEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

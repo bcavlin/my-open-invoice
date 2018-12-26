@@ -10,7 +10,6 @@ import com.bgh.myopeninvoice.db.domain.QCompanyEntity;
 import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
 import com.bgh.myopeninvoice.db.repository.CompanyRepository;
 import com.bgh.myopeninvoice.db.repository.ContentRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import io.jsonwebtoken.lang.Collections;
@@ -40,10 +39,8 @@ public class CompanyService implements CommonService<CompanyEntity> {
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
+        if (searchParameters.getFilter() != null && !searchParameters.getBuilder().hasValue()) {
+            searchParameters.getBuilder().andAnyOf(
                     QCompanyEntity.companyEntity.companyName.contains(searchParameters.getFilter()),
                     QCompanyEntity.companyEntity.phone1.contains(searchParameters.getFilter()),
                     QCompanyEntity.companyEntity.shortName.contains(searchParameters.getFilter()),
@@ -54,7 +51,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
             );
 
         }
-        return builder;
+        return searchParameters.getBuilder();
     }
 
     @Override
@@ -143,9 +140,6 @@ public class CompanyService implements CommonService<CompanyEntity> {
     public List<CompanyEntity> save(CompanyEntity entity) throws InvalidDataException {
         log.info("Saving entity");
 
-        //delete missing contacts - orphan removal is making problems with update
-        removeMissingContacts(entity);
-
         List<CompanyEntity> entities = new ArrayList<>();
         if (entity.getCompanyId() != null) {
             //update (we are missing image)
@@ -160,37 +154,37 @@ public class CompanyService implements CommonService<CompanyEntity> {
         }
         CompanyEntity saved = companyRepository.save(entity);
 
+        //delete missing contacts - orphan removal is making problems with update
+//        removeMissingContacts(entity);
+
         log.info("Saved entity: {}", entity);
         entities.add(saved);
         return entities;
     }
 
-    private void removeMissingContacts(CompanyEntity entity) throws InvalidDataException {
-        if (entity.getCompanyId() != null) {
-            log.debug("CompanyId found... checking owned change");
-            Optional<CompanyEntity> byId = companyRepository.findById(entity.getCompanyId());
-            if (byId.isPresent()) {
-                if (!Collections.isEmpty(byId.get().getContractsByCompanyId())
-                        && !entity.getOwnedByMe()
-                        && byId.get().getOwnedByMe()) {
-                    throw new InvalidDataException("To change company from owned to not owned you have to remove contracts!");
-                }
-                if (entity.getCompanyContactsByCompanyId()!=null &&
-                        !entity.getCompanyContactsByCompanyId().equals(byId.get().getCompanyContactsByCompanyId())) {
-                    log.debug("Deleting missing data");
-                    List<Integer> toDelete = new ArrayList<>();
-                    if (!Collections.isEmpty(entity.getCompanyContactsByCompanyId())) {
-                        toDelete = entity.getCompanyContactsByCompanyId().stream()
-                                .map(CompanyContactEntity::getCompanyContactId).collect(Collectors.toList());
-                    }
-                    companyContactRepository.deleteAllByCompanyContactIdIsNotInAndCompanyIdEquals(
-                            toDelete,
-                            entity.getCompanyId()
-                    );
-                }
-            }
-        }
-    }
+//    private void removeMissingContacts(CompanyEntity entity) throws InvalidDataException {
+//        if (entity.getCompanyId() != null) {
+//            log.debug("CompanyId found... checking owned change");
+//            Optional<CompanyEntity> byId = companyRepository.findById(entity.getCompanyId());
+//            if (byId.isPresent()) {
+//                if (!Collections.isEmpty(byId.get().getContractsByCompanyId())
+//                        && !entity.getOwnedByMe()
+//                        && byId.get().getOwnedByMe()) {
+//                    throw new InvalidDataException("To change company from owned to not owned you have to remove contracts!");
+//                }
+//                log.debug("Deleting missing contact data");
+//                List<Integer> skipDeleteFor = new ArrayList<>();
+//                if (!Collections.isEmpty(entity.getCompanyContactsByCompanyId())) {
+//                    skipDeleteFor = entity.getCompanyContactsByCompanyId().stream()
+//                            .map(CompanyContactEntity::getCompanyContactId).collect(Collectors.toList());
+//                }
+//                companyContactRepository.deleteAllByCompanyContactIdIsNotInAndCompanyIdEquals(
+//                        skipDeleteFor,
+//                        entity.getCompanyId()
+//                );
+//            }
+//        }
+//    }
 
     @Transactional
     @Override

@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
+        // @DATE_TIME_FORMATTER:off
         http
                     .cors()
                 .and()
@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest().authenticated()
                 .and().addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        // @formatter:on
+        // @DATE_TIME_FORMATTER:on
     }
 
 }

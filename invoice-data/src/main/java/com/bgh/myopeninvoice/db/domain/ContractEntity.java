@@ -20,16 +20,16 @@ public class ContractEntity implements java.io.Serializable {
     private Integer contractId;
 
     @Basic
-    @Column(name = "CONTRACT_IS_FOR", nullable = false)
-    private Integer contractIsFor;
+    @Column(name = "COMPANY_CONTACT_ID", nullable = false)
+    private Integer companyContactId;
 
     @Basic
-    @Column(name = "CONTRACT_SIGNED_WITH", nullable = false)
-    private Integer contractSignedWith;
+    @Column(name = "COMPANY_ID", nullable = false)
+    private Integer companyId;
 
     @Basic
-    @Column(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", nullable = false)
-    private Integer contractSignedWithSubcontract;
+    @Column(name = "COMPANY_ID_SUBCONTRACT", nullable = false)
+    private Integer companyIdSubcontract;
 
     @Basic
     @Column(name = "RATE", nullable = false, precision = 32767)
@@ -69,21 +69,21 @@ public class ContractEntity implements java.io.Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
-    @JoinColumn(name = "CONTRACT_IS_FOR", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false,
+    @JoinColumn(name = "COMPANY_CONTACT_ID", referencedColumnName = "COMPANY_CONTACT_ID", nullable = false,
             insertable = false, updatable = false)
-    private CompanyContactEntity companyContactByContractIsFor;
+    private CompanyContactEntity companyContactByCompanyContactId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
-    @JoinColumn(name = "CONTRACT_SIGNED_WITH", referencedColumnName = "COMPANY_ID", nullable = false,
+    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID", nullable = false,
             insertable = false, updatable = false)
-    private CompanyEntity companyByContractSignedWith;
+    private CompanyEntity companyByCompanyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
-    @JoinColumn(name = "CONTRACT_SIGNED_WITH_SUBCONTRACT", referencedColumnName = "COMPANY_ID", nullable = false,
+    @JoinColumn(name = "COMPANY_ID_SUBCONTRACT", referencedColumnName = "COMPANY_ID", nullable = false,
             insertable = false, updatable = false)
-    private CompanyEntity companyByContractSignedWithSubcontract;
+    private CompanyEntity companyByCompanyIdSubcontract;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne

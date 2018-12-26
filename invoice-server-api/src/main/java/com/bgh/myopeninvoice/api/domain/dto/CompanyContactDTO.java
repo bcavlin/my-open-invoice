@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import java.util.Collection;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class CompanyContactDTO implements java.io.Serializable {
@@ -17,7 +19,11 @@ public class CompanyContactDTO implements java.io.Serializable {
     @JsonIgnoreProperties({"companyContacts"})
     private ContactDTO contact;
 
-    @JsonIgnoreProperties({"content","companyContacts"})
+    @JsonIgnoreProperties({"content", "companyContacts"})
     private CompanyDTO company;
+
+    private boolean markedForRemoval;
+
+    private Integer participatesInContracts;
 
 }

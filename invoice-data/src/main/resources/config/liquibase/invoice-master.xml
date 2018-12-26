@@ -193,13 +193,13 @@
             <column name="contract_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="contract_is_for" type="int">
+            <column name="company_contact_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="contract_signed_with" type="int">
+            <column name="company_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="contract_signed_with_subcontract" type="int">
+            <column name="company_id_subcontract" type="int">
             </column>
             <column name="rate" type="decimal">
                 <constraints nullable="false"/>
@@ -226,19 +226,19 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="contract_is_for"
+        <addForeignKeyConstraint baseColumnNames="company_contact_id"
                                  baseTableName="contract"
                                  constraintName="fk_contract_1"
                                  referencedColumnNames="company_contact_id"
                                  referencedTableName="company_contact"/>
 
-        <addForeignKeyConstraint baseColumnNames="contract_signed_with"
+        <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="contract"
                                  constraintName="fk_contract_2"
                                  referencedColumnNames="company_id"
                                  referencedTableName="company"/>
 
-        <addForeignKeyConstraint baseColumnNames="contract_signed_with_subcontract"
+        <addForeignKeyConstraint baseColumnNames="company_id_subcontract"
                                  baseTableName="contract"
                                  constraintName="fk_contract_3"
                                  referencedColumnNames="company_id"

@@ -12,7 +12,6 @@ import com.bgh.myopeninvoice.api.transformer.CompanyContactTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.QCompanyContactEntity;
-import com.bgh.myopeninvoice.db.domain.QContractEntity;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -31,12 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -78,18 +73,18 @@ public class CompanyContactController extends AbstractController implements Comp
             Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
             BooleanBuilder builder = searchParameters.getBuilder();
 
-            while (matcher.find()){
+            while (matcher.find()) {
                 String[] split = matcher.group(1).split(":");
-                if("owned".equalsIgnoreCase(split[0])){
+                if ("owned".equalsIgnoreCase(split[0])) {
                     searchParameters.getBuilder().and(QCompanyContactEntity.companyContactEntity
                             .companyByCompanyId.ownedByMe.eq(Boolean.valueOf(split[1])));
-                } else if ("companyId".equalsIgnoreCase(split[0])){
+                } else if ("companyId".equalsIgnoreCase(split[0])) {
                     searchParameters.getBuilder().and(QCompanyContactEntity.companyContactEntity
                             .companyId.eq(NumberUtils.toInt(split[1])));
                 }
             }
 
-            if(searchParameters.getBuilder().hasValue()){
+            if (searchParameters.getBuilder().hasValue()) {
                 //reset the filter
                 searchParameters.setFilter(null);
             }
@@ -118,7 +113,7 @@ public class CompanyContactController extends AbstractController implements Comp
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyContactDTO>> save(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                        BindingResult bindingResult) {
+                                                                   BindingResult bindingResult) {
         List<CompanyContactDTO> result = new ArrayList<>();
 
         try {
@@ -156,7 +151,7 @@ public class CompanyContactController extends AbstractController implements Comp
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyContactDTO>> update(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                          BindingResult bindingResult) {
+                                                                     BindingResult bindingResult) {
 
         List<CompanyContactDTO> result = new ArrayList<>();
 
@@ -215,8 +210,36 @@ public class CompanyContactController extends AbstractController implements Comp
 
     @Override
     public ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
+                                                                                            @RequestParam("file") MultipartFile file) {
         throw new org.apache.commons.lang.NotImplementedException();
+    }
+
+    @Override
+    public ResponseEntity<DefaultResponse<CompanyContactDTO>> updateBulk(
+            @Valid @NotNull @RequestBody CompanyContactDTO[] companycontactDTO, BindingResult bindingResult) {
+        List<CompanyContactDTO> result = new ArrayList<>();
+
+        try {
+            Assert.isTrue(companycontactDTO.length > 0, "There has to be at least one change listed");
+            if (bindingResult.hasErrors()) {
+                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
+                        .collect(Collectors.joining(", "));
+                throw new InvalidDataException(collect);
+            }
+
+            List<CompanyContactEntity> companyContactEntities = companycontactTransformer.transformDTOToEntity(Arrays.asList(companycontactDTO), CompanyContactEntity.class);
+            List<CompanyContactEntity> companyContactEntities1 = companycontactService.bulkAddDelete(companyContactEntities);
+            result = companycontactTransformer.transformEntityToDTO(companyContactEntities1, CompanyContactDTO.class);
+
+        } catch (Exception e) {
+            return Utils.getErrorResponse(CompanyContactDTO.class, e);
+        }
+
+        DefaultResponse<CompanyContactDTO> defaultResponse = new DefaultResponse<>(CompanyContactDTO.class);
+        defaultResponse.setCount((long) result.size());
+        defaultResponse.setDetails(result);
+        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
     }
 
 }

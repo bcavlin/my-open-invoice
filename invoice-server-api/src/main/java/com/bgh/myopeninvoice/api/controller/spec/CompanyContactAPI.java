@@ -100,4 +100,15 @@ public interface CompanyContactAPI {
             @PathVariable("id") Integer id,
             @RequestParam("file") MultipartFile file);
 
+    @ApiOperation(value = "Update bulk companycontact",
+            notes = "Updates CompanyContactDTO in a bulk",
+            response = DefaultResponseCompanyContactDTO[].class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseCompanyContactDTO[].class)
+    })
+    @PutMapping(value = "/companycontact/bulk", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    ResponseEntity<DefaultResponse<CompanyContactDTO>> updateBulk(
+            @Valid @NotNull @RequestBody CompanyContactDTO[] companycontactDTO,
+            BindingResult bindingResult);
+
 }

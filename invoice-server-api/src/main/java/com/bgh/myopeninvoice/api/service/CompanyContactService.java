@@ -4,10 +4,10 @@ import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
+import com.bgh.myopeninvoice.db.domain.QCompanyContactEntity;
 import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.PredicateTemplate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +108,25 @@ public class CompanyContactService implements CommonService<CompanyContactEntity
         log.info("Deleting CompanyContactDTO with id [{}]", id);
         Assert.notNull(id, "ID cannot be empty when deleting data");
         companycontactRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<CompanyContactEntity> bulkAddDelete(List<CompanyContactEntity> companyContactEntities) {
+        for (CompanyContactEntity companyContactEntity : companyContactEntities) {
+            if (companyContactEntity.getCompanyContactId() != null) {
+                //delete old contacts
+                log.info("Deleting company contact: {}", companyContactEntity);
+                this.delete(companyContactEntity.getCompanyContactId());
+            } else {
+                //add new contacts
+                log.info("Saving company contact: {}", companyContactEntity);
+                this.save(companyContactEntity);
+            }
+        }
+        return Utils.convertIterableToList(companycontactRepository.findAll(
+                new BooleanBuilder().and(
+                        QCompanyContactEntity.companyContactEntity.companyId.eq(
+                                companyContactEntities.get(0).getCompanyId()))));
     }
 
 }

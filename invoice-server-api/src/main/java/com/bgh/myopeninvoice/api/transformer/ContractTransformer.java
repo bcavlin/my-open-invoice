@@ -22,6 +22,9 @@ public class ContractTransformer extends CustomAbstractTransformer<ContractEntit
     public MapperFactory mapFields(MapperFactory mapperFactory) {
         mapperFactory.classMap(ContractDTO.class, ContractEntity.class)
                 .field("content", "contentByContentId")
+                .field("companyContact", "companyContactByCompanyContactId")
+                .field("company", "companyByCompanyId")
+                .field("companySubcontract", "companyByCompanyIdSubcontract")
                 .field("currency", "currencyByCcyId")
                 .byDefault()
                 .register();
