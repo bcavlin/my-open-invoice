@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.CompanyAPI;
+import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
@@ -11,7 +12,12 @@ import com.bgh.myopeninvoice.api.transformer.CompanyTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
+import com.bgh.myopeninvoice.db.domain.QCompanyContactEntity;
+import com.bgh.myopeninvoice.db.domain.QCompanyEntity;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -30,13 +36,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 public class CompanyController extends AbstractController implements CompanyAPI {
-
-    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
     @Autowired
     private CompanyService companyService;
@@ -50,8 +55,10 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         long count;
 
         try {
-            count = companyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            List<CompanyEntity> entities = companyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+            SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+            validateSpecialFilter(queryParameters, searchParameters);
+            count = companyService.count(searchParameters);
+            List<CompanyEntity> entities = companyService.findAll(searchParameters);
             result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
         } catch (Exception e) {
@@ -63,6 +70,27 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         defaultResponse.setDetails(result);
         defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
         return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    }
+
+    @Override
+    protected void validateSpecialFilter(Map<String, String> queryParameters, SearchParameters searchParameters) {
+        if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
+            Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
+            BooleanBuilder builder = searchParameters.getBuilder();
+
+            while (matcher.find()){
+                String[] split = matcher.group(1).split(":");
+                if("owned".equalsIgnoreCase(split[0])){
+                    searchParameters.getBuilder().and(QCompanyEntity.companyEntity
+                            .ownedByMe.eq(Boolean.valueOf(split[1])));
+                }
+            }
+
+            if(searchParameters.getBuilder().hasValue()){
+                //reset the filter
+                searchParameters.setFilter(null);
+            }
+        }
     }
 
     @Override

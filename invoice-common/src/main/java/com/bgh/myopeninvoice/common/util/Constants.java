@@ -1,5 +1,7 @@
 package com.bgh.myopeninvoice.common.util;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Application constants.
  */
@@ -16,6 +18,12 @@ public final class Constants {
     public static final String SPRING_PROFILE_PRODUCTION = "prod";
 
     public static final String DATE_FORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
+
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
+            .ofPattern("[yyyy-MM-dd'T'HH:mm:ss.SSSZ][yyyy-MM-dd'T'HH:mm:ss.SSSX]");
+
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
+            .ofPattern("[yyyy-MM-dd]");
 
     private Constants() {
     }

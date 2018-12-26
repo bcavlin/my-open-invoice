@@ -83,7 +83,7 @@ public class ContractController extends AbstractController implements ContractAP
                 if ("companyId".equalsIgnoreCase(split[0])){
                     searchParameters.getBuilder().and(
                             QContractEntity.contractEntity
-                                    .contractSignedWith.eq(NumberUtils.toInt(split[1]))
+                                    .companyId.eq(NumberUtils.toInt(split[1]))
                     );
                 }
             }

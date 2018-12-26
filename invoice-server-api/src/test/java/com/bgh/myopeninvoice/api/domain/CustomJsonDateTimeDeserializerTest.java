@@ -11,7 +11,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class CustomJsonDateDeserializerTest {
+public class CustomJsonDateTimeDeserializerTest {
 
     String test1 = "2018-11-25T22:12:09.433-0500";
     String test2 = "2018-11-25T22:12:09.433Z";

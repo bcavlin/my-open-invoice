@@ -1,10 +1,13 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.api.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import com.bgh.myopeninvoice.db.domain.QContractEntity;
+import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
 import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.bgh.myopeninvoice.db.repository.ContractRepository;
 import com.querydsl.core.types.Predicate;
@@ -27,6 +30,9 @@ public class ContractService implements CommonService<ContractEntity> {
 
     @Autowired
     private ContentRepository contentRepository;
+
+    @Autowired
+    private CompanyContactRepository companyContactRepository;
 
     @Override
     public Predicate getPredicate(SearchParameters searchParameters) {
@@ -104,12 +110,13 @@ public class ContractService implements CommonService<ContractEntity> {
     @SuppressWarnings("unchecked")
     @Transactional
     @Override
-    public List<ContractEntity> saveContent(Integer id, ContentEntity content) {
+    public List<ContractEntity> saveContent(Integer id, ContentEntity content) throws InvalidDataException {
         log.info("Save content to contract {}, file {}", id, content.getFilename());
         List<ContractEntity> save = new ArrayList<>();
 
         Optional<ContractEntity> byId = contractRepository.findById(id);
-        byId.ifPresent(contractEntity -> {
+        if (byId.isPresent()) {
+            ContractEntity contractEntity = byId.get();
             if (contractEntity.getContentByContentId() == null) {
                 log.debug("Adding new content");
                 contractEntity.setContentByContentId(content);
@@ -121,16 +128,23 @@ public class ContractService implements CommonService<ContractEntity> {
                 contractEntity.getContentByContentId().setFilename(content.getFilename());
             }
             save.addAll(this.save(contractEntity));
-        });
+        }
 
         return save;
     }
 
     @Transactional
     @Override
-    public List<ContractEntity> save(ContractEntity entity) {
+    public List<ContractEntity> save(ContractEntity entity) throws InvalidDataException {
         log.info("Saving entity");
         List<ContractEntity> entities = new ArrayList<>();
+        Optional<CompanyContactEntity> companyContactEntity = companyContactRepository.findById(entity.getCompanyContactId());
+        if (companyContactEntity.isPresent()
+                && companyContactEntity.get().getCompanyId().equals(
+                entity.getCompanyId()
+        )) {
+            throw new InvalidDataException("Company that we sign contract with and contact cannot have same company id.");
+        }
         ContractEntity saved = contractRepository.save(entity);
         log.info("Saved entity: {}", entity);
         entities.add(saved);

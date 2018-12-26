@@ -1,9 +1,11 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
+import com.bgh.myopeninvoice.api.domain.CustomJsonDateTimeDeserializer;
 import com.bgh.myopeninvoice.common.util.EnumValidator;
 import com.bgh.myopeninvoice.common.util.RateType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -17,12 +19,12 @@ public class ContractDTO implements java.io.Serializable {
     private Integer contractId;
 
     @NotNull
-    private Integer contractIsFor;
+    private Integer companyContactId;
 
     @NotNull
-    private Integer contractSignedWith;
+    private Integer companyId;
 
-    private Integer contractSignedWithSubcontract;
+    private Integer companyIdSubcontract;
 
     @NotNull
     private BigDecimal rate;
@@ -35,9 +37,11 @@ public class ContractDTO implements java.io.Serializable {
     private Integer ccyId;
 
     @NotNull
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date validFrom;
 
     @NotNull
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date validTo;
 
     private String description;
@@ -51,13 +55,14 @@ public class ContractDTO implements java.io.Serializable {
     @JsonIgnoreProperties({"content"})
     private ContentDTO content;
 
-    private CompanyContactDTO companyContactByContractIsFor;
+    @JsonIgnoreProperties({"contracts","invoices"})
+    private CompanyContactDTO companyContact;
 
     @JsonIgnoreProperties({"content","companyContacts"})
-    private CompanyDTO companyByContractSignedWith;
+    private CompanyDTO company;
 
     @JsonIgnoreProperties({"content","companyContacts"})
-    private CompanyDTO companyByContractSignedWithSubcontract;
+    private CompanyDTO companySubcontract;
 
     private CurrencyDTO currency;
 

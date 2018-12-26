@@ -58,15 +58,15 @@ public class CompanyEntity implements java.io.Serializable {
     private ContentEntity contentByContentId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyByCompanyId", cascade = CascadeType.ALL) //, orphanRemoval = true
+    @OneToMany(mappedBy = "companyByCompanyId")
     private Collection<CompanyContactEntity> companyContactsByCompanyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyByContractSignedWith")
+    @OneToMany(mappedBy = "companyByCompanyId")
     private Collection<ContractEntity> contractsByCompanyId;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "companyByContractSignedWithSubcontract")
+    @OneToMany(mappedBy = "companyByCompanyIdSubcontract")
     private Collection<ContractEntity> contractsByCompanyId_0;
 
     @OneToMany(mappedBy = "companyByCompanyTo")
@@ -75,7 +75,6 @@ public class CompanyEntity implements java.io.Serializable {
     @Formula("(select count(*) from invoice.company_contact cc where cc.company_id = company_id)")
     private Integer numberOfContacts;
 
-    @Formula("(select count(*) from invoice.contract cc where cc.contract_is_for = company_id)")
+    @Formula("(select count(*) from invoice.contract cc where cc.company_id = company_id)")
     private Integer numberOfContracts;
-
 }

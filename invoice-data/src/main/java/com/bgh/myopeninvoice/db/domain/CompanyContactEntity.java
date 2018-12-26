@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -37,13 +38,10 @@ public class CompanyContactEntity implements java.io.Serializable {
             insertable = false, updatable = false)
     private CompanyEntity companyByCompanyId;
 
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    @OneToMany(mappedBy = "companyContactByContractIsFor")
-//    private Collection<ContractEntity> contractsByCompanyContactId;
-//
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    @OneToMany(mappedBy = "companyContactByCompanyContactFrom")
-//    private Collection<InvoiceEntity> invoicesByCompanyContactId;
+    @Transient
+    private boolean markedForRemoval;
 
+    @Formula("(select count(*) from invoice.contract cc where cc.company_contact_id = company_contact_id)")
+    private Integer participatesInContracts;
 
 }
