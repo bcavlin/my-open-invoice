@@ -6,6 +6,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 
@@ -60,10 +62,6 @@ public class ContractEntity implements java.io.Serializable {
     private String contractNumber;
 
     @Basic
-    @Column(name = "CONTENT_ID")
-    private Integer contentId;
-
-    @Basic
     @Column(name = "PURCHASE_ORDER", length = 50)
     private String purchaseOrder;
 
@@ -91,13 +89,29 @@ public class ContractEntity implements java.io.Serializable {
             insertable = false, updatable = false)
     private CurrencyEntity currencyByCcyId;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne
-    @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID",
-            insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID")
     private ContentEntity contentByContentId;
 
     @OneToMany(mappedBy = "contractByCompanyContractTo")
     private Collection<InvoiceEntity> invoicesByContractId;
+
+    @Transient
+    public boolean isContractValid() {
+        if (validFrom != null && validTo != null) {
+            Instant today = Instant.now();
+            Instant from = Instant
+                    .ofEpochMilli(validFrom.getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant();
+            Instant to = Instant
+                    .ofEpochMilli(validTo.getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant();
+            return today.isAfter(from) && today.isBefore(to);
+        } else {
+            return false;
+        }
+    }
 
 }

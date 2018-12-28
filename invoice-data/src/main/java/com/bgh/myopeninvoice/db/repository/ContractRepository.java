@@ -20,7 +20,10 @@ import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * Created by bcavlin on 14/03/17.
@@ -31,4 +34,7 @@ public interface ContractRepository
 
     @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)
     Long getNewContractSequenceNumber();
+
+    @Query("select e from ContractEntity e where e.contractId=:id")
+    Optional<ContractEntity> findCustomById(@Param("id") Integer id);
 }

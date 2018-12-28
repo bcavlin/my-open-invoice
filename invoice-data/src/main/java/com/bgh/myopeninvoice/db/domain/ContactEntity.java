@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Table(name = "CONTACT", schema = "INVOICE")
+@ToString(exclude = {"companyContactsByContactId"})
 public class ContactEntity implements java.io.Serializable {
 
     @Id

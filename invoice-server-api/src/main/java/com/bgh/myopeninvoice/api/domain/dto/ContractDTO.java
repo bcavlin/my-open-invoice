@@ -66,4 +66,6 @@ public class ContractDTO implements java.io.Serializable {
 
     private CurrencyDTO currency;
 
+    private boolean isContractValid;
+
 }

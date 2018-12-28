@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -10,6 +11,7 @@ import java.util.Collection;
 
 @Data
 @Entity
+@ToString(exclude = {"contactByContactId","companyByCompanyId"})
 @Table(name = "COMPANY_CONTACT", schema = "INVOICE")
 public class CompanyContactEntity implements java.io.Serializable {
 
