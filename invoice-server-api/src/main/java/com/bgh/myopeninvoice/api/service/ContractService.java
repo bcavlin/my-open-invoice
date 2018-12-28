@@ -112,9 +112,9 @@ public class ContractService implements CommonService<ContractEntity> {
     @Override
     public List<ContractEntity> saveContent(Integer id, ContentEntity content) throws InvalidDataException {
         log.info("Save content to contract {}, file {}", id, content.getFilename());
-        List<ContractEntity> save = new ArrayList<>();
+        List<ContractEntity> contractEntities = new ArrayList<>();
 
-        Optional<ContractEntity> byId = contractRepository.findById(id);
+        Optional<ContractEntity> byId = contractRepository.findCustomById(id);
         if (byId.isPresent()) {
             ContractEntity contractEntity = byId.get();
             if (contractEntity.getContentByContentId() == null) {
@@ -127,10 +127,10 @@ public class ContractService implements CommonService<ContractEntity> {
                 contractEntity.getContentByContentId().setContent(content.getContent());
                 contractEntity.getContentByContentId().setFilename(content.getFilename());
             }
-            save.addAll(this.save(contractEntity));
+            contractEntities.addAll(this.save(contractEntity));
         }
 
-        return save;
+        return contractEntities;
     }
 
     @Transactional
@@ -138,6 +138,7 @@ public class ContractService implements CommonService<ContractEntity> {
     public List<ContractEntity> save(ContractEntity entity) throws InvalidDataException {
         log.info("Saving entity");
         List<ContractEntity> entities = new ArrayList<>();
+
         Optional<CompanyContactEntity> companyContactEntity = companyContactRepository.findById(entity.getCompanyContactId());
         if (companyContactEntity.isPresent()
                 && companyContactEntity.get().getCompanyId().equals(
@@ -145,6 +146,19 @@ public class ContractService implements CommonService<ContractEntity> {
         )) {
             throw new InvalidDataException("Company that we sign contract with and contact cannot have same company id.");
         }
+
+        if (entity.getContractId() != null) {
+            //update (we are missing image)
+            entity.setContentByContentId(
+                    contentRepository.findContentByContractId(
+                            entity.getContractId(),
+                            ContentEntity.ContentEntityTable.CONTRACT.name().toUpperCase()));
+        } else if (entity.getContentByContentId() != null
+                && entity.getContentByContentId().getContentId() == null
+                && entity.getContentByContentId().getFilename() == null) {
+            entity.setContentByContentId(null);
+        }
+
         ContractEntity saved = contractRepository.save(entity);
         log.info("Saved entity: {}", entity);
         entities.add(saved);

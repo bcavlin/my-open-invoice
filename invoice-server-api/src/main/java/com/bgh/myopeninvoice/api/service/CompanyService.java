@@ -152,39 +152,13 @@ public class CompanyService implements CommonService<CompanyEntity> {
                 && entity.getContentByContentId().getFilename() == null) {
             entity.setContentByContentId(null);
         }
-        CompanyEntity saved = companyRepository.save(entity);
 
-        //delete missing contacts - orphan removal is making problems with update
-//        removeMissingContacts(entity);
+        CompanyEntity saved = companyRepository.save(entity);
 
         log.info("Saved entity: {}", entity);
         entities.add(saved);
         return entities;
     }
-
-//    private void removeMissingContacts(CompanyEntity entity) throws InvalidDataException {
-//        if (entity.getCompanyId() != null) {
-//            log.debug("CompanyId found... checking owned change");
-//            Optional<CompanyEntity> byId = companyRepository.findById(entity.getCompanyId());
-//            if (byId.isPresent()) {
-//                if (!Collections.isEmpty(byId.get().getContractsByCompanyId())
-//                        && !entity.getOwnedByMe()
-//                        && byId.get().getOwnedByMe()) {
-//                    throw new InvalidDataException("To change company from owned to not owned you have to remove contracts!");
-//                }
-//                log.debug("Deleting missing contact data");
-//                List<Integer> skipDeleteFor = new ArrayList<>();
-//                if (!Collections.isEmpty(entity.getCompanyContactsByCompanyId())) {
-//                    skipDeleteFor = entity.getCompanyContactsByCompanyId().stream()
-//                            .map(CompanyContactEntity::getCompanyContactId).collect(Collectors.toList());
-//                }
-//                companyContactRepository.deleteAllByCompanyContactIdIsNotInAndCompanyIdEquals(
-//                        skipDeleteFor,
-//                        entity.getCompanyId()
-//                );
-//            }
-//        }
-//    }
 
     @Transactional
     @Override
