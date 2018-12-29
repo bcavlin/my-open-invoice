@@ -139,7 +139,8 @@ public class ContractService implements CommonService<ContractEntity> {
         log.info("Saving entity");
         List<ContractEntity> entities = new ArrayList<>();
 
-        Optional<CompanyContactEntity> companyContactEntity = companyContactRepository.findById(entity.getCompanyContactId());
+        Optional<CompanyContactEntity> companyContactEntity = companyContactRepository.findById(
+                entity.getCompanyContactId());
         if (companyContactEntity.isPresent()
                 && companyContactEntity.get().getCompanyId().equals(
                 entity.getCompanyId()

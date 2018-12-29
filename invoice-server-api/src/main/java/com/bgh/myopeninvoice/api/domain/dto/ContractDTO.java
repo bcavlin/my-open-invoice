@@ -48,8 +48,6 @@ public class ContractDTO implements java.io.Serializable {
 
     private String contractNumber;
 
-    private Integer contentId;
-
     private String purchaseOrder;
 
     @JsonIgnoreProperties({"content"})

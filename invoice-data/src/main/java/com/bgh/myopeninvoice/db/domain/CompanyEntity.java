@@ -69,9 +69,6 @@ public class CompanyEntity implements java.io.Serializable {
     @OneToMany(mappedBy = "companyByCompanyIdSubcontract")
     private Collection<ContractEntity> contractsByCompanyId_0;
 
-    @OneToMany(mappedBy = "companyByCompanyTo")
-    private Collection<InvoiceEntity> invoicesByCompanyId;
-
     @Formula("(select count(*) from invoice.company_contact cc where cc.company_id = company_id)")
     private Integer numberOfContacts;
 

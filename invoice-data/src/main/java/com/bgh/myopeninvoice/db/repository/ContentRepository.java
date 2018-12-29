@@ -43,8 +43,10 @@ public interface ContentRepository
 
     @Query("select c.contentByContentId from ContractEntity c where c.contractId = :contractId " +
             "and c.contentByContentId.contentTable = :table")
-    ContentEntity findContentByContractId(@Param("contractId") Integer contractId,
-                                          @Param("table") String table);
+    ContentEntity findContentByContractId(
+            @Param("contractId") Integer contractId,
+            @Param("table") String table
+    );
 
     @Query("select c.contentByContentId from ReportsEntity c where c.reportId = :reportId " +
             "and c.contentByContentId.contentTable = :table")

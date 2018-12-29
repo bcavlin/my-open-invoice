@@ -228,31 +228,31 @@
 
         <addForeignKeyConstraint baseColumnNames="company_contact_id"
                                  baseTableName="contract"
-                                 constraintName="fk_contract_1"
+                                 constraintName="fk_contract_cc"
                                  referencedColumnNames="company_contact_id"
                                  referencedTableName="company_contact"/>
 
         <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="contract"
-                                 constraintName="fk_contract_2"
+                                 constraintName="fk_contract_c"
                                  referencedColumnNames="company_id"
                                  referencedTableName="company"/>
 
         <addForeignKeyConstraint baseColumnNames="company_id_subcontract"
                                  baseTableName="contract"
-                                 constraintName="fk_contract_3"
+                                 constraintName="fk_contract_sc"
                                  referencedColumnNames="company_id"
                                  referencedTableName="company"/>
 
         <addForeignKeyConstraint baseColumnNames="ccy_id"
                                  baseTableName="contract"
-                                 constraintName="fk_contract_4"
+                                 constraintName="fk_contract_ccy"
                                  referencedColumnNames="ccy_id"
                                  referencedTableName="currency"/>
 
         <addForeignKeyConstraint baseColumnNames="content_id"
                                  baseTableName="contract"
-                                 constraintName="fk_contract_5"
+                                 constraintName="fk_contract_cnt"
                                  referencedColumnNames="content_id"
                                  referencedTableName="content"/>
 
@@ -275,10 +275,10 @@
             <column name="invoice_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="company_to" type="int">
+            <column name="company_contact_from" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="company_contact_from" type="int">
+            <column name="company_contract_to" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="from_date" type="date">
@@ -310,32 +310,23 @@
             <column name="ccy_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="company_contract_to" type="int">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
-
-        <addForeignKeyConstraint baseColumnNames="company_to"
-                                 baseTableName="invoice"
-                                 constraintName="fk_invoice_1"
-                                 referencedColumnNames="company_id"
-                                 referencedTableName="company"/>
 
         <addForeignKeyConstraint baseColumnNames="company_contact_from"
                                  baseTableName="invoice"
-                                 constraintName="fk_invoice_2"
+                                 constraintName="fk_invoice_ccfrom"
                                  referencedColumnNames="company_contact_id"
                                  referencedTableName="company_contact"/>
 
         <addForeignKeyConstraint baseColumnNames="ccy_id"
                                  baseTableName="invoice"
-                                 constraintName="fk_invoice_3"
+                                 constraintName="fk_invoice_ccy"
                                  referencedColumnNames="ccy_id"
                                  referencedTableName="currency"/>
 
         <addForeignKeyConstraint baseColumnNames="company_contract_to"
                                  baseTableName="invoice"
-                                 constraintName="fk_invoice_4"
+                                 constraintName="fk_invoice_ccto"
                                  referencedColumnNames="contract_id"
                                  referencedTableName="contract"/>
     </changeSet>
