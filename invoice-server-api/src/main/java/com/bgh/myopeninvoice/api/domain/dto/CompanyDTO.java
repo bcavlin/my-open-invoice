@@ -1,5 +1,6 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
+import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

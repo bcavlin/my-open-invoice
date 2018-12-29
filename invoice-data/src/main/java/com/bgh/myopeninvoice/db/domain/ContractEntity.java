@@ -79,7 +79,7 @@ public class ContractEntity implements java.io.Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne
-    @JoinColumn(name = "COMPANY_ID_SUBCONTRACT", referencedColumnName = "COMPANY_ID", nullable = false,
+    @JoinColumn(name = "COMPANY_ID_SUBCONTRACT", referencedColumnName = "COMPANY_ID",
             insertable = false, updatable = false)
     private CompanyEntity companyByCompanyIdSubcontract;
 

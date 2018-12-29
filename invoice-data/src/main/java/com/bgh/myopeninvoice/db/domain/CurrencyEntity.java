@@ -23,10 +23,4 @@ public class CurrencyEntity implements java.io.Serializable {
     @Column(name = "DESCRIPTION", nullable = false, length = 100)
     private String description;
 
-    @OneToMany(mappedBy = "currencyByCcyId")
-    private Collection<ContractEntity> contractsByCcyId;
-
-    @OneToMany(mappedBy = "currencyByCcyId")
-    private Collection<InvoiceEntity> invoicesByCcyId;
-
 }
