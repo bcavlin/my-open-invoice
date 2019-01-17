@@ -17,6 +17,7 @@
 package com.bgh.myopeninvoice.db.repository;
 
 import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -27,5 +28,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InvoiceRepository
         extends PagingAndSortingRepository<InvoiceEntity, Integer>, QuerydslPredicateExecutor<InvoiceEntity> {
+
+
+    @Query(value = "SELECT INVOICE.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", nativeQuery = true)
+    Integer getNextSequence();
 
 }

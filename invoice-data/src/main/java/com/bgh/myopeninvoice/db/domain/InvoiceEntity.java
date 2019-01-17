@@ -100,6 +100,14 @@ public class InvoiceEntity implements java.io.Serializable {
     @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) from invoice.invoice_items e where e.invoice_id = invoice_id)")
     private BigDecimal totalValue;
 
+    public BigDecimal getTotalValue() {
+        return totalValue == null ? BigDecimal.valueOf(0) : totalValue;
+    }
+
+    public BigDecimal getTotalValueWithTax() {
+        return totalValueWithTax == null ? BigDecimal.valueOf(0) : totalValueWithTax;
+    }
+
     @Formula("(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
     private BigDecimal totalValueWithTax;
 

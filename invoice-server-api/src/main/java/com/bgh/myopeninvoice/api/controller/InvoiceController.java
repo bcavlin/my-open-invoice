@@ -187,4 +187,14 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
         throw new org.apache.commons.lang.NotImplementedException();
     }
 
+    @Override
+    public ResponseEntity<DefaultResponse<Integer>> getNextCounter() {
+        Integer sequence = invoiceService.getNextCounter();
+        log.info("Returning next sequence for the Invoice: {}", sequence);
+        DefaultResponse<Integer> defaultResponse = new DefaultResponse<>(Integer.class);
+        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+        defaultResponse.setDetails(Collections.singletonList(sequence));
+        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    }
+
 }

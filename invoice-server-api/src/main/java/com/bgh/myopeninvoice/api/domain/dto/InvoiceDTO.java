@@ -1,11 +1,13 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
+import com.bgh.myopeninvoice.api.domain.CustomJsonDateTimeDeserializer;
 import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
 import com.bgh.myopeninvoice.db.domain.CompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity;
 import com.bgh.myopeninvoice.db.domain.ReportsEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -29,18 +31,22 @@ public class InvoiceDTO implements java.io.Serializable {
     private Integer companyContractTo;
 
     @NotNull
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date fromDate;
 
     @NotNull
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date toDate;
 
     @NotNull
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date createdDate;
 
     @NotNull
     private String title;
 
     @NotNull
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date dueDate;
 
     @NotNull
@@ -48,10 +54,16 @@ public class InvoiceDTO implements java.io.Serializable {
 
     private String note;
 
+    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
     private Date paidDate;
 
+    @NotNull
+    private Integer ccyId;
+
+    @NotNull
     private BigDecimal rate;
 
+    @NotNull
     private String rateUnit;
 
     private BigDecimal totalValue;
@@ -61,15 +73,13 @@ public class InvoiceDTO implements java.io.Serializable {
     @JsonIgnoreProperties({"invoice"})
     private Collection<AttachmentDTO> attachments;
 
-    @NotNull
     private CompanyContactDTO companyContact;
 
-    @NotNull
     private CurrencyDTO currency;
 
-    @NotNull
     private ContractDTO contract;
 
+    @JsonIgnoreProperties({"invoice"})
     private Collection<InvoiceItemsDTO> invoiceItems;
 
     private Collection<ReportsDTO> reports;

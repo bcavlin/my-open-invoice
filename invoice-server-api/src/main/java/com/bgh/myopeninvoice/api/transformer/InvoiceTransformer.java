@@ -23,11 +23,13 @@ public class InvoiceTransformer extends CustomAbstractTransformer<InvoiceEntity,
     @Autowired
     private ContractTransformer contractTransformer;
 
+    @Autowired
+    private InvoiceItemsTransformer invoiceItemsTransformer;
+
     @Override
     public MapperFactory mapFields(MapperFactory mapperFactory) {
         mapperFactory.classMap(InvoiceDTO.class, InvoiceEntity.class)
                 .field("attachments", "attachmentsByInvoiceId")
-                .field("company", "companyByCompanyTo")
                 .field("companyContact", "companyContactByCompanyContactFrom")
                 .field("currency", "currencyByCcyId")
                 .field("contract", "contractByCompanyContractTo")
@@ -45,6 +47,7 @@ public class InvoiceTransformer extends CustomAbstractTransformer<InvoiceEntity,
         factory = companyTransformer.mapFields(factory);
         factory = companyContactTransformer.mapFields(factory);
         factory = contractTransformer.mapFields(factory);
+        factory = invoiceItemsTransformer.mapFields(factory);
         return factory.getMapperFacade();
     }
 
