@@ -128,4 +128,9 @@ public class InvoiceService implements CommonService<InvoiceEntity> {
         invoiceRepository.deleteById(id);
     }
 
+    @Transactional
+    public Integer getNextCounter(){
+        return invoiceRepository.getNextSequence();
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.db.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -50,9 +52,11 @@ public class InvoiceItemsEntity implements java.io.Serializable {
 
 
     @Transient
+    @Setter(AccessLevel.NONE)
     private BigDecimal timeSheetTotal;
 
     @Transient
+    @Setter(AccessLevel.NONE)
     private Long timeSheetTotalDays;
 
     //this did not wor as we need to update total hours upfront - new entries cannot be calcualted until they are in the database

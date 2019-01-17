@@ -1,29 +1,37 @@
 package com.bgh.myopeninvoice.api.transformer;
 
+import com.bgh.myopeninvoice.api.domain.dto.InvoiceItemsDTO;
 import com.bgh.myopeninvoice.api.domain.dto.TimeSheetDTO;
+import com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity;
 import com.bgh.myopeninvoice.db.domain.TimeSheetEntity;
 import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TimeSheetTransformer extends CustomAbstractTransformer<TimeSheetEntity, TimeSheetDTO> {
 
-    @Override protected BoundMapperFacade<TimeSheetEntity, TimeSheetDTO> getBoundMapper() {
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        return mapperFactory.getMapperFacade(TimeSheetEntity.class, TimeSheetDTO.class);
-    }
+    @Autowired
+    private InvoiceItemsTransformer invoiceItemsTransformer;
 
     @Override
     public MapperFactory mapFields(MapperFactory mapperFactory) {
-        return null;
+        mapperFactory.classMap(TimeSheetDTO.class, TimeSheetEntity.class)
+                .field("invoiceItem", "invoiceItemsByInvoiceItemId")
+                .byDefault()
+                .register();
+
+        return mapperFactory;
     }
 
     @Override
     protected MapperFacade getMapper() {
-        return null;
+        factory = mapFields(factory);
+        factory = invoiceItemsTransformer.mapFields(factory);
+        return factory.getMapperFacade();
     }
 
 }

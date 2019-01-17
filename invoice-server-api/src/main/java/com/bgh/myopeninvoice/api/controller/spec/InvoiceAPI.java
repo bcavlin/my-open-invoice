@@ -97,4 +97,14 @@ public interface InvoiceAPI {
     ResponseEntity<DefaultResponse<InvoiceDTO>> saveContentByInvoiceId(@PathVariable("id") Integer id,
                                                                @RequestParam("file") MultipartFile file);
 
+    @ApiOperation(value = "Get next counter",
+            notes = "Get next counter for Invoice",
+            response = Integer.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful operation", response = String.class)
+    })
+    @GetMapping(value = "/invoice/counter",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    ResponseEntity<DefaultResponse<Integer>> getNextCounter();
+
 }

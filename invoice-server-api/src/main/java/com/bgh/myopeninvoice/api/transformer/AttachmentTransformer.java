@@ -1,7 +1,9 @@
 package com.bgh.myopeninvoice.api.transformer;
 
 import com.bgh.myopeninvoice.api.domain.dto.AttachmentDTO;
+import com.bgh.myopeninvoice.api.domain.dto.TimeSheetDTO;
 import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
+import com.bgh.myopeninvoice.db.domain.TimeSheetEntity;
 import ma.glasnost.orika.BoundMapperFacade;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
@@ -12,19 +14,19 @@ import org.springframework.stereotype.Component;
 public class AttachmentTransformer extends CustomAbstractTransformer<AttachmentEntity, AttachmentDTO> {
 
     @Override
-    protected BoundMapperFacade<AttachmentEntity, AttachmentDTO> getBoundMapper() {
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        return mapperFactory.getMapperFacade(AttachmentEntity.class, AttachmentDTO.class);
-    }
-
-    @Override
     public MapperFactory mapFields(MapperFactory mapperFactory) {
-        return null;
+        mapperFactory.classMap(AttachmentDTO.class, AttachmentEntity.class)
+                .field("content", "contentByContentId")
+                .byDefault()
+                .register();
+
+        return mapperFactory;
     }
 
     @Override
     protected MapperFacade getMapper() {
-        return null;
+        factory = mapFields(factory);
+        return factory.getMapperFacade();
     }
 
 }

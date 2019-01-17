@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.db.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -37,6 +39,7 @@ public class TimeSheetEntity implements java.io.Serializable {
     private InvoiceItemsEntity invoiceItemsByInvoiceItemId;
 
     @Transient
+    @Setter(AccessLevel.NONE)
     private Boolean isWeekend;
 
     public Boolean getWeekend() {
