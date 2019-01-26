@@ -10,16 +10,16 @@ import java.io.Serializable;
 @Data
 public class SearchParameters implements Serializable {
 
-    public SearchParameters() {
-        this.builder = new BooleanBuilder();
-    }
+  String filter;
 
-    String filter;
+  PageRequest pageRequest;
 
-    PageRequest pageRequest;
+  Sort sort;
 
-    Sort sort;
+  // this will replace regular filter if set for special calls
+  BooleanBuilder builder;
 
-    //this will replace regular filter if set for special calls
-    BooleanBuilder builder;
+  public SearchParameters() {
+    this.builder = new BooleanBuilder();
+  }
 }

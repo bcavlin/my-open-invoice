@@ -14,21 +14,18 @@ import java.util.Date;
 @Data
 public class TimeSheetDTO implements java.io.Serializable {
 
-    private Integer timesheetId;
+  private Integer timesheetId;
 
-    @NotNull
-    private Integer invoiceItemId;
+  @NotNull private Integer invoiceItemId;
 
-    @NotNull
-    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-    private Date itemDate;
+  @NotNull
+  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
+  private Date itemDate;
 
-    @NotNull
-    private BigDecimal hoursWorked;
+  @NotNull private BigDecimal hoursWorked;
 
-    private Boolean isWeekend;
+  private Boolean isWeekend;
 
-    @JsonIgnoreProperties({"timeSheets"})
-    private InvoiceItemsDTO invoiceItem;
-
+  @JsonIgnoreProperties({"timeSheets"})
+  private InvoiceItemsDTO invoiceItem;
 }

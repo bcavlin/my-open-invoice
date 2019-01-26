@@ -10,24 +10,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContactTransformer extends CustomAbstractTransformer<ContactEntity, ContactDTO> {
 
-    @Autowired
-    private CompanyContactTransformer companyContactTransformer;
+  @Autowired private CompanyContactTransformer companyContactTransformer;
 
-    @Override
-    public MapperFactory mapFields(MapperFactory mapperFactory) {
-        mapperFactory.classMap(ContactDTO.class, ContactEntity.class)
-                .field("companyContacts", "companyContactsByContactId")
-                .byDefault()
-                .register();
+  @Override
+  public MapperFactory mapFields(MapperFactory mapperFactory) {
+    mapperFactory
+        .classMap(ContactDTO.class, ContactEntity.class)
+        .field("companyContacts", "companyContactsByContactId")
+        .byDefault()
+        .register();
 
-        return mapperFactory;
-    }
+    return mapperFactory;
+  }
 
-    @Override
-    protected MapperFacade getMapper() {
-        factory = mapFields(factory);
-        factory = companyContactTransformer.mapFields(factory);
-        return factory.getMapperFacade();
-    }
-
+  @Override
+  protected MapperFacade getMapper() {
+    factory = mapFields(factory);
+    factory = companyContactTransformer.mapFields(factory);
+    return factory.getMapperFacade();
+  }
 }

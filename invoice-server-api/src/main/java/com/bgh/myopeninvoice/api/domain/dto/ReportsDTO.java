@@ -9,14 +9,13 @@ import java.util.Date;
 @Data
 public class ReportsDTO implements java.io.Serializable {
 
-    private Integer reportId;
+  private Integer reportId;
 
-    private Integer invoiceId;
+  private Integer invoiceId;
 
-    private Integer contentId;
+  private Integer contentId;
 
-    private Date dateCreated;
+  private Date dateCreated;
 
-    private String reportName;
-
+  private String reportName;
 }

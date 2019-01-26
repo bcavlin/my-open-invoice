@@ -22,102 +22,109 @@ import java.util.Optional;
 @Service
 public class TimeSheetService implements CommonService<TimeSheetEntity> {
 
-    @Autowired
-    private TimeSheetRepository timesheetRepository;
+  @Autowired private TimeSheetRepository timesheetRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+    BooleanBuilder builder = new BooleanBuilder();
 
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
-                    QTimeSheetEntity.timeSheetEntity.hoursWorked.stringValue().contains(searchParameters.getFilter()),
-                    QTimeSheetEntity.timeSheetEntity.itemDate.stringValue().contains(searchParameters.getFilter())
-            );
+    if (searchParameters.getFilter() != null) {
+      builder.andAnyOf(
+          QTimeSheetEntity.timeSheetEntity
+              .hoursWorked
+              .stringValue()
+              .contains(searchParameters.getFilter()),
+          QTimeSheetEntity.timeSheetEntity
+              .itemDate
+              .stringValue()
+              .contains(searchParameters.getFilter()));
+    }
+    return builder;
+  }
 
-        }
-        return builder;
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = timesheetRepository.count(predicate);
+    } else {
+      count = timesheetRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = timesheetRepository.count(predicate);
-        } else {
-            count = timesheetRepository.count();
-        }
+  @Override
+  public List<TimeSheetEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<TimeSheetEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                timesheetRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(
+                timesheetRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(timesheetRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(timesheetRepository.findAll());
+      }
     }
 
-    @Override
-    public List<TimeSheetEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<TimeSheetEntity> entities;
+  @Override
+  public List<TimeSheetEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<TimeSheetEntity> entities = new ArrayList<>();
+    Optional<TimeSheetEntity> byId = timesheetRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(timesheetRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(timesheetRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(timesheetRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(timesheetRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<TimeSheetEntity> saveContent(Integer id, ContentEntity content) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        return entities;
-    }
+  @Transactional
+  @Override
+  public List<TimeSheetEntity> save(TimeSheetEntity entity) {
+    log.info("Saving entity");
+    List<TimeSheetEntity> entities = new ArrayList<>();
+    TimeSheetEntity saved = timesheetRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
 
-    @Override
-    public List<TimeSheetEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<TimeSheetEntity> entities = new ArrayList<>();
-        Optional<TimeSheetEntity> byId = timesheetRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<TimeSheetEntity> saveContent(Integer id, ContentEntity content) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Transactional
-    @Override
-    public List<TimeSheetEntity> save(TimeSheetEntity entity) {
-        log.info("Saving entity");
-        List<TimeSheetEntity> entities = new ArrayList<>();
-        TimeSheetEntity saved = timesheetRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting TimeSheetDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        timesheetRepository.deleteById(id);
-    }
-
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting TimeSheetDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    timesheetRepository.deleteById(id);
+  }
 }

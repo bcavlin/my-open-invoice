@@ -11,19 +11,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReportsTransformer extends CustomAbstractTransformer<ReportsEntity, ReportsDTO> {
 
-    @Override protected BoundMapperFacade<ReportsEntity, ReportsDTO> getBoundMapper() {
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        return mapperFactory.getMapperFacade(ReportsEntity.class, ReportsDTO.class);
-    }
+  @Override
+  protected BoundMapperFacade<ReportsEntity, ReportsDTO> getBoundMapper() {
+    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    return mapperFactory.getMapperFacade(ReportsEntity.class, ReportsDTO.class);
+  }
 
-    @Override
-    public MapperFactory mapFields(MapperFactory mapperFactory) {
-        return null;
-    }
+  @Override
+  public MapperFactory mapFields(MapperFactory mapperFactory) {
+    return null;
+  }
 
-    @Override
-    protected MapperFacade getMapper() {
-        return null;
-    }
-
+  @Override
+  protected MapperFacade getMapper() {
+    return null;
+  }
 }

@@ -25,16 +25,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
+/** Created by bcavlin on 14/03/17. */
 @Repository
 public interface ContractRepository
-            extends PagingAndSortingRepository<ContractEntity, Integer>, QuerydslPredicateExecutor<ContractEntity> {
+    extends PagingAndSortingRepository<ContractEntity, Integer>,
+        QuerydslPredicateExecutor<ContractEntity> {
 
-    @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)
-    Long getNewContractSequenceNumber();
+  @Query(value = "select INVOICE.CONTRACT_COUNTER_SEQ.NEXTVAL", nativeQuery = true)
+  Long getNewContractSequenceNumber();
 
-    @Query("select e from ContractEntity e where e.contractId=:id")
-    Optional<ContractEntity> findCustomById(@Param("id") Integer id);
+  @Query("select e from ContractEntity e where e.contractId=:id")
+  Optional<ContractEntity> findCustomById(@Param("id") Integer id);
 }

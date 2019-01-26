@@ -26,17 +26,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
+/** Created by bcavlin on 14/03/17. */
 @Repository
 public interface CompanyContactRepository
-        extends PagingAndSortingRepository<CompanyContactEntity, Integer>,
+    extends PagingAndSortingRepository<CompanyContactEntity, Integer>,
         QuerydslPredicateExecutor<CompanyContactEntity> {
 
-    @Modifying
-    @Query("delete from CompanyContactEntity e where e.companyContactId not in (:ids) and e.companyId=:companyId")
-    void deleteAllByCompanyContactIdIsNotInAndCompanyIdEquals(@Param("ids") List<Integer> ids,
-                                                              @Param("companyId") Integer companyId);
-
+  @Modifying
+  @Query(
+      "delete from CompanyContactEntity e where e.companyContactId not in (:ids) and e.companyId=:companyId")
+  void deleteAllByCompanyContactIdIsNotInAndCompanyIdEquals(
+      @Param("ids") List<Integer> ids, @Param("companyId") Integer companyId);
 }

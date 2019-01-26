@@ -26,12 +26,17 @@ import java.util.Date;
 @Data
 public abstract class OperationResponse {
 
-    @ApiModelProperty(required = true)
-    private OperationResponseStatus operationStatus;
+  @ApiModelProperty(required = true)
+  private OperationResponseStatus operationStatus;
 
-    private String operationMessage;
+  private String operationMessage;
 
-    private Date operationDate = new Date();
+  private Date operationDate = new Date();
 
-    public enum OperationResponseStatus {SUCCESS, ERROR, WARNING, NO_ACCESS}
+  public enum OperationResponseStatus {
+    SUCCESS,
+    ERROR,
+    WARNING,
+    NO_ACCESS
+  }
 }

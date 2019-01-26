@@ -9,16 +9,14 @@ import lombok.Data;
 @Data
 public class AttachmentDTO implements java.io.Serializable {
 
-    private Integer attachmentId;
+  private Integer attachmentId;
 
-    private Integer invoiceId;
+  private Integer invoiceId;
 
-    private Integer contentId;
+  private Integer contentId;
 
-    @JsonIgnore
-    private InvoiceDTO invoice;
+  @JsonIgnore private InvoiceDTO invoice;
 
-    @JsonIgnoreProperties("content")
-    private ContentDTO content;
-
+  @JsonIgnoreProperties("content")
+  private ContentDTO content;
 }

@@ -38,208 +38,239 @@ import java.util.stream.Collectors;
 @RestController
 public class CompanyContactController extends AbstractController implements CompanyContactAPI {
 
-    @Autowired
-    private CompanyContactService companycontactService;
+  @Autowired private CompanyContactService companycontactService;
 
-    @Autowired
-    private CompanyContactTransformer companycontactTransformer;
+  @Autowired private CompanyContactTransformer companycontactTransformer;
 
-    @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<CompanyContactDTO> result = new ArrayList<>();
-        long count;
+  @Override
+  public ResponseEntity<DefaultResponse<CompanyContactDTO>> findAll(
+      @RequestParam Map<String, String> queryParameters) {
+    List<CompanyContactDTO> result = new ArrayList<>();
+    long count;
 
-        try {
-            SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
-            validateSpecialFilter(queryParameters, searchParameters);
-            count = companycontactService.count(searchParameters);
-            List<CompanyContactEntity> entities = companycontactService.findAll(searchParameters);
-            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
+    try {
+      SearchParameters searchParameters =
+          Utils.mapQueryParametersToSearchParameters(queryParameters);
+      validateSpecialFilter(queryParameters, searchParameters);
+      count = companycontactService.count(searchParameters);
+      List<CompanyContactEntity> entities = companycontactService.findAll(searchParameters);
+      result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyContactDTO.class, e);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CompanyContactDTO.class, e);
+    }
+
+    DefaultResponse<CompanyContactDTO> defaultResponse =
+        new DefaultResponse<>(CompanyContactDTO.class);
+    defaultResponse.setCount(count);
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
+
+  @Override
+  protected void validateSpecialFilter(
+      Map<String, String> queryParameters, SearchParameters searchParameters) {
+    if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
+      Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
+      BooleanBuilder builder = searchParameters.getBuilder();
+
+      while (matcher.find()) {
+        String[] split = matcher.group(1).split(":");
+        if ("owned".equalsIgnoreCase(split[0])) {
+          searchParameters
+              .getBuilder()
+              .and(
+                  QCompanyContactEntity.companyContactEntity.companyByCompanyId.ownedByMe.eq(
+                      Boolean.valueOf(split[1])));
+        } else if ("companyId".equalsIgnoreCase(split[0])) {
+          searchParameters
+              .getBuilder()
+              .and(
+                  QCompanyContactEntity.companyContactEntity.companyId.eq(
+                      NumberUtils.toInt(split[1])));
         }
+      }
 
-        DefaultResponse<CompanyContactDTO> defaultResponse = new DefaultResponse<>(CompanyContactDTO.class);
-        defaultResponse.setCount(count);
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+      if (searchParameters.getBuilder().hasValue()) {
+        // reset the filter
+        searchParameters.setFilter(null);
+      }
+    }
+  }
+
+  @Override
+  public ResponseEntity<DefaultResponse<CompanyContactDTO>> findById(
+      @PathVariable("id") Integer id) {
+    List<CompanyContactDTO> result = new ArrayList<>();
+
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      List<CompanyContactEntity> entities = companycontactService.findById(id);
+      result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
+
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CompanyContactDTO.class, e);
     }
 
-    @Override
-    protected void validateSpecialFilter(Map<String, String> queryParameters, SearchParameters searchParameters) {
-        if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
-            Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
-            BooleanBuilder builder = searchParameters.getBuilder();
+    DefaultResponse<CompanyContactDTO> defaultResponse =
+        new DefaultResponse<>(CompanyContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-            while (matcher.find()) {
-                String[] split = matcher.group(1).split(":");
-                if ("owned".equalsIgnoreCase(split[0])) {
-                    searchParameters.getBuilder().and(QCompanyContactEntity.companyContactEntity
-                            .companyByCompanyId.ownedByMe.eq(Boolean.valueOf(split[1])));
-                } else if ("companyId".equalsIgnoreCase(split[0])) {
-                    searchParameters.getBuilder().and(QCompanyContactEntity.companyContactEntity
-                            .companyId.eq(NumberUtils.toInt(split[1])));
-                }
-            }
+  @Override
+  public ResponseEntity<DefaultResponse<CompanyContactDTO>> save(
+      @Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
+      BindingResult bindingResult) {
+    List<CompanyContactDTO> result = new ArrayList<>();
 
-            if (searchParameters.getBuilder().hasValue()) {
-                //reset the filter
-                searchParameters.setFilter(null);
-            }
-        }
+    try {
+
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
+
+      if (companycontactDTO.getCompanyContactId() != null) {
+        throw new InvalidDataException(
+            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+      }
+
+      List<CompanyContactEntity> entities =
+          companycontactService.save(
+              companycontactTransformer.transformDTOToEntity(
+                  companycontactDTO, CompanyContactEntity.class));
+      result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
+
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
+
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CompanyContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> findById(@PathVariable("id") Integer id) {
-        List<CompanyContactDTO> result = new ArrayList<>();
+    DefaultResponse<CompanyContactDTO> defaultResponse =
+        new DefaultResponse<>(CompanyContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            List<CompanyContactEntity> entities = companycontactService.findById(id);
-            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
+  @Override
+  public ResponseEntity<DefaultResponse<CompanyContactDTO>> update(
+      @Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
+      BindingResult bindingResult) {
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyContactDTO.class, e);
-        }
+    List<CompanyContactDTO> result = new ArrayList<>();
 
-        DefaultResponse<CompanyContactDTO> defaultResponse = new DefaultResponse<>(CompanyContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    try {
+
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
+      if (companycontactDTO.getCompanyContactId() == null) {
+        throw new InvalidDataException("When updating, data entity must have ID");
+      }
+
+      List<CompanyContactEntity> entities =
+          companycontactService.save(
+              companycontactTransformer.transformDTOToEntity(
+                  companycontactDTO, CompanyContactEntity.class));
+      result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
+
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
+
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CompanyContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> save(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                                   BindingResult bindingResult) {
-        List<CompanyContactDTO> result = new ArrayList<>();
+    DefaultResponse<CompanyContactDTO> defaultResponse =
+        new DefaultResponse<>(CompanyContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
+  @Override
+  public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      companycontactService.delete(id);
 
-            if (companycontactDTO.getCompanyContactId() != null) {
-                throw new InvalidDataException(
-                        getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-            }
-
-            List<CompanyContactEntity> entities = companycontactService.save(
-                    companycontactTransformer.transformDTOToEntity(companycontactDTO, CompanyContactEntity.class));
-            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
-
-
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
-
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyContactDTO.class, e);
-        }
-
-        DefaultResponse<CompanyContactDTO> defaultResponse = new DefaultResponse<>(CompanyContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(Boolean.class, e, false);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> update(@Valid @NotNull @RequestBody CompanyContactDTO companycontactDTO,
-                                                                     BindingResult bindingResult) {
+    DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setDetails(Collections.singletonList(true));
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        List<CompanyContactDTO> result = new ArrayList<>();
+  @Override
+  public ResponseEntity<byte[]> findContentByCompanyContactId(@PathVariable("id") Integer id) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        try {
+  @Override
+  public ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
-            if (companycontactDTO.getCompanyContactId() == null) {
-                throw new InvalidDataException("When updating, data entity must have ID");
-            }
+  @Override
+  public ResponseEntity<DefaultResponse<CompanyContactDTO>> updateBulk(
+      @Valid @NotNull @RequestBody CompanyContactDTO[] companycontactDTO,
+      BindingResult bindingResult) {
+    List<CompanyContactDTO> result = new ArrayList<>();
 
-            List<CompanyContactEntity> entities = companycontactService.save(
-                    companycontactTransformer.transformDTOToEntity(companycontactDTO, CompanyContactEntity.class));
-            result = companycontactTransformer.transformEntityToDTO(entities, CompanyContactDTO.class);
+    try {
+      Assert.isTrue(companycontactDTO.length > 0, "There has to be at least one change listed");
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      List<CompanyContactEntity> companyContactEntities =
+          companycontactTransformer.transformDTOToEntity(
+              Arrays.asList(companycontactDTO), CompanyContactEntity.class);
+      List<CompanyContactEntity> companyContactEntities1 =
+          companycontactService.bulkAddDelete(companyContactEntities);
+      result =
+          companycontactTransformer.transformEntityToDTO(
+              companyContactEntities1, CompanyContactDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyContactDTO.class, e);
-        }
-
-        DefaultResponse<CompanyContactDTO> defaultResponse = new DefaultResponse<>(CompanyContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CompanyContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
-
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            companycontactService.delete(id);
-
-        } catch (Exception e) {
-            return Utils.getErrorResponse(Boolean.class, e, false);
-        }
-
-        DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        defaultResponse.setOperationMessage("Deleted entity with id: " + id);
-        defaultResponse.setDetails(Collections.singletonList(true));
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<byte[]> findContentByCompanyContactId(@PathVariable("id") Integer id) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> saveContentByCompanyContactId(@PathVariable("id") Integer id,
-                                                                                            @RequestParam("file") MultipartFile file) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Override
-    public ResponseEntity<DefaultResponse<CompanyContactDTO>> updateBulk(
-            @Valid @NotNull @RequestBody CompanyContactDTO[] companycontactDTO, BindingResult bindingResult) {
-        List<CompanyContactDTO> result = new ArrayList<>();
-
-        try {
-            Assert.isTrue(companycontactDTO.length > 0, "There has to be at least one change listed");
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
-
-            List<CompanyContactEntity> companyContactEntities = companycontactTransformer.transformDTOToEntity(Arrays.asList(companycontactDTO), CompanyContactEntity.class);
-            List<CompanyContactEntity> companyContactEntities1 = companycontactService.bulkAddDelete(companyContactEntities);
-            result = companycontactTransformer.transformEntityToDTO(companyContactEntities1, CompanyContactDTO.class);
-
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CompanyContactDTO.class, e);
-        }
-
-        DefaultResponse<CompanyContactDTO> defaultResponse = new DefaultResponse<>(CompanyContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
-    }
-
+    DefaultResponse<CompanyContactDTO> defaultResponse =
+        new DefaultResponse<>(CompanyContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 }

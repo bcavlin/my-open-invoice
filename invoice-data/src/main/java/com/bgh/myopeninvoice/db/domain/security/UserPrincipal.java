@@ -19,66 +19,65 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private Integer id;
+  private Integer id;
 
-    private String name;
+  private String name;
 
-    private String username;
+  private String username;
 
-    @JsonIgnore
-    private String email;
+  @JsonIgnore private String email;
 
-    @JsonIgnore
-    private String password;
+  @JsonIgnore private String password;
 
-    private boolean enabled;
+  private boolean enabled;
 
-    private Collection<? extends GrantedAuthority> authorities;
+  private Collection<? extends GrantedAuthority> authorities;
 
-    public static UserPrincipal create(UserEntity user) {
-        if (user.getUserRolesByUserId().isEmpty()) {
-            log.error("Username [{}] does not have any roles assigned", user.getUsername());
-            throw new AuthenticationServiceException("User does not have any roles assigned");
-        }
-
-        List<GrantedAuthority> authorities = user.getUserRolesByUserId()
-                .stream()
-                .map(role -> {
-                    log.info("Authority [{}] added for user [{}]", role.getRoleByRoleId()
-                            .getRoleName(), user.getUsername());
-                    return new SimpleGrantedAuthority(role.getRoleByRoleId().getRoleName());
-                }).collect(Collectors.toList());
-
-        return new UserPrincipal(
-                user.getUserId(),
-                user.getFirstName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPasswordHash(),
-                user.getEnabled(),
-                authorities
-        );
+  public static UserPrincipal create(UserEntity user) {
+    if (user.getUserRolesByUserId().isEmpty()) {
+      log.error("Username [{}] does not have any roles assigned", user.getUsername());
+      throw new AuthenticationServiceException("User does not have any roles assigned");
     }
 
+    List<GrantedAuthority> authorities =
+        user.getUserRolesByUserId().stream()
+            .map(
+                role -> {
+                  log.info(
+                      "Authority [{}] added for user [{}]",
+                      role.getRoleByRoleId().getRoleName(),
+                      user.getUsername());
+                  return new SimpleGrantedAuthority(role.getRoleByRoleId().getRoleName());
+                })
+            .collect(Collectors.toList());
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    return new UserPrincipal(
+        user.getUserId(),
+        user.getFirstName(),
+        user.getUsername(),
+        user.getEmail(),
+        user.getPasswordHash(),
+        user.getEnabled(),
+        authorities);
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
+  @Override
+  public boolean isEnabled() {
+    return this.enabled;
+  }
 }

@@ -22,5 +22,4 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LogoutRespose extends OperationResponse {
-}
+public class LogoutRespose extends OperationResponse {}

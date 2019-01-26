@@ -9,8 +9,7 @@ import java.io.Serializable;
 @Data
 public class RoleDTO implements Serializable {
 
-    private Integer roleId;
+  private Integer roleId;
 
-    private String roleName;
-
+  private String roleName;
 }

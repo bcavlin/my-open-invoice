@@ -33,33 +33,30 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    private UsersRepository usersRepository;
+  @Autowired private UsersRepository usersRepository;
 
-    @Autowired
-    private UserRoleRepository userRoleRepository;
+  @Autowired private UserRoleRepository userRoleRepository;
 
-    @Transactional
-    public List<RoleEntity> findUserRoles(String username) {
-        return userRoleRepository.findRolesByUsername(username);
-    }
+  @Transactional
+  public List<RoleEntity> findUserRoles(String username) {
+    return userRoleRepository.findRolesByUsername(username);
+  }
 
-    public Optional<UserEntity> findUserByUsername(String username) {
-        return usersRepository.findByUsername(username);
-    }
+  public Optional<UserEntity> findUserByUsername(String username) {
+    return usersRepository.findByUsername(username);
+  }
 
-    public List<UserEntity> getUsers() {
-        return Utils.convertIterableToList(usersRepository.findAll());
-    }
+  public List<UserEntity> getUsers() {
+    return Utils.convertIterableToList(usersRepository.findAll());
+  }
 
-    @Transactional
-    public void updateLastLoggedDate(String username) {
-        Timestamp from = Timestamp.from(Instant.now());
-        usersRepository.updateLastLoggedDateByUsername(username, from);
-    }
+  @Transactional
+  public void updateLastLoggedDate(String username) {
+    Timestamp from = Timestamp.from(Instant.now());
+    usersRepository.updateLastLoggedDateByUsername(username, from);
+  }
 
-    public Boolean isUserValid(String username) {
-        return usersRepository.isUserValid(username).orElse(Boolean.FALSE);
-    }
-
+  public Boolean isUserValid(String username) {
+    return usersRepository.isUserValid(username).orElse(Boolean.FALSE);
+  }
 }

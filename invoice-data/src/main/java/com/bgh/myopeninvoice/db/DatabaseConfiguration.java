@@ -23,15 +23,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/**
- * Created by bcavlin on 20/06/17.
- */
+/** Created by bcavlin on 20/06/17. */
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.bgh.myopeninvoice.db.repository"})
 @EntityScan(basePackages = {"com.bgh.myopeninvoice.db.domain"})
 @ComponentScan({"com.bgh.myopeninvoice.db.repository", "com.bgh.myopeninvoice.db.service"})
 @EnableAutoConfiguration
 @EnableTransactionManagement
-public class DatabaseConfiguration {
-
-}
+public class DatabaseConfiguration {}

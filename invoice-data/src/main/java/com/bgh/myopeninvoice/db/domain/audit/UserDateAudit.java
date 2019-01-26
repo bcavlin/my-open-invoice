@@ -13,12 +13,11 @@ import javax.persistence.MappedSuperclass;
 @EqualsAndHashCode(callSuper = true)
 public abstract class UserDateAudit extends DateAudit {
 
-    @CreatedBy
-    @Column(name = "CREATED_BY", updatable = false)
-    private Integer createdBy;
+  @CreatedBy
+  @Column(name = "CREATED_BY", updatable = false)
+  private Integer createdBy;
 
-    @LastModifiedBy
-    @Column(name = "UPDATED_BY")
-    private Integer updatedBy;
-
+  @LastModifiedBy
+  @Column(name = "UPDATED_BY")
+  private Integer updatedBy;
 }

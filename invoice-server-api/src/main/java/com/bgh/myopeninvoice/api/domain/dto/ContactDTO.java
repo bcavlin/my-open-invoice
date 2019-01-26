@@ -11,23 +11,22 @@ import java.util.Collection;
 @Data
 public class ContactDTO implements Serializable {
 
-    private Integer contactId;
+  private Integer contactId;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private String middleName;
+  private String middleName;
 
-    private String email;
+  private String email;
 
-    private String address1;
+  private String address1;
 
-    private String phone1;
+  private String phone1;
 
-    private Integer userId;
+  private Integer userId;
 
-    @JsonIgnoreProperties({"contact"})
-    private Collection<CompanyContactDTO> companyContacts;
-
+  @JsonIgnoreProperties({"contact"})
+  private Collection<CompanyContactDTO> companyContacts;
 }

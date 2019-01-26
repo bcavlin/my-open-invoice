@@ -16,54 +16,49 @@ import java.util.Date;
 @Data
 public class ContractDTO implements java.io.Serializable {
 
-    private Integer contractId;
+  private Integer contractId;
 
-    @NotNull
-    private Integer companyContactId;
+  @NotNull private Integer companyContactId;
 
-    @NotNull
-    private Integer companyId;
+  @NotNull private Integer companyId;
 
-    private Integer companyIdSubcontract;
+  private Integer companyIdSubcontract;
 
-    @NotNull
-    private BigDecimal rate;
+  @NotNull private BigDecimal rate;
 
-    @EnumValidator(enumClass = RateType.class)
-    @NotNull
-    private String rateUnit;
+  @EnumValidator(enumClass = RateType.class)
+  @NotNull
+  private String rateUnit;
 
-    @NotNull
-    private Integer ccyId;
+  @NotNull private Integer ccyId;
 
-    @NotNull
-    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-    private Date validFrom;
+  @NotNull
+  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
+  private Date validFrom;
 
-    @NotNull
-    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-    private Date validTo;
+  @NotNull
+  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
+  private Date validTo;
 
-    private String description;
+  private String description;
 
-    private String contractNumber;
+  private String contractNumber;
 
-    private String purchaseOrder;
+  private String purchaseOrder;
 
-    @JsonIgnoreProperties({"content"})
-    private ContentDTO content;
+  @JsonIgnoreProperties({"content"})
+  private ContentDTO content;
 
-    @JsonIgnoreProperties({"contracts","invoices"})
-    private CompanyContactDTO companyContact;
+  @JsonIgnoreProperties({"contracts", "invoices"})
+  private CompanyContactDTO companyContact;
 
-    @JsonIgnoreProperties({"content","companyContacts"})
-    private CompanyDTO company;
+  @JsonIgnoreProperties({"content", "companyContacts"})
+  private CompanyDTO company;
 
-    @JsonIgnoreProperties({"content","companyContacts"})
-    private CompanyDTO companySubcontract;
+  @JsonIgnoreProperties({"content", "companyContacts"})
+  private CompanyDTO companySubcontract;
 
-    private CurrencyDTO currency;
+  private CurrencyDTO currency;
 
-    private boolean contractValid;
-
+  private boolean contractValid;
 }

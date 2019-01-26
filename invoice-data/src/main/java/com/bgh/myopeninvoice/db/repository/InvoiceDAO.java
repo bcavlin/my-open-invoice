@@ -16,47 +16,44 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.domain.CompanyEntity;
-import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import com.bgh.myopeninvoice.db.domain.UserEntity;
 
 import java.util.List;
 
-/**
- * Created by bcavlin on 21/03/17.
- */
+/** Created by bcavlin on 21/03/17. */
 public interface InvoiceDAO {
 
-    TaxRepository getTaxRepository();
+  TaxRepository getTaxRepository();
 
-    UsersRepository getUsersRepository();
+  UsersRepository getUsersRepository();
 
-    RolesRepository getRolesRepository();
+  RolesRepository getRolesRepository();
 
-    ContactRepository getContactRepository();
+  ContactRepository getContactRepository();
 
-    CompanyRepository getCompanyRepository();
+  CompanyRepository getCompanyRepository();
 
-    CurrencyRepository getCurrencyRepository();
+  CurrencyRepository getCurrencyRepository();
 
-    InvoiceRepository getInvoiceRepository();
+  InvoiceRepository getInvoiceRepository();
 
-    void saveUserRolesEntity(UserEntity user, List<RoleEntity> targetRoles);
+  void saveUserRolesEntity(UserEntity user, List<RoleEntity> targetRoles);
 
-//    void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> target);
+  //    void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity>
+  // target);
 
-    ContractRepository getContractRepository();
+  ContractRepository getContractRepository();
 
-    CompanyContactRepository getCompanyContactRepository();
+  CompanyContactRepository getCompanyContactRepository();
 
-    Integer getInvoiceCounterSeq();
+  Integer getInvoiceCounterSeq();
 
-    InvoiceItemsRepository getInvoiceItemsRepository();
+  InvoiceItemsRepository getInvoiceItemsRepository();
 
-    AttachmentRepository getAttachmentRepository();
+  AttachmentRepository getAttachmentRepository();
 
-    TimeSheetRepository getTimeSheetRepository();
+  TimeSheetRepository getTimeSheetRepository();
 
-    ReportsRepository getReportsRepository();
+  ReportsRepository getReportsRepository();
 }

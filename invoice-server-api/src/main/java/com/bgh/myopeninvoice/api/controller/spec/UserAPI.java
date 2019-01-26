@@ -17,45 +17,52 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Api(value = "User Controller")
-@RequestMapping(value = "/api/v1",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface UserAPI {
 
-    @ApiOperation(value = "Find user roles",
+  @ApiOperation(value = "Find user roles", response = DefaultResponseRoleDTO.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            code = 200,
+            message = "Successful operation",
             response = DefaultResponseRoleDTO.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseRoleDTO.class)
-    })
-    @GetMapping(value = "/user/{username}/roles")
-    ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username);
+      })
+  @GetMapping(value = "/user/{username}/roles")
+  ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username);
 
-    class DefaultResponseRoleDTO extends DefaultResponse<RoleDTO> {
-        public DefaultResponseRoleDTO() {
-            super(RoleDTO.class);
-        }
-    }
-
-    @ApiOperation(value = "Login",
+  @ApiOperation(value = "Login", response = JwtAuthenticationResponse.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            code = 200,
+            message = "Successful operation",
             response = JwtAuthenticationResponse.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = JwtAuthenticationResponse.class)
-    })
-    @PostMapping(value = "/login")
-    ResponseEntity login(@Valid @RequestBody AccountCredentials credentials,
-                                                    BindingResult bindingResult);
+      })
+  @PostMapping(value = "/login")
+  ResponseEntity login(
+      @Valid @RequestBody AccountCredentials credentials, BindingResult bindingResult);
 
-    @ApiOperation(value = "List users",
+  @ApiOperation(value = "List users", response = DefaultResponseUserDTO.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            code = 200,
+            message = "Successful operation",
             response = DefaultResponseUserDTO.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation", response = DefaultResponseUserDTO.class)
-    })
-    @GetMapping(value = "/user")
-    ResponseEntity<DefaultResponse<UserDTO>> getUsers();
+      })
+  @GetMapping(value = "/user")
+  ResponseEntity<DefaultResponse<UserDTO>> getUsers();
 
-    class DefaultResponseUserDTO extends DefaultResponse<UserDTO> {
-        public DefaultResponseUserDTO() {
-            super(UserDTO.class);
-        }
+  class DefaultResponseRoleDTO extends DefaultResponse<RoleDTO> {
+    public DefaultResponseRoleDTO() {
+      super(RoleDTO.class);
     }
+  }
 
+  class DefaultResponseUserDTO extends DefaultResponse<UserDTO> {
+    public DefaultResponseUserDTO() {
+      super(UserDTO.class);
+    }
+  }
 }

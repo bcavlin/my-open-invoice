@@ -10,23 +10,22 @@ import java.util.List;
 
 public interface CommonService<T> {
 
-    List<T> findAll(SearchParameters searchParameters);
+  List<T> findAll(SearchParameters searchParameters);
 
-    Predicate getPredicate(SearchParameters searchParameters);
+  Predicate getPredicate(SearchParameters searchParameters);
 
-    long count(SearchParameters searchParameters);
+  long count(SearchParameters searchParameters);
 
-    List<T> findById(Integer id);
+  List<T> findById(Integer id);
 
-    @Transactional
-    List<T> save(T entity) throws InvalidDataException;
+  @Transactional
+  List<T> save(T entity) throws InvalidDataException;
 
-    @Transactional
-    void delete(Integer id);
+  @Transactional
+  void delete(Integer id);
 
-    ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table);
+  ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table);
 
-    @Transactional
-    <T> List<T> saveContent(Integer id, ContentEntity content) throws InvalidDataException;
-
+  @Transactional
+  <T> List<T> saveContent(Integer id, ContentEntity content) throws InvalidDataException;
 }

@@ -16,7 +16,6 @@
 
 package com.bgh.myopeninvoice.db.service.security;
 
-
 import com.bgh.myopeninvoice.db.domain.UserEntity;
 import com.bgh.myopeninvoice.db.domain.security.UserPrincipal;
 import com.bgh.myopeninvoice.db.repository.UsersRepository;
@@ -29,59 +28,57 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-/**
- * Created by bcavlin on 27/11/14.
- */
+/** Created by bcavlin on 27/11/14. */
 @Slf4j
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UsersRepository usersRepository;
+  private UsersRepository usersRepository;
 
-    @Autowired
-    public CustomUserDetailsService(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
+  @Autowired
+  public CustomUserDetailsService(UsersRepository usersRepository) {
+    this.usersRepository = usersRepository;
+  }
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) {
-        log.info("Verifying username [{}]", username);
+  @Override
+  @Transactional
+  public UserDetails loadUserByUsername(String username) {
+    log.info("Verifying username [{}]", username);
 
-        UserEntity user = usersRepository.findByUsername(username).orElseThrow(
+    UserEntity user =
+        usersRepository
+            .findByUsername(username)
+            .orElseThrow(
                 () -> {
-                    log.error("Username [{}] not found!", username);
-                    throw new UsernameNotFoundException("Username or password have not been found");
-                }
-        );
+                  log.error("Username [{}] not found!", username);
+                  throw new UsernameNotFoundException("Username or password have not been found");
+                });
 
-        if (!user.getEnabled()) {
-            log.error("Username [{}] has been disabled", username);
-            throw new DisabledException("Username has been disabled");
-        }
-
-        return UserPrincipal.create(user);
+    if (!user.getEnabled()) {
+      log.error("Username [{}] has been disabled", username);
+      throw new DisabledException("Username has been disabled");
     }
 
-    // This method is used by JWTAuthenticationFilter
-    @Transactional
-    public UserDetails loadUserById(Integer id) {
-        UserEntity user = usersRepository.findById(id).orElseThrow(
+    return UserPrincipal.create(user);
+  }
+
+  // This method is used by JWTAuthenticationFilter
+  @Transactional
+  public UserDetails loadUserById(Integer id) {
+    UserEntity user =
+        usersRepository
+            .findById(id)
+            .orElseThrow(
                 () -> {
-                    log.error("User [{}] not found!", id);
-                    throw new UsernameNotFoundException("Username or password have not been found");
-                }
-        );
+                  log.error("User [{}] not found!", id);
+                  throw new UsernameNotFoundException("Username or password have not been found");
+                });
 
-        if (!user.getEnabled()) {
-            log.error("Username [{}] has been disabled", user.getUsername());
-            throw new DisabledException("Username has been disabled");
-        }
-
-        return UserPrincipal.create(user);
+    if (!user.getEnabled()) {
+      log.error("Username [{}] has been disabled", user.getUsername());
+      throw new DisabledException("Username has been disabled");
     }
 
+    return UserPrincipal.create(user);
+  }
 }
-

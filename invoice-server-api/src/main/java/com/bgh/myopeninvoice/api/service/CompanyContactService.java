@@ -22,111 +22,117 @@ import java.util.Optional;
 @Service
 public class CompanyContactService implements CommonService<CompanyContactEntity> {
 
-    @Autowired
-    private CompanyContactRepository companycontactRepository;
+  @Autowired private CompanyContactRepository companycontactRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
-        return searchParameters.getBuilder();
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
+    return searchParameters.getBuilder();
+  }
+
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = companycontactRepository.count(predicate);
+    } else {
+      count = companycontactRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = companycontactRepository.count(predicate);
-        } else {
-            count = companycontactRepository.count();
-        }
+  @Override
+  public List<CompanyContactEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<CompanyContactEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                companycontactRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(
+                companycontactRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(companycontactRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(companycontactRepository.findAll());
+      }
     }
 
-    @Override
-    public List<CompanyContactEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<CompanyContactEntity> entities;
+  @Override
+  public List<CompanyContactEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<CompanyContactEntity> entities = new ArrayList<>();
+    Optional<CompanyContactEntity> byId = companycontactRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(companycontactRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(companycontactRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(companycontactRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(companycontactRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<CompanyContactEntity> saveContent(Integer id, ContentEntity content) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        return entities;
+  @Transactional
+  @Override
+  public List<CompanyContactEntity> save(CompanyContactEntity entity) {
+    log.info("Saving entity");
+    List<CompanyContactEntity> entities = new ArrayList<>();
+    CompanyContactEntity saved = companycontactRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
+
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting CompanyContactDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    companycontactRepository.deleteById(id);
+  }
+
+  @Transactional
+  public List<CompanyContactEntity> bulkAddDelete(
+      List<CompanyContactEntity> companyContactEntities) {
+    for (CompanyContactEntity companyContactEntity : companyContactEntities) {
+      if (companyContactEntity.getCompanyContactId() != null) {
+        // delete old contacts
+        log.info("Deleting company contact: {}", companyContactEntity);
+        this.delete(companyContactEntity.getCompanyContactId());
+      } else {
+        // add new contacts
+        log.info("Saving company contact: {}", companyContactEntity);
+        this.save(companyContactEntity);
+      }
     }
-
-    @Override
-    public List<CompanyContactEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<CompanyContactEntity> entities = new ArrayList<>();
-        Optional<CompanyContactEntity> byId = companycontactRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<CompanyContactEntity> saveContent(Integer id, ContentEntity content) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Transactional
-    @Override
-    public List<CompanyContactEntity> save(CompanyContactEntity entity) {
-        log.info("Saving entity");
-        List<CompanyContactEntity> entities = new ArrayList<>();
-        CompanyContactEntity saved = companycontactRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting CompanyContactDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        companycontactRepository.deleteById(id);
-    }
-
-    @Transactional
-    public List<CompanyContactEntity> bulkAddDelete(List<CompanyContactEntity> companyContactEntities) {
-        for (CompanyContactEntity companyContactEntity : companyContactEntities) {
-            if (companyContactEntity.getCompanyContactId() != null) {
-                //delete old contacts
-                log.info("Deleting company contact: {}", companyContactEntity);
-                this.delete(companyContactEntity.getCompanyContactId());
-            } else {
-                //add new contacts
-                log.info("Saving company contact: {}", companyContactEntity);
-                this.save(companyContactEntity);
-            }
-        }
-        return Utils.convertIterableToList(companycontactRepository.findAll(
-                new BooleanBuilder().and(
-                        QCompanyContactEntity.companyContactEntity.companyId.eq(
-                                companyContactEntities.get(0).getCompanyId()))));
-    }
-
+    return Utils.convertIterableToList(
+        companycontactRepository.findAll(
+            new BooleanBuilder()
+                .and(
+                    QCompanyContactEntity.companyContactEntity.companyId.eq(
+                        companyContactEntities.get(0).getCompanyId()))));
+  }
 }

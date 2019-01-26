@@ -21,12 +21,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
+/** Created by bcavlin on 14/03/17. */
 @Repository
 public interface InvoiceItemsRepository
-        extends PagingAndSortingRepository<InvoiceItemsEntity, Integer>,
-        QuerydslPredicateExecutor<InvoiceItemsEntity> {
-
-}
+    extends PagingAndSortingRepository<InvoiceItemsEntity, Integer>,
+        QuerydslPredicateExecutor<InvoiceItemsEntity> {}

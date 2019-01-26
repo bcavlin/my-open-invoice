@@ -27,21 +27,19 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
+/** Created by bcavlin on 14/03/17. */
 @Repository
 public interface UsersRepository
-        extends PagingAndSortingRepository<UserEntity, Integer>, QuerydslPredicateExecutor<UserEntity> {
+    extends PagingAndSortingRepository<UserEntity, Integer>, QuerydslPredicateExecutor<UserEntity> {
 
-    @Query("select e from UserEntity e where e.username = :username")
-    Optional<UserEntity> findByUsername(@Param("username") String username);
+  @Query("select e from UserEntity e where e.username = :username")
+  Optional<UserEntity> findByUsername(@Param("username") String username);
 
-    @Modifying(clearAutomatically = true)
-    @Query("update UserEntity e set e.lastLoggedDate = :date where e.username = :username")
-    void updateLastLoggedDateByUsername(@Param("username") String username, @Param("date") Timestamp date);
+  @Modifying(clearAutomatically = true)
+  @Query("update UserEntity e set e.lastLoggedDate = :date where e.username = :username")
+  void updateLastLoggedDateByUsername(
+      @Param("username") String username, @Param("date") Timestamp date);
 
-    @Query("select e.enabled from UserEntity e where e.username = :username")
-    Optional<Boolean> isUserValid(@Param("username") String username);
-
+  @Query("select e.enabled from UserEntity e where e.username = :username")
+  Optional<Boolean> isUserValid(@Param("username") String username);
 }

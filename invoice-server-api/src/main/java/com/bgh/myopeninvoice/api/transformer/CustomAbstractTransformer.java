@@ -10,46 +10,45 @@ import java.util.stream.Collectors;
 
 public abstract class CustomAbstractTransformer<R, K> implements Transformer<R, K> {
 
-    protected MapperFactory factory;
+  protected MapperFactory factory;
 
-    protected CustomAbstractTransformer() {
-        this.factory = new DefaultMapperFactory.Builder().build();
+  protected CustomAbstractTransformer() {
+    this.factory = new DefaultMapperFactory.Builder().build();
+  }
+
+  @Override
+  public K transformEntityToDTO(R entity, Class<K> dto) {
+    if (getBoundMapper() != null) {
+      return getBoundMapper().map(entity);
+    } else {
+      return getMapper().map(entity, dto);
     }
+  }
 
-    @Override
-    public K transformEntityToDTO(R entity, Class<K> dto) {
-        if (getBoundMapper() != null) {
-            return getBoundMapper().map(entity);
-        } else {
-            return getMapper().map(entity, dto);
-        }
+  @Override
+  public R transformDTOToEntity(K dto, Class<R> entity) {
+    if (getBoundMapper() != null) {
+      return getBoundMapper().mapReverse(dto);
+    } else {
+      return getMapper().map(dto, entity);
     }
+  }
 
-    @Override
-    public R transformDTOToEntity(K dto, Class<R> entity) {
-        if (getBoundMapper() != null) {
-            return getBoundMapper().mapReverse(dto);
-        } else {
-            return getMapper().map(dto, entity);
-        }
-    }
+  @Override
+  public List<K> transformEntityToDTO(List<R> entity, Class<K> dto) {
+    return entity.stream().map(m -> transformEntityToDTO(m, dto)).collect(Collectors.toList());
+  }
 
-    @Override
-    public List<K> transformEntityToDTO(List<R> entity, Class<K> dto) {
-        return entity.stream().map(m -> transformEntityToDTO(m, dto)).collect(Collectors.toList());
-    }
+  @Override
+  public List<R> transformDTOToEntity(List<K> dto, Class<R> entity) {
+    return dto.stream().map(m -> transformDTOToEntity(m, entity)).collect(Collectors.toList());
+  }
 
-    @Override
-    public List<R> transformDTOToEntity(List<K> dto, Class<R> entity) {
-        return dto.stream().map(m -> transformDTOToEntity(m, entity)).collect(Collectors.toList());
-    }
+  protected BoundMapperFacade<R, K> getBoundMapper() {
+    return null;
+  }
 
-    protected BoundMapperFacade<R, K> getBoundMapper() {
-        return null;
-    }
+  public abstract MapperFactory mapFields(MapperFactory mapperFactory);
 
-    public abstract MapperFactory mapFields(MapperFactory mapperFactory);
-
-    protected abstract MapperFacade getMapper();
-
+  protected abstract MapperFacade getMapper();
 }

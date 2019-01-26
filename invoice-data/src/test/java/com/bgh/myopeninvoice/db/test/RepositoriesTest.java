@@ -18,33 +18,25 @@ package com.bgh.myopeninvoice.db.test;
 
 import com.bgh.myopeninvoice.db.DatabaseConfiguration;
 import com.bgh.myopeninvoice.db.repository.ReportsRepository;
-import com.bgh.myopeninvoice.db.domain.ReportsEntity;
-import org.assertj.core.util.Lists;
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-
-/**
- * Created by bcavlin on 20/06/17.
- */
+/** Created by bcavlin on 20/06/17. */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = DatabaseConfiguration.class)
 public class RepositoriesTest {
 
-    @Autowired
-    private ReportsRepository reportsRepository;
+  @Autowired private ReportsRepository reportsRepository;
 
-//    @Test
-//    public void testReportsRepository(){
-//        Assert.assertNotNull(reportsRepository);
-//        final ArrayList<ReportsEntity> reportsEntities = Lists.newArrayList(reportsRepository.findAll());
-//        Assert.assertNotNull(reportsEntities);
-//    }
+  //    @Test
+  //    public void testReportsRepository(){
+  //        Assert.assertNotNull(reportsRepository);
+  //        final ArrayList<ReportsEntity> reportsEntities =
+  // Lists.newArrayList(reportsRepository.findAll());
+  //        Assert.assertNotNull(reportsEntities);
+  //    }
 }
