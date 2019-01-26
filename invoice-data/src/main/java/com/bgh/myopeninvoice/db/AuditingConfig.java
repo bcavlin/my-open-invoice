@@ -15,26 +15,26 @@ import java.util.Optional;
 @EnableJpaAuditing
 public class AuditingConfig {
 
-    @Bean
-    public AuditorAware<Integer> auditorProvider() {
-        return new SpringSecurityAuditAwareImpl();
-    }
+  @Bean
+  public AuditorAware<Integer> auditorProvider() {
+    return new SpringSecurityAuditAwareImpl();
+  }
 }
 
 class SpringSecurityAuditAwareImpl implements AuditorAware<Integer> {
 
-    @Override
-    public Optional<Integer> getCurrentAuditor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  @Override
+  public Optional<Integer> getCurrentAuditor() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null ||
-                !authentication.isAuthenticated() ||
-                authentication instanceof AnonymousAuthenticationToken) {
-            return Optional.empty();
-        }
-
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
-        return Optional.ofNullable(userPrincipal.getId());
+    if (authentication == null
+        || !authentication.isAuthenticated()
+        || authentication instanceof AnonymousAuthenticationToken) {
+      return Optional.empty();
     }
+
+    UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+    return Optional.ofNullable(userPrincipal.getId());
+  }
 }

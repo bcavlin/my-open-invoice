@@ -11,30 +11,27 @@ import java.util.Collection;
 @Data
 public class UserDTO implements java.io.Serializable {
 
-    private Integer userId;
+  private Integer userId;
 
-    @NotNull
-    private String username;
+  @NotNull private String username;
 
-    private String passwordHash;
+  private String passwordHash;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    @NotNull
-    private Boolean enabled;
+  @NotNull private Boolean enabled;
 
-    @NotNull
-    private String email;
+  @NotNull private String email;
 
-    private Instant createdAt;
+  private Instant createdAt;
 
-    private Instant updatedAt;
+  private Instant updatedAt;
 
-    private Integer createdBy;
+  private Integer createdBy;
 
-    private Integer updatedBy;
+  private Integer updatedBy;
 
-    private Collection<UserRoleDTO> userRoles;
+  private Collection<UserRoleDTO> userRoles;
 }

@@ -14,19 +14,19 @@ import java.util.Date;
 
 public class CustomJsonDateTimeDeserializer extends JsonDeserializer<Date> {
 
-    @Override
-    public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException {
+  @Override
+  public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+      throws IOException {
 
-        if (jsonParser.getText() == null) {
-            return null;
-        } else if (jsonParser.getText().length() == 10) {
-            LocalDate localDate = LocalDate.parse(jsonParser.getText(), Constants.DATE_FORMATTER);
-            return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        } else {
-            OffsetDateTime offsetDateTime = OffsetDateTime.parse(jsonParser.getText(), Constants.DATE_TIME_FORMATTER);
-            return Date.from(Instant.from(offsetDateTime));
-        }
+    if (jsonParser.getText() == null) {
+      return null;
+    } else if (jsonParser.getText().length() == 10) {
+      LocalDate localDate = LocalDate.parse(jsonParser.getText(), Constants.DATE_FORMATTER);
+      return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    } else {
+      OffsetDateTime offsetDateTime =
+          OffsetDateTime.parse(jsonParser.getText(), Constants.DATE_TIME_FORMATTER);
+      return Date.from(Instant.from(offsetDateTime));
     }
-
+  }
 }

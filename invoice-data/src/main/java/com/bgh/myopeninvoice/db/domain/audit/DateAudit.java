@@ -16,12 +16,11 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class DateAudit implements Serializable {
 
-    @CreatedDate
-    @Column(name = "CREATED_AT", nullable = false, updatable = false)
-    private Instant createdAt;
+  @CreatedDate
+  @Column(name = "CREATED_AT", nullable = false, updatable = false)
+  private Instant createdAt;
 
-    @LastModifiedDate
-    @Column(name = "UPDATED_AT", nullable = false)
-    private Instant updatedAt;
-
+  @LastModifiedDate
+  @Column(name = "UPDATED_AT", nullable = false)
+  private Instant updatedAt;
 }

@@ -22,102 +22,103 @@ import java.util.Optional;
 @Service
 public class CurrencyService implements CommonService<CurrencyEntity> {
 
-    @Autowired
-    private CurrencyRepository currencyRepository;
+  @Autowired private CurrencyRepository currencyRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+    BooleanBuilder builder = new BooleanBuilder();
 
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
-                    QCurrencyEntity.currencyEntity.description.contains(searchParameters.getFilter()),
-                    QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter())
-            );
+    if (searchParameters.getFilter() != null) {
+      builder.andAnyOf(
+          QCurrencyEntity.currencyEntity.description.contains(searchParameters.getFilter()),
+          QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter()));
+    }
+    return builder;
+  }
 
-        }
-        return builder;
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = currencyRepository.count(predicate);
+    } else {
+      count = currencyRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = currencyRepository.count(predicate);
-        } else {
-            count = currencyRepository.count();
-        }
+  @Override
+  public List<CurrencyEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<CurrencyEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                currencyRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(
+                currencyRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(currencyRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(currencyRepository.findAll());
+      }
     }
 
-    @Override
-    public List<CurrencyEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<CurrencyEntity> entities;
+  @Override
+  public List<CurrencyEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<CurrencyEntity> entities = new ArrayList<>();
+    Optional<CurrencyEntity> byId = currencyRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(currencyRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(currencyRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(currencyRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(currencyRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<CurrencyEntity> saveContent(Integer id, ContentEntity content) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        return entities;
-    }
+  @Transactional
+  @Override
+  public List<CurrencyEntity> save(CurrencyEntity entity) {
+    log.info("Saving entity");
+    List<CurrencyEntity> entities = new ArrayList<>();
+    CurrencyEntity saved = currencyRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
 
-    @Override
-    public List<CurrencyEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<CurrencyEntity> entities = new ArrayList<>();
-        Optional<CurrencyEntity> byId = currencyRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<CurrencyEntity> saveContent(Integer id, ContentEntity content) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Transactional
-    @Override
-    public List<CurrencyEntity> save(CurrencyEntity entity) {
-        log.info("Saving entity");
-        List<CurrencyEntity> entities = new ArrayList<>();
-        CurrencyEntity saved = currencyRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting CurrencyDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        currencyRepository.deleteById(id);
-    }
-
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting CurrencyDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    currencyRepository.deleteById(id);
+  }
 }

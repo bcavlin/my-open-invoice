@@ -26,15 +26,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
+/** Created by bcavlin on 14/03/17. */
 @Repository
 public interface UserRoleRepository
-        extends PagingAndSortingRepository<UserRoleEntity, Integer>, QuerydslPredicateExecutor<UserRoleEntity> {
+    extends PagingAndSortingRepository<UserRoleEntity, Integer>,
+        QuerydslPredicateExecutor<UserRoleEntity> {
 
-    @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
-    @Query("select r.roleByRoleId from UserRoleEntity r where r.userByUserId.username = :username")
-    List<RoleEntity> findRolesByUsername(@Param("username") String username);
-
+  @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
+  @Query("select r.roleByRoleId from UserRoleEntity r where r.userByUserId.username = :username")
+  List<RoleEntity> findRolesByUsername(@Param("username") String username);
 }

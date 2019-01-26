@@ -7,10 +7,9 @@ import lombok.Data;
 @Data
 public class CurrencyDTO implements java.io.Serializable {
 
-    private Integer ccyId;
+  private Integer ccyId;
 
-    private String name;
+  private String name;
 
-    private String description;
-
+  private String description;
 }

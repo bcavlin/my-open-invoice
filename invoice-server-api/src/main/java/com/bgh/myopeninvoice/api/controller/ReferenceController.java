@@ -22,44 +22,49 @@ import java.util.stream.Collectors;
 @RestController
 public class ReferenceController extends AbstractController implements ReferencesAPI {
 
-    private List<String> types = Arrays.asList("RATE");
+  private List<String> types = Arrays.asList("RATE");
 
-    @Override
-    public ResponseEntity<DefaultResponse<String>> getReferenceTypes() {
-        DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
-        defaultResponse.setCount(1L);
-        defaultResponse.setDetails(types);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  @Override
+  public ResponseEntity<DefaultResponse<String>> getReferenceTypes() {
+    DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
+    defaultResponse.setCount(1L);
+    defaultResponse.setDetails(types);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public ResponseEntity<DefaultResponse<String>> getReferenceType(
+      @PathVariable("type") String type) {
+
+    List result = new ArrayList<>();
+
+    try {
+      Assert.notNull(
+          type, getMessageSource().getMessage("type.cannot.be.null", null, getContextLocale()));
+      Assert.isTrue(
+          !types.contains(type),
+          getMessageSource().getMessage("type.does.not.exist", null, getContextLocale()));
+
+      if ("RATE".equalsIgnoreCase(type)) {
+        result =
+            Arrays.stream(RateType.values())
+                .map(v -> v.name().toUpperCase())
+                .collect(Collectors.toList());
+
+      } else {
+        throw new InvalidParameterException("Type does not exist");
+      }
+
+    } catch (Exception e) {
+      return Utils.getErrorResponse(String.class, e);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public ResponseEntity<DefaultResponse<String>> getReferenceType(@PathVariable("type") String type) {
-
-        List result = new ArrayList<>();
-
-        try {
-            Assert.notNull(type, getMessageSource().getMessage("type.cannot.be.null", null, getContextLocale()));
-            Assert.isTrue(!types.contains(type), getMessageSource().getMessage("type.does.not.exist", null, getContextLocale()));
-
-            if ("RATE".equalsIgnoreCase(type)) {
-                result = Arrays.stream(RateType.values())
-                        .map(v -> v.name().toUpperCase()).collect(Collectors.toList());
-
-            } else {
-                throw new InvalidParameterException("Type does not exist");
-            }
-
-        } catch (Exception e) {
-            return Utils.getErrorResponse(String.class, e);
-        }
-
-        DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
-    }
-
+    DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 }

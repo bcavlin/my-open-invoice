@@ -14,19 +14,16 @@ import java.util.Date;
 @Data
 public class ContentDTO implements java.io.Serializable {
 
-    private Integer contentId;
+  private Integer contentId;
 
-    @NotNull
-    private String contentTable;
+  @NotNull private String contentTable;
 
-    @NotNull
-    private String filename;
+  @NotNull private String filename;
 
-    @Setter(AccessLevel.NONE)
-    private byte[] content;
+  @Setter(AccessLevel.NONE)
+  private byte[] content;
 
-    @NotNull
-    @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-    private Date dateCreated;
-
+  @NotNull
+  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
+  private Date dateCreated;
 }

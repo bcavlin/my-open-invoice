@@ -12,19 +12,19 @@ import java.util.Locale;
 @EqualsAndHashCode(callSuper = true)
 public class CustomUPAToken extends UsernamePasswordAuthenticationToken {
 
-    private Locale locale;
+  private Locale locale;
 
-    public CustomUPAToken(Object principal, Object credentials, Locale locale) {
-        super(principal, credentials);
-        this.locale = locale;
-    }
+  public CustomUPAToken(Object principal, Object credentials, Locale locale) {
+    super(principal, credentials);
+    this.locale = locale;
+  }
 
-    public CustomUPAToken(Object principal,
-                          Object credentials,
-                          Collection<? extends GrantedAuthority> authorities,
-                          Locale locale) {
-        super(principal, credentials, authorities);
-        this.locale = locale;
-    }
-
+  public CustomUPAToken(
+      Object principal,
+      Object credentials,
+      Collection<? extends GrantedAuthority> authorities,
+      Locale locale) {
+    super(principal, credentials, authorities);
+    this.locale = locale;
+  }
 }

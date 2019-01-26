@@ -7,22 +7,23 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CompanyContactTransformer extends CustomAbstractTransformer<CompanyContactEntity, CompanyContactDTO> {
+public class CompanyContactTransformer
+    extends CustomAbstractTransformer<CompanyContactEntity, CompanyContactDTO> {
 
-    @Override
-    public MapperFactory mapFields(MapperFactory mapperFactory) {
-        mapperFactory.classMap(CompanyContactDTO.class, CompanyContactEntity.class)
-                .field("contact", "contactByContactId")
-                .field("company", "companyByCompanyId")
-                .byDefault()
-                .register();
-        return mapperFactory;
-    }
+  @Override
+  public MapperFactory mapFields(MapperFactory mapperFactory) {
+    mapperFactory
+        .classMap(CompanyContactDTO.class, CompanyContactEntity.class)
+        .field("contact", "contactByContactId")
+        .field("company", "companyByCompanyId")
+        .byDefault()
+        .register();
+    return mapperFactory;
+  }
 
-    @Override
-    protected MapperFacade getMapper() {
-        factory = this.mapFields(factory);
-        return factory.getMapperFacade();
-    }
-
+  @Override
+  protected MapperFacade getMapper() {
+    factory = this.mapFields(factory);
+    return factory.getMapperFacade();
+  }
 }

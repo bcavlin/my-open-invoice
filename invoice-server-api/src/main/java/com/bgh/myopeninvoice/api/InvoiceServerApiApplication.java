@@ -34,42 +34,42 @@ import java.util.TimeZone;
 @Slf4j
 @SpringBootApplication
 @ComponentScan({
-        "com.bgh.myopeninvoice.api",
-        "com.bgh.myopeninvoice.db",
-        "com.bgh.myopeninvoice.reporting",
-        "com.bgh.myopeninvoice.common"})
+  "com.bgh.myopeninvoice.api",
+  "com.bgh.myopeninvoice.db",
+  "com.bgh.myopeninvoice.reporting",
+  "com.bgh.myopeninvoice.common"
+})
 @EnableAspectJAutoProxy
 public class InvoiceServerApiApplication {
 
-    @Autowired
-    private Environment env;
+  @Autowired private Environment env;
 
-    public static void main(String[] args) {
-        TimeZone.setDefault(TimeZone.getTimeZone("America/Toronto"));
-        System.setProperty("spring.devtools.restart.enabled", "false");
-        SpringApplication.run(InvoiceServerApiApplication.class, args);
-    }
+  public static void main(String[] args) {
+    TimeZone.setDefault(TimeZone.getTimeZone("America/Toronto"));
+    System.setProperty("spring.devtools.restart.enabled", "false");
+    SpringApplication.run(InvoiceServerApiApplication.class, args);
+  }
 
-    @PostConstruct
-    void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone(env.getRequiredProperty("spring.jackson.time-zone")));
-    }
+  @PostConstruct
+  void init() {
+    TimeZone.setDefault(TimeZone.getTimeZone(env.getRequiredProperty("spring.jackson.time-zone")));
+  }
 
-    @Bean
-    public StandardPBEStringEncryptor getStandardPBEStringEncryptor() {
-        StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
-        standardPBEStringEncryptor.setPassword(Objects.requireNonNull(env.getProperty("jasypt.encryptor.password")));
-        standardPBEStringEncryptor.setAlgorithm(Objects.requireNonNull(env.getProperty("jasypt.encryptor.algorithm")));
-        return standardPBEStringEncryptor;
-    }
+  @Bean
+  public StandardPBEStringEncryptor getStandardPBEStringEncryptor() {
+    StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
+    standardPBEStringEncryptor.setPassword(
+        Objects.requireNonNull(env.getProperty("jasypt.encryptor.password")));
+    standardPBEStringEncryptor.setAlgorithm(
+        Objects.requireNonNull(env.getProperty("jasypt.encryptor.algorithm")));
+    return standardPBEStringEncryptor;
+  }
 
-
-    @Bean
-    public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasename("messages");
-        source.setCacheSeconds(3600); // Refresh cache once per hour.
-        return source;
-    }
-
+  @Bean
+  public ResourceBundleMessageSource messageSource() {
+    ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+    source.setBasename("messages");
+    source.setCacheSeconds(3600); // Refresh cache once per hour.
+    return source;
+  }
 }

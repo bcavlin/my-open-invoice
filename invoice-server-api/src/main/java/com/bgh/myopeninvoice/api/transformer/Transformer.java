@@ -4,12 +4,11 @@ import java.util.List;
 
 public interface Transformer<E, D> {
 
-    D transformEntityToDTO(E entity, Class<D> dto);
+  D transformEntityToDTO(E entity, Class<D> dto);
 
-    E transformDTOToEntity(D dto, Class<E> entity);
+  E transformDTOToEntity(D dto, Class<E> entity);
 
-    List<D> transformEntityToDTO(List<E> entity, Class<D> dto);
+  List<D> transformEntityToDTO(List<E> entity, Class<D> dto);
 
-    List<E> transformDTOToEntity(List<D> dto, Class<E> entity);
-
+  List<E> transformDTOToEntity(List<D> dto, Class<E> entity);
 }

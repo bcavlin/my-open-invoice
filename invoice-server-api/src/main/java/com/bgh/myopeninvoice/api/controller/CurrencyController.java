@@ -35,156 +35,162 @@ import java.util.stream.Collectors;
 @RestController
 public class CurrencyController extends AbstractController implements CurrencyAPI {
 
-    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
+  private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-    @Autowired
-    private CurrencyService currencyService;
+  @Autowired private CurrencyService currencyService;
 
-    @Autowired
-    private CurrencyTransformer currencyTransformer;
+  @Autowired private CurrencyTransformer currencyTransformer;
 
-    @Override
-    public ResponseEntity<DefaultResponse<CurrencyDTO>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<CurrencyDTO> result = new ArrayList<>();
-        long count;
+  @Override
+  public ResponseEntity<DefaultResponse<CurrencyDTO>> findAll(
+      @RequestParam Map<String, String> queryParameters) {
+    List<CurrencyDTO> result = new ArrayList<>();
+    long count;
 
-        try {
-            count = currencyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            List<CurrencyEntity> entities = currencyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
+    try {
+      count = currencyService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      List<CurrencyEntity> entities =
+          currencyService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CurrencyDTO.class, e);
-        }
-
-        DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
-        defaultResponse.setCount(count);
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CurrencyDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CurrencyDTO>> findById(@PathVariable("id") Integer id) {
-        List<CurrencyDTO> result = new ArrayList<>();
+    DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
+    defaultResponse.setCount(count);
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            List<CurrencyEntity> entities = currencyService.findById(id);
-            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
+  @Override
+  public ResponseEntity<DefaultResponse<CurrencyDTO>> findById(@PathVariable("id") Integer id) {
+    List<CurrencyDTO> result = new ArrayList<>();
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CurrencyDTO.class, e);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      List<CurrencyEntity> entities = currencyService.findById(id);
+      result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
-        DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CurrencyDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CurrencyDTO>> save(@Valid @NotNull @RequestBody CurrencyDTO currencyDTO,
-                                                        BindingResult bindingResult) {
-        List<CurrencyDTO> result = new ArrayList<>();
+    DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
+  @Override
+  public ResponseEntity<DefaultResponse<CurrencyDTO>> save(
+      @Valid @NotNull @RequestBody CurrencyDTO currencyDTO, BindingResult bindingResult) {
+    List<CurrencyDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
+    try {
 
-            if (currencyDTO.getCcyId() != null) {
-                throw new InvalidDataException(
-                        getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-            }
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
 
-            List<CurrencyEntity> entities = currencyService.save(
-                    currencyTransformer.transformDTOToEntity(currencyDTO, CurrencyEntity.class));
-            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
+      if (currencyDTO.getCcyId() != null) {
+        throw new InvalidDataException(
+            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+      }
 
+      List<CurrencyEntity> entities =
+          currencyService.save(
+              currencyTransformer.transformDTOToEntity(currencyDTO, CurrencyEntity.class));
+      result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CurrencyDTO.class, e);
-        }
-
-        DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CurrencyDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CurrencyDTO>> update(@Valid @NotNull @RequestBody CurrencyDTO currencyDTO,
-                                                          BindingResult bindingResult) {
+    DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        List<CurrencyDTO> result = new ArrayList<>();
+  @Override
+  public ResponseEntity<DefaultResponse<CurrencyDTO>> update(
+      @Valid @NotNull @RequestBody CurrencyDTO currencyDTO, BindingResult bindingResult) {
 
-        try {
+    List<CurrencyDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
-            if (currencyDTO.getCcyId() == null) {
-                throw new InvalidDataException("When updating, data entity must have ID");
-            }
+    try {
 
-            List<CurrencyEntity> entities = currencyService.save(
-                    currencyTransformer.transformDTOToEntity(currencyDTO, CurrencyEntity.class));
-            result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
+      if (currencyDTO.getCcyId() == null) {
+        throw new InvalidDataException("When updating, data entity must have ID");
+      }
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      List<CurrencyEntity> entities =
+          currencyService.save(
+              currencyTransformer.transformDTOToEntity(currencyDTO, CurrencyEntity.class));
+      result = currencyTransformer.transformEntityToDTO(entities, CurrencyDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(CurrencyDTO.class, e);
-        }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(CurrencyDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
+    DefaultResponse<CurrencyDTO> defaultResponse = new DefaultResponse<>(CurrencyDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            currencyService.delete(id);
+  @Override
+  public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(Boolean.class, e, false);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      currencyService.delete(id);
 
-        DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        defaultResponse.setOperationMessage("Deleted entity with id: " + id);
-        defaultResponse.setDetails(Collections.singletonList(true));
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(Boolean.class, e, false);
     }
 
-    @Override
-    public ResponseEntity<byte[]> findContentByCurrencyId(@PathVariable("id") Integer id) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
+    DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setDetails(Collections.singletonList(true));
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-    @Override
-    public ResponseEntity<DefaultResponse<CurrencyDTO>> saveContentByCurrencyId(@PathVariable("id") Integer id,
-                                                                                 @RequestParam("file") MultipartFile file) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
+  @Override
+  public ResponseEntity<byte[]> findContentByCurrencyId(@PathVariable("id") Integer id) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
+  @Override
+  public ResponseEntity<DefaultResponse<CurrencyDTO>> saveContentByCurrencyId(
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 }

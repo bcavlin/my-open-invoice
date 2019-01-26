@@ -14,22 +14,19 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractController {
 
-    @Getter
-    @Autowired
-    private MessageSource messageSource;
+  static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-    static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
+  static final String FILTER = "filter";
 
-    static final String FILTER = "filter";
+  Pattern patternFields = Pattern.compile("(?:(?:, )?#(\\w+:\\w+))+", Pattern.CASE_INSENSITIVE);
 
-    Pattern patternFields = Pattern.compile("(?:(?:, )?#(\\w+:\\w+))+", Pattern.CASE_INSENSITIVE);
+  @Getter @Autowired private MessageSource messageSource;
 
-    Locale getContextLocale() {
-        CustomUPAToken token = (CustomUPAToken) SecurityContextHolder.getContext().getAuthentication();
-        return token.getLocale();
-    }
+  Locale getContextLocale() {
+    CustomUPAToken token = (CustomUPAToken) SecurityContextHolder.getContext().getAuthentication();
+    return token.getLocale();
+  }
 
-    protected void validateSpecialFilter(@RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
-    }
-
+  protected void validateSpecialFilter(
+      @RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {}
 }

@@ -12,29 +12,24 @@ import java.util.Collection;
 @Data
 public class InvoiceItemsDTO implements java.io.Serializable {
 
-    private Integer invoiceItemId;
+  private Integer invoiceItemId;
 
-    @NotNull
-    private Integer invoiceId;
+  @NotNull private Integer invoiceId;
 
-    @NotNull
-    private String description;
+  @NotNull private String description;
 
-    private String code;
+  private String code;
 
-    @NotNull
-    private BigDecimal quantity;
+  @NotNull private BigDecimal quantity;
 
-    @NotNull
-    private String unit;
+  @NotNull private String unit;
 
-    private BigDecimal timeSheetTotal;
+  private BigDecimal timeSheetTotal;
 
-    private Long timeSheetTotalDays;
+  private Long timeSheetTotalDays;
 
-    private InvoiceDTO invoice;
+  private InvoiceDTO invoice;
 
-    @JsonIgnoreProperties({"invoiceItems"})
-    private Collection<TimeSheetDTO> timeSheets;
-
+  @JsonIgnoreProperties({"invoiceItems"})
+  private Collection<TimeSheetDTO> timeSheets;
 }

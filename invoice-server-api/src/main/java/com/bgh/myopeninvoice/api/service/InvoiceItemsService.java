@@ -22,103 +22,104 @@ import java.util.Optional;
 @Service
 public class InvoiceItemsService implements CommonService<InvoiceItemsEntity> {
 
-    @Autowired
-    private InvoiceItemsRepository invoiceitemsRepository;
+  @Autowired private InvoiceItemsRepository invoiceitemsRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+    BooleanBuilder builder = new BooleanBuilder();
 
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
-                    QInvoiceItemsEntity.invoiceItemsEntity.code.contains(searchParameters.getFilter()),
-                    QInvoiceItemsEntity.invoiceItemsEntity.description.contains(searchParameters.getFilter()),
-                    QInvoiceItemsEntity.invoiceItemsEntity.unit.contains(searchParameters.getFilter())
-            );
+    if (searchParameters.getFilter() != null) {
+      builder.andAnyOf(
+          QInvoiceItemsEntity.invoiceItemsEntity.code.contains(searchParameters.getFilter()),
+          QInvoiceItemsEntity.invoiceItemsEntity.description.contains(searchParameters.getFilter()),
+          QInvoiceItemsEntity.invoiceItemsEntity.unit.contains(searchParameters.getFilter()));
+    }
+    return builder;
+  }
 
-        }
-        return builder;
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = invoiceitemsRepository.count(predicate);
+    } else {
+      count = invoiceitemsRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = invoiceitemsRepository.count(predicate);
-        } else {
-            count = invoiceitemsRepository.count();
-        }
+  @Override
+  public List<InvoiceItemsEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<InvoiceItemsEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                invoiceitemsRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(
+                invoiceitemsRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(invoiceitemsRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(invoiceitemsRepository.findAll());
+      }
     }
 
-    @Override
-    public List<InvoiceItemsEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<InvoiceItemsEntity> entities;
+  @Override
+  public List<InvoiceItemsEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<InvoiceItemsEntity> entities = new ArrayList<>();
+    Optional<InvoiceItemsEntity> byId = invoiceitemsRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(invoiceitemsRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(invoiceitemsRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(invoiceitemsRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(invoiceitemsRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<InvoiceItemsEntity> saveContent(Integer id, ContentEntity content) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        return entities;
-    }
+  @Transactional
+  @Override
+  public List<InvoiceItemsEntity> save(InvoiceItemsEntity entity) {
+    log.info("Saving entity");
+    List<InvoiceItemsEntity> entities = new ArrayList<>();
+    InvoiceItemsEntity saved = invoiceitemsRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
 
-    @Override
-    public List<InvoiceItemsEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<InvoiceItemsEntity> entities = new ArrayList<>();
-        Optional<InvoiceItemsEntity> byId = invoiceitemsRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<InvoiceItemsEntity> saveContent(Integer id, ContentEntity content) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Transactional
-    @Override
-    public List<InvoiceItemsEntity> save(InvoiceItemsEntity entity) {
-        log.info("Saving entity");
-        List<InvoiceItemsEntity> entities = new ArrayList<>();
-        InvoiceItemsEntity saved = invoiceitemsRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting InvoiceItemsDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        invoiceitemsRepository.deleteById(id);
-    }
-
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting InvoiceItemsDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    invoiceitemsRepository.deleteById(id);
+  }
 }

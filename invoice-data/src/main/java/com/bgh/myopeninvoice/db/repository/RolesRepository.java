@@ -21,12 +21,10 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
+/** Created by bcavlin on 14/03/17. */
 @Repository
-public interface RolesRepository extends CrudRepository<RoleEntity, Integer>, QuerydslPredicateExecutor<RoleEntity> {
+public interface RolesRepository
+    extends CrudRepository<RoleEntity, Integer>, QuerydslPredicateExecutor<RoleEntity> {
 
-    RoleEntity findByRoleName(String roleName);
-
+  RoleEntity findByRoleName(String roleName);
 }

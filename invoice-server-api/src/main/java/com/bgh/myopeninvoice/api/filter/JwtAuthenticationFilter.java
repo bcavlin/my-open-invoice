@@ -22,48 +22,42 @@ import java.util.Locale;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+  @Autowired private JwtTokenProvider tokenProvider;
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+  @Autowired private CustomUserDetailsService customUserDetailsService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
-        try {
-            String jwt = getJwtFromRequest(request);
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    try {
+      String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                Integer userId = tokenProvider.getUserIdFromJWT(jwt);
+      if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+        Integer userId = tokenProvider.getUserIdFromJWT(jwt);
 
-                UserPrincipal userDetails = (UserPrincipal)customUserDetailsService.loadUserById(userId);
+        UserPrincipal userDetails = (UserPrincipal) customUserDetailsService.loadUserById(userId);
 
-                CustomUPAToken authentication = new CustomUPAToken(
-                        userDetails.getUsername(),
-                        null,
-                        userDetails.getAuthorities(),
-                        Locale.US);
+        CustomUPAToken authentication =
+            new CustomUPAToken(
+                userDetails.getUsername(), null, userDetails.getAuthorities(), Locale.US);
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (Exception ex) {
-            log.error("Could not set user authentication in security context", ex);
-        }
-
-        filterChain.doFilter(request, response);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      }
+    } catch (Exception ex) {
+      log.error("Could not set user authentication in security context", ex);
     }
 
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
-        }
-        return null;
-    }
+    filterChain.doFilter(request, response);
+  }
 
+  private String getJwtFromRequest(HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+      return bearerToken.substring(7);
+    }
+    return null;
+  }
 }

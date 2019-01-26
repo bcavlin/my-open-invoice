@@ -35,156 +35,162 @@ import java.util.stream.Collectors;
 @RestController
 public class TimeSheetController extends AbstractController implements TimeSheetAPI {
 
-    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
+  private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-    @Autowired
-    private TimeSheetService timesheetService;
+  @Autowired private TimeSheetService timesheetService;
 
-    @Autowired
-    private TimeSheetTransformer timesheetTransformer;
+  @Autowired private TimeSheetTransformer timesheetTransformer;
 
-    @Override
-    public ResponseEntity<DefaultResponse<TimeSheetDTO>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<TimeSheetDTO> result = new ArrayList<>();
-        long count;
+  @Override
+  public ResponseEntity<DefaultResponse<TimeSheetDTO>> findAll(
+      @RequestParam Map<String, String> queryParameters) {
+    List<TimeSheetDTO> result = new ArrayList<>();
+    long count;
 
-        try {
-            count = timesheetService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            List<TimeSheetEntity> entities = timesheetService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
+    try {
+      count = timesheetService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      List<TimeSheetEntity> entities =
+          timesheetService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(TimeSheetDTO.class, e);
-        }
-
-        DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
-        defaultResponse.setCount(count);
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(TimeSheetDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<TimeSheetDTO>> findById(@PathVariable("id") Integer id) {
-        List<TimeSheetDTO> result = new ArrayList<>();
+    DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
+    defaultResponse.setCount(count);
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            List<TimeSheetEntity> entities = timesheetService.findById(id);
-            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
+  @Override
+  public ResponseEntity<DefaultResponse<TimeSheetDTO>> findById(@PathVariable("id") Integer id) {
+    List<TimeSheetDTO> result = new ArrayList<>();
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(TimeSheetDTO.class, e);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      List<TimeSheetEntity> entities = timesheetService.findById(id);
+      result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
-        DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(TimeSheetDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<TimeSheetDTO>> save(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
-                                                              BindingResult bindingResult) {
-        List<TimeSheetDTO> result = new ArrayList<>();
+    DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
+  @Override
+  public ResponseEntity<DefaultResponse<TimeSheetDTO>> save(
+      @Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO, BindingResult bindingResult) {
+    List<TimeSheetDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
+    try {
 
-            if (timesheetDTO.getTimesheetId() != null) {
-                throw new InvalidDataException(
-                        getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-            }
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
 
-            List<TimeSheetEntity> entities = timesheetService.save(
-                    timesheetTransformer.transformDTOToEntity(timesheetDTO, TimeSheetEntity.class));
-            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
+      if (timesheetDTO.getTimesheetId() != null) {
+        throw new InvalidDataException(
+            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+      }
 
+      List<TimeSheetEntity> entities =
+          timesheetService.save(
+              timesheetTransformer.transformDTOToEntity(timesheetDTO, TimeSheetEntity.class));
+      result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(TimeSheetDTO.class, e);
-        }
-
-        DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(TimeSheetDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<TimeSheetDTO>> update(@Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO,
-                                                                BindingResult bindingResult) {
+    DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        List<TimeSheetDTO> result = new ArrayList<>();
+  @Override
+  public ResponseEntity<DefaultResponse<TimeSheetDTO>> update(
+      @Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO, BindingResult bindingResult) {
 
-        try {
+    List<TimeSheetDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
-            if (timesheetDTO.getTimesheetId() == null) {
-                throw new InvalidDataException("When updating, data entity must have ID");
-            }
+    try {
 
-            List<TimeSheetEntity> entities = timesheetService.save(
-                    timesheetTransformer.transformDTOToEntity(timesheetDTO, TimeSheetEntity.class));
-            result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
+      if (timesheetDTO.getTimesheetId() == null) {
+        throw new InvalidDataException("When updating, data entity must have ID");
+      }
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      List<TimeSheetEntity> entities =
+          timesheetService.save(
+              timesheetTransformer.transformDTOToEntity(timesheetDTO, TimeSheetEntity.class));
+      result = timesheetTransformer.transformEntityToDTO(entities, TimeSheetDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(TimeSheetDTO.class, e);
-        }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(TimeSheetDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
+    DefaultResponse<TimeSheetDTO> defaultResponse = new DefaultResponse<>(TimeSheetDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            timesheetService.delete(id);
+  @Override
+  public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(Boolean.class, e, false);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      timesheetService.delete(id);
 
-        DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        defaultResponse.setOperationMessage("Deleted entity with id: " + id);
-        defaultResponse.setDetails(Collections.singletonList(true));
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(Boolean.class, e, false);
     }
 
-    @Override
-    public ResponseEntity<byte[]> findContentByTimeSheetId(@PathVariable("id") Integer id) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
+    DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setDetails(Collections.singletonList(true));
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-    @Override
-    public ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(@PathVariable("id") Integer id,
-                                                                                  @RequestParam("file") MultipartFile file) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
+  @Override
+  public ResponseEntity<byte[]> findContentByTimeSheetId(@PathVariable("id") Integer id) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
+  @Override
+  public ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 }

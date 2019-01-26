@@ -22,115 +22,137 @@ import java.util.Optional;
 @Service
 public class InvoiceService implements CommonService<InvoiceEntity> {
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+  @Autowired private InvoiceRepository invoiceRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+    BooleanBuilder builder = new BooleanBuilder();
 
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
-                    QInvoiceEntity.invoiceEntity.note.contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.rateUnit.contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.title.contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.rate.stringValue().contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.createdDate.stringValue().contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.dueDate.stringValue().contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.paidDate.stringValue().contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.totalValue.stringValue().contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.totalValue.stringValue().contains(searchParameters.getFilter()),
-                    QInvoiceEntity.invoiceEntity.fromDate.stringValue().contains(searchParameters.getFilter())
-            );
+    if (searchParameters.getFilter() != null) {
+      builder.andAnyOf(
+          QInvoiceEntity.invoiceEntity.note.containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity.rateUnit.containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity.title.containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .rate
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .createdDate
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .dueDate
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .paidDate
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .totalValue
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .totalValue
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()),
+          QInvoiceEntity.invoiceEntity
+              .fromDate
+              .stringValue()
+              .containsIgnoreCase(searchParameters.getFilter()));
+    }
+    return builder;
+  }
 
-        }
-        return builder;
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = invoiceRepository.count(predicate);
+    } else {
+      count = invoiceRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = invoiceRepository.count(predicate);
-        } else {
-            count = invoiceRepository.count();
-        }
+  @Override
+  public List<InvoiceEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<InvoiceEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                invoiceRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(
+                invoiceRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(invoiceRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(invoiceRepository.findAll());
+      }
     }
 
-    @Override
-    public List<InvoiceEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<InvoiceEntity> entities;
+  @Override
+  public List<InvoiceEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<InvoiceEntity> entities = new ArrayList<>();
+    Optional<InvoiceEntity> byId = invoiceRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(invoiceRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(invoiceRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(invoiceRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(invoiceRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<InvoiceEntity> saveContent(Integer id, ContentEntity content) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        return entities;
-    }
+  @Transactional
+  @Override
+  public List<InvoiceEntity> save(InvoiceEntity entity) {
+    log.info("Saving entity");
+    List<InvoiceEntity> entities = new ArrayList<>();
+    InvoiceEntity saved = invoiceRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
 
-    @Override
-    public List<InvoiceEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<InvoiceEntity> entities = new ArrayList<>();
-        Optional<InvoiceEntity> byId = invoiceRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
-    }
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting InvoiceDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    invoiceRepository.deleteById(id);
+  }
 
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<InvoiceEntity> saveContent(Integer id, ContentEntity content) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Transactional
-    @Override
-    public List<InvoiceEntity> save(InvoiceEntity entity) {
-        log.info("Saving entity");
-        List<InvoiceEntity> entities = new ArrayList<>();
-        InvoiceEntity saved = invoiceRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting InvoiceDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        invoiceRepository.deleteById(id);
-    }
-
-    @Transactional
-    public Integer getNextCounter(){
-        return invoiceRepository.getNextSequence();
-    }
-
+  @Transactional
+  public Integer getNextCounter() {
+    return invoiceRepository.getNextSequence();
+  }
 }

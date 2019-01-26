@@ -22,102 +22,102 @@ import java.util.Optional;
 @Service
 public class TaxService implements CommonService<TaxEntity> {
 
-    @Autowired
-    private TaxRepository taxRepository;
+  @Autowired private TaxRepository taxRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
 
-        BooleanBuilder builder = new BooleanBuilder();
+    BooleanBuilder builder = new BooleanBuilder();
 
-        if (searchParameters.getFilter() != null) {
-            builder.andAnyOf(
-                    QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
-                    QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter())
-            );
+    if (searchParameters.getFilter() != null) {
+      builder.andAnyOf(
+          QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
+          QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+    }
+    return builder;
+  }
 
-        }
-        return builder;
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = taxRepository.count(predicate);
+    } else {
+      count = taxRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = taxRepository.count(predicate);
-        } else {
-            count = taxRepository.count();
-        }
+  @Override
+  public List<TaxEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<TaxEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                taxRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(taxRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(taxRepository.findAll());
+      }
     }
 
-    @Override
-    public List<TaxEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<TaxEntity> entities;
+  @Override
+  public List<TaxEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<TaxEntity> entities = new ArrayList<>();
+    Optional<TaxEntity> byId = taxRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(taxRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(taxRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(taxRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<TaxEntity> saveContent(Integer id, ContentEntity content) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
-        return entities;
-    }
+  @Transactional
+  @Override
+  public List<TaxEntity> save(TaxEntity entity) {
+    log.info("Saving entity");
+    List<TaxEntity> entities = new ArrayList<>();
+    TaxEntity saved = taxRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
 
-    @Override
-    public List<TaxEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<TaxEntity> entities = new ArrayList<>();
-        Optional<TaxEntity> byId = taxRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
-    }
-
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<TaxEntity> saveContent(Integer id, ContentEntity content) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
-
-    @Transactional
-    @Override
-    public List<TaxEntity> save(TaxEntity entity) {
-        log.info("Saving entity");
-        List<TaxEntity> entities = new ArrayList<>();
-        TaxEntity saved = taxRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting TaxDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        taxRepository.deleteById(id);
-    }
-
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting TaxDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    taxRepository.deleteById(id);
+  }
 }

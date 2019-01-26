@@ -18,20 +18,20 @@ package com.bgh.myopeninvoice.reporting;
 
 import java.util.Map;
 
-/**
- * Created by bcavlin on 07/05/17.
- */
+/** Created by bcavlin on 07/05/17. */
 public class BIRTReport extends Report {
 
-    public BIRTReport(String name, Map<String, Object> reportParameters,
-                      byte[] template, ReportRunner reportRunner) {
-        super(name, template, reportParameters, reportRunner);
-    }
+  public BIRTReport(
+      String name,
+      Map<String, Object> reportParameters,
+      byte[] template,
+      ReportRunner reportRunner) {
+    super(name, template, reportParameters, reportRunner);
+  }
 
-    @Override
-    public Report runReport() {
-        this.reportContent = reportRunner.runReport(this);
-        return this;
-    }
-
+  @Override
+  public Report runReport() {
+    this.reportContent = reportRunner.runReport(this);
+    return this;
+  }
 }

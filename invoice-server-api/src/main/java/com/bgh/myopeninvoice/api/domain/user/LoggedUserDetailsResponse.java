@@ -26,13 +26,12 @@ import org.springframework.security.core.Authentication;
 @EqualsAndHashCode(callSuper = false)
 public class LoggedUserDetailsResponse extends OperationResponse {
 
-    public LoggedUserDetailsResponse() {
-    }
+  @ApiModelProperty(required = true, value = "")
+  private Authentication authentication;
 
-    public LoggedUserDetailsResponse(Authentication authentication) {
-        this.authentication = authentication;
-    }
+  public LoggedUserDetailsResponse() {}
 
-    @ApiModelProperty(required = true, value = "")
-    private Authentication authentication;
+  public LoggedUserDetailsResponse(Authentication authentication) {
+    this.authentication = authentication;
+  }
 }

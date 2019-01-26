@@ -53,100 +53,96 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController extends AbstractController implements UserAPI {
 
-    @Autowired
-    private UserService userService;
+  @Autowired JwtTokenProvider tokenProvider;
 
-    @Autowired
-    private RoleTransformer roleTransformer;
+  @Autowired AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserTransformer userTransformer;
+  @Autowired private UserService userService;
 
-    @Autowired
-    JwtTokenProvider tokenProvider;
+  @Autowired private RoleTransformer roleTransformer;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+  @Autowired private UserTransformer userTransformer;
 
-    @Override
-    public ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(@PathVariable("username") String username) {
-        List<RoleDTO> result = new ArrayList<>();
+  @Override
+  public ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(
+      @PathVariable("username") String username) {
+    List<RoleDTO> result = new ArrayList<>();
 
-        try {
-            List<RoleEntity> userRoles = userService.findUserRoles(username);
-            result = roleTransformer.transformEntityToDTO(userRoles, RoleDTO.class);
+    try {
+      List<RoleEntity> userRoles = userService.findUserRoles(username);
+      result = roleTransformer.transformEntityToDTO(userRoles, RoleDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(RoleDTO.class, e);
-
-        }
-
-        DefaultResponse<RoleDTO> defaultResponse = new DefaultResponse<>(RoleDTO.class);
-        defaultResponse.setDetails(result);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        ResponseEntity<DefaultResponse<RoleDTO>> responseEntity = new ResponseEntity<>(defaultResponse, HttpStatus.OK);
-
-        log.debug("Returning: {}", responseEntity);
-
-        return responseEntity;
+    } catch (Exception e) {
+      return Utils.getErrorResponse(RoleDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<?> login(@Valid @RequestBody AccountCredentials credentials,
-                                   BindingResult bindingResult) {
+    DefaultResponse<RoleDTO> defaultResponse = new DefaultResponse<>(RoleDTO.class);
+    defaultResponse.setDetails(result);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    ResponseEntity<DefaultResponse<RoleDTO>> responseEntity =
+        new ResponseEntity<>(defaultResponse, HttpStatus.OK);
 
-        try {
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
+    log.debug("Returning: {}", responseEntity);
 
-            log.info("Logging in user: {}", credentials.getUsername());
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            credentials.getUsername(),
-                            credentials.getPassword()
-                    )
-            );
+    return responseEntity;
+  }
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+  @Override
+  public ResponseEntity<?> login(
+      @Valid @RequestBody AccountCredentials credentials, BindingResult bindingResult) {
 
-            String jwt = tokenProvider.generateToken(authentication);
+    try {
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
 
-            userService.updateLastLoggedDate(credentials.getUsername());
+      log.info("Logging in user: {}", credentials.getUsername());
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  credentials.getUsername(), credentials.getPassword()));
 
-            return ResponseEntity.ok(JwtAuthenticationResponse.builder().accessToken(jwt).build());
+      SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        } catch (Exception e) {
-            log.error(e.toString(), e);
-        }
-        return ResponseEntity.badRequest().body("{\"message\":\"There was a problem logging in. Please call technical support.\"}");
+      String jwt = tokenProvider.generateToken(authentication);
+
+      userService.updateLastLoggedDate(credentials.getUsername());
+
+      return ResponseEntity.ok(JwtAuthenticationResponse.builder().accessToken(jwt).build());
+
+    } catch (Exception e) {
+      log.error(e.toString(), e);
+    }
+    return ResponseEntity.badRequest()
+        .body("{\"message\":\"There was a problem logging in. Please call technical support.\"}");
+  }
+
+  @Override
+  public ResponseEntity<DefaultResponse<UserDTO>> getUsers() {
+    List<UserDTO> result = new ArrayList<>();
+
+    try {
+      List<UserEntity> users = userService.getUsers();
+      result = userTransformer.transformEntityToDTO(users, UserDTO.class);
+
+    } catch (Exception e) {
+      return Utils.getErrorResponse(UserDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<UserDTO>> getUsers() {
-        List<UserDTO> result = new ArrayList<>();
+    DefaultResponse<UserDTO> defaultResponse = new DefaultResponse<>(UserDTO.class);
+    defaultResponse.setDetails(result);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    ResponseEntity<DefaultResponse<UserDTO>> responseEntity =
+        new ResponseEntity<>(defaultResponse, HttpStatus.OK);
 
-        try {
-            List<UserEntity> users = userService.getUsers();
-            result = userTransformer.transformEntityToDTO(users, UserDTO.class);
+    log.debug("Returning: {}", responseEntity);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(UserDTO.class, e);
-
-        }
-
-        DefaultResponse<UserDTO> defaultResponse = new DefaultResponse<>(UserDTO.class);
-        defaultResponse.setDetails(result);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        ResponseEntity<DefaultResponse<UserDTO>> responseEntity = new ResponseEntity<>(defaultResponse, HttpStatus.OK);
-
-        log.debug("Returning: {}", responseEntity);
-
-        return responseEntity;
-    }
-
+    return responseEntity;
+  }
 }

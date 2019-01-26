@@ -25,153 +25,163 @@ import java.util.Optional;
 @Service
 public class ContractService implements CommonService<ContractEntity> {
 
-    @Autowired
-    private ContractRepository contractRepository;
+  @Autowired private ContractRepository contractRepository;
 
-    @Autowired
-    private ContentRepository contentRepository;
+  @Autowired private ContentRepository contentRepository;
 
-    @Autowired
-    private CompanyContactRepository companyContactRepository;
+  @Autowired private CompanyContactRepository companyContactRepository;
 
-    @Override
-    public Predicate getPredicate(SearchParameters searchParameters) {
+  @Override
+  public Predicate getPredicate(SearchParameters searchParameters) {
 
-        if (searchParameters.getFilter() != null && !searchParameters.getBuilder().hasValue()) {
-            searchParameters.getBuilder().andAnyOf(
-                    QContractEntity.contractEntity.contractNumber.contains(searchParameters.getFilter()),
-                    QContractEntity.contractEntity.description.contains(searchParameters.getFilter()),
-                    QContractEntity.contractEntity.purchaseOrder.contains(searchParameters.getFilter()),
-                    QContractEntity.contractEntity.rate.stringValue().contains(searchParameters.getFilter()),
-                    QContractEntity.contractEntity.rateUnit.contains(searchParameters.getFilter()),
-                    QContractEntity.contractEntity.validFrom.stringValue().contains(searchParameters.getFilter()),
-                    QContractEntity.contractEntity.validTo.stringValue().contains(searchParameters.getFilter())
-            );
+    if (searchParameters.getFilter() != null && !searchParameters.getBuilder().hasValue()) {
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QContractEntity.contractEntity.contractNumber.contains(searchParameters.getFilter()),
+              QContractEntity.contractEntity.description.contains(searchParameters.getFilter()),
+              QContractEntity.contractEntity.purchaseOrder.contains(searchParameters.getFilter()),
+              QContractEntity.contractEntity
+                  .rate
+                  .stringValue()
+                  .contains(searchParameters.getFilter()),
+              QContractEntity.contractEntity.rateUnit.contains(searchParameters.getFilter()),
+              QContractEntity.contractEntity
+                  .validFrom
+                  .stringValue()
+                  .contains(searchParameters.getFilter()),
+              QContractEntity.contractEntity
+                  .validTo
+                  .stringValue()
+                  .contains(searchParameters.getFilter()));
+    }
+    return searchParameters.getBuilder();
+  }
 
-        }
-        return searchParameters.getBuilder();
+  @Override
+  public long count(SearchParameters searchParameters) {
+    log.info("count");
+    Predicate predicate = getPredicate(searchParameters);
+    long count;
+
+    if (predicate != null) {
+      count = contractRepository.count(predicate);
+    } else {
+      count = contractRepository.count();
     }
 
-    @Override
-    public long count(SearchParameters searchParameters) {
-        log.info("count");
-        Predicate predicate = getPredicate(searchParameters);
-        long count;
+    return count;
+  }
 
-        if (predicate != null) {
-            count = contractRepository.count(predicate);
-        } else {
-            count = contractRepository.count();
-        }
+  @Override
+  public List<ContractEntity> findAll(SearchParameters searchParameters) {
+    log.info("findAll");
 
-        return count;
+    List<ContractEntity> entities;
+
+    Predicate predicate = getPredicate(searchParameters);
+
+    if (searchParameters.getPageRequest() != null) {
+      if (predicate != null) {
+        entities =
+            Utils.convertIterableToList(
+                contractRepository.findAll(predicate, searchParameters.getPageRequest()));
+      } else {
+        entities =
+            Utils.convertIterableToList(
+                contractRepository.findAll(searchParameters.getPageRequest()));
+      }
+    } else {
+      if (predicate != null) {
+        entities = Utils.convertIterableToList(contractRepository.findAll(predicate));
+      } else {
+        entities = Utils.convertIterableToList(contractRepository.findAll());
+      }
     }
 
-    @Override
-    public List<ContractEntity> findAll(SearchParameters searchParameters) {
-        log.info("findAll");
+    return entities;
+  }
 
-        List<ContractEntity> entities;
+  @Override
+  public List<ContractEntity> findById(Integer id) {
+    log.info("findById: {}", id);
+    List<ContractEntity> entities = new ArrayList<>();
+    Optional<ContractEntity> byId = contractRepository.findById(id);
+    byId.ifPresent(entities::add);
+    return entities;
+  }
 
-        Predicate predicate = getPredicate(searchParameters);
+  @Override
+  public ContentEntity findContentByParentEntityId(
+      Integer id, ContentEntity.ContentEntityTable table) {
+    log.info("Find content for contract {}", id);
+    return contentRepository.findContentByContractId(id, table.name());
+  }
 
-        if (searchParameters.getPageRequest() != null) {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(contractRepository.findAll(predicate, searchParameters.getPageRequest()));
-            } else {
-                entities = Utils.convertIterableToList(contractRepository.findAll(searchParameters.getPageRequest()));
-            }
-        } else {
-            if (predicate != null) {
-                entities = Utils.convertIterableToList(contractRepository.findAll(predicate));
-            } else {
-                entities = Utils.convertIterableToList(contractRepository.findAll());
-            }
-        }
+  @SuppressWarnings("unchecked")
+  @Transactional
+  @Override
+  public List<ContractEntity> saveContent(Integer id, ContentEntity content)
+      throws InvalidDataException {
+    log.info("Save content to contract {}, file {}", id, content.getFilename());
+    List<ContractEntity> contractEntities = new ArrayList<>();
 
-        return entities;
+    Optional<ContractEntity> byId = contractRepository.findCustomById(id);
+    if (byId.isPresent()) {
+      ContractEntity contractEntity = byId.get();
+      if (contractEntity.getContentByContentId() == null) {
+        log.debug("Adding new content");
+        contractEntity.setContentByContentId(content);
+      } else {
+        log.debug("Updating content: {}", contractEntity.getContentByContentId().getContentId());
+        contractEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+        contractEntity.getContentByContentId().setContentTable(content.getContentTable());
+        contractEntity.getContentByContentId().setContent(content.getContent());
+        contractEntity.getContentByContentId().setFilename(content.getFilename());
+      }
+      contractEntities.addAll(this.save(contractEntity));
     }
 
-    @Override
-    public List<ContractEntity> findById(Integer id) {
-        log.info("findById: {}", id);
-        List<ContractEntity> entities = new ArrayList<>();
-        Optional<ContractEntity> byId = contractRepository.findById(id);
-        byId.ifPresent(entities::add);
-        return entities;
+    return contractEntities;
+  }
+
+  @Transactional
+  @Override
+  public List<ContractEntity> save(ContractEntity entity) throws InvalidDataException {
+    log.info("Saving entity");
+    List<ContractEntity> entities = new ArrayList<>();
+
+    Optional<CompanyContactEntity> companyContactEntity =
+        companyContactRepository.findById(entity.getCompanyContactId());
+    if (companyContactEntity.isPresent()
+        && companyContactEntity.get().getCompanyId().equals(entity.getCompanyId())) {
+      throw new InvalidDataException(
+          "Company that we sign contract with and contact cannot have same company id.");
     }
 
-    @Override
-    public ContentEntity findContentByParentEntityId(Integer id, ContentEntity.ContentEntityTable table) {
-        log.info("Find content for contract {}", id);
-        return contentRepository.findContentByContractId(id, table.name());
+    if (entity.getContractId() != null) {
+      // update (we are missing image)
+      entity.setContentByContentId(
+          contentRepository.findContentByContractId(
+              entity.getContractId(),
+              ContentEntity.ContentEntityTable.CONTRACT.name().toUpperCase()));
+    } else if (entity.getContentByContentId() != null
+        && entity.getContentByContentId().getContentId() == null
+        && entity.getContentByContentId().getFilename() == null) {
+      entity.setContentByContentId(null);
     }
 
-    @SuppressWarnings("unchecked")
-    @Transactional
-    @Override
-    public List<ContractEntity> saveContent(Integer id, ContentEntity content) throws InvalidDataException {
-        log.info("Save content to contract {}, file {}", id, content.getFilename());
-        List<ContractEntity> contractEntities = new ArrayList<>();
+    ContractEntity saved = contractRepository.save(entity);
+    log.info("Saved entity: {}", entity);
+    entities.add(saved);
+    return entities;
+  }
 
-        Optional<ContractEntity> byId = contractRepository.findCustomById(id);
-        if (byId.isPresent()) {
-            ContractEntity contractEntity = byId.get();
-            if (contractEntity.getContentByContentId() == null) {
-                log.debug("Adding new content");
-                contractEntity.setContentByContentId(content);
-            } else {
-                log.debug("Updating content: {}", contractEntity.getContentByContentId().getContentId());
-                contractEntity.getContentByContentId().setDateCreated(content.getDateCreated());
-                contractEntity.getContentByContentId().setContentTable(content.getContentTable());
-                contractEntity.getContentByContentId().setContent(content.getContent());
-                contractEntity.getContentByContentId().setFilename(content.getFilename());
-            }
-            contractEntities.addAll(this.save(contractEntity));
-        }
-
-        return contractEntities;
-    }
-
-    @Transactional
-    @Override
-    public List<ContractEntity> save(ContractEntity entity) throws InvalidDataException {
-        log.info("Saving entity");
-        List<ContractEntity> entities = new ArrayList<>();
-
-        Optional<CompanyContactEntity> companyContactEntity = companyContactRepository.findById(
-                entity.getCompanyContactId());
-        if (companyContactEntity.isPresent()
-                && companyContactEntity.get().getCompanyId().equals(
-                entity.getCompanyId()
-        )) {
-            throw new InvalidDataException("Company that we sign contract with and contact cannot have same company id.");
-        }
-
-        if (entity.getContractId() != null) {
-            //update (we are missing image)
-            entity.setContentByContentId(
-                    contentRepository.findContentByContractId(
-                            entity.getContractId(),
-                            ContentEntity.ContentEntityTable.CONTRACT.name().toUpperCase()));
-        } else if (entity.getContentByContentId() != null
-                && entity.getContentByContentId().getContentId() == null
-                && entity.getContentByContentId().getFilename() == null) {
-            entity.setContentByContentId(null);
-        }
-
-        ContractEntity saved = contractRepository.save(entity);
-        log.info("Saved entity: {}", entity);
-        entities.add(saved);
-        return entities;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        log.info("Deleting ContractDTO with id [{}]", id);
-        Assert.notNull(id, "ID cannot be empty when deleting data");
-        contractRepository.deleteById(id);
-    }
-
+  @Transactional
+  @Override
+  public void delete(Integer id) {
+    log.info("Deleting ContractDTO with id [{}]", id);
+    Assert.notNull(id, "ID cannot be empty when deleting data");
+    contractRepository.deleteById(id);
+  }
 }

@@ -12,38 +12,34 @@ import java.util.Collection;
 @Data
 public class CompanyDTO implements java.io.Serializable {
 
-    private Integer companyId;
+  private Integer companyId;
 
-    @NotNull
-    private String companyName;
+  @NotNull private String companyName;
 
-    @NotNull
-    @MatchesPattern("[A-Z0-9]+")
-    private String shortName;
+  @NotNull
+  @MatchesPattern("[A-Z0-9]+")
+  private String shortName;
 
-    private String address1;
+  private String address1;
 
-    @MatchesPattern("^(\\+\\d{1,3})?(-|\\s|\\()?(\\d{3})(\\))?(-|\\s)?(\\d{3})(-|\\s)?(\\d{4})$")
-    private String phone1;
+  @MatchesPattern("^(\\+\\d{1,3})?(-|\\s|\\()?(\\d{3})(\\))?(-|\\s)?(\\d{3})(-|\\s)?(\\d{4})$")
+  private String phone1;
 
-    @NotNull
-    private Boolean ownedByMe;
+  @NotNull private Boolean ownedByMe;
 
-    private String businessNumber;
+  private String businessNumber;
 
-    @NotNull
-    @MatchesPattern("^[1-7]$")
-    private Integer weekStart;
+  @NotNull
+  @MatchesPattern("^[1-7]$")
+  private Integer weekStart;
 
-    @JsonIgnoreProperties({"content"})
-    private ContentDTO content;
+  @JsonIgnoreProperties({"content"})
+  private ContentDTO content;
 
-    @JsonIgnoreProperties({"company"})
-    private Collection<CompanyContactDTO> companyContacts;
+  @JsonIgnoreProperties({"company"})
+  private Collection<CompanyContactDTO> companyContacts;
 
-    private Integer numberOfContacts;
+  private Integer numberOfContacts;
 
-    private Integer numberOfContracts;
-
-
+  private Integer numberOfContracts;
 }

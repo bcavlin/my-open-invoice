@@ -16,7 +16,9 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.domain.*;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
+import com.bgh.myopeninvoice.db.domain.UserRoleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,290 +28,297 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by bcavlin on 21/03/17.
- */
+/** Created by bcavlin on 21/03/17. */
 @Repository("invoiceDAO")
 public class InvoiceDAOImpl implements InvoiceDAO {
 
-    private RolesRepository rolesRepository;
+  private RolesRepository rolesRepository;
 
-    private TaxRepository taxRepository;
+  private TaxRepository taxRepository;
 
-    private UsersRepository usersRepository;
+  private UsersRepository usersRepository;
 
-    private UserRoleRepository userRoleRepository;
+  private UserRoleRepository userRoleRepository;
 
-    private ContactRepository contactRepository;
+  private ContactRepository contactRepository;
 
-    private CompanyRepository companyRepository;
+  private CompanyRepository companyRepository;
 
-    private CompanyContactRepository companyContactRepository;
+  private CompanyContactRepository companyContactRepository;
 
-    private ContractRepository contractRepository;
+  private ContractRepository contractRepository;
 
-    private CurrencyRepository currencyRepository;
+  private CurrencyRepository currencyRepository;
 
-    private InvoiceRepository invoiceRepository;
+  private InvoiceRepository invoiceRepository;
 
-    private JdbcTemplate jdbcTemplate;
+  private JdbcTemplate jdbcTemplate;
 
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
+  private InvoiceItemsRepository invoiceItemsRepository;
+
+  private AttachmentRepository attachmentRepository;
+
+  private TimeSheetRepository timeSheetRepository;
+
+  private ReportsRepository reportsRepository;
+
+  public JdbcTemplate getJdbcTemplate() {
+    return jdbcTemplate;
+  }
+
+  @Autowired
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+
+  @Override
+  public InvoiceRepository getInvoiceRepository() {
+    return invoiceRepository;
+  }
+
+  @Autowired
+  public void setInvoiceRepository(InvoiceRepository invoiceRepository) {
+    this.invoiceRepository = invoiceRepository;
+  }
+
+  @Override
+  public CurrencyRepository getCurrencyRepository() {
+    return currencyRepository;
+  }
+
+  @Autowired
+  public void setCurrencyRepository(CurrencyRepository currencyRepository) {
+    this.currencyRepository = currencyRepository;
+  }
+
+  @Autowired
+  public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
+    this.userRoleRepository = userRoleRepository;
+  }
+
+  @Override
+  public ContactRepository getContactRepository() {
+    return contactRepository;
+  }
+
+  @Autowired
+  public void setContactRepository(ContactRepository contactRepository) {
+    this.contactRepository = contactRepository;
+  }
+
+  @Override
+  public CompanyRepository getCompanyRepository() {
+    return companyRepository;
+  }
+
+  @Autowired
+  public void setCompanyRepository(CompanyRepository companyRepository) {
+    this.companyRepository = companyRepository;
+  }
+
+  @Override
+  public TaxRepository getTaxRepository() {
+    return taxRepository;
+  }
+
+  @Autowired
+  public void setTaxRepository(TaxRepository taxRepository) {
+    this.taxRepository = taxRepository;
+  }
+
+  @Override
+  public UsersRepository getUsersRepository() {
+    return usersRepository;
+  }
+
+  @Autowired
+  public void setUsersRepository(UsersRepository usersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
+  @Override
+  public RolesRepository getRolesRepository() {
+    return rolesRepository;
+  }
+
+  @Autowired
+  public void setRolesRepository(RolesRepository rolesRepository) {
+    this.rolesRepository = rolesRepository;
+  }
+
+  @Transactional
+  @Override
+  public void saveUserRolesEntity(UserEntity userEntity, List<RoleEntity> targetRoles) {
+    List<UserRoleEntity> add = new ArrayList<>();
+    List<UserRoleEntity> remove = new ArrayList<>();
+    // first add new roles if not already there
+    iterateTargetRoles(userEntity, targetRoles, add);
+    // then delete those that are extra
+    iterateUserEntity(userEntity, targetRoles, remove);
+
+    for (UserRoleEntity entity : remove) {
+      userRoleRepository.delete(entity);
     }
 
-    @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    for (UserRoleEntity entity : add) {
+      userRoleRepository.save(entity);
     }
+  }
 
-    @Autowired
-    public void setInvoiceRepository(InvoiceRepository invoiceRepository) {
-        this.invoiceRepository = invoiceRepository;
-    }
+  //    @Override
+  //    public void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity,
+  // List<ContactEntity> targetContacts) {
+  //        List<CompanyContactEntity> add = new ArrayList<>();
+  //        List<CompanyContactEntity> remove = new ArrayList<>();
+  //
+  //        prepareContactEntity(selectedCompanyEntity, targetContacts, add);
+  //        //then delete those that are extra
+  //        prepareCompanyContactEntity(selectedCompanyEntity, targetContacts, remove);
+  //
+  //        for (CompanyContactEntity entity : remove) {
+  //            companyContactRepository.delete(entity);
+  //        }
+  //
+  //        for (CompanyContactEntity entity : add) {
+  //            companyContactRepository.save(entity);
+  //        }
+  //
+  //    }
 
-    @Override
-    public InvoiceRepository getInvoiceRepository() {
-        return invoiceRepository;
-    }
+  //    private void prepareCompanyContactEntity(CompanyEntity selectedCompanyEntity,
+  // List<ContactEntity> targetContacts, List<CompanyContactEntity> remove) {
+  //        for (CompanyContactEntity current :
+  // selectedCompanyEntity.getCompanyContactsByCompanyId()) {
+  //            boolean found = false;
+  //            for (ContactEntity target : targetContacts) {
+  //                if
+  // (current.getContactByContactId().getContactId().equals(target.getContactId())) {
+  //                    found = true;
+  //                }
+  //            }
+  //            if (!found) {
+  //                remove.add(current);
+  //            }
+  //        }
+  //    }
 
-    @Autowired
-    public void setCurrencyRepository(CurrencyRepository currencyRepository) {
-        this.currencyRepository = currencyRepository;
-    }
+  //    private void prepareContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity>
+  // targetContacts, List<CompanyContactEntity> add) {
+  //        for (ContactEntity target : targetContacts) {
+  //            boolean found = false;
+  //            for (CompanyContactEntity current :
+  // selectedCompanyEntity.getCompanyContactsByCompanyId()) {
+  //                if
+  // (current.getContactByContactId().getContactId().equals(target.getContactId())) {
+  //                    found = true;
+  //                }
+  //            }
+  //            if (!found) {
+  //                CompanyContactEntity newCompanyContEnt = new CompanyContactEntity();
+  //                newCompanyContEnt.setCompanyByCompanyId(selectedCompanyEntity);
+  //                newCompanyContEnt.setContactByContactId(target);
+  //                add.add(newCompanyContEnt);
+  //            }
+  //        }
+  //    }
 
-    @Autowired
-    public void setContactRepository(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
-
-    @Override
-    public CurrencyRepository getCurrencyRepository() {
-        return currencyRepository;
-    }
-
-    @Autowired
-    public void setRolesRepository(RolesRepository rolesRepository) {
-        this.rolesRepository = rolesRepository;
-    }
-
-    @Autowired
-    public void setCompanyRepository(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
-    }
-
-    @Autowired
-    public void setCompanyContactRepository(CompanyContactRepository companyContactRepository) {
-        this.companyContactRepository = companyContactRepository;
-    }
-
-    @Autowired
-    public void setContractRepository(ContractRepository contractRepository) {
-        this.contractRepository = contractRepository;
-    }
-
-    @Autowired
-    public void setTaxRepository(TaxRepository taxRepository) {
-        this.taxRepository = taxRepository;
-    }
-
-    @Autowired
-    public void setUsersRepository(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
-
-    @Autowired
-    public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
-        this.userRoleRepository = userRoleRepository;
-    }
-
-    @Override
-    public ContactRepository getContactRepository() {
-        return contactRepository;
-    }
-
-    @Override
-    public CompanyRepository getCompanyRepository() {
-        return companyRepository;
-    }
-
-    @Override
-    public TaxRepository getTaxRepository() {
-        return taxRepository;
-    }
-
-    @Override
-    public UsersRepository getUsersRepository() {
-        return usersRepository;
-    }
-
-    @Override
-    public RolesRepository getRolesRepository() {
-        return rolesRepository;
-    }
-
-    @Transactional
-    @Override
-    public void saveUserRolesEntity(UserEntity userEntity, List<RoleEntity> targetRoles) {
-        List<UserRoleEntity> add = new ArrayList<>();
-        List<UserRoleEntity> remove = new ArrayList<>();
-        //first add new roles if not already there
-        iterateTargetRoles(userEntity, targetRoles, add);
-        //then delete those that are extra
-        iterateUserEntity(userEntity, targetRoles, remove);
-
-        for (UserRoleEntity entity : remove) {
-            userRoleRepository.delete(entity);
+  private void iterateUserEntity(
+      UserEntity userEntity, List<RoleEntity> targetRoles, List<UserRoleEntity> remove) {
+    for (UserRoleEntity current : userEntity.getUserRolesByUserId()) {
+      boolean found = false;
+      for (RoleEntity targetRole : targetRoles) {
+        if (current.getRoleByRoleId().getRoleId().equals(targetRole.getRoleId())) {
+          found = true;
         }
+      }
+      if (!found) {
+        remove.add(current);
+      }
+    }
+  }
 
-        for (UserRoleEntity entity : add) {
-            userRoleRepository.save(entity);
+  private void iterateTargetRoles(
+      UserEntity userEntity, List<RoleEntity> targetRoles, List<UserRoleEntity> add) {
+    for (RoleEntity target : targetRoles) {
+      boolean found = false;
+      for (UserRoleEntity currentRole : userEntity.getUserRolesByUserId()) {
+        if (currentRole.getRoleByRoleId().getRoleId().equals(target.getRoleId())) {
+          found = true;
         }
-
+      }
+      if (!found) {
+        UserRoleEntity newUserRoleEntity = new UserRoleEntity();
+        newUserRoleEntity.setAssignedDate(new Date());
+        newUserRoleEntity.setUserByUserId(userEntity);
+        newUserRoleEntity.setRoleByRoleId(target);
+        add.add(newUserRoleEntity);
+      }
     }
+  }
 
-    private void iterateUserEntity(UserEntity userEntity, List<RoleEntity> targetRoles, List<UserRoleEntity> remove) {
-        for (UserRoleEntity current : userEntity.getUserRolesByUserId()) {
-            boolean found = false;
-            for (RoleEntity targetRole : targetRoles) {
-                if (current.getRoleByRoleId().getRoleId().equals(targetRole.getRoleId())) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                remove.add(current);
-            }
-        }
-    }
+  @Override
+  public ContractRepository getContractRepository() {
+    return contractRepository;
+  }
 
-    private void iterateTargetRoles(UserEntity userEntity, List<RoleEntity> targetRoles, List<UserRoleEntity> add) {
-        for (RoleEntity target : targetRoles) {
-            boolean found = false;
-            for (UserRoleEntity currentRole : userEntity.getUserRolesByUserId()) {
-                if (currentRole.getRoleByRoleId().getRoleId().equals(target.getRoleId())) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                UserRoleEntity newUserRoleEntity = new UserRoleEntity();
-                newUserRoleEntity.setAssignedDate(new Date());
-                newUserRoleEntity.setUserByUserId(userEntity);
-                newUserRoleEntity.setRoleByRoleId(target);
-                add.add(newUserRoleEntity);
-            }
-        }
-    }
+  @Autowired
+  public void setContractRepository(ContractRepository contractRepository) {
+    this.contractRepository = contractRepository;
+  }
 
-//    @Override
-//    public void saveCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts) {
-//        List<CompanyContactEntity> add = new ArrayList<>();
-//        List<CompanyContactEntity> remove = new ArrayList<>();
-//
-//        prepareContactEntity(selectedCompanyEntity, targetContacts, add);
-//        //then delete those that are extra
-//        prepareCompanyContactEntity(selectedCompanyEntity, targetContacts, remove);
-//
-//        for (CompanyContactEntity entity : remove) {
-//            companyContactRepository.delete(entity);
-//        }
-//
-//        for (CompanyContactEntity entity : add) {
-//            companyContactRepository.save(entity);
-//        }
-//
-//    }
+  @Override
+  public CompanyContactRepository getCompanyContactRepository() {
+    return companyContactRepository;
+  }
 
-//    private void prepareCompanyContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts, List<CompanyContactEntity> remove) {
-//        for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
-//            boolean found = false;
-//            for (ContactEntity target : targetContacts) {
-//                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
-//                    found = true;
-//                }
-//            }
-//            if (!found) {
-//                remove.add(current);
-//            }
-//        }
-//    }
+  @Autowired
+  public void setCompanyContactRepository(CompanyContactRepository companyContactRepository) {
+    this.companyContactRepository = companyContactRepository;
+  }
 
-//    private void prepareContactEntity(CompanyEntity selectedCompanyEntity, List<ContactEntity> targetContacts, List<CompanyContactEntity> add) {
-//        for (ContactEntity target : targetContacts) {
-//            boolean found = false;
-//            for (CompanyContactEntity current : selectedCompanyEntity.getCompanyContactsByCompanyId()) {
-//                if (current.getContactByContactId().getContactId().equals(target.getContactId())) {
-//                    found = true;
-//                }
-//            }
-//            if (!found) {
-//                CompanyContactEntity newCompanyContEnt = new CompanyContactEntity();
-//                newCompanyContEnt.setCompanyByCompanyId(selectedCompanyEntity);
-//                newCompanyContEnt.setContactByContactId(target);
-//                add.add(newCompanyContEnt);
-//            }
-//        }
-//    }
+  @Override
+  public Integer getInvoiceCounterSeq() {
+    return jdbcTemplate.queryForObject(
+        "SELECT INVOICE.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", Integer.class);
+  }
 
-    @Override
-    public ContractRepository getContractRepository() {
-        return contractRepository;
-    }
+  @Override
+  public InvoiceItemsRepository getInvoiceItemsRepository() {
+    return invoiceItemsRepository;
+  }
 
-    @Override
-    public CompanyContactRepository getCompanyContactRepository() {
-        return companyContactRepository;
-    }
+  @Autowired
+  public void setInvoiceItemsRepository(InvoiceItemsRepository invoiceItemsRepository) {
+    this.invoiceItemsRepository = invoiceItemsRepository;
+  }
 
-    @Override
-    public Integer getInvoiceCounterSeq() {
-        return jdbcTemplate.queryForObject("SELECT INVOICE.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", Integer.class);
-    }
+  @Override
+  public AttachmentRepository getAttachmentRepository() {
+    return attachmentRepository;
+  }
 
-    private InvoiceItemsRepository invoiceItemsRepository;
+  @Autowired
+  public void setAttachmentRepository(AttachmentRepository attachmentRepository) {
+    this.attachmentRepository = attachmentRepository;
+  }
 
-    @Autowired
-    public void setInvoiceItemsRepository(InvoiceItemsRepository invoiceItemsRepository) {
-        this.invoiceItemsRepository = invoiceItemsRepository;
-    }
+  @Override
+  public TimeSheetRepository getTimeSheetRepository() {
+    return timeSheetRepository;
+  }
 
-    @Override
-    public InvoiceItemsRepository getInvoiceItemsRepository() {
-        return invoiceItemsRepository;
-    }
+  @Autowired
+  public void setTimeSheetRepository(TimeSheetRepository timeSheetRepository) {
+    this.timeSheetRepository = timeSheetRepository;
+  }
 
-    private AttachmentRepository attachmentRepository;
+  @Override
+  public ReportsRepository getReportsRepository() {
+    return reportsRepository;
+  }
 
-    @Override
-    public AttachmentRepository getAttachmentRepository() {
-        return attachmentRepository;
-    }
-
-    @Autowired
-    public void setAttachmentRepository(AttachmentRepository attachmentRepository) {
-        this.attachmentRepository = attachmentRepository;
-    }
-
-    private TimeSheetRepository timeSheetRepository;
-
-    @Override
-    public TimeSheetRepository getTimeSheetRepository() {
-        return timeSheetRepository;
-    }
-
-    @Autowired
-    public void setTimeSheetRepository(TimeSheetRepository timeSheetRepository) {
-        this.timeSheetRepository = timeSheetRepository;
-    }
-
-    private ReportsRepository reportsRepository;
-
-    @Override
-    public ReportsRepository getReportsRepository() {
-        return reportsRepository;
-    }
-
-    @Autowired
-    public void setReportsRepository(ReportsRepository reportsRepository) {
-        this.reportsRepository = reportsRepository;
-    }
+  @Autowired
+  public void setReportsRepository(ReportsRepository reportsRepository) {
+    this.reportsRepository = reportsRepository;
+  }
 }

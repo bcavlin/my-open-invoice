@@ -35,200 +35,209 @@ import java.util.stream.Collectors;
 @RestController
 public class ReportsController extends AbstractController implements ReportsAPI {
 
-    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
+  private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-    @Autowired
-    private ReportsService reportsService;
+  @Autowired private ReportsService reportsService;
 
-    @Autowired
-    private ReportsTransformer reportsTransformer;
+  @Autowired private ReportsTransformer reportsTransformer;
 
-    @Override
-    public ResponseEntity<DefaultResponse<ReportsDTO>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<ReportsDTO> result = new ArrayList<>();
-        long count;
+  @Override
+  public ResponseEntity<DefaultResponse<ReportsDTO>> findAll(
+      @RequestParam Map<String, String> queryParameters) {
+    List<ReportsDTO> result = new ArrayList<>();
+    long count;
 
-        try {
-            count = reportsService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            List<ReportsEntity> entities = reportsService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
+    try {
+      count = reportsService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      List<ReportsEntity> entities =
+          reportsService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ReportsDTO.class, e);
-        }
-
-        DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
-        defaultResponse.setCount(count);
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ReportsDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ReportsDTO>> findById(@PathVariable("id") Integer id) {
-        List<ReportsDTO> result = new ArrayList<>();
+    DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
+    defaultResponse.setCount(count);
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            List<ReportsEntity> entities = reportsService.findById(id);
-            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
+  @Override
+  public ResponseEntity<DefaultResponse<ReportsDTO>> findById(@PathVariable("id") Integer id) {
+    List<ReportsDTO> result = new ArrayList<>();
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ReportsDTO.class, e);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      List<ReportsEntity> entities = reportsService.findById(id);
+      result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
-        DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ReportsDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ReportsDTO>> save(@Valid @NotNull @RequestBody ReportsDTO reportsDTO,
-                                                            BindingResult bindingResult) {
-        List<ReportsDTO> result = new ArrayList<>();
+    DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
+  @Override
+  public ResponseEntity<DefaultResponse<ReportsDTO>> save(
+      @Valid @NotNull @RequestBody ReportsDTO reportsDTO, BindingResult bindingResult) {
+    List<ReportsDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
+    try {
 
-            if (reportsDTO.getReportId() != null) {
-                throw new InvalidDataException(
-                        getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-            }
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
 
-            List<ReportsEntity> entities = reportsService.save(
-                    reportsTransformer.transformDTOToEntity(reportsDTO, ReportsEntity.class));
-            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
+      if (reportsDTO.getReportId() != null) {
+        throw new InvalidDataException(
+            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+      }
 
+      List<ReportsEntity> entities =
+          reportsService.save(
+              reportsTransformer.transformDTOToEntity(reportsDTO, ReportsEntity.class));
+      result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ReportsDTO.class, e);
-        }
-
-        DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ReportsDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ReportsDTO>> update(@Valid @NotNull @RequestBody ReportsDTO reportsDTO,
-                                                              BindingResult bindingResult) {
+    DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        List<ReportsDTO> result = new ArrayList<>();
+  @Override
+  public ResponseEntity<DefaultResponse<ReportsDTO>> update(
+      @Valid @NotNull @RequestBody ReportsDTO reportsDTO, BindingResult bindingResult) {
 
-        try {
+    List<ReportsDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
-            if (reportsDTO.getReportId() == null) {
-                throw new InvalidDataException("When updating, data entity must have ID");
-            }
+    try {
 
-            List<ReportsEntity> entities = reportsService.save(
-                    reportsTransformer.transformDTOToEntity(reportsDTO, ReportsEntity.class));
-            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
+      if (reportsDTO.getReportId() == null) {
+        throw new InvalidDataException("When updating, data entity must have ID");
+      }
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      List<ReportsEntity> entities =
+          reportsService.save(
+              reportsTransformer.transformDTOToEntity(reportsDTO, ReportsEntity.class));
+      result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ReportsDTO.class, e);
-        }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ReportsDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
+    DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            reportsService.delete(id);
+  @Override
+  public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(Boolean.class, e, false);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      reportsService.delete(id);
 
-        DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        defaultResponse.setOperationMessage("Deleted entity with id: " + id);
-        defaultResponse.setDetails(Collections.singletonList(true));
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(Boolean.class, e, false);
     }
 
-    @Override
-    public ResponseEntity<byte[]> findContentByReportsId(@PathVariable("id") Integer id) {
-        byte[] source;
-        String contentType = "image/png";
+    DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setDetails(Collections.singletonList(true));
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            ContentEntity content = reportsService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.REPORTS);
-            if (content != null) {
-                source = content.getContent();
-                if (source.length > 0) {
-                    contentType = new Tika().detect(source);
-                }
-            } else {
-                throw new InvalidDataException("Content not found for the entity " + id);
-            }
+  @Override
+  public ResponseEntity<byte[]> findContentByReportsId(@PathVariable("id") Integer id) {
+    byte[] source;
+    String contentType = "image/png";
 
-        } catch (Exception e) {
-            log.error(e.toString(), e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      ContentEntity content =
+          reportsService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.REPORTS);
+      if (content != null) {
+        source = content.getContent();
+        if (source.length > 0) {
+          contentType = new Tika().detect(source);
         }
+      } else {
+        throw new InvalidDataException("Content not found for the entity " + id);
+      }
 
-        return ResponseEntity.ok()
-                .contentLength(source.length)
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(source);
+    } catch (Exception e) {
+      log.error(e.toString(), e);
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ReportsDTO>> saveContentByReportsId(@PathVariable("id") Integer id,
-                                                                              @RequestParam("file") MultipartFile file) {
-        List<ReportsDTO> result = new ArrayList<>();
+    return ResponseEntity.ok()
+        .contentLength(source.length)
+        .contentType(MediaType.parseMediaType(contentType))
+        .body(source);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            ContentEntity content = new ContentEntity();
-            content.setContent(file.getBytes());
-            content.setFilename(file.getOriginalFilename());
-            content.setDateCreated(new Date());
-            content.setContentTable(ContentEntity.ContentEntityTable.REPORTS.name());
+  @Override
+  public ResponseEntity<DefaultResponse<ReportsDTO>> saveContentByReportsId(
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+    List<ReportsDTO> result = new ArrayList<>();
 
-            List<ReportsEntity> entities = reportsService.saveContent(id, content);
-            result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      ContentEntity content = new ContentEntity();
+      content.setContent(file.getBytes());
+      content.setFilename(file.getOriginalFilename());
+      content.setDateCreated(new Date());
+      content.setContentTable(ContentEntity.ContentEntityTable.REPORTS.name());
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ReportsDTO.class, e);
-        }
+      List<ReportsEntity> entities = reportsService.saveContent(id, content);
+      result = reportsTransformer.transformEntityToDTO(entities, ReportsDTO.class);
 
-        DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ReportsDTO.class, e);
     }
 
+    DefaultResponse<ReportsDTO> defaultResponse = new DefaultResponse<>(ReportsDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 }

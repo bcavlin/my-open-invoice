@@ -11,16 +11,15 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class DefaultResponse<T> extends OperationResponse {
 
-    @SuppressWarnings("unchecked")
-    public DefaultResponse(Class<T> objectType) {
-        this.objectType = objectType.getSimpleName();
-    }
+  @Setter(AccessLevel.NONE)
+  private final String objectType;
 
-    private Long count;
+  private Long count;
 
-    @Setter(AccessLevel.NONE)
-    private final String objectType;
+  private List<T> details;
 
-    private List<T> details;
-
+  @SuppressWarnings("unchecked")
+  public DefaultResponse(Class<T> objectType) {
+    this.objectType = objectType.getSimpleName();
+  }
 }

@@ -16,10 +16,7 @@
 
 package com.bgh.myopeninvoice.reporting;
 
-/**
- * Created by bcavlin on 07/05/17.
- */
-
+/** Created by bcavlin on 07/05/17. */
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,36 +25,29 @@ import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 /**
- * A Report object has a byte representation of the report output that can be
- * used to write to any output stream. This class is designed around the concept
- * of using ByteArrayOutputStreams to write PDFs to an output stream.
+ * A Report object has a byte representation of the report output that can be used to write to any
+ * output stream. This class is designed around the concept of using ByteArrayOutputStreams to write
+ * PDFs to an output stream.
  */
 @Getter
 @RequiredArgsConstructor
 public abstract class Report {
 
-    @NonNull
-    protected String name;
+  @NonNull protected String name;
 
-    @NonNull
-    protected byte[] template;
+  @NonNull protected byte[] template;
 
-    @NonNull
-    protected Map<String, Object> parameters;
+  @NonNull protected Map<String, Object> parameters;
 
-    protected ByteArrayOutputStream reportContent;
+  protected ByteArrayOutputStream reportContent;
 
-    @NonNull
-    protected ReportRunner reportRunner;
+  @NonNull protected ReportRunner reportRunner;
 
-
-    /**
-     * This is the processing method for a Report. Once the report is ran it
-     * populates an internal field with a ByteArrayOutputStream of the
-     * report content generated during the run process.
-     *
-     * @return Returns itself with the report content output stream created.
-     */
-    public abstract Report runReport();
-
+  /**
+   * This is the processing method for a Report. Once the report is ran it populates an internal
+   * field with a ByteArrayOutputStream of the report content generated during the run process.
+   *
+   * @return Returns itself with the report content output stream created.
+   */
+  public abstract Report runReport();
 }

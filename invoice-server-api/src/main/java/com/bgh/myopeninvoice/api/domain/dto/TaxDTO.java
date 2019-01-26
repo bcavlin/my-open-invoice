@@ -13,14 +13,12 @@ import java.math.BigDecimal;
 @Data
 public class TaxDTO implements Serializable {
 
-    private Integer taxId;
+  private Integer taxId;
 
-    @DecimalMin("0.0")
-    @DecimalMax("1.0")
-    @NotNull
-    private BigDecimal percent;
+  @DecimalMin("0.0")
+  @DecimalMax("1.0")
+  @NotNull
+  private BigDecimal percent;
 
-    @NotNull
-    private String identifier;
-
+  @NotNull private String identifier;
 }

@@ -35,156 +35,162 @@ import java.util.stream.Collectors;
 @RestController
 public class ContactController extends AbstractController implements ContactAPI {
 
-    private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
+  private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-    @Autowired
-    private ContactService contactService;
+  @Autowired private ContactService contactService;
 
-    @Autowired
-    private ContactTransformer contactTransformer;
+  @Autowired private ContactTransformer contactTransformer;
 
-    @Override
-    public ResponseEntity<DefaultResponse<ContactDTO>> findAll(@RequestParam Map<String, String> queryParameters) {
-        List<ContactDTO> result = new ArrayList<>();
-        long count;
+  @Override
+  public ResponseEntity<DefaultResponse<ContactDTO>> findAll(
+      @RequestParam Map<String, String> queryParameters) {
+    List<ContactDTO> result = new ArrayList<>();
+    long count;
 
-        try {
-            count = contactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            List<ContactEntity> entities = contactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
+    try {
+      count = contactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      List<ContactEntity> entities =
+          contactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ContactDTO.class, e);
-        }
-
-        DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
-        defaultResponse.setCount(count);
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ContactDTO>> findById(@PathVariable("id") Integer id) {
-        List<ContactDTO> result = new ArrayList<>();
+    DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
+    defaultResponse.setCount(count);
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            List<ContactEntity> entities = contactService.findById(id);
-            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
+  @Override
+  public ResponseEntity<DefaultResponse<ContactDTO>> findById(@PathVariable("id") Integer id) {
+    List<ContactDTO> result = new ArrayList<>();
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ContactDTO.class, e);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      List<ContactEntity> entities = contactService.findById(id);
+      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
-        DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ContactDTO>> save(@Valid @NotNull @RequestBody ContactDTO contactDTO,
-                                                            BindingResult bindingResult) {
-        List<ContactDTO> result = new ArrayList<>();
+    DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
+  @Override
+  public ResponseEntity<DefaultResponse<ContactDTO>> save(
+      @Valid @NotNull @RequestBody ContactDTO contactDTO, BindingResult bindingResult) {
+    List<ContactDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
+    try {
 
-            if (contactDTO.getContactId() != null) {
-                throw new InvalidDataException(
-                        getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-            }
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
 
-            List<ContactEntity> entities = contactService.save(
-                    contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
-            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
+      if (contactDTO.getContactId() != null) {
+        throw new InvalidDataException(
+            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+      }
 
+      List<ContactEntity> entities =
+          contactService.save(
+              contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
+      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ContactDTO.class, e);
-        }
-
-        DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ContactDTO>> update(@Valid @NotNull @RequestBody ContactDTO contactDTO,
-                                                              BindingResult bindingResult) {
+    DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        List<ContactDTO> result = new ArrayList<>();
+  @Override
+  public ResponseEntity<DefaultResponse<ContactDTO>> update(
+      @Valid @NotNull @RequestBody ContactDTO contactDTO, BindingResult bindingResult) {
 
-        try {
+    List<ContactDTO> result = new ArrayList<>();
 
-            if (bindingResult.hasErrors()) {
-                String collect = bindingResult.getAllErrors().stream().map(Object::toString)
-                        .collect(Collectors.joining(", "));
-                throw new InvalidDataException(collect);
-            }
-            if (contactDTO.getContactId() == null) {
-                throw new InvalidDataException("When updating, data entity must have ID");
-            }
+    try {
 
-            List<ContactEntity> entities = contactService.save(
-                    contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
-            result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
+      if (bindingResult.hasErrors()) {
+        String collect =
+            bindingResult.getAllErrors().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        throw new InvalidDataException(collect);
+      }
+      if (contactDTO.getContactId() == null) {
+        throw new InvalidDataException("When updating, data entity must have ID");
+      }
 
-            if (CollectionUtils.isEmpty(result)) {
-                throw new InvalidResultDataException("Data not saved");
-            }
+      List<ContactEntity> entities =
+          contactService.save(
+              contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
+      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(ContactDTO.class, e);
-        }
+      if (CollectionUtils.isEmpty(result)) {
+        throw new InvalidResultDataException("Data not saved");
+      }
 
-        DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
-        defaultResponse.setCount((long) result.size());
-        defaultResponse.setDetails(result);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(ContactDTO.class, e);
     }
 
-    @Override
-    public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
+    DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setDetails(result);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-        try {
-            Assert.notNull(id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-            contactService.delete(id);
+  @Override
+  public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-        } catch (Exception e) {
-            return Utils.getErrorResponse(Boolean.class, e, false);
-        }
+    try {
+      Assert.notNull(
+          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+      contactService.delete(id);
 
-        DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-        defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-        defaultResponse.setOperationMessage("Deleted entity with id: " + id);
-        defaultResponse.setDetails(Collections.singletonList(true));
-        return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+    } catch (Exception e) {
+      return Utils.getErrorResponse(Boolean.class, e, false);
     }
 
-    @Override
-    public ResponseEntity<byte[]> findContentByContactId(@PathVariable("id") Integer id) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
+    DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
+    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setDetails(Collections.singletonList(true));
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 
-    @Override
-    public ResponseEntity<DefaultResponse<ContactDTO>> saveContentByContactId(@PathVariable("id") Integer id,
-                                                                              @RequestParam("file") MultipartFile file) {
-        throw new org.apache.commons.lang.NotImplementedException();
-    }
+  @Override
+  public ResponseEntity<byte[]> findContentByContactId(@PathVariable("id") Integer id) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 
+  @Override
+  public ResponseEntity<DefaultResponse<ContactDTO>> saveContentByContactId(
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+    throw new org.apache.commons.lang.NotImplementedException();
+  }
 }

@@ -18,42 +18,40 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class UserEntity extends UserDateAudit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID", nullable = false)
-    private Integer userId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "USER_ID", nullable = false)
+  private Integer userId;
 
-    @Basic
-    @Column(name = "USERNAME", nullable = false, length = 50)
-    private String username;
+  @Basic
+  @Column(name = "USERNAME", nullable = false, length = 50)
+  private String username;
 
-    @Basic
-    @Column(name = "PASSWORD_HASH", length = 80)
-    private String passwordHash;
+  @Basic
+  @Column(name = "PASSWORD_HASH", length = 80)
+  private String passwordHash;
 
-    @Basic
-    @Column(name = "FIRST_NAME", length = 50)
-    private String firstName;
+  @Basic
+  @Column(name = "FIRST_NAME", length = 50)
+  private String firstName;
 
-    @Basic
-    @Column(name = "LAST_NAME", length = 50)
-    private String lastName;
+  @Basic
+  @Column(name = "LAST_NAME", length = 50)
+  private String lastName;
 
-    @Basic
-    @Column(name = "ENABLED")
-    private Boolean enabled;
+  @Basic
+  @Column(name = "ENABLED")
+  private Boolean enabled;
 
-    @Basic
-    @Column(name = "EMAIL", nullable = false, length = 254)
-    private String email;
+  @Basic
+  @Column(name = "EMAIL", nullable = false, length = 254)
+  private String email;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "LAST_LOGGED_DATE")
-    private Date lastLoggedDate;
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "LAST_LOGGED_DATE")
+  private Date lastLoggedDate;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<UserRoleEntity> userRolesByUserId;
-
-
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(mappedBy = "userByUserId")
+  private Collection<UserRoleEntity> userRolesByUserId;
 }

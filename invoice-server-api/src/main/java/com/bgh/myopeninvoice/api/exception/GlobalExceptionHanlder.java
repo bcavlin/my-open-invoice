@@ -19,21 +19,18 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHanlder extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(Throwable.class)
-    @ResponseBody
-    ResponseEntity<Object> handleControllerException(HttpServletRequest req, Throwable ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  @ExceptionHandler(Throwable.class)
+  @ResponseBody
+  ResponseEntity<Object> handleControllerException(HttpServletRequest req, Throwable ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
-    @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
-                                                                   HttpHeaders headers,
-                                                                   HttpStatus status,
-                                                                   WebRequest request) {
-        Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("path", request.getContextPath());
-        responseBody.put("message", "The URL you have reached is not in service at this time (404).");
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
-    }
-
+  @Override
+  protected ResponseEntity<Object> handleNoHandlerFoundException(
+      NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    Map<String, String> responseBody = new HashMap<>();
+    responseBody.put("path", request.getContextPath());
+    responseBody.put("message", "The URL you have reached is not in service at this time (404).");
+    return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+  }
 }
