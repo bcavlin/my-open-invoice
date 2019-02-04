@@ -69,7 +69,10 @@ public class Utils {
       int size = NumberUtils.parseNumber(queryParameters.get("size"), Integer.class);
       if (page < 0 || size > 1000) {
         throw new InvalidParameterException(
-            "Invalid parameters 'page' or 'size'. Rule: page < 0 || size > 1000");
+                "Invalid parameters 'page' or 'size'. Rule: page < 0 || size > 1000: page: " +
+                        page +
+                        ", size: " +
+                        size);
       }
 
       if (searchParameters.getSort() != null) {
@@ -91,7 +94,8 @@ public class Utils {
         if (!field.matches("^([+-]?)([a-zA-Z0-9_]{1,20})$")) {
           throw new InvalidParameterException(
               "Invalid parameters 'sort'. "
-                  + "Rule: field.length() <= 20 and field.matches([+-]?)([a-zA-Z0-9_]{1,20})");
+                  + "Rule: field.length() <= 20 and field.matches([+-]?)([a-zA-Z0-9_]{1,20}): "
+                  + field);
         }
 
         finalSort = assignSortField(finalSort, field);

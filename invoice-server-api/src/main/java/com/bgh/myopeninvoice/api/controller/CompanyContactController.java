@@ -71,8 +71,8 @@ public class CompanyContactController extends AbstractController implements Comp
   @Override
   protected void validateSpecialFilter(
       Map<String, String> queryParameters, SearchParameters searchParameters) {
-    if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
-      Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
+    if (StringUtils.isNotEmpty(queryParameters.get(FILTER_FIELD))) {
+      Matcher matcher = filterPattern.matcher(queryParameters.get(FILTER_FIELD));
       BooleanBuilder builder = searchParameters.getBuilder();
 
       while (matcher.find()) {

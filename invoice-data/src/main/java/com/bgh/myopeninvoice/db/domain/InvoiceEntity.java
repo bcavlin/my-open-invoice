@@ -8,7 +8,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -123,5 +125,17 @@ public class InvoiceEntity implements java.io.Serializable {
 
   public BigDecimal getTotalValueWithTax() {
     return totalValueWithTax == null ? BigDecimal.valueOf(0) : totalValueWithTax;
+  }
+
+  public Integer getReportsByInvoiceIdSize() {
+    return Optional.of(reportsByInvoiceId).orElse(Collections.emptyList()).size();
+  }
+
+  public Integer getInvoiceItemsByInvoiceIdSize() {
+    return Optional.of(invoiceItemsByInvoiceId).orElse(Collections.emptyList()).size();
+  }
+
+  public Integer getAttachmentsByInvoiceIdSize() {
+    return Optional.of(attachmentsByInvoiceId).orElse(Collections.emptyList()).size();
   }
 }

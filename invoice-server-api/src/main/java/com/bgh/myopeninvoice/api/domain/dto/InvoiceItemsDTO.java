@@ -24,11 +24,9 @@ public class InvoiceItemsDTO implements java.io.Serializable {
 
   @NotNull private String unit;
 
-  private BigDecimal timeSheetTotal;
+  private BigDecimal timesheetTotal;
 
-  private Long timeSheetTotalDays;
-
-  private InvoiceDTO invoice;
+  private Long timesheetTotalDays;
 
   @JsonIgnoreProperties({"invoiceItems"})
   private Collection<TimeSheetDTO> timeSheets;

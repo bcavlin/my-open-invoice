@@ -59,37 +59,37 @@ public class InvoiceItemsEntity implements java.io.Serializable {
 
   @Transient
   @Setter(AccessLevel.NONE)
-  private BigDecimal timeSheetTotal;
+  private BigDecimal timesheetTotal;
 
   @Transient
   @Setter(AccessLevel.NONE)
-  private Long timeSheetTotalDays;
+  private Long timesheetTotalDays;
 
   // this did not wor as we need to update total hours upfront - new entries cannot be calcualted
   // until they are in the database
   //    @Formula("(select sum(e.hours_worked) from invoice.time_sheet e where e.invoice_item_id =
   // invoice_item_id)")
 
-  public BigDecimal getTimeSheetTotal() {
+  public BigDecimal getTimesheetTotal() {
     if (getTimeSheetsByInvoiceItemId() != null) {
-      timeSheetTotal =
+      timesheetTotal =
           getTimeSheetsByInvoiceItemId().stream()
               .filter(o -> o.getHoursWorked() != null)
               .map(TimeSheetEntity::getHoursWorked)
               .reduce(BigDecimal.ZERO, BigDecimal::add);
     } else {
-      timeSheetTotal = new BigDecimal(0);
+      timesheetTotal = new BigDecimal(0);
     }
-    return timeSheetTotal == null ? new BigDecimal(0) : timeSheetTotal;
+    return timesheetTotal == null ? new BigDecimal(0) : timesheetTotal;
   }
 
-  public Long getTimeSheetTotalDays() {
+  public Long getTimesheetTotalDays() {
     if (getTimeSheetsByInvoiceItemId() != null) {
-      timeSheetTotalDays =
+      timesheetTotalDays =
           getTimeSheetsByInvoiceItemId().stream().filter(o -> o.getHoursWorked() != null).count();
     } else {
-      timeSheetTotalDays = 0L;
+      timesheetTotalDays = 0L;
     }
-    return timeSheetTotalDays;
+    return timesheetTotalDays;
   }
 }

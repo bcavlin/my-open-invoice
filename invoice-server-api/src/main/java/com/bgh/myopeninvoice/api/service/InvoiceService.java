@@ -6,7 +6,6 @@ import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
 import com.bgh.myopeninvoice.db.domain.QInvoiceEntity;
 import com.bgh.myopeninvoice.db.repository.InvoiceRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -27,43 +26,44 @@ public class InvoiceService implements CommonService<InvoiceEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QInvoiceEntity.invoiceEntity.note.containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity.rateUnit.containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity.title.containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .rate
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .createdDate
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .dueDate
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .paidDate
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .totalValue
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .totalValue
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()),
-          QInvoiceEntity.invoiceEntity
-              .fromDate
-              .stringValue()
-              .containsIgnoreCase(searchParameters.getFilter()));
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QInvoiceEntity.invoiceEntity.note.containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity.rateUnit.containsIgnoreCase(
+                  searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity.title.containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .rate
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .createdDate
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .dueDate
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .paidDate
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .totalValue
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .totalValue
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()),
+              QInvoiceEntity.invoiceEntity
+                  .fromDate
+                  .stringValue()
+                  .containsIgnoreCase(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override

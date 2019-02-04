@@ -8,7 +8,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -56,17 +55,24 @@ public class InvoiceDTO implements java.io.Serializable {
 
   private BigDecimal totalValueWithTax;
 
-  @JsonIgnoreProperties({"invoice"})
-  private Collection<AttachmentDTO> attachments;
+  //  @JsonIgnoreProperties({"invoice"})
+  //  private Collection<AttachmentDTO> attachments;
+
+  private Integer attachmentsSize;
 
   private CompanyContactDTO companyContact;
 
   private CurrencyDTO currency;
 
+  @JsonIgnoreProperties({"content", "companyContact"})
   private ContractDTO contract;
 
-  @JsonIgnoreProperties({"invoice"})
-  private Collection<InvoiceItemsDTO> invoiceItems;
+  //  @JsonIgnoreProperties({"invoice"})
+  //  private Collection<InvoiceItemsDTO> invoiceItems;
 
-  private Collection<ReportsDTO> reports;
+  private Integer invoiceItemsSize;
+
+  //  private Collection<ReportsDTO> reports;
+
+  private Integer reportsSize;
 }

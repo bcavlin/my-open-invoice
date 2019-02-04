@@ -6,7 +6,6 @@ import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
 import com.bgh.myopeninvoice.db.domain.QCurrencyEntity;
 import com.bgh.myopeninvoice.db.repository.CurrencyRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +26,14 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QCurrencyEntity.currencyEntity.description.contains(searchParameters.getFilter()),
-          QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter()));
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QCurrencyEntity.currencyEntity.description.contains(searchParameters.getFilter()),
+              QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override
