@@ -16,7 +16,6 @@ public class TimeSheetTransformer extends CustomAbstractTransformer<TimeSheetEnt
   public MapperFactory mapFields(MapperFactory mapperFactory) {
     mapperFactory
         .classMap(TimeSheetDTO.class, TimeSheetEntity.class)
-        .field("invoiceItem", "invoiceItemsByInvoiceItemId")
         .byDefault()
         .register();
 

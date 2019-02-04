@@ -16,9 +16,10 @@ public abstract class AbstractController {
 
   static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-  static final String FILTER = "filter";
+  static final String FILTER_FIELD = "filter";
 
-  Pattern patternFields = Pattern.compile("(?:(?:, )?#(\\w+:\\w+))+", Pattern.CASE_INSENSITIVE);
+  Pattern filterPattern =
+      Pattern.compile("(?:(?:, )?#(\\w+:\\w+))+(?:(?:;)(.*))?", Pattern.CASE_INSENSITIVE);
 
   @Getter @Autowired private MessageSource messageSource;
 

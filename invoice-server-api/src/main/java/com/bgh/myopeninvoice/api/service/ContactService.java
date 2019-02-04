@@ -6,7 +6,6 @@ import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QContactEntity;
 import com.bgh.myopeninvoice.db.repository.ContactRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -27,20 +26,20 @@ public class ContactService implements CommonService<ContactEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QContactEntity.contactEntity.lastName.contains(searchParameters.getFilter()),
-          QContactEntity.contactEntity.email.contains(searchParameters.getFilter()),
-          QContactEntity.contactEntity.phone1.contains(searchParameters.getFilter()),
-          QContactEntity.contactEntity
-              .firstName
-              .stringValue()
-              .contains(searchParameters.getFilter()),
-          QContactEntity.contactEntity.address1.contains(searchParameters.getFilter()));
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QContactEntity.contactEntity.lastName.contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity.email.contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity.phone1.contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity
+                  .firstName
+                  .stringValue()
+                  .contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity.address1.contains(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override

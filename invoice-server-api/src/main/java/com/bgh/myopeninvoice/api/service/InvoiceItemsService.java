@@ -27,15 +27,18 @@ public class InvoiceItemsService implements CommonService<InvoiceItemsEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QInvoiceItemsEntity.invoiceItemsEntity.code.contains(searchParameters.getFilter()),
-          QInvoiceItemsEntity.invoiceItemsEntity.description.contains(searchParameters.getFilter()),
-          QInvoiceItemsEntity.invoiceItemsEntity.unit.contains(searchParameters.getFilter()));
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QInvoiceItemsEntity.invoiceItemsEntity.code.containsIgnoreCase(
+                  searchParameters.getFilter()),
+              QInvoiceItemsEntity.invoiceItemsEntity.description.containsIgnoreCase(
+                  searchParameters.getFilter()),
+              QInvoiceItemsEntity.invoiceItemsEntity.unit.containsIgnoreCase(
+                  searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override

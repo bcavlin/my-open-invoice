@@ -22,12 +22,12 @@ public class InvoiceTransformer extends CustomAbstractTransformer<InvoiceEntity,
   public MapperFactory mapFields(MapperFactory mapperFactory) {
     mapperFactory
         .classMap(InvoiceDTO.class, InvoiceEntity.class)
-        .field("attachments", "attachmentsByInvoiceId")
         .field("companyContact", "companyContactByCompanyContactFrom")
         .field("currency", "currencyByCcyId")
         .field("contract", "contractByCompanyContractTo")
-        .field("invoiceItems", "invoiceItemsByInvoiceId")
-        .field("reports", "reportsByInvoiceId")
+        .field("attachmentsSize", "attachmentsByInvoiceIdSize")
+        .field("invoiceItemsSize", "invoiceItemsByInvoiceIdSize")
+        .field("reportsSize", "reportsByInvoiceIdSize")
         .byDefault()
         .register();
 

@@ -16,8 +16,6 @@ public class TimeSheetDTO implements java.io.Serializable {
 
   private Integer timesheetId;
 
-  @NotNull private Integer invoiceItemId;
-
   @NotNull
   @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
   private Date itemDate;
@@ -26,6 +24,4 @@ public class TimeSheetDTO implements java.io.Serializable {
 
   private Boolean isWeekend;
 
-  @JsonIgnoreProperties({"timeSheets"})
-  private InvoiceItemsDTO invoiceItem;
 }

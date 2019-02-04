@@ -33,23 +33,23 @@ public class CompanyService implements CommonService<CompanyEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    if (searchParameters.getFilter() != null && !searchParameters.getBuilder().hasValue()) {
+    if (searchParameters.getFilter() != null) {
       searchParameters
           .getBuilder()
           .andAnyOf(
-              QCompanyEntity.companyEntity.companyName.contains(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.companyName.containsIgnoreCase(searchParameters.getFilter()),
               QCompanyEntity.companyEntity.phone1.contains(searchParameters.getFilter()),
-              QCompanyEntity.companyEntity.shortName.contains(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.shortName.containsIgnoreCase(searchParameters.getFilter()),
               QCompanyEntity.companyEntity
                   .weekStart
                   .stringValue()
                   .contains(searchParameters.getFilter()),
-              QCompanyEntity.companyEntity.businessNumber.contains(searchParameters.getFilter()),
-              QCompanyEntity.companyEntity.companyName.contains(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.businessNumber.containsIgnoreCase(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.companyName.containsIgnoreCase(searchParameters.getFilter()),
               QCompanyEntity.companyEntity
                   .address1
                   .stringValue()
-                  .contains(searchParameters.getFilter()));
+                  .containsIgnoreCase(searchParameters.getFilter()));
     }
     return searchParameters.getBuilder();
   }

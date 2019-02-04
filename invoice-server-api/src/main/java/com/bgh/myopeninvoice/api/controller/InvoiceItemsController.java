@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.InvoiceItemsAPI;
+import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.InvoiceItemsDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
@@ -10,7 +11,10 @@ import com.bgh.myopeninvoice.api.service.InvoiceItemsService;
 import com.bgh.myopeninvoice.api.transformer.InvoiceItemsTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity;
+import com.bgh.myopeninvoice.db.domain.QInvoiceItemsEntity;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -48,10 +53,11 @@ public class InvoiceItemsController extends AbstractController implements Invoic
     long count;
 
     try {
-      count =
-          invoiceitemsService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-      List<InvoiceItemsEntity> entities =
-          invoiceitemsService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      SearchParameters searchParameters =
+          Utils.mapQueryParametersToSearchParameters(queryParameters);
+      validateSpecialFilter(queryParameters, searchParameters);
+      count = invoiceitemsService.count(searchParameters);
+      List<InvoiceItemsEntity> entities = invoiceitemsService.findAll(searchParameters);
       result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
     } catch (Exception e) {
@@ -63,6 +69,38 @@ public class InvoiceItemsController extends AbstractController implements Invoic
     defaultResponse.setDetails(result);
     defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
+
+  @Override
+  protected void validateSpecialFilter(
+      Map<String, String> queryParameters, SearchParameters searchParameters) {
+    if (StringUtils.isNotEmpty(queryParameters.get(FILTER_FIELD))) {
+      Matcher matcher = filterPattern.matcher(queryParameters.get(FILTER_FIELD));
+      BooleanBuilder builder = searchParameters.getBuilder();
+      boolean foundGroup2 = false;
+
+      while (matcher.find()) {
+        String[] split = matcher.group(1).split(":");
+        if ("invoiceId".equalsIgnoreCase(split[0])) {
+          searchParameters
+              .getBuilder()
+              .and(QInvoiceItemsEntity.invoiceItemsEntity.invoiceId.eq(Integer.valueOf(split[1])));
+        } else {
+          log.info("Skipping search parameter: " + matcher.group(1));
+        }
+
+        if (matcher.group(2) != null) {
+          foundGroup2 = true;
+          /** Set additional search properties one # filters have been removed */
+          searchParameters.setFilter(matcher.group(2));
+        }
+      }
+
+      if (searchParameters.getBuilder().hasValue() && !foundGroup2) {
+        // reset the filter
+        searchParameters.setFilter(null);
+      }
+    }
   }
 
   @Override

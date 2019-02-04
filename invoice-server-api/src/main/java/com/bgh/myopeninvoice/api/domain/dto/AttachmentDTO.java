@@ -15,8 +15,6 @@ public class AttachmentDTO implements java.io.Serializable {
 
   private Integer contentId;
 
-  @JsonIgnore private InvoiceDTO invoice;
-
   @JsonIgnoreProperties("content")
   private ContentDTO content;
 }

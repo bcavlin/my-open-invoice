@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.InvoiceAPI;
+import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.InvoiceDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
@@ -48,9 +49,10 @@ public class InvoiceController extends AbstractController implements InvoiceAPI 
     long count;
 
     try {
-      count = invoiceService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+      count = invoiceService.count(searchParameters);
       List<InvoiceEntity> entities =
-          invoiceService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+          invoiceService.findAll(searchParameters);
       result = invoiceTransformer.transformEntityToDTO(entities, InvoiceDTO.class);
 
     } catch (Exception e) {

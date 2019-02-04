@@ -34,7 +34,7 @@ public class ContractService implements CommonService<ContractEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    if (searchParameters.getFilter() != null && !searchParameters.getBuilder().hasValue()) {
+    if (searchParameters.getFilter() != null) {
       searchParameters
           .getBuilder()
           .andAnyOf(

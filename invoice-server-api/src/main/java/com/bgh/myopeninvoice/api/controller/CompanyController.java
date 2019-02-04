@@ -72,9 +72,10 @@ public class CompanyController extends AbstractController implements CompanyAPI 
   @Override
   protected void validateSpecialFilter(
       Map<String, String> queryParameters, SearchParameters searchParameters) {
-    if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
-      Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
+    if (StringUtils.isNotEmpty(queryParameters.get(FILTER_FIELD))) {
+      Matcher matcher = filterPattern.matcher(queryParameters.get(FILTER_FIELD));
       BooleanBuilder builder = searchParameters.getBuilder();
+      boolean foundGroup2 = false;
 
       while (matcher.find()) {
         String[] split = matcher.group(1).split(":");
@@ -82,11 +83,20 @@ public class CompanyController extends AbstractController implements CompanyAPI 
           searchParameters
               .getBuilder()
               .and(QCompanyEntity.companyEntity.ownedByMe.eq(Boolean.valueOf(split[1])));
+        } else {
+          log.info("Skipping search parameter: " + matcher.group(1));
+        }
+
+        if(matcher.group(2)!=null){
+          foundGroup2=true;
+          /** Set additional search properties one # filters have been removed */
+          searchParameters.setFilter(matcher.group(2));
         }
       }
 
-      if (searchParameters.getBuilder().hasValue()) {
+      if (searchParameters.getBuilder().hasValue() && !foundGroup2) {
         // reset the filter
+        log.info("Resetting the filter to null");
         searchParameters.setFilter(null);
       }
     }

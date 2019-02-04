@@ -6,7 +6,6 @@ import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QTaxEntity;
 import com.bgh.myopeninvoice.db.domain.TaxEntity;
 import com.bgh.myopeninvoice.db.repository.TaxRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +26,14 @@ public class TaxService implements CommonService<TaxEntity> {
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QTaxEntity.taxEntity.identifier.contains(searchParameters.getFilter()),
-          QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QTaxEntity.taxEntity.identifier.containsIgnoreCase(searchParameters.getFilter()),
+              QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override

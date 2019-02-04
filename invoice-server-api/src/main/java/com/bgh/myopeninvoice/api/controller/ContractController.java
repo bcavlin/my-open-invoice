@@ -73,9 +73,10 @@ public class ContractController extends AbstractController implements ContractAP
   @Override
   protected void validateSpecialFilter(
       @RequestParam Map<String, String> queryParameters, SearchParameters searchParameters) {
-    if (StringUtils.isNotEmpty(queryParameters.get(FILTER))) {
-      Matcher matcher = patternFields.matcher(queryParameters.get(FILTER));
+    if (StringUtils.isNotEmpty(queryParameters.get(FILTER_FIELD))) {
+      Matcher matcher = filterPattern.matcher(queryParameters.get(FILTER_FIELD));
       BooleanBuilder builder = searchParameters.getBuilder();
+      boolean foundGroup2 = false;
 
       while (matcher.find()) {
         String[] split = matcher.group(1).split(":");
@@ -83,10 +84,18 @@ public class ContractController extends AbstractController implements ContractAP
           searchParameters
               .getBuilder()
               .and(QContractEntity.contractEntity.companyId.eq(NumberUtils.toInt(split[1])));
+        } else {
+          log.info("Skipping search parameter: " + matcher.group(1));
+        }
+
+        if (matcher.group(2) != null) {
+          foundGroup2 = true;
+          /** Set additional search properties one # filters have been removed */
+          searchParameters.setFilter(matcher.group(2));
         }
       }
 
-      if (searchParameters.getBuilder().hasValue()) {
+      if (searchParameters.getBuilder().hasValue() && !foundGroup2) {
         // reset the filter
         searchParameters.setFilter(null);
       }
