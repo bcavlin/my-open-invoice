@@ -7,9 +7,12 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Optional;
 
 @Data
@@ -30,25 +33,21 @@ public class InvoiceEntity implements java.io.Serializable {
   @Column(name = "COMPANY_CONTRACT_TO", nullable = false)
   private Integer companyContractTo;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "FROM_DATE", nullable = false)
-  private Date fromDate;
+  private LocalDate fromDate;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "TO_DATE", nullable = false)
-  private Date toDate;
+  private LocalDate toDate;
 
-  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "CREATED_DATE", nullable = false)
-  private Date createdDate;
+  private ZonedDateTime createdDate;
 
   @Basic
   @Column(name = "TITLE", nullable = false)
   private String title;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "DUE_DATE", nullable = false)
-  private Date dueDate;
+  private LocalDate dueDate;
 
   @Basic
   @Column(name = "TAX_PERCENT", nullable = false, precision = 32767)
@@ -58,9 +57,9 @@ public class InvoiceEntity implements java.io.Serializable {
   @Column(name = "NOTE", length = 2000)
   private String note;
 
-  @Temporal(TemporalType.DATE)
+  //  @Temporal(TemporalType.DATE)
   @Column(name = "PAID_DATE")
-  private Date paidDate;
+  private LocalDate paidDate;
 
   @Basic
   @Column(name = "RATE", precision = 32767)
@@ -127,15 +126,59 @@ public class InvoiceEntity implements java.io.Serializable {
     return totalValueWithTax == null ? BigDecimal.valueOf(0) : totalValueWithTax;
   }
 
+  @Transient
   public Integer getReportsByInvoiceIdSize() {
-    return Optional.of(reportsByInvoiceId).orElse(Collections.emptyList()).size();
+    return Optional.ofNullable(reportsByInvoiceId).orElse(Collections.emptyList()).size();
   }
 
+  @Transient
   public Integer getInvoiceItemsByInvoiceIdSize() {
-    return Optional.of(invoiceItemsByInvoiceId).orElse(Collections.emptyList()).size();
+    return Optional.ofNullable(invoiceItemsByInvoiceId).orElse(Collections.emptyList()).size();
   }
 
+  @Transient
   public Integer getAttachmentsByInvoiceIdSize() {
-    return Optional.of(attachmentsByInvoiceId).orElse(Collections.emptyList()).size();
+    return Optional.ofNullable(attachmentsByInvoiceId).orElse(Collections.emptyList()).size();
+  }
+
+  @Transient
+  public LocalDate getFromDateAdjusted() {
+    if (this.getContractByCompanyContractTo() != null) {
+      int weekStart = this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart();
+      LocalDate d = fromDate;
+
+      if (d.getDayOfWeek().getValue() - weekStart < 0) {
+        return d.minusWeeks(1).with(ChronoField.DAY_OF_WEEK, weekStart);
+      } else {
+        return d.with(ChronoField.DAY_OF_WEEK, weekStart);
+      }
+    }
+    return null;
+  }
+
+  @Transient
+  public LocalDate getToDateAdjusted() {
+    if (this.getContractByCompanyContractTo() != null) {
+      int weekStart = this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart();
+      int weekEnd = weekStart == 1 ? 7 : weekStart - 1;
+
+      LocalDate d = toDate;
+
+      if (d.getDayOfWeek().getValue() - weekEnd <= 0) {
+        return d.with(ChronoField.DAY_OF_WEEK, weekEnd);
+      } else {
+        return d.plusWeeks(1).with(ChronoField.DAY_OF_WEEK, weekEnd);
+      }
+    }
+    return null;
+  }
+
+  @Transient
+  public Long getFromToDays() {
+    if (getFromDateAdjusted() != null && getToDateAdjusted() != null) {
+      return ChronoUnit.DAYS.between(getFromDateAdjusted(), getToDateAdjusted());
+    } else {
+      return null;
+    }
   }
 }

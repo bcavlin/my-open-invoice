@@ -8,8 +8,8 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 @Data
 @Entity
@@ -47,9 +47,8 @@ public class UserEntity extends UserDateAudit {
   @Column(name = "EMAIL", nullable = false, length = 254)
   private String email;
 
-  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "LAST_LOGGED_DATE")
-  private Date lastLoggedDate;
+  private LocalDateTime lastLoggedDate;
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @OneToMany(mappedBy = "userByUserId")

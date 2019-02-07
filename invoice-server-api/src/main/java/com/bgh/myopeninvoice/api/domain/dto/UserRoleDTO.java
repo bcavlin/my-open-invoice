@@ -3,7 +3,7 @@ package com.bgh.myopeninvoice.api.domain.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -15,7 +15,7 @@ public class UserRoleDTO implements java.io.Serializable {
 
   private Integer roleId;
 
-  private Date assignedDate;
+  private LocalDate assignedDate;
 
   private RoleDTO role;
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -29,9 +30,8 @@ public class ContentEntity implements java.io.Serializable {
   @Column(name = "CONTENT")
   private byte[] content;
 
-  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "DATE_CREATED", nullable = false)
-  private Date dateCreated;
+  private LocalDateTime dateCreated;
 
   public enum ContentEntityTable {
     COMPANY,

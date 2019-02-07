@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -263,7 +264,7 @@ public class ContractController extends AbstractController implements ContractAP
       ContentEntity content = new ContentEntity();
       content.setContent(file.getBytes());
       content.setFilename(file.getOriginalFilename());
-      content.setDateCreated(new Date());
+      content.setDateCreated(LocalDateTime.now());
       content.setContentTable(ContentEntity.ContentEntityTable.CONTRACT.name());
 
       List<ContractEntity> entities = contractService.saveContent(id, content);

@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -226,7 +227,7 @@ public class AttachmentController extends AbstractController implements Attachme
       ContentEntity content = new ContentEntity();
       content.setContent(file.getBytes());
       content.setFilename(file.getOriginalFilename());
-      content.setDateCreated(new Date());
+      content.setDateCreated(LocalDateTime.now());
       content.setContentTable(ContentEntity.ContentEntityTable.ATTACHMENT.name());
 
       List<AttachmentEntity> entities = attachmentService.saveContent(id, content);

@@ -3,7 +3,7 @@ package com.bgh.myopeninvoice.db.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -23,9 +23,8 @@ public class ReportsEntity implements java.io.Serializable {
   @Column(name = "CONTENT_ID", nullable = false)
   private Integer contentId;
 
-  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "DATE_CREATED", nullable = false)
-  private Date dateCreated;
+  private LocalDateTime dateCreated;
 
   @Basic
   @Column(name = "REPORT_NAME", nullable = false, length = 255)

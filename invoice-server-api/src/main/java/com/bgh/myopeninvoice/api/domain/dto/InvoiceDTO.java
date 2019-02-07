@@ -8,7 +8,8 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -21,29 +22,30 @@ public class InvoiceDTO implements java.io.Serializable {
   @NotNull private Integer companyContractTo;
 
   @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date fromDate;
+  private LocalDate fromDate;
 
   @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date toDate;
+  private LocalDate toDate;
+
+  private LocalDate fromDateAdjusted;
+
+  private LocalDate toDateAdjusted;
+
+  private Long fromToDays;
 
   @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date createdDate;
+  private ZonedDateTime createdDate;
 
   @NotNull private String title;
 
   @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date dueDate;
+  private LocalDate dueDate;
 
   @NotNull private BigDecimal taxPercent;
 
   private String note;
 
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date paidDate;
+  private LocalDate paidDate;
 
   @NotNull private Integer ccyId;
 
@@ -55,9 +57,6 @@ public class InvoiceDTO implements java.io.Serializable {
 
   private BigDecimal totalValueWithTax;
 
-  //  @JsonIgnoreProperties({"invoice"})
-  //  private Collection<AttachmentDTO> attachments;
-
   private Integer attachmentsSize;
 
   private CompanyContactDTO companyContact;
@@ -67,12 +66,8 @@ public class InvoiceDTO implements java.io.Serializable {
   @JsonIgnoreProperties({"content", "companyContact"})
   private ContractDTO contract;
 
-  //  @JsonIgnoreProperties({"invoice"})
-  //  private Collection<InvoiceItemsDTO> invoiceItems;
-
   private Integer invoiceItemsSize;
 
-  //  private Collection<ReportsDTO> reports;
-
   private Integer reportsSize;
+
 }
