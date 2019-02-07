@@ -7,9 +7,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
-import java.util.Date;
 
 @Data
 @Entity
@@ -45,13 +45,13 @@ public class ContractEntity implements java.io.Serializable {
   @Column(name = "CCY_ID", nullable = false)
   private Integer ccyId;
 
-  @Temporal(TemporalType.DATE)
+//  @Temporal(TemporalType.DATE)
   @Column(name = "VALID_FROM", nullable = false)
-  private Date validFrom;
+  private LocalDate validFrom;
 
-  @Temporal(TemporalType.DATE)
+  //  @Temporal(TemporalType.DATE)
   @Column(name = "VALID_TO")
-  private Date validTo;
+  private LocalDate validTo;
 
   @Basic
   @Column(name = "DESCRIPTION", nullable = false, length = 100)
@@ -114,12 +114,10 @@ public class ContractEntity implements java.io.Serializable {
   @Transient
   public boolean isContractValid() {
     if (validFrom != null && validTo != null) {
-      Instant today = Instant.now();
-      Instant from =
-          Instant.ofEpochMilli(validFrom.getTime()).atZone(ZoneId.systemDefault()).toInstant();
-      Instant to =
-          Instant.ofEpochMilli(validTo.getTime()).atZone(ZoneId.systemDefault()).toInstant();
-      return today.isAfter(from) && today.isBefore(to);
+
+      LocalDate now = LocalDate.now();
+      return now.isAfter(validFrom) && now.isBefore(validTo);
+
     } else {
       return false;
     }

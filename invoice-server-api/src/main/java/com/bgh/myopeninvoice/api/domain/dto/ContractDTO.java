@@ -1,16 +1,14 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
-import com.bgh.myopeninvoice.api.domain.CustomJsonDateTimeDeserializer;
 import com.bgh.myopeninvoice.common.util.EnumValidator;
 import com.bgh.myopeninvoice.common.util.RateType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -33,12 +31,10 @@ public class ContractDTO implements java.io.Serializable {
   @NotNull private Integer ccyId;
 
   @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date validFrom;
+  private LocalDate validFrom;
 
   @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date validTo;
+  private LocalDate validTo;
 
   private String description;
 

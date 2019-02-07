@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 
 @Data
 @Entity
@@ -25,9 +24,8 @@ public class TimeSheetEntity implements java.io.Serializable {
   @Column(name = "INVOICE_ITEM_ID", nullable = false)
   private Integer invoiceItemId;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "ITEM_DATE", nullable = false)
-  private Date itemDate;
+  private LocalDate itemDate;
 
   @Basic
   @Column(name = "HOURS_WORKED", nullable = false, precision = 32767)
@@ -48,7 +46,7 @@ public class TimeSheetEntity implements java.io.Serializable {
 
   public Boolean getWeekend() {
     if (isWeekend == null && itemDate != null) {
-      LocalDate date = itemDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate date = itemDate;
       isWeekend =
           date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY
               ? Boolean.TRUE

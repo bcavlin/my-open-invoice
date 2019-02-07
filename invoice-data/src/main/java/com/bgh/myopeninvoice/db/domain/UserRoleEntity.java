@@ -6,7 +6,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -27,9 +27,8 @@ public class UserRoleEntity implements java.io.Serializable {
   @Column(name = "ROLE_ID", nullable = false)
   private Integer roleId;
 
-  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "ASSIGNED_DATE", nullable = false)
-  private Date assignedDate;
+  private LocalDateTime assignedDate;
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(

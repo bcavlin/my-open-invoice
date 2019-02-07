@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,7 +32,7 @@ public abstract class OperationResponse {
 
   private String operationMessage;
 
-  private Date operationDate = new Date();
+  private LocalDate operationDate = LocalDate.now();
 
   public enum OperationResponseStatus {
     SUCCESS,
