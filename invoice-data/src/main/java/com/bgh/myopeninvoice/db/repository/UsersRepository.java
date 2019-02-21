@@ -25,6 +25,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /** Created by bcavlin on 14/03/17. */
@@ -38,7 +39,7 @@ public interface UsersRepository
   @Modifying(clearAutomatically = true)
   @Query("update UserEntity e set e.lastLoggedDate = :date where e.username = :username")
   void updateLastLoggedDateByUsername(
-      @Param("username") String username, @Param("date") Timestamp date);
+      @Param("username") String username, @Param("date") LocalDateTime date);
 
   @Query("select e.enabled from UserEntity e where e.username = :username")
   Optional<Boolean> isUserValid(@Param("username") String username);

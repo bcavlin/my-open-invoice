@@ -16,13 +16,26 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.domain.TimeSheetEntity;
+import com.bgh.myopeninvoice.db.domain.TimesheetEntity;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 
 /** Created by bcavlin on 14/03/17. */
 @Repository
-public interface TimeSheetRepository
-    extends PagingAndSortingRepository<TimeSheetEntity, Integer>,
-        QuerydslPredicateExecutor<TimeSheetEntity> {}
+public interface TimesheetRepository
+    extends PagingAndSortingRepository<TimesheetEntity, Integer>,
+        QuerydslPredicateExecutor<TimesheetEntity> {
+  /*
+  For some reason deleteall from out of th ebox is not working...
+   */
+  @Modifying
+  @Transactional
+  @Query("delete from TimesheetEntity e where e.timesheetId=:timesheetId")
+  void deleteTimesheetEntityByTimesheetId(@Param("timesheetId") Integer timesheetId);
+}

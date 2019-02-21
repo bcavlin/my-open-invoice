@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.db.domain;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,7 +14,8 @@ import java.time.ZoneId;
 @Data
 @Entity
 @Table(name = "TIME_SHEET", schema = "INVOICE")
-public class TimeSheetEntity implements java.io.Serializable {
+@ToString(exclude = {"invoiceItemsByInvoiceItemId"})
+public class TimesheetEntity implements java.io.Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,17 +43,12 @@ public class TimeSheetEntity implements java.io.Serializable {
   private InvoiceItemsEntity invoiceItemsByInvoiceItemId;
 
   @Transient
-  @Setter(AccessLevel.NONE)
-  private Boolean isWeekend;
-
   public Boolean getWeekend() {
-    if (isWeekend == null && itemDate != null) {
-      LocalDate date = itemDate;
-      isWeekend =
-          date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY
+    if (itemDate != null) {
+      return itemDate.getDayOfWeek() == DayOfWeek.SATURDAY || itemDate.getDayOfWeek() == DayOfWeek.SUNDAY
               ? Boolean.TRUE
               : Boolean.FALSE;
     }
-    return isWeekend;
+    return Boolean.FALSE;
   }
 }
