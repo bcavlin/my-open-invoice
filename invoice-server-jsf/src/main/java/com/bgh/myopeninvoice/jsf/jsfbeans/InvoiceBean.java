@@ -182,14 +182,14 @@ public class InvoiceBean implements Serializable {
         selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
 
         //now search actual minimum date in the date for the entry and compare to invoice date. Use less of the two.
-        selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId()
+        selectedInvoiceItemsEntity.getTimesheetsByInvoiceItemId()
                 .stream().min((o1, o2) -> o1.getItemDate().compareTo(o2.getItemDate()))
-                .ifPresent(timeSheetEntity -> dateFromTimesheet = timeSheetEntity.getItemDate().compareTo(dateFromTimesheet.toDate()) > 0 ? dateFromTimesheet : new LocalDate(timeSheetEntity.getItemDate()));
+                .ifPresent(timesheetEntity -> dateFromTimesheet = timesheetEntity.getItemDate().compareTo(dateFromTimesheet.toDate()) > 0 ? dateFromTimesheet : new LocalDate(timesheetEntity.getItemDate()));
 
         //search max date from the one of the invoice and the database data and use larger one
-        selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId()
+        selectedInvoiceItemsEntity.getTimesheetsByInvoiceItemId()
                 .stream().max((o1, o2) -> o1.getItemDate().compareTo(o2.getItemDate()))
-                .ifPresent(timeSheetEntity -> dateToTimesheet = timeSheetEntity.getItemDate().compareTo(dateToTimesheet.toDate()) < 0 ? dateToTimesheet : new LocalDate(timeSheetEntity.getItemDate()));
+                .ifPresent(timesheetEntity -> dateToTimesheet = timesheetEntity.getItemDate().compareTo(dateToTimesheet.toDate()) < 0 ? dateToTimesheet : new LocalDate(timesheetEntity.getItemDate()));
 
         //1-mon ... 7-sun
         final Integer weekStart = selectedInvoiceEntity.getCompaniesByCompanyTo().getWeekStart();
@@ -268,8 +268,8 @@ public class InvoiceBean implements Serializable {
             log.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
 
             //update total
-            if (selectedInvoiceItemsEntity.getTimeSheetTotal().compareTo(new BigDecimal(0)) > 0) {
-                selectedInvoiceItemsEntity.setQuantity(selectedInvoiceItemsEntity.getTimeSheetTotal());
+            if (selectedInvoiceItemsEntity.getTimesheetTotal().compareTo(new BigDecimal(0)) > 0) {
+                selectedInvoiceItemsEntity.setQuantity(selectedInvoiceItemsEntity.getTimesheetTotal());
             }
 
             selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().save(selectedInvoiceItemsEntity);
@@ -287,10 +287,10 @@ public class InvoiceBean implements Serializable {
             log.info("Adding/editing entity {} for {}", selectedInvoiceEntity.toString(), selectedInvoiceItemsEntity.toString());
 
             //filter out null or 0.00 values
-            selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId().removeIf(o -> o.getHoursWorked() == null || o.getHoursWorked().equals(new BigDecimal(0.0)));
+            selectedInvoiceItemsEntity.getTimesheetsByInvoiceItemId().removeIf(o -> o.getHoursWorked() == null || o.getHoursWorked().equals(new BigDecimal(0.0)));
             //update total
-            if (selectedInvoiceItemsEntity.getTimeSheetTotal().compareTo(new BigDecimal(0)) > 0) {
-                selectedInvoiceItemsEntity.setQuantity(selectedInvoiceItemsEntity.getTimeSheetTotal());
+            if (selectedInvoiceItemsEntity.getTimesheetTotal().compareTo(new BigDecimal(0)) > 0) {
+                selectedInvoiceItemsEntity.setQuantity(selectedInvoiceItemsEntity.getTimesheetTotal());
             }
 
             invoiceDAO.getInvoiceItemsRepository().save(selectedInvoiceItemsEntity);
@@ -497,23 +497,23 @@ public class InvoiceBean implements Serializable {
         if ("select-date".equalsIgnoreCase(event.getOldStep()) && selectedInvoiceItemsEntity != null) {
             //need to reset in case we changed something
             selectedInvoiceItemsEntity = invoiceDAO.getInvoiceItemsRepository().findOne(selectedInvoiceItemsEntity.getInvoiceItemId());
-            final List<TimeSheetEntity> timeSheetsByInvoiceItemId = (List<TimeSheetEntity>) selectedInvoiceItemsEntity.getTimeSheetsByInvoiceItemId();
+            final List<TimesheetEntity> timesheetsByInvoiceItemId = (List<TimesheetEntity>) selectedInvoiceItemsEntity.getTimesheetsByInvoiceItemId();
 
             int days = Days.daysBetween(dateFromTimesheet, dateToTimesheet).getDays() + 1;
 
             for (int i = 0; i < days; i++) {
                 LocalDate potentialLocalDate = dateFromTimesheet.withFieldAdded(DurationFieldType.days(), i);
-                TimeSheetEntity e = new TimeSheetEntity();
+                TimesheetEntity e = new TimesheetEntity();
                 e.setInvoiceItemId(selectedInvoiceItemsEntity.getInvoiceItemId());
                 e.setInvoiceItemsByInvoiceItemId(selectedInvoiceItemsEntity);
                 e.setItemDate(potentialLocalDate.toDate());
 
-                if (timeSheetsByInvoiceItemId.stream().noneMatch(p -> p.getItemDate().equals(potentialLocalDate.toDate()))) {
-                    timeSheetsByInvoiceItemId.add(e);
+                if (timesheetsByInvoiceItemId.stream().noneMatch(p -> p.getItemDate().equals(potentialLocalDate.toDate()))) {
+                    timesheetsByInvoiceItemId.add(e);
                 }
             }
             //need to sort here because we added some values - they will be displayed in order
-            timeSheetsByInvoiceItemId.sort((l1, l2) -> l1.getItemDate().compareTo(l2.getItemDate()));
+            timesheetsByInvoiceItemId.sort((l1, l2) -> l1.getItemDate().compareTo(l2.getItemDate()));
 
         }
         return event.getNewStep();

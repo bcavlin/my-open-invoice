@@ -111,11 +111,13 @@ public class InvoiceEntity implements java.io.Serializable {
   private Collection<ReportsEntity> reportsByInvoiceId;
 
   @Formula(
-      "(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) from invoice.invoice_items e where e.invoice_id = invoice_id)")
+      "(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) "
+          + "from invoice.invoice_items e where e.invoice_id = invoice_id)")
   private BigDecimal totalValue;
 
   @Formula(
-      "(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) from invoice.invoice_items e where e.invoice_id = invoice_id)")
+      "(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) "
+          + "from invoice.invoice_items e where e.invoice_id = invoice_id)")
   private BigDecimal totalValueWithTax;
 
   public BigDecimal getTotalValue() {
@@ -160,7 +162,7 @@ public class InvoiceEntity implements java.io.Serializable {
   public LocalDate getToDateAdjusted() {
     if (this.getContractByCompanyContractTo() != null) {
       int weekStart = this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart();
-      int weekEnd = weekStart == 1 ? 7 : weekStart - 1;
+      int weekEnd = weekStart == 1 ? 7 : weekStart;
 
       LocalDate d = toDate;
 
@@ -176,7 +178,8 @@ public class InvoiceEntity implements java.io.Serializable {
   @Transient
   public Long getFromToDays() {
     if (getFromDateAdjusted() != null && getToDateAdjusted() != null) {
-      return ChronoUnit.DAYS.between(getFromDateAdjusted(), getToDateAdjusted());
+      long between = ChronoUnit.DAYS.between(getFromDateAdjusted(), getToDateAdjusted());
+      return between % 7 != 0 ? between + 1 : between;
     } else {
       return null;
     }

@@ -53,9 +53,8 @@ public class InvoiceItemsEntity implements java.io.Serializable {
   @OrderBy("itemDate ASC")
   @OneToMany(
       mappedBy = "invoiceItemsByInvoiceItemId",
-      orphanRemoval = true,
       cascade = CascadeType.ALL)
-  private Collection<TimeSheetEntity> timeSheetsByInvoiceItemId;
+  private Collection<TimesheetEntity> timesheetsByInvoiceItemId;
 
   @Transient
   @Setter(AccessLevel.NONE)
@@ -71,11 +70,11 @@ public class InvoiceItemsEntity implements java.io.Serializable {
   // invoice_item_id)")
 
   public BigDecimal getTimesheetTotal() {
-    if (getTimeSheetsByInvoiceItemId() != null) {
+    if (getTimesheetsByInvoiceItemId() != null) {
       timesheetTotal =
-          getTimeSheetsByInvoiceItemId().stream()
+          getTimesheetsByInvoiceItemId().stream()
               .filter(o -> o.getHoursWorked() != null)
-              .map(TimeSheetEntity::getHoursWorked)
+              .map(TimesheetEntity::getHoursWorked)
               .reduce(BigDecimal.ZERO, BigDecimal::add);
     } else {
       timesheetTotal = new BigDecimal(0);
@@ -84,9 +83,9 @@ public class InvoiceItemsEntity implements java.io.Serializable {
   }
 
   public Long getTimesheetTotalDays() {
-    if (getTimeSheetsByInvoiceItemId() != null) {
+    if (getTimesheetsByInvoiceItemId() != null) {
       timesheetTotalDays =
-          getTimeSheetsByInvoiceItemId().stream().filter(o -> o.getHoursWorked() != null).count();
+          getTimesheetsByInvoiceItemId().stream().filter(o -> o.getHoursWorked() != null).count();
     } else {
       timesheetTotalDays = 0L;
     }

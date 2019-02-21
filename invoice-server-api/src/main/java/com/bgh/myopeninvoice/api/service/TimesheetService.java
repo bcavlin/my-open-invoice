@@ -3,13 +3,14 @@ package com.bgh.myopeninvoice.api.service;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.QTimeSheetEntity;
-import com.bgh.myopeninvoice.db.domain.TimeSheetEntity;
-import com.bgh.myopeninvoice.db.repository.TimeSheetRepository;
+import com.bgh.myopeninvoice.db.domain.QTimesheetEntity;
+import com.bgh.myopeninvoice.db.domain.TimesheetEntity;
+import com.bgh.myopeninvoice.db.repository.TimesheetRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,30 +18,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class TimeSheetService implements CommonService<TimeSheetEntity> {
+public class TimesheetService implements CommonService<TimesheetEntity> {
 
-  @Autowired private TimeSheetRepository timesheetRepository;
+  @Autowired private TimesheetRepository timesheetRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QTimeSheetEntity.timeSheetEntity
+      searchParameters.getBuilder().andAnyOf(
+          QTimesheetEntity.timesheetEntity
               .hoursWorked
               .stringValue()
               .contains(searchParameters.getFilter()),
-          QTimeSheetEntity.timeSheetEntity
+          QTimesheetEntity.timesheetEntity
               .itemDate
               .stringValue()
               .contains(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override
@@ -59,10 +59,10 @@ public class TimeSheetService implements CommonService<TimeSheetEntity> {
   }
 
   @Override
-  public List<TimeSheetEntity> findAll(SearchParameters searchParameters) {
+  public List<TimesheetEntity> findAll(SearchParameters searchParameters) {
     log.info("findAll");
 
-    List<TimeSheetEntity> entities;
+    List<TimesheetEntity> entities;
 
     Predicate predicate = getPredicate(searchParameters);
 
@@ -88,10 +88,10 @@ public class TimeSheetService implements CommonService<TimeSheetEntity> {
   }
 
   @Override
-  public List<TimeSheetEntity> findById(Integer id) {
+  public List<TimesheetEntity> findById(Integer id) {
     log.info("findById: {}", id);
-    List<TimeSheetEntity> entities = new ArrayList<>();
-    Optional<TimeSheetEntity> byId = timesheetRepository.findById(id);
+    List<TimesheetEntity> entities = new ArrayList<>();
+    Optional<TimesheetEntity> byId = timesheetRepository.findById(id);
     byId.ifPresent(entities::add);
     return entities;
   }
@@ -105,16 +105,16 @@ public class TimeSheetService implements CommonService<TimeSheetEntity> {
   @SuppressWarnings("unchecked")
   @Transactional
   @Override
-  public List<TimeSheetEntity> saveContent(Integer id, ContentEntity content) {
+  public List<TimesheetEntity> saveContent(Integer id, ContentEntity content) {
     throw new org.apache.commons.lang.NotImplementedException();
   }
 
   @Transactional
   @Override
-  public List<TimeSheetEntity> save(TimeSheetEntity entity) {
+  public List<TimesheetEntity> save(TimesheetEntity entity) {
     log.info("Saving entity");
-    List<TimeSheetEntity> entities = new ArrayList<>();
-    TimeSheetEntity saved = timesheetRepository.save(entity);
+    List<TimesheetEntity> entities = new ArrayList<>();
+    TimesheetEntity saved = timesheetRepository.save(entity);
     log.info("Saved entity: {}", entity);
     entities.add(saved);
     return entities;
@@ -123,8 +123,34 @@ public class TimeSheetService implements CommonService<TimeSheetEntity> {
   @Transactional
   @Override
   public void delete(Integer id) {
-    log.info("Deleting TimeSheetDTO with id [{}]", id);
+    log.info("Deleting TimesheetDTO with id [{}]", id);
     Assert.notNull(id, "ID cannot be empty when deleting data");
     timesheetRepository.deleteById(id);
+  }
+
+  @Transactional
+  public List<TimesheetEntity> saveAll(List<TimesheetEntity> timesheetEntityList) {
+    log.info("Saving/deleting timesheetEntityList");
+    List<TimesheetEntity> toDelete =
+        timesheetEntityList.stream()
+            .filter(o -> o.getInvoiceItemId() != null && o.getHoursWorked() == null)
+            .collect(Collectors.toList());
+
+    List<TimesheetEntity> toSave =
+        timesheetEntityList.stream()
+            .filter(o -> o.getHoursWorked() != null)
+            .collect(Collectors.toList());
+
+    Iterable<TimesheetEntity> saved = timesheetRepository.saveAll(toSave);
+
+    if (CollectionUtils.isNotEmpty(toDelete)) {
+      for (TimesheetEntity timesheetEntity : toDelete) {
+        timesheetRepository.deleteTimesheetEntityByTimesheetId(timesheetEntity.getTimesheetId());
+      }
+    }
+
+    log.info("Deleted timesheetEntityList: {}", toDelete);
+    log.info("Saved timesheetEntityList: {}", saved);
+    return Utils.convertIterableToList(saved);
   }
 }

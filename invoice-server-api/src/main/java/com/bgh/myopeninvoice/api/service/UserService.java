@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,7 @@ public class UserService {
 
   @Transactional
   public void updateLastLoggedDate(String username) {
-    Timestamp from = Timestamp.from(Instant.now());
-    usersRepository.updateLastLoggedDateByUsername(username, from);
+    usersRepository.updateLastLoggedDateByUsername(username, LocalDateTime.now());
   }
 
   public Boolean isUserValid(String username) {

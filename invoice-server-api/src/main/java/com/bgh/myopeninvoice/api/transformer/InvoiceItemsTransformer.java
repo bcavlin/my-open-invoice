@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 public class InvoiceItemsTransformer
     extends CustomAbstractTransformer<InvoiceItemsEntity, InvoiceItemsDTO> {
 
-  @Autowired private TimeSheetTransformer timeSheetTransformer;
+  @Autowired private TimesheetTransformer timesheetTransformer;
 
   @Override
   public MapperFactory mapFields(MapperFactory mapperFactory) {
     mapperFactory
         .classMap(InvoiceItemsDTO.class, InvoiceItemsEntity.class)
-        .field("timeSheets", "timeSheetsByInvoiceItemId")
+        .field("timesheets", "timesheetsByInvoiceItemId")
         .byDefault()
         .register();
 
@@ -27,7 +27,7 @@ public class InvoiceItemsTransformer
   @Override
   protected MapperFacade getMapper() {
     factory = mapFields(factory);
-    factory = timeSheetTransformer.mapFields(factory);
+    factory = timesheetTransformer.mapFields(factory);
     return factory.getMapperFacade();
   }
 }

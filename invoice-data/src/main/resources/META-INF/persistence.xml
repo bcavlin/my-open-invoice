@@ -10,7 +10,7 @@
         <class>com.bgh.myopeninvoice.db.domain.InvoiceEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.ContactEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.ContractEntity</class>
-        <class>com.bgh.myopeninvoice.db.domain.TimeSheetEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.TimesheetEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.RoleEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.UserRoleEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity</class>

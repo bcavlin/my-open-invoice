@@ -1,6 +1,6 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
-import com.bgh.myopeninvoice.api.domain.dto.TimeSheetDTO;
+import com.bgh.myopeninvoice.api.domain.dto.TimesheetDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.MediaType;
@@ -13,20 +13,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@Api(value = "TimeSheet Controller")
+@Api(value = "Timesheet Controller")
 @RequestMapping(value = "/api/v1")
-public interface TimeSheetAPI {
+public interface TimesheetAPI {
 
   @ApiOperation(
       value = "Find all timesheet data",
-      notes = "Returns a list of TimeSheetDTO",
-      response = DefaultResponseTimeSheetDTO.class)
+      notes = "Returns a list of TimesheetDTO",
+      response = DefaultResponseTimesheetDTO.class)
   @ApiResponses(
       value = {
         @ApiResponse(
             code = 200,
             message = "Successful operation",
-            response = DefaultResponseTimeSheetDTO.class)
+            response = DefaultResponseTimesheetDTO.class)
       })
   @ApiImplicitParams({
     @ApiImplicitParam(
@@ -34,56 +34,71 @@ public interface TimeSheetAPI {
         value = "page/size/sortField/sortOrder=ASC,DESC,NONE/filter")
   })
   @GetMapping(value = "/timesheet", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  ResponseEntity<DefaultResponse<TimeSheetDTO>> findAll(
+  ResponseEntity<DefaultResponse<TimesheetDTO>> findAll(
       @RequestParam Map<String, String> queryParameters);
 
   @ApiOperation(
       value = "Find timesheet by ID",
-      notes = "Returns a list of TimeSheetDTO",
-      response = DefaultResponseTimeSheetDTO.class)
+      notes = "Returns a list of TimesheetDTO",
+      response = DefaultResponseTimesheetDTO.class)
   @ApiResponses(
       value = {
         @ApiResponse(
             code = 200,
             message = "Successful operation",
-            response = DefaultResponseTimeSheetDTO.class)
+            response = DefaultResponseTimesheetDTO.class)
       })
   @GetMapping(value = "/timesheet/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  ResponseEntity<DefaultResponse<TimeSheetDTO>> findById(@PathVariable("id") Integer id);
+  ResponseEntity<DefaultResponse<TimesheetDTO>> findById(@PathVariable("id") Integer id);
 
   @ApiOperation(
       value = "Save timesheet",
-      notes = "Saves TimeSheetDTO",
-      response = DefaultResponseTimeSheetDTO.class)
+      notes = "Saves TimesheetDTO",
+      response = DefaultResponseTimesheetDTO.class)
   @ApiResponses(
       value = {
         @ApiResponse(
             code = 200,
             message = "Successful operation",
-            response = DefaultResponseTimeSheetDTO.class)
+            response = DefaultResponseTimesheetDTO.class)
       })
   @PostMapping(value = "/timesheet")
-  ResponseEntity<DefaultResponse<TimeSheetDTO>> save(
-      @Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO, BindingResult bindingResult);
+  ResponseEntity<DefaultResponse<TimesheetDTO>> save(
+          @Valid @NotNull @RequestBody TimesheetDTO timesheetDTO, BindingResult bindingResult);
+
+  @ApiOperation(
+          value = "Save all timesheets",
+          notes = "Saves TimesheetDTO[]",
+          response = DefaultResponseTimesheetDTO.class)
+  @ApiResponses(
+          value = {
+                  @ApiResponse(
+                          code = 200,
+                          message = "Successful operation",
+                          response = DefaultResponseTimesheetDTO.class)
+          })
+  @PostMapping(value = "/timesheets")
+  ResponseEntity<DefaultResponse<TimesheetDTO>> saveAll(
+          @Valid @NotNull @RequestBody TimesheetDTO[] timesheetDTO, BindingResult bindingResult);
 
   @ApiOperation(
       value = "Update timesheet",
-      notes = "Updates TimeSheetDTO",
-      response = DefaultResponseTimeSheetDTO.class)
+      notes = "Updates TimesheetDTO",
+      response = DefaultResponseTimesheetDTO.class)
   @ApiResponses(
       value = {
         @ApiResponse(
             code = 200,
             message = "Successful operation",
-            response = DefaultResponseTimeSheetDTO.class)
+            response = DefaultResponseTimesheetDTO.class)
       })
   @PutMapping(value = "/timesheet", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  ResponseEntity<DefaultResponse<TimeSheetDTO>> update(
-      @Valid @NotNull @RequestBody TimeSheetDTO timesheetDTO, BindingResult bindingResult);
+  ResponseEntity<DefaultResponse<TimesheetDTO>> update(
+          @Valid @NotNull @RequestBody TimesheetDTO timesheetDTO, BindingResult bindingResult);
 
   @ApiOperation(
       value = "Delete timesheet by ID",
-      notes = "Deletes TimeSheetDTO",
+      notes = "Deletes TimesheetDTO",
       response = Boolean.class)
   @ApiResponses(
       value = {
@@ -94,7 +109,7 @@ public interface TimeSheetAPI {
 
   @ApiOperation(
       value = "Find timesheet content by ID",
-      notes = "Find content for TimeSheetDTO",
+      notes = "Find content for TimesheetDTO",
       response = Byte[].class)
   @ApiResponses(
       value = {
@@ -102,11 +117,11 @@ public interface TimeSheetAPI {
       })
   @GetMapping(value = "/timesheet/{id}/content")
   @ResponseBody
-  ResponseEntity<byte[]> findContentByTimeSheetId(@PathVariable("id") Integer id);
+  ResponseEntity<byte[]> findContentByTimesheetId(@PathVariable("id") Integer id);
 
   @ApiOperation(
       value = "Save content for timesheet by ID",
-      notes = "Saves content for TimeSheetDTO",
+      notes = "Saves content for TimesheetDTO",
       response = Boolean.class)
   @ApiResponses(
       value = {
@@ -116,13 +131,12 @@ public interface TimeSheetAPI {
       value = "/timesheet/{id}/content",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
       produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  ResponseEntity<DefaultResponse<TimeSheetDTO>> saveContentByTimeSheetId(
+  ResponseEntity<DefaultResponse<TimesheetDTO>> saveContentByTimesheetId(
       @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file);
 
-  class DefaultResponseTimeSheetDTO extends DefaultResponse<TimeSheetDTO> {
-
-    public DefaultResponseTimeSheetDTO() {
-      super(TimeSheetDTO.class);
+  class DefaultResponseTimesheetDTO extends DefaultResponse<TimesheetDTO> {
+    public DefaultResponseTimesheetDTO() {
+      super(TimesheetDTO.class);
     }
   }
 }

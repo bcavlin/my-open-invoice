@@ -1,14 +1,12 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
-import com.bgh.myopeninvoice.api.domain.CustomJsonDateTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -23,7 +21,5 @@ public class ContentDTO implements java.io.Serializable {
   @Setter(AccessLevel.NONE)
   private byte[] content;
 
-  @NotNull
-  @JsonDeserialize(using = CustomJsonDateTimeDeserializer.class)
-  private Date dateCreated;
+  @NotNull private LocalDateTime dateCreated;
 }
