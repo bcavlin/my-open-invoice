@@ -37,15 +37,19 @@ public class CompanyService implements CommonService<CompanyEntity> {
       searchParameters
           .getBuilder()
           .andAnyOf(
-              QCompanyEntity.companyEntity.companyName.containsIgnoreCase(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.companyName.containsIgnoreCase(
+                  searchParameters.getFilter()),
               QCompanyEntity.companyEntity.phone1.contains(searchParameters.getFilter()),
-              QCompanyEntity.companyEntity.shortName.containsIgnoreCase(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.shortName.containsIgnoreCase(
+                  searchParameters.getFilter()),
               QCompanyEntity.companyEntity
                   .weekStart
                   .stringValue()
                   .contains(searchParameters.getFilter()),
-              QCompanyEntity.companyEntity.businessNumber.containsIgnoreCase(searchParameters.getFilter()),
-              QCompanyEntity.companyEntity.companyName.containsIgnoreCase(searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.businessNumber.containsIgnoreCase(
+                  searchParameters.getFilter()),
+              QCompanyEntity.companyEntity.companyName.containsIgnoreCase(
+                  searchParameters.getFilter()),
               QCompanyEntity.companyEntity
                   .address1
                   .stringValue()
@@ -135,7 +139,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
         companyEntity.getContentByContentId().setContent(content.getContent());
         companyEntity.getContentByContentId().setFilename(content.getFilename());
       }
-      save.addAll(this.save(companyEntity));
+      save.add(companyRepository.save(companyEntity));
     }
 
     return save;
@@ -147,13 +151,7 @@ public class CompanyService implements CommonService<CompanyEntity> {
     log.info("Saving entity");
 
     List<CompanyEntity> entities = new ArrayList<>();
-    if (entity.getCompanyId() != null) {
-      // update (we are missing image)
-      entity.setContentByContentId(
-          contentRepository.findContentByCompanyId(
-              entity.getCompanyId(),
-              ContentEntity.ContentEntityTable.COMPANY.name().toUpperCase()));
-    } else if (entity.getContentByContentId() != null
+    if (entity.getContentByContentId() != null
         && entity.getContentByContentId().getContentId() == null
         && entity.getContentByContentId().getFilename() == null) {
       entity.setContentByContentId(null);

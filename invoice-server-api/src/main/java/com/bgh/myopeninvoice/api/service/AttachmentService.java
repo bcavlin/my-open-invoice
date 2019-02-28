@@ -9,7 +9,6 @@ import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,7 @@ public class AttachmentService implements CommonService<AttachmentEntity> {
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
-    throw new NotImplementedException();
+    return searchParameters.getBuilder();
   }
 
   @Override
@@ -99,21 +98,20 @@ public class AttachmentService implements CommonService<AttachmentEntity> {
     List<AttachmentEntity> save = new ArrayList<>();
 
     Optional<AttachmentEntity> byId = attachmentRepository.findById(id);
-    byId.ifPresent(
-        attachmentEntity -> {
-          if (attachmentEntity.getContentByContentId() == null) {
-            log.debug("Adding new content");
-            attachmentEntity.setContentByContentId(content);
-          } else {
-            log.debug(
-                "Updating content: {}", attachmentEntity.getContentByContentId().getContentId());
-            attachmentEntity.getContentByContentId().setDateCreated(content.getDateCreated());
-            attachmentEntity.getContentByContentId().setContentTable(content.getContentTable());
-            attachmentEntity.getContentByContentId().setContent(content.getContent());
-            attachmentEntity.getContentByContentId().setFilename(content.getFilename());
-          }
-          save.addAll(this.save(attachmentEntity));
-        });
+    if (byId.isPresent()) {
+      AttachmentEntity attachmentEntity = byId.get();
+      if (attachmentEntity.getContentByContentId() == null) {
+        log.debug("Adding new content");
+        attachmentEntity.setContentByContentId(content);
+      } else {
+        log.debug("Updating content: {}", attachmentEntity.getContentByContentId().getContentId());
+        attachmentEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+        attachmentEntity.getContentByContentId().setContentTable(content.getContentTable());
+        attachmentEntity.getContentByContentId().setContent(content.getContent());
+        attachmentEntity.getContentByContentId().setFilename(content.getFilename());
+      }
+      save.add(attachmentRepository.save(attachmentEntity));
+    }
 
     return save;
   }
@@ -122,8 +120,16 @@ public class AttachmentService implements CommonService<AttachmentEntity> {
   @Override
   public List<AttachmentEntity> save(AttachmentEntity entity) {
     log.info("Saving entity");
+
     List<AttachmentEntity> entities = new ArrayList<>();
+    if (entity.getContentByContentId() != null
+        && entity.getContentByContentId().getContentId() == null
+        && entity.getContentByContentId().getFilename() == null) {
+      entity.setContentByContentId(null);
+    }
+
     AttachmentEntity saved = attachmentRepository.save(entity);
+
     log.info("Saved entity: {}", entity);
     entities.add(saved);
     return entities;

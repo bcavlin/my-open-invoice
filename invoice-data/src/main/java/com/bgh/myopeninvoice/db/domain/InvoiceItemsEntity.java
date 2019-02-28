@@ -9,6 +9,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -91,4 +93,10 @@ public class InvoiceItemsEntity implements java.io.Serializable {
     }
     return timesheetTotalDays;
   }
+
+  @Transient
+  public Integer getTimesheetsByInvoiceItemIdSize() {
+    return Optional.ofNullable(timesheetsByInvoiceItemId).orElse(Collections.emptyList()).size();
+  }
+
 }

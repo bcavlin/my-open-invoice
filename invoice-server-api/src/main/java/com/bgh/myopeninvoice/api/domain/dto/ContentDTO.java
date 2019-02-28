@@ -18,6 +18,7 @@ public class ContentDTO implements java.io.Serializable {
 
   @NotNull private String filename;
 
+  /* We need to get content as a separate call - using proxy pattern */
   @Setter(AccessLevel.NONE)
   private byte[] content;
 

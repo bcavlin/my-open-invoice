@@ -17,7 +17,7 @@ public class InvoiceItemsTransformer
   public MapperFactory mapFields(MapperFactory mapperFactory) {
     mapperFactory
         .classMap(InvoiceItemsDTO.class, InvoiceItemsEntity.class)
-        .field("timesheets", "timesheetsByInvoiceItemId")
+        .field("timesheetsSize", "timesheetsByInvoiceItemIdSize")
         .byDefault()
         .register();
 

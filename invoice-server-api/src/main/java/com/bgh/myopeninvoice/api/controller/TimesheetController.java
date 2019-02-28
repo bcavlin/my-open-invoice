@@ -183,10 +183,6 @@ public class TimesheetController extends AbstractController implements Timesheet
                   Arrays.asList(timesheetDTO), TimesheetEntity.class));
       result = timesheetTransformer.transformEntityToDTO(entities, TimesheetDTO.class);
 
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
     } catch (Exception e) {
       return Utils.getErrorResponse(TimesheetDTO.class, e);
     }
