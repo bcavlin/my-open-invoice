@@ -73,7 +73,6 @@ public class InvoiceEntity implements java.io.Serializable {
   @Column(name = "CCY_ID", nullable = false)
   private Integer ccyId;
 
-  @LazyCollection(LazyCollectionOption.FALSE)
   @OneToMany(mappedBy = "invoiceByInvoiceId")
   private Collection<AttachmentEntity> attachmentsByInvoiceId;
 
@@ -111,12 +110,12 @@ public class InvoiceEntity implements java.io.Serializable {
   private Collection<ReportsEntity> reportsByInvoiceId;
 
   @Formula(
-      "(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) "
+      "(select sum(e.quantity * case when e.unit <> 'TOTAL' then rate else 1 end) "
           + "from invoice.invoice_items e where e.invoice_id = invoice_id)")
   private BigDecimal totalValue;
 
   @Formula(
-      "(select sum(e.quantity * case when e.unit = 'HOUR' then rate else 1 end) * (tax_percent + 1) "
+      "(select sum(e.quantity * case when e.unit <> 'TOTAL' then rate else 1 end) * (tax_percent + 1) "
           + "from invoice.invoice_items e where e.invoice_id = invoice_id)")
   private BigDecimal totalValueWithTax;
 

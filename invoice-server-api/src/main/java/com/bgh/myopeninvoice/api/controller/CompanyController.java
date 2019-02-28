@@ -235,8 +235,10 @@ public class CompanyController extends AbstractController implements CompanyAPI 
           companyService.findContentByParentEntityId(id, ContentEntity.ContentEntityTable.COMPANY);
       if (content != null) {
         source = content.getContent();
-        if (source.length > 0) {
+        if (source != null && source.length > 0) {
           contentType = new Tika().detect(source);
+        } else {
+          throw new InvalidDataException("Content source not found for the entity " + id);
         }
       } else {
         throw new InvalidDataException("Content not found for the entity " + id);

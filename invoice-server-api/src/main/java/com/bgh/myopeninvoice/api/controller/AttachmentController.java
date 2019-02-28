@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.AttachmentAPI;
+import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.AttachmentDTO;
 import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
 import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
@@ -11,7 +12,10 @@ import com.bgh.myopeninvoice.api.transformer.AttachmentTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
+import com.bgh.myopeninvoice.db.domain.QAttachmentEntity;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +33,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -49,9 +57,11 @@ public class AttachmentController extends AbstractController implements Attachme
     long count;
 
     try {
-      count = attachmentService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-      List<AttachmentEntity> entities =
-          attachmentService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+      SearchParameters searchParameters =
+          Utils.mapQueryParametersToSearchParameters(queryParameters);
+      validateSpecialFilter(queryParameters, searchParameters);
+      count = attachmentService.count(searchParameters);
+      List<AttachmentEntity> entities = attachmentService.findAll(searchParameters);
       result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
     } catch (Exception e) {
@@ -63,6 +73,38 @@ public class AttachmentController extends AbstractController implements Attachme
     defaultResponse.setDetails(result);
     defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
+
+  @Override
+  protected void validateSpecialFilter(
+      Map<String, String> queryParameters, SearchParameters searchParameters) {
+    if (StringUtils.isNotEmpty(queryParameters.get(FILTER_FIELD))) {
+      Matcher matcher = filterPattern.matcher(queryParameters.get(FILTER_FIELD));
+      BooleanBuilder builder = searchParameters.getBuilder();
+      boolean foundGroup2 = false;
+
+      while (matcher.find()) {
+        String[] split = matcher.group(1).split(":");
+        if ("invoiceId".equalsIgnoreCase(split[0])) {
+          searchParameters
+              .getBuilder()
+              .and(QAttachmentEntity.attachmentEntity.invoiceId.eq(Integer.valueOf(split[1])));
+        } else {
+          log.info("Skipping search parameter: " + matcher.group(1));
+        }
+
+        if (matcher.group(2) != null) {
+          foundGroup2 = true;
+          /** Set additional search properties one # filters have been removed */
+          searchParameters.setFilter(matcher.group(2));
+        }
+      }
+
+      if (searchParameters.getBuilder().hasValue() && !foundGroup2) {
+        // reset the filter
+        searchParameters.setFilter(null);
+      }
+    }
   }
 
   @Override
@@ -198,8 +240,10 @@ public class AttachmentController extends AbstractController implements Attachme
               id, ContentEntity.ContentEntityTable.ATTACHMENT);
       if (content != null) {
         source = content.getContent();
-        if (source.length > 0) {
+        if (source != null && source.length > 0) {
           contentType = new Tika().detect(source);
+        } else {
+            throw new InvalidDataException("Content source not found for the entity " + id);
         }
       } else {
         throw new InvalidDataException("Content not found for the entity " + id);

@@ -1,12 +1,14 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "ATTACHMENT", schema = "INVOICE")
+@ToString(exclude = {"invoiceByInvoiceId"})
 public class AttachmentEntity implements java.io.Serializable {
 
   @Id
@@ -18,10 +20,6 @@ public class AttachmentEntity implements java.io.Serializable {
   @Column(name = "INVOICE_ID", nullable = false)
   private Integer invoiceId;
 
-  @Basic
-  @Column(name = "CONTENT_ID", nullable = false)
-  private Integer contentId;
-
   @ManyToOne
   @JoinColumn(
       name = "INVOICE_ID",
@@ -31,12 +29,7 @@ public class AttachmentEntity implements java.io.Serializable {
       updatable = false)
   private InvoiceEntity invoiceByInvoiceId;
 
-  @ManyToOne
-  @JoinColumn(
-      name = "CONTENT_ID",
-      referencedColumnName = "CONTENT_ID",
-      nullable = false,
-      insertable = false,
-      updatable = false)
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID")
   private ContentEntity contentByContentId;
 }
