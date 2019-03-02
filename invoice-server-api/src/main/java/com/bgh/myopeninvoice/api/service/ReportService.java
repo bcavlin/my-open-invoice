@@ -3,44 +3,52 @@ package com.bgh.myopeninvoice.api.service;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.QReportsEntity;
-import com.bgh.myopeninvoice.db.domain.ReportsEntity;
+import com.bgh.myopeninvoice.db.domain.QReportEntity;
+import com.bgh.myopeninvoice.db.domain.ReportEntity;
 import com.bgh.myopeninvoice.db.repository.ContentRepository;
 import com.bgh.myopeninvoice.db.repository.ReportsRepository;
-import com.querydsl.core.BooleanBuilder;
+import com.bgh.myopeninvoice.reporting.BIRTReport;
+import com.bgh.myopeninvoice.reporting.ReportRunner;
+import com.bgh.myopeninvoice.reporting.util.Constants;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Slf4j
 @Service
-public class ReportsService implements CommonService<ReportsEntity> {
+public class ReportService implements CommonService<ReportEntity> {
 
   @Autowired private ReportsRepository reportsRepository;
 
   @Autowired private ContentRepository contentRepository;
 
+  @Autowired private ReportRunner reportRunner;
+
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-          QReportsEntity.reportsEntity.reportName.contains(searchParameters.getFilter()),
-          QReportsEntity.reportsEntity
-              .dateCreated
-              .stringValue()
-              .contains(searchParameters.getFilter()));
+      searchParameters
+          .getBuilder()
+          .andAnyOf(
+              QReportEntity.reportEntity.reportName.contains(searchParameters.getFilter()),
+              QReportEntity.reportEntity
+                  .dateCreated
+                  .stringValue()
+                  .contains(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override
@@ -59,10 +67,10 @@ public class ReportsService implements CommonService<ReportsEntity> {
   }
 
   @Override
-  public List<ReportsEntity> findAll(SearchParameters searchParameters) {
+  public List<ReportEntity> findAll(SearchParameters searchParameters) {
     log.info("findAll");
 
-    List<ReportsEntity> entities;
+    List<ReportEntity> entities;
 
     Predicate predicate = getPredicate(searchParameters);
 
@@ -88,10 +96,10 @@ public class ReportsService implements CommonService<ReportsEntity> {
   }
 
   @Override
-  public List<ReportsEntity> findById(Integer id) {
+  public List<ReportEntity> findById(Integer id) {
     log.info("findById: {}", id);
-    List<ReportsEntity> entities = new ArrayList<>();
-    Optional<ReportsEntity> byId = reportsRepository.findById(id);
+    List<ReportEntity> entities = new ArrayList<>();
+    Optional<ReportEntity> byId = reportsRepository.findById(id);
     byId.ifPresent(entities::add);
     return entities;
   }
@@ -106,11 +114,11 @@ public class ReportsService implements CommonService<ReportsEntity> {
   @SuppressWarnings("unchecked")
   @Transactional
   @Override
-  public List<ReportsEntity> saveContent(Integer id, ContentEntity content) {
+  public List<ReportEntity> saveContent(Integer id, ContentEntity content) {
     log.info("Save content to reports {}, file {}", id, content.getFilename());
-    List<ReportsEntity> save = new ArrayList<>();
+    List<ReportEntity> save = new ArrayList<>();
 
-    Optional<ReportsEntity> byId = reportsRepository.findById(id);
+    Optional<ReportEntity> byId = reportsRepository.findById(id);
     byId.ifPresent(
         reportsEntity -> {
           if (reportsEntity.getContentByContentId() == null) {
@@ -131,10 +139,34 @@ public class ReportsService implements CommonService<ReportsEntity> {
 
   @Transactional
   @Override
-  public List<ReportsEntity> save(ReportsEntity entity) {
+  public List<ReportEntity> save(ReportEntity entity) {
     log.info("Saving entity");
-    List<ReportsEntity> entities = new ArrayList<>();
-    ReportsEntity saved = reportsRepository.save(entity);
+    List<ReportEntity> entities = new ArrayList<>();
+
+    ClassPathResource report1 = new ClassPathResource(Constants.REPORT_3);
+    byte[] bytes = new byte[0];
+    try {
+      bytes = IOUtils.toByteArray(report1.getInputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("p_invoice_id", entity.getInvoiceId());
+
+    final BIRTReport myReport = new BIRTReport(entity.getReportName(), params, bytes, reportRunner);
+    final ByteArrayOutputStream reportContent = myReport.runReport().getReportContent();
+
+    ContentEntity contentEntity = new ContentEntity();
+    contentEntity.setContent(reportContent.toByteArray());
+    contentEntity.setContentTable(ContentEntity.ContentEntityTable.REPORTS.toString());
+    contentEntity.setDateCreated(LocalDateTime.now());
+    contentEntity.setFilename(entity.getReportName() + ".pdf");
+
+    entity.setContentByContentId(contentEntity);
+    entity.setDateCreated(ZonedDateTime.now());
+
+    ReportEntity saved = reportsRepository.save(entity);
     log.info("Saved entity: {}", entity);
     entities.add(saved);
     return entities;
@@ -143,7 +175,7 @@ public class ReportsService implements CommonService<ReportsEntity> {
   @Transactional
   @Override
   public void delete(Integer id) {
-    log.info("Deleting ReportsDTO with id [{}]", id);
+    log.info("Deleting ReportDTO with id [{}]", id);
     Assert.notNull(id, "ID cannot be empty when deleting data");
     reportsRepository.deleteById(id);
   }

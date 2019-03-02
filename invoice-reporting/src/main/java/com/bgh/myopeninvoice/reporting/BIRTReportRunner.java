@@ -30,6 +30,7 @@ import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -114,8 +115,9 @@ public class BIRTReportRunner implements ReportRunner {
       runAndRenderTask.run();
       runAndRenderTask.close();
 
-    } catch (Exception e) {
-      log.error("Error while running report task: {}.", e.getMessage());
+    } catch (EngineException e) {
+      throw new BirtReportException(e.getMessage(), e);
+    } catch (SQLException e) {
       throw new BirtReportException(e.getMessage(), e);
     }
 

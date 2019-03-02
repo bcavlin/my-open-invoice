@@ -35,7 +35,7 @@ public class RepositoriesTest {
   //    @Test
   //    public void testReportsRepository(){
   //        Assert.assertNotNull(reportsRepository);
-  //        final ArrayList<ReportsEntity> reportsEntities =
+  //        final ArrayList<ReportEntity> reportsEntities =
   // Lists.newArrayList(reportsRepository.findAll());
   //        Assert.assertNotNull(reportsEntities);
   //    }

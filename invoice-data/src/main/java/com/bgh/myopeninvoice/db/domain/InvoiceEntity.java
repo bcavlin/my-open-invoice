@@ -2,8 +2,6 @@ package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -57,7 +55,6 @@ public class InvoiceEntity implements java.io.Serializable {
   @Column(name = "NOTE", length = 2000)
   private String note;
 
-  //  @Temporal(TemporalType.DATE)
   @Column(name = "PAID_DATE")
   private LocalDate paidDate;
 
@@ -107,7 +104,7 @@ public class InvoiceEntity implements java.io.Serializable {
   private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
 
   @OneToMany(mappedBy = "invoiceByInvoiceId")
-  private Collection<ReportsEntity> reportsByInvoiceId;
+  private Collection<ReportEntity> reportsByInvoiceId;
 
   @Formula(
       "(select sum(e.quantity * case when e.unit <> 'TOTAL' then rate else 1 end) "

@@ -17,7 +17,7 @@
         <class>com.bgh.myopeninvoice.db.domain.CompanyContactEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.ContentEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.TaxEntity</class>
-        <class>com.bgh.myopeninvoice.db.domain.ReportsEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.ReportEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.CurrencyEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.AttachmentEntity</class>
         <class>com.bgh.myopeninvoice.db.domain.CompanyEntity</class>
