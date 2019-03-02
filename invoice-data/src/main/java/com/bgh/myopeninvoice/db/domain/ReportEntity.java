@@ -1,14 +1,17 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
 @Table(name = "REPORTS", schema = "INVOICE")
-public class ReportsEntity implements java.io.Serializable {
+@ToString(exclude = {"invoiceByInvoiceId"})
+public class ReportEntity implements java.io.Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +22,8 @@ public class ReportsEntity implements java.io.Serializable {
   @Column(name = "INVOICE_ID", nullable = false)
   private Integer invoiceId;
 
-  @Basic
-  @Column(name = "CONTENT_ID", nullable = false)
-  private Integer contentId;
-
   @Column(name = "DATE_CREATED", nullable = false)
-  private LocalDateTime dateCreated;
+  private ZonedDateTime dateCreated;
 
   @Basic
   @Column(name = "REPORT_NAME", nullable = false, length = 255)
@@ -39,12 +38,7 @@ public class ReportsEntity implements java.io.Serializable {
       updatable = false)
   private InvoiceEntity invoiceByInvoiceId;
 
-  @ManyToOne
-  @JoinColumn(
-      name = "CONTENT_ID",
-      referencedColumnName = "CONTENT_ID",
-      nullable = false,
-      insertable = false,
-      updatable = false)
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "CONTENT_ID", referencedColumnName = "CONTENT_ID")
   private ContentEntity contentByContentId;
 }
