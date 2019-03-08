@@ -187,6 +187,11 @@
             <column name="description" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
+            <column name="rate_to_cad" type="decimal">
+            </column>
+            <column name="updated_at" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="contract" schemaName="invoice">
@@ -369,10 +374,10 @@
             </column>
             <column name="code" type="varchar(255)">
             </column>
-            <column name="quantity" type="decimal">
+            <column name="quantity" type="decimal" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
-            <column name="unit" type="varchar(20)" defaultValue="hour">
+            <column name="unit" type="varchar(20)" defaultValue="HOUR">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -384,7 +389,7 @@
                                  referencedTableName="invoice"/>
 
 
-        <createTable tableName="time_sheet" schemaName="invoice">
+        <createTable tableName="timesheet" schemaName="invoice">
             <column name="timesheet_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

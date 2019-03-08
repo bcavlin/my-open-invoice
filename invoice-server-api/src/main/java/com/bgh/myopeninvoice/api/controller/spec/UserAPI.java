@@ -2,7 +2,7 @@ package com.bgh.myopeninvoice.api.controller.spec;
 
 import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.dto.UserDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
 import com.bgh.myopeninvoice.api.security.AccountCredentials;
 import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
 import io.swagger.annotations.Api;

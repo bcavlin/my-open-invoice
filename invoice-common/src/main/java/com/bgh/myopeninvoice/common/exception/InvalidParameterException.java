@@ -1,6 +1,6 @@
-package com.bgh.myopeninvoice.api.exception;
+package com.bgh.myopeninvoice.common.exception;
 
-public class InvalidParameterException extends Exception {
+public class InvalidParameterException extends RuntimeException {
 
   public InvalidParameterException() {}
 

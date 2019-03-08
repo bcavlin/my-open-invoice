@@ -3,13 +3,13 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.InvoiceItemsAPI;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.InvoiceItemsDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.InvoiceItemsService;
+import com.bgh.myopeninvoice.api.service.InvoiceItemsCRUDService;
 import com.bgh.myopeninvoice.api.transformer.InvoiceItemsTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.InvoiceItemsEntity;
 import com.bgh.myopeninvoice.db.domain.QInvoiceItemsEntity;
 import com.querydsl.core.BooleanBuilder;
@@ -42,7 +42,7 @@ public class InvoiceItemsController extends AbstractController implements Invoic
 
   private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-  @Autowired private InvoiceItemsService invoiceitemsService;
+  @Autowired private InvoiceItemsCRUDService invoiceitemsService;
 
   @Autowired private InvoiceItemsTransformer invoiceitemsTransformer;
 
@@ -52,22 +52,16 @@ public class InvoiceItemsController extends AbstractController implements Invoic
     List<InvoiceItemsDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      SearchParameters searchParameters =
-          Utils.mapQueryParametersToSearchParameters(queryParameters);
-      validateSpecialFilter(queryParameters, searchParameters);
-      count = invoiceitemsService.count(searchParameters);
-      List<InvoiceItemsEntity> entities = invoiceitemsService.findAll(searchParameters);
-      result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(InvoiceItemsDTO.class, e);
-    }
+    SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+    validateSpecialFilter(queryParameters, searchParameters);
+    count = invoiceitemsService.count(searchParameters);
+    List<InvoiceItemsEntity> entities = invoiceitemsService.findAll(searchParameters);
+    result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
     DefaultResponse<InvoiceItemsDTO> defaultResponse = new DefaultResponse<>(InvoiceItemsDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -107,20 +101,15 @@ public class InvoiceItemsController extends AbstractController implements Invoic
   public ResponseEntity<DefaultResponse<InvoiceItemsDTO>> findById(@PathVariable("id") Integer id) {
     List<InvoiceItemsDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<InvoiceItemsEntity> entities = invoiceitemsService.findById(id);
-      result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(InvoiceItemsDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<InvoiceItemsEntity> entities = invoiceitemsService.findById(id);
+    result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
     DefaultResponse<InvoiceItemsDTO> defaultResponse = new DefaultResponse<>(InvoiceItemsDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -129,39 +118,33 @@ public class InvoiceItemsController extends AbstractController implements Invoic
       @Valid @NotNull @RequestBody InvoiceItemsDTO invoiceitemsDTO, BindingResult bindingResult) {
     List<InvoiceItemsDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (invoiceitemsDTO.getInvoiceItemId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (invoiceitemsDTO.getInvoiceItemId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<InvoiceItemsEntity> entities =
+        invoiceitemsService.save(
+            invoiceitemsTransformer.transformDTOToEntity(
+                invoiceitemsDTO, InvoiceItemsEntity.class));
+    result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
-      List<InvoiceItemsEntity> entities =
-          invoiceitemsService.save(
-              invoiceitemsTransformer.transformDTOToEntity(
-                  invoiceitemsDTO, InvoiceItemsEntity.class));
-      result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(InvoiceItemsDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<InvoiceItemsDTO> defaultResponse = new DefaultResponse<>(InvoiceItemsDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -171,55 +154,44 @@ public class InvoiceItemsController extends AbstractController implements Invoic
 
     List<InvoiceItemsDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+    if (invoiceitemsDTO.getInvoiceItemId() == null) {
+      throw new InvalidDataException("When updating, data entity must have ID");
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-      if (invoiceitemsDTO.getInvoiceItemId() == null) {
-        throw new InvalidDataException("When updating, data entity must have ID");
-      }
+    List<InvoiceItemsEntity> entities =
+        invoiceitemsService.save(
+            invoiceitemsTransformer.transformDTOToEntity(
+                invoiceitemsDTO, InvoiceItemsEntity.class));
+    result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
 
-      List<InvoiceItemsEntity> entities =
-          invoiceitemsService.save(
-              invoiceitemsTransformer.transformDTOToEntity(
-                  invoiceitemsDTO, InvoiceItemsEntity.class));
-      result = invoiceitemsTransformer.transformEntityToDTO(entities, InvoiceItemsDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(InvoiceItemsDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<InvoiceItemsDTO> defaultResponse = new DefaultResponse<>(InvoiceItemsDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      invoiceitemsService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    invoiceitemsService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }

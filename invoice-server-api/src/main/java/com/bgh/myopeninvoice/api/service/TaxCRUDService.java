@@ -1,11 +1,12 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
-import com.bgh.myopeninvoice.db.domain.QCurrencyEntity;
-import com.bgh.myopeninvoice.db.repository.CurrencyRepository;
+import com.bgh.myopeninvoice.db.domain.QTaxEntity;
+import com.bgh.myopeninvoice.db.domain.TaxEntity;
+import com.bgh.myopeninvoice.db.repository.TaxRepository;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,9 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class CurrencyService implements CommonService<CurrencyEntity> {
+public class TaxCRUDService implements CommonCRUDService<TaxEntity> {
 
-  @Autowired private CurrencyRepository currencyRepository;
+  @Autowired private TaxRepository taxRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -30,8 +31,8 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
       searchParameters
           .getBuilder()
           .andAnyOf(
-              QCurrencyEntity.currencyEntity.description.contains(searchParameters.getFilter()),
-              QCurrencyEntity.currencyEntity.name.contains(searchParameters.getFilter()));
+              QTaxEntity.taxEntity.identifier.containsIgnoreCase(searchParameters.getFilter()),
+              QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
     }
     return searchParameters.getBuilder();
   }
@@ -43,19 +44,19 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
     long count;
 
     if (predicate != null) {
-      count = currencyRepository.count(predicate);
+      count = taxRepository.count(predicate);
     } else {
-      count = currencyRepository.count();
+      count = taxRepository.count();
     }
 
     return count;
   }
 
   @Override
-  public List<CurrencyEntity> findAll(SearchParameters searchParameters) {
+  public List<TaxEntity> findAll(SearchParameters searchParameters) {
     log.info("findAll");
 
-    List<CurrencyEntity> entities;
+    List<TaxEntity> entities;
 
     Predicate predicate = getPredicate(searchParameters);
 
@@ -63,17 +64,16 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
       if (predicate != null) {
         entities =
             Utils.convertIterableToList(
-                currencyRepository.findAll(predicate, searchParameters.getPageRequest()));
+                taxRepository.findAll(predicate, searchParameters.getPageRequest()));
       } else {
         entities =
-            Utils.convertIterableToList(
-                currencyRepository.findAll(searchParameters.getPageRequest()));
+            Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
       }
     } else {
       if (predicate != null) {
-        entities = Utils.convertIterableToList(currencyRepository.findAll(predicate));
+        entities = Utils.convertIterableToList(taxRepository.findAll(predicate));
       } else {
-        entities = Utils.convertIterableToList(currencyRepository.findAll());
+        entities = Utils.convertIterableToList(taxRepository.findAll());
       }
     }
 
@@ -81,10 +81,10 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
   }
 
   @Override
-  public List<CurrencyEntity> findById(Integer id) {
+  public List<TaxEntity> findById(Integer id) {
     log.info("findById: {}", id);
-    List<CurrencyEntity> entities = new ArrayList<>();
-    Optional<CurrencyEntity> byId = currencyRepository.findById(id);
+    List<TaxEntity> entities = new ArrayList<>();
+    Optional<TaxEntity> byId = taxRepository.findById(id);
     byId.ifPresent(entities::add);
     return entities;
   }
@@ -95,19 +95,30 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
     throw new org.apache.commons.lang.NotImplementedException();
   }
 
+  /**
+   * No need to use validate here as tax cannot affect any existing invoices (tax is copied)
+   * @param entity
+   * @param action
+   * @return
+   * @throws InvalidDataException
+   */
+  @Override
+  public void validate(TaxEntity entity, Action action) throws InvalidDataException {
+  }
+
   @SuppressWarnings("unchecked")
   @Transactional
   @Override
-  public List<CurrencyEntity> saveContent(Integer id, ContentEntity content) {
+  public List<TaxEntity> saveContent(Integer id, ContentEntity content) {
     throw new org.apache.commons.lang.NotImplementedException();
   }
 
   @Transactional
   @Override
-  public List<CurrencyEntity> save(CurrencyEntity entity) {
+  public List<TaxEntity> save(TaxEntity entity) {
     log.info("Saving entity");
-    List<CurrencyEntity> entities = new ArrayList<>();
-    CurrencyEntity saved = currencyRepository.save(entity);
+    List<TaxEntity> entities = new ArrayList<>();
+    TaxEntity saved = taxRepository.save(entity);
     log.info("Saved entity: {}", entity);
     entities.add(saved);
     return entities;
@@ -116,8 +127,8 @@ public class CurrencyService implements CommonService<CurrencyEntity> {
   @Transactional
   @Override
   public void delete(Integer id) {
-    log.info("Deleting CurrencyDTO with id [{}]", id);
+    log.info("Deleting TaxDTO with id [{}]", id);
     Assert.notNull(id, "ID cannot be empty when deleting data");
-    currencyRepository.deleteById(id);
+    taxRepository.deleteById(id);
   }
 }

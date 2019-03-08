@@ -1,9 +1,8 @@
-package com.bgh.myopeninvoice.api.domain.response;
+package com.bgh.myopeninvoice.common.domain;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -11,15 +10,15 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class DefaultResponse<T> extends OperationResponse {
 
-  @Setter(AccessLevel.NONE)
-  private final String objectType;
+  private String type;
 
   private Long count;
 
   private List<T> details;
 
   @SuppressWarnings("unchecked")
-  public DefaultResponse(Class<T> objectType) {
-    this.objectType = objectType.getSimpleName();
+  public DefaultResponse(Class<T> type) {
+    this.type = type.getSimpleName();
+    this.httpStatus = HttpStatus.OK;
   }
 }

@@ -1,7 +1,7 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
 import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.Map;
 
 @Api(value = "Company Controller")
@@ -117,7 +118,7 @@ public interface CompanyAPI {
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
       produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(
-      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file);
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException;
 
   class DefaultResponseCompanyDTO extends DefaultResponse<CompanyDTO> {
 

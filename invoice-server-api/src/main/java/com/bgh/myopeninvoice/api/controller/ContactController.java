@@ -2,13 +2,13 @@ package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.ContactAPI;
 import com.bgh.myopeninvoice.api.domain.dto.ContactDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.ContactService;
+import com.bgh.myopeninvoice.api.service.ContactCRUDService;
 import com.bgh.myopeninvoice.api.transformer.ContactTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class ContactController extends AbstractController implements ContactAPI 
 
   private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-  @Autowired private ContactService contactService;
+  @Autowired private ContactCRUDService contactService;
 
   @Autowired private ContactTransformer contactTransformer;
 
@@ -47,20 +47,15 @@ public class ContactController extends AbstractController implements ContactAPI 
     List<ContactDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      count = contactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-      List<ContactEntity> entities =
-          contactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContactDTO.class, e);
-    }
+    count = contactService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+    List<ContactEntity> entities =
+        contactService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+    result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
     DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -68,20 +63,15 @@ public class ContactController extends AbstractController implements ContactAPI 
   public ResponseEntity<DefaultResponse<ContactDTO>> findById(@PathVariable("id") Integer id) {
     List<ContactDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<ContactEntity> entities = contactService.findById(id);
-      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContactDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<ContactEntity> entities = contactService.findById(id);
+    result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
     DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -90,38 +80,32 @@ public class ContactController extends AbstractController implements ContactAPI 
       @Valid @NotNull @RequestBody ContactDTO contactDTO, BindingResult bindingResult) {
     List<ContactDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (contactDTO.getContactId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (contactDTO.getContactId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<ContactEntity> entities =
+        contactService.save(
+            contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
+    result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
-      List<ContactEntity> entities =
-          contactService.save(
-              contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
-      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContactDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -131,54 +115,43 @@ public class ContactController extends AbstractController implements ContactAPI 
 
     List<ContactDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+    if (contactDTO.getContactId() == null) {
+      throw new InvalidDataException("When updating, data entity must have ID");
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-      if (contactDTO.getContactId() == null) {
-        throw new InvalidDataException("When updating, data entity must have ID");
-      }
+    List<ContactEntity> entities =
+        contactService.save(
+            contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
+    result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
 
-      List<ContactEntity> entities =
-          contactService.save(
-              contactTransformer.transformDTOToEntity(contactDTO, ContactEntity.class));
-      result = contactTransformer.transformEntityToDTO(entities, ContactDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContactDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<ContactDTO> defaultResponse = new DefaultResponse<>(ContactDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      contactService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    contactService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }

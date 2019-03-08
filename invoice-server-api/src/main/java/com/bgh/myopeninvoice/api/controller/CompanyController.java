@@ -3,13 +3,13 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.CompanyAPI;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.CompanyDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.CompanyService;
+import com.bgh.myopeninvoice.api.service.CompanyCRUDService;
 import com.bgh.myopeninvoice.api.transformer.CompanyTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QCompanyEntity;
@@ -32,8 +32,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -41,7 +45,7 @@ import java.util.stream.Collectors;
 @RestController
 public class CompanyController extends AbstractController implements CompanyAPI {
 
-  @Autowired private CompanyService companyService;
+  @Autowired private CompanyCRUDService companyService;
 
   @Autowired private CompanyTransformer companyTransformer;
 
@@ -51,22 +55,16 @@ public class CompanyController extends AbstractController implements CompanyAPI 
     List<CompanyDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      SearchParameters searchParameters =
-          Utils.mapQueryParametersToSearchParameters(queryParameters);
-      validateSpecialFilter(queryParameters, searchParameters);
-      count = companyService.count(searchParameters);
-      List<CompanyEntity> entities = companyService.findAll(searchParameters);
-      result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(CompanyDTO.class, e);
-    }
+    SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+    validateSpecialFilter(queryParameters, searchParameters);
+    count = companyService.count(searchParameters);
+    List<CompanyEntity> entities = companyService.findAll(searchParameters);
+    result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
     DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -88,8 +86,8 @@ public class CompanyController extends AbstractController implements CompanyAPI 
           log.info("Skipping search parameter: " + matcher.group(1));
         }
 
-        if(matcher.group(2)!=null){
-          foundGroup2=true;
+        if (matcher.group(2) != null) {
+          foundGroup2 = true;
           /** Set additional search properties one # filters have been removed */
           searchParameters.setFilter(matcher.group(2));
         }
@@ -107,20 +105,15 @@ public class CompanyController extends AbstractController implements CompanyAPI 
   public ResponseEntity<DefaultResponse<CompanyDTO>> findById(@PathVariable("id") Integer id) {
     List<CompanyDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<CompanyEntity> entities = companyService.findById(id);
-      result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(CompanyDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<CompanyEntity> entities = companyService.findById(id);
+    result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
     DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -129,38 +122,32 @@ public class CompanyController extends AbstractController implements CompanyAPI 
       @Valid @NotNull @RequestBody CompanyDTO companyDTO, BindingResult bindingResult) {
     List<CompanyDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (companyDTO.getCompanyId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (companyDTO.getCompanyId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<CompanyEntity> entities =
+        companyService.save(
+            companyTransformer.transformDTOToEntity(companyDTO, CompanyEntity.class));
+    result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
-      List<CompanyEntity> entities =
-          companyService.save(
-              companyTransformer.transformDTOToEntity(companyDTO, CompanyEntity.class));
-      result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(CompanyDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -170,54 +157,42 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
     List<CompanyDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+    if (companyDTO.getCompanyId() == null) {
+      throw new InvalidDataException("When updating, data entity must have ID");
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-      if (companyDTO.getCompanyId() == null) {
-        throw new InvalidDataException("When updating, data entity must have ID");
-      }
+    CompanyEntity entity = companyTransformer.transformDTOToEntity(companyDTO, CompanyEntity.class);
+    List<CompanyEntity> entities = companyService.save(entity);
+    result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
-      CompanyEntity entity =
-          companyTransformer.transformDTOToEntity(companyDTO, CompanyEntity.class);
-      List<CompanyEntity> entities = companyService.save(entity);
-      result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(CompanyDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      companyService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    companyService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
@@ -257,29 +232,24 @@ public class CompanyController extends AbstractController implements CompanyAPI 
 
   @Override
   public ResponseEntity<DefaultResponse<CompanyDTO>> saveContentByCompanyId(
-      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
     List<CompanyDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      ContentEntity content = new ContentEntity();
-      content.setContent(file.getBytes());
-      content.setFilename(file.getOriginalFilename());
-      content.setDateCreated(LocalDateTime.now());
-      content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    ContentEntity content = new ContentEntity();
+    content.setContent(file.getBytes());
+    content.setFilename(file.getOriginalFilename());
+    content.setDateCreated(LocalDateTime.now());
+    content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
 
-      List<CompanyEntity> entities = companyService.saveContent(id, content);
-      result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(CompanyDTO.class, e);
-    }
+    List<CompanyEntity> entities = companyService.saveContent(id, content);
+    result = companyTransformer.transformEntityToDTO(entities, CompanyDTO.class);
 
     DefaultResponse<CompanyDTO> defaultResponse = new DefaultResponse<>(CompanyDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 }

@@ -1,11 +1,12 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.QTaxEntity;
-import com.bgh.myopeninvoice.db.domain.TaxEntity;
-import com.bgh.myopeninvoice.db.repository.TaxRepository;
+import com.bgh.myopeninvoice.db.domain.QContactEntity;
+import com.bgh.myopeninvoice.db.repository.ContactRepository;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,9 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class TaxService implements CommonService<TaxEntity> {
+public class ContactCRUDService implements CommonCRUDService<ContactEntity> {
 
-  @Autowired private TaxRepository taxRepository;
+  @Autowired private ContactRepository contactRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -30,8 +31,14 @@ public class TaxService implements CommonService<TaxEntity> {
       searchParameters
           .getBuilder()
           .andAnyOf(
-              QTaxEntity.taxEntity.identifier.containsIgnoreCase(searchParameters.getFilter()),
-              QTaxEntity.taxEntity.percent.stringValue().contains(searchParameters.getFilter()));
+              QContactEntity.contactEntity.lastName.contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity.email.contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity.phone1.contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity
+                  .firstName
+                  .stringValue()
+                  .contains(searchParameters.getFilter()),
+              QContactEntity.contactEntity.address1.contains(searchParameters.getFilter()));
     }
     return searchParameters.getBuilder();
   }
@@ -43,19 +50,19 @@ public class TaxService implements CommonService<TaxEntity> {
     long count;
 
     if (predicate != null) {
-      count = taxRepository.count(predicate);
+      count = contactRepository.count(predicate);
     } else {
-      count = taxRepository.count();
+      count = contactRepository.count();
     }
 
     return count;
   }
 
   @Override
-  public List<TaxEntity> findAll(SearchParameters searchParameters) {
+  public List<ContactEntity> findAll(SearchParameters searchParameters) {
     log.info("findAll");
 
-    List<TaxEntity> entities;
+    List<ContactEntity> entities;
 
     Predicate predicate = getPredicate(searchParameters);
 
@@ -63,16 +70,17 @@ public class TaxService implements CommonService<TaxEntity> {
       if (predicate != null) {
         entities =
             Utils.convertIterableToList(
-                taxRepository.findAll(predicate, searchParameters.getPageRequest()));
+                contactRepository.findAll(predicate, searchParameters.getPageRequest()));
       } else {
         entities =
-            Utils.convertIterableToList(taxRepository.findAll(searchParameters.getPageRequest()));
+            Utils.convertIterableToList(
+                contactRepository.findAll(searchParameters.getPageRequest()));
       }
     } else {
       if (predicate != null) {
-        entities = Utils.convertIterableToList(taxRepository.findAll(predicate));
+        entities = Utils.convertIterableToList(contactRepository.findAll(predicate));
       } else {
-        entities = Utils.convertIterableToList(taxRepository.findAll());
+        entities = Utils.convertIterableToList(contactRepository.findAll());
       }
     }
 
@@ -80,10 +88,10 @@ public class TaxService implements CommonService<TaxEntity> {
   }
 
   @Override
-  public List<TaxEntity> findById(Integer id) {
+  public List<ContactEntity> findById(Integer id) {
     log.info("findById: {}", id);
-    List<TaxEntity> entities = new ArrayList<>();
-    Optional<TaxEntity> byId = taxRepository.findById(id);
+    List<ContactEntity> entities = new ArrayList<>();
+    Optional<ContactEntity> byId = contactRepository.findById(id);
     byId.ifPresent(entities::add);
     return entities;
   }
@@ -94,19 +102,23 @@ public class TaxService implements CommonService<TaxEntity> {
     throw new org.apache.commons.lang.NotImplementedException();
   }
 
+  @Override
+  public void validate(ContactEntity entity, Action action) throws InvalidDataException {
+  }
+
   @SuppressWarnings("unchecked")
   @Transactional
   @Override
-  public List<TaxEntity> saveContent(Integer id, ContentEntity content) {
+  public List<ContactEntity> saveContent(Integer id, ContentEntity content) {
     throw new org.apache.commons.lang.NotImplementedException();
   }
 
   @Transactional
   @Override
-  public List<TaxEntity> save(TaxEntity entity) {
+  public List<ContactEntity> save(ContactEntity entity) {
     log.info("Saving entity");
-    List<TaxEntity> entities = new ArrayList<>();
-    TaxEntity saved = taxRepository.save(entity);
+    List<ContactEntity> entities = new ArrayList<>();
+    ContactEntity saved = contactRepository.save(entity);
     log.info("Saved entity: {}", entity);
     entities.add(saved);
     return entities;
@@ -115,8 +127,8 @@ public class TaxService implements CommonService<TaxEntity> {
   @Transactional
   @Override
   public void delete(Integer id) {
-    log.info("Deleting TaxDTO with id [{}]", id);
+    log.info("Deleting ContactDTO with id [{}]", id);
     Assert.notNull(id, "ID cannot be empty when deleting data");
-    taxRepository.deleteById(id);
+    contactRepository.deleteById(id);
   }
 }

@@ -19,16 +19,15 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.UserAPI;
 import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
 import com.bgh.myopeninvoice.api.domain.dto.UserDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.security.AccountCredentials;
 import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
 import com.bgh.myopeninvoice.api.security.JwtTokenProvider;
 import com.bgh.myopeninvoice.api.service.UserService;
 import com.bgh.myopeninvoice.api.transformer.RoleTransformer;
 import com.bgh.myopeninvoice.api.transformer.UserTransformer;
-import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.db.domain.RoleEntity;
 import com.bgh.myopeninvoice.db.domain.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -68,18 +67,13 @@ public class UserController extends AbstractController implements UserAPI {
       @PathVariable("username") String username) {
     List<RoleDTO> result = new ArrayList<>();
 
-    try {
-      List<RoleEntity> userRoles = userService.findUserRoles(username);
-      result = roleTransformer.transformEntityToDTO(userRoles, RoleDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(RoleDTO.class, e);
-    }
+    List<RoleEntity> userRoles = userService.findUserRoles(username);
+    result = roleTransformer.transformEntityToDTO(userRoles, RoleDTO.class);
 
     DefaultResponse<RoleDTO> defaultResponse = new DefaultResponse<>(RoleDTO.class);
     defaultResponse.setDetails(result);
     defaultResponse.setCount((long) result.size());
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     ResponseEntity<DefaultResponse<RoleDTO>> responseEntity =
         new ResponseEntity<>(defaultResponse, HttpStatus.OK);
 
@@ -92,52 +86,40 @@ public class UserController extends AbstractController implements UserAPI {
   public ResponseEntity<?> login(
       @Valid @RequestBody AccountCredentials credentials, BindingResult bindingResult) {
 
-    try {
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-
-      log.info("Logging in user: {}", credentials.getUsername());
-      Authentication authentication =
-          authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(
-                  credentials.getUsername(), credentials.getPassword()));
-
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-
-      String jwt = tokenProvider.generateToken(authentication);
-
-      userService.updateLastLoggedDate(credentials.getUsername());
-
-      return ResponseEntity.ok(JwtAuthenticationResponse.builder().accessToken(jwt).build());
-
-    } catch (Exception e) {
-      log.error(e.toString(), e);
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
     }
-    return ResponseEntity.badRequest()
-        .body("{\"message\":\"There was a problem logging in. Please call technical support.\"}");
+
+    log.info("Logging in user: {}", credentials.getUsername());
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                credentials.getUsername(), credentials.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    String jwt = tokenProvider.generateToken(authentication);
+
+    userService.updateLastLoggedDate(credentials.getUsername());
+
+    return ResponseEntity.ok(JwtAuthenticationResponse.builder().accessToken(jwt).build());
   }
 
   @Override
   public ResponseEntity<DefaultResponse<UserDTO>> getUsers() {
     List<UserDTO> result = new ArrayList<>();
 
-    try {
-      List<UserEntity> users = userService.getUsers();
-      result = userTransformer.transformEntityToDTO(users, UserDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(UserDTO.class, e);
-    }
+    List<UserEntity> users = userService.getUsers();
+    result = userTransformer.transformEntityToDTO(users, UserDTO.class);
 
     DefaultResponse<UserDTO> defaultResponse = new DefaultResponse<>(UserDTO.class);
     defaultResponse.setDetails(result);
     defaultResponse.setCount((long) result.size());
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     ResponseEntity<DefaultResponse<UserDTO>> responseEntity =
         new ResponseEntity<>(defaultResponse, HttpStatus.OK);
 

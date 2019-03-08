@@ -1,9 +1,9 @@
 package com.bgh.myopeninvoice.api.util;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidParameterException;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -69,10 +69,10 @@ public class Utils {
       int size = NumberUtils.parseNumber(queryParameters.get("size"), Integer.class);
       if (page < 0 || size > 1000) {
         throw new InvalidParameterException(
-                "Invalid parameters 'page' or 'size'. Rule: page < 0 || size > 1000: page: " +
-                        page +
-                        ", size: " +
-                        size);
+            "Invalid parameters 'page' or 'size'. Rule: page < 0 || size > 1000: page: "
+                + page
+                + ", size: "
+                + size);
       }
 
       if (searchParameters.getSort() != null) {
@@ -121,35 +121,4 @@ public class Utils {
     return finalSort;
   }
 
-  public static <T> ResponseEntity<DefaultResponse<T>> getErrorResponse(
-      Class<T> clazz, Exception e) {
-    log.error(e.toString(), e);
-    @SuppressWarnings("unchecked")
-    DefaultResponse<T> defaultResponse = new DefaultResponse<>(clazz);
-    defaultResponse.setOperationMessage(e.toString());
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.ERROR);
-    return new ResponseEntity<>(defaultResponse, HttpStatus.BAD_REQUEST);
-  }
-
-  public static <T> ResponseEntity<DefaultResponse<T>> getErrorResponse(
-      Class<T> clazz, Exception e, T element) {
-    log.error(e.toString(), e);
-    @SuppressWarnings("unchecked")
-    DefaultResponse<T> defaultResponse = new DefaultResponse<>(clazz);
-    defaultResponse.setOperationMessage(e.toString());
-    defaultResponse.setDetails(Collections.singletonList(element));
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.ERROR);
-    return new ResponseEntity<>(defaultResponse, HttpStatus.BAD_REQUEST);
-  }
-
-  public static void addCorsHeaders(HttpServletResponse res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Expose-Headers", "Authorization,Content-Type");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Authorization, x-xsrf-token, "
-            + "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, "
-            + "Content-Type, Access-Control-Request-Method, Custom-Filter-Header");
-  }
 }

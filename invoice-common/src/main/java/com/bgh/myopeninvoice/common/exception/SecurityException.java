@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.exception;
+package com.bgh.myopeninvoice.common.exception;
 
 public class SecurityException extends Exception {
 
