@@ -3,13 +3,13 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.ContractAPI;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.ContractDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.ContractService;
+import com.bgh.myopeninvoice.api.service.ContractCRUDService;
 import com.bgh.myopeninvoice.api.transformer.ContractTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.ContractEntity;
 import com.bgh.myopeninvoice.db.domain.QContractEntity;
@@ -33,8 +33,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -42,7 +46,7 @@ import java.util.stream.Collectors;
 @RestController
 public class ContractController extends AbstractController implements ContractAPI {
 
-  @Autowired private ContractService contractService;
+  @Autowired private ContractCRUDService contractService;
 
   @Autowired private ContractTransformer contractTransformer;
 
@@ -52,22 +56,16 @@ public class ContractController extends AbstractController implements ContractAP
     List<ContractDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      SearchParameters searchParameters =
-          Utils.mapQueryParametersToSearchParameters(queryParameters);
-      validateSpecialFilter(queryParameters, searchParameters);
-      count = contractService.count(searchParameters);
-      List<ContractEntity> entities = contractService.findAll(searchParameters);
-      result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContractDTO.class, e);
-    }
+    SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+    validateSpecialFilter(queryParameters, searchParameters);
+    count = contractService.count(searchParameters);
+    List<ContractEntity> entities = contractService.findAll(searchParameters);
+    result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
     DefaultResponse<ContractDTO> defaultResponse = new DefaultResponse<>(ContractDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -107,20 +105,15 @@ public class ContractController extends AbstractController implements ContractAP
   public ResponseEntity<DefaultResponse<ContractDTO>> findById(@PathVariable("id") Integer id) {
     List<ContractDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<ContractEntity> entities = contractService.findById(id);
-      result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContractDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<ContractEntity> entities = contractService.findById(id);
+    result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
     DefaultResponse<ContractDTO> defaultResponse = new DefaultResponse<>(ContractDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -129,38 +122,32 @@ public class ContractController extends AbstractController implements ContractAP
       @Valid @NotNull @RequestBody ContractDTO contractDTO, BindingResult bindingResult) {
     List<ContractDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (contractDTO.getContractId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (contractDTO.getContractId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<ContractEntity> entities =
+        contractService.save(
+            contractTransformer.transformDTOToEntity(contractDTO, ContractEntity.class));
+    result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
-      List<ContractEntity> entities =
-          contractService.save(
-              contractTransformer.transformDTOToEntity(contractDTO, ContractEntity.class));
-      result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContractDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<ContractDTO> defaultResponse = new DefaultResponse<>(ContractDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -170,54 +157,43 @@ public class ContractController extends AbstractController implements ContractAP
 
     List<ContractDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+    if (contractDTO.getContractId() == null) {
+      throw new InvalidDataException("When updating, data entity must have ID");
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-      if (contractDTO.getContractId() == null) {
-        throw new InvalidDataException("When updating, data entity must have ID");
-      }
+    List<ContractEntity> entities =
+        contractService.save(
+            contractTransformer.transformDTOToEntity(contractDTO, ContractEntity.class));
+    result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
-      List<ContractEntity> entities =
-          contractService.save(
-              contractTransformer.transformDTOToEntity(contractDTO, ContractEntity.class));
-      result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContractDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<ContractDTO> defaultResponse = new DefaultResponse<>(ContractDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      contractService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    contractService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
@@ -255,29 +231,24 @@ public class ContractController extends AbstractController implements ContractAP
 
   @Override
   public ResponseEntity<DefaultResponse<ContractDTO>> saveContentByContractId(
-      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
     List<ContractDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      ContentEntity content = new ContentEntity();
-      content.setContent(file.getBytes());
-      content.setFilename(file.getOriginalFilename());
-      content.setDateCreated(LocalDateTime.now());
-      content.setContentTable(ContentEntity.ContentEntityTable.CONTRACT.name());
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    ContentEntity content = new ContentEntity();
+    content.setContent(file.getBytes());
+    content.setFilename(file.getOriginalFilename());
+    content.setDateCreated(LocalDateTime.now());
+    content.setContentTable(ContentEntity.ContentEntityTable.CONTRACT.name());
 
-      List<ContractEntity> entities = contractService.saveContent(id, content);
-      result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ContractDTO.class, e);
-    }
+    List<ContractEntity> entities = contractService.saveContent(id, content);
+    result = contractTransformer.transformEntityToDTO(entities, ContractDTO.class);
 
     DefaultResponse<ContractDTO> defaultResponse = new DefaultResponse<>(ContractDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 }

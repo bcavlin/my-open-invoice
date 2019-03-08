@@ -3,13 +3,13 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.ReportAPI;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.ReportDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.ReportService;
+import com.bgh.myopeninvoice.api.service.ReportCRUDService;
 import com.bgh.myopeninvoice.api.transformer.ReportTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QReportEntity;
 import com.bgh.myopeninvoice.db.domain.ReportEntity;
@@ -46,7 +46,7 @@ public class ReportController extends AbstractController implements ReportAPI {
 
   private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-  @Autowired private ReportService reportService;
+  @Autowired private ReportCRUDService reportService;
 
   @Autowired private ReportTransformer reportTransformer;
 
@@ -56,22 +56,16 @@ public class ReportController extends AbstractController implements ReportAPI {
     List<ReportDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      SearchParameters searchParameters =
-          Utils.mapQueryParametersToSearchParameters(queryParameters);
-      validateSpecialFilter(queryParameters, searchParameters);
-      count = reportService.count(searchParameters);
-      List<ReportEntity> entities = reportService.findAll(searchParameters);
-      result = reportTransformer.transformEntityToDTO(entities, ReportDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ReportDTO.class, e);
-    }
+    SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+    validateSpecialFilter(queryParameters, searchParameters);
+    count = reportService.count(searchParameters);
+    List<ReportEntity> entities = reportService.findAll(searchParameters);
+    result = reportTransformer.transformEntityToDTO(entities, ReportDTO.class);
 
     DefaultResponse<ReportDTO> defaultResponse = new DefaultResponse<>(ReportDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -111,20 +105,15 @@ public class ReportController extends AbstractController implements ReportAPI {
   public ResponseEntity<DefaultResponse<ReportDTO>> findById(@PathVariable("id") Integer id) {
     List<ReportDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<ReportEntity> entities = reportService.findById(id);
-      result = reportTransformer.transformEntityToDTO(entities, ReportDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ReportDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<ReportEntity> entities = reportService.findById(id);
+    result = reportTransformer.transformEntityToDTO(entities, ReportDTO.class);
 
     DefaultResponse<ReportDTO> defaultResponse = new DefaultResponse<>(ReportDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -133,37 +122,31 @@ public class ReportController extends AbstractController implements ReportAPI {
       @Valid @NotNull @RequestBody ReportDTO reportDTO, BindingResult bindingResult) {
     List<ReportDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (reportDTO.getReportId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (reportDTO.getReportId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<ReportEntity> entities =
+        reportService.save(reportTransformer.transformDTOToEntity(reportDTO, ReportEntity.class));
+    result = reportTransformer.transformEntityToDTO(entities, ReportDTO.class);
 
-      List<ReportEntity> entities =
-          reportService.save(reportTransformer.transformDTOToEntity(reportDTO, ReportEntity.class));
-      result = reportTransformer.transformEntityToDTO(entities, ReportDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(ReportDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<ReportDTO> defaultResponse = new DefaultResponse<>(ReportDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -177,18 +160,13 @@ public class ReportController extends AbstractController implements ReportAPI {
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      reportService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    reportService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }

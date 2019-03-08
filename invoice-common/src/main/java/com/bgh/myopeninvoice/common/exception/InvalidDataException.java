@@ -1,6 +1,10 @@
-package com.bgh.myopeninvoice.api.exception;
+package com.bgh.myopeninvoice.common.exception;
 
-public class InvalidDataException extends Exception {
+import java.util.List;
+
+public class InvalidDataException extends RuntimeException {
+
+  private List<String> errors;
 
   public InvalidDataException() {
     super();
@@ -18,8 +22,18 @@ public class InvalidDataException extends Exception {
     super(cause);
   }
 
+  public InvalidDataException(String message, List<String> errors) {
+    super(message);
+    this.errors = errors;
+  }
+
   protected InvalidDataException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
+
+  public List<String> getErrors() {
+    return errors;
+  }
+
 }

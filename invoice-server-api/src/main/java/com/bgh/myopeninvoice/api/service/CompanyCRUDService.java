@@ -1,7 +1,7 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class CompanyService implements CommonService<CompanyEntity> {
+public class CompanyCRUDService implements CommonCRUDService<CompanyEntity> {
 
   @Autowired private CompanyRepository companyRepository;
 
@@ -118,7 +118,11 @@ public class CompanyService implements CommonService<CompanyEntity> {
     return contentRepository.findContentByCompanyId(id, table.name());
   }
 
-  @SuppressWarnings("unchecked")
+    @Override
+    public void validate(CompanyEntity entity, Action action) throws InvalidDataException {
+    }
+
+    @SuppressWarnings("unchecked")
   @Transactional
   @Override
   public List<CompanyEntity> saveContent(Integer id, ContentEntity content)

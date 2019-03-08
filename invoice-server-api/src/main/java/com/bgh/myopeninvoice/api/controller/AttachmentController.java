@@ -3,13 +3,13 @@ package com.bgh.myopeninvoice.api.controller;
 import com.bgh.myopeninvoice.api.controller.spec.AttachmentAPI;
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
 import com.bgh.myopeninvoice.api.domain.dto.AttachmentDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.AttachmentService;
+import com.bgh.myopeninvoice.api.service.AttachmentCRUDService;
 import com.bgh.myopeninvoice.api.transformer.AttachmentTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QAttachmentEntity;
@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +47,7 @@ public class AttachmentController extends AbstractController implements Attachme
 
   private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-  @Autowired private AttachmentService attachmentService;
+  @Autowired private AttachmentCRUDService attachmentService;
 
   @Autowired private AttachmentTransformer attachmentTransformer;
 
@@ -56,22 +57,16 @@ public class AttachmentController extends AbstractController implements Attachme
     List<AttachmentDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      SearchParameters searchParameters =
-          Utils.mapQueryParametersToSearchParameters(queryParameters);
-      validateSpecialFilter(queryParameters, searchParameters);
-      count = attachmentService.count(searchParameters);
-      List<AttachmentEntity> entities = attachmentService.findAll(searchParameters);
-      result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(AttachmentDTO.class, e);
-    }
+    SearchParameters searchParameters = Utils.mapQueryParametersToSearchParameters(queryParameters);
+    validateSpecialFilter(queryParameters, searchParameters);
+    count = attachmentService.count(searchParameters);
+    List<AttachmentEntity> entities = attachmentService.findAll(searchParameters);
+    result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
     DefaultResponse<AttachmentDTO> defaultResponse = new DefaultResponse<>(AttachmentDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -111,20 +106,15 @@ public class AttachmentController extends AbstractController implements Attachme
   public ResponseEntity<DefaultResponse<AttachmentDTO>> findById(@PathVariable("id") Integer id) {
     List<AttachmentDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<AttachmentEntity> entities = attachmentService.findById(id);
-      result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(AttachmentDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<AttachmentEntity> entities = attachmentService.findById(id);
+    result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
     DefaultResponse<AttachmentDTO> defaultResponse = new DefaultResponse<>(AttachmentDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -133,38 +123,32 @@ public class AttachmentController extends AbstractController implements Attachme
       @Valid @NotNull @RequestBody AttachmentDTO attachmentDTO, BindingResult bindingResult) {
     List<AttachmentDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (attachmentDTO.getAttachmentId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (attachmentDTO.getAttachmentId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<AttachmentEntity> entities =
+        attachmentService.save(
+            attachmentTransformer.transformDTOToEntity(attachmentDTO, AttachmentEntity.class));
+    result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
-      List<AttachmentEntity> entities =
-          attachmentService.save(
-              attachmentTransformer.transformDTOToEntity(attachmentDTO, AttachmentEntity.class));
-      result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(AttachmentDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<AttachmentDTO> defaultResponse = new DefaultResponse<>(AttachmentDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -174,54 +158,43 @@ public class AttachmentController extends AbstractController implements Attachme
 
     List<AttachmentDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+    if (attachmentDTO.getAttachmentId() == null) {
+      throw new InvalidDataException("When updating, data entity must have ID");
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-      if (attachmentDTO.getAttachmentId() == null) {
-        throw new InvalidDataException("When updating, data entity must have ID");
-      }
+    List<AttachmentEntity> entities =
+        attachmentService.save(
+            attachmentTransformer.transformDTOToEntity(attachmentDTO, AttachmentEntity.class));
+    result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
-      List<AttachmentEntity> entities =
-          attachmentService.save(
-              attachmentTransformer.transformDTOToEntity(attachmentDTO, AttachmentEntity.class));
-      result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(AttachmentDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<AttachmentDTO> defaultResponse = new DefaultResponse<>(AttachmentDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      attachmentService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    attachmentService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
@@ -243,7 +216,7 @@ public class AttachmentController extends AbstractController implements Attachme
         if (source != null && source.length > 0) {
           contentType = new Tika().detect(source);
         } else {
-            throw new InvalidDataException("Content source not found for the entity " + id);
+          throw new InvalidDataException("Content source not found for the entity " + id);
         }
       } else {
         throw new InvalidDataException("Content not found for the entity " + id);
@@ -262,29 +235,24 @@ public class AttachmentController extends AbstractController implements Attachme
 
   @Override
   public ResponseEntity<DefaultResponse<AttachmentDTO>> saveContentByAttachmentId(
-      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+      @PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
     List<AttachmentDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      ContentEntity content = new ContentEntity();
-      content.setContent(file.getBytes());
-      content.setFilename(file.getOriginalFilename());
-      content.setDateCreated(LocalDateTime.now());
-      content.setContentTable(ContentEntity.ContentEntityTable.ATTACHMENT.name());
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    ContentEntity content = new ContentEntity();
+    content.setContent(file.getBytes());
+    content.setFilename(file.getOriginalFilename());
+    content.setDateCreated(LocalDateTime.now());
+    content.setContentTable(ContentEntity.ContentEntityTable.ATTACHMENT.name());
 
-      List<AttachmentEntity> entities = attachmentService.saveContent(id, content);
-      result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(AttachmentDTO.class, e);
-    }
+    List<AttachmentEntity> entities = attachmentService.saveContent(id, content);
+    result = attachmentTransformer.transformEntityToDTO(entities, AttachmentDTO.class);
 
     DefaultResponse<AttachmentDTO> defaultResponse = new DefaultResponse<>(AttachmentDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 }

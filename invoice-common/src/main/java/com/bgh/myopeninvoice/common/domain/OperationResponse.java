@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package com.bgh.myopeninvoice.api.domain.response;
+package com.bgh.myopeninvoice.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class OperationResponse {
 
   @ApiModelProperty(required = true)
-  private OperationResponseStatus operationStatus;
+  protected OperationResponseStatus status;
 
-  private String operationMessage;
+  protected String message;
 
-  private LocalDate operationDate = LocalDate.now();
+  protected HttpStatus httpStatus;
+
+  protected ZonedDateTime date = ZonedDateTime.now();
 
   public enum OperationResponseStatus {
     SUCCESS,

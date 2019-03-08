@@ -1,6 +1,6 @@
 package com.bgh.myopeninvoice.api.controller.spec;
 
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -21,11 +21,13 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -47,7 +49,7 @@ public class InvoiceServerApiApplication {
   public static void main(String[] args) {
     TimeZone.setDefault(TimeZone.getTimeZone("America/Toronto"));
     System.setProperty("spring.devtools.restart.enabled", "false");
-    SpringApplication.run(InvoiceServerApiApplication.class, args);
+    ConfigurableApplicationContext ctx = SpringApplication.run(InvoiceServerApiApplication.class, args);
   }
 
   @PostConstruct
@@ -72,4 +74,5 @@ public class InvoiceServerApiApplication {
     source.setCacheSeconds(3600); // Refresh cache once per hour.
     return source;
   }
+
 }

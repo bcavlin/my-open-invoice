@@ -2,13 +2,13 @@ package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.TaxAPI;
 import com.bgh.myopeninvoice.api.domain.dto.TaxDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidDataException;
-import com.bgh.myopeninvoice.api.exception.InvalidResultDataException;
-import com.bgh.myopeninvoice.api.service.TaxService;
+import com.bgh.myopeninvoice.api.service.TaxCRUDService;
 import com.bgh.myopeninvoice.api.transformer.TaxTransformer;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.common.exception.InvalidResultDataException;
 import com.bgh.myopeninvoice.db.domain.TaxEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class TaxController extends AbstractController implements TaxAPI {
 
   private static final String ENTITY_ID_CANNOT_BE_NULL = "entity.id-cannot-be-null";
 
-  @Autowired private TaxService taxService;
+  @Autowired private TaxCRUDService taxService;
 
   @Autowired private TaxTransformer taxTransformer;
 
@@ -47,20 +47,15 @@ public class TaxController extends AbstractController implements TaxAPI {
     List<TaxDTO> result = new ArrayList<>();
     long count;
 
-    try {
-      count = taxService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
-      List<TaxEntity> entities =
-          taxService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
-      result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(TaxDTO.class, e);
-    }
+    count = taxService.count(Utils.mapQueryParametersToSearchParameters(queryParameters));
+    List<TaxEntity> entities =
+        taxService.findAll(Utils.mapQueryParametersToSearchParameters(queryParameters));
+    result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
     DefaultResponse<TaxDTO> defaultResponse = new DefaultResponse<>(TaxDTO.class);
     defaultResponse.setCount(count);
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -68,20 +63,15 @@ public class TaxController extends AbstractController implements TaxAPI {
   public ResponseEntity<DefaultResponse<TaxDTO>> findById(@PathVariable("id") Integer id) {
     List<TaxDTO> result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      List<TaxEntity> entities = taxService.findById(id);
-      result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(TaxDTO.class, e);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    List<TaxEntity> entities = taxService.findById(id);
+    result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
     DefaultResponse<TaxDTO> defaultResponse = new DefaultResponse<>(TaxDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -90,37 +80,31 @@ public class TaxController extends AbstractController implements TaxAPI {
       @Valid @NotNull @RequestBody TaxDTO taxDTO, BindingResult bindingResult) {
     List<TaxDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
+    if (taxDTO.getTaxId() != null) {
+      throw new InvalidDataException(
+          getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
+    }
 
-      if (taxDTO.getTaxId() != null) {
-        throw new InvalidDataException(
-            getMessageSource().getMessage("entity.save-cannot-have-id", null, getContextLocale()));
-      }
+    List<TaxEntity> entities =
+        taxService.save(taxTransformer.transformDTOToEntity(taxDTO, TaxEntity.class));
+    result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
-      List<TaxEntity> entities =
-          taxService.save(taxTransformer.transformDTOToEntity(taxDTO, TaxEntity.class));
-      result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(TaxDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<TaxDTO> defaultResponse = new DefaultResponse<>(TaxDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -130,53 +114,42 @@ public class TaxController extends AbstractController implements TaxAPI {
 
     List<TaxDTO> result = new ArrayList<>();
 
-    try {
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+    if (taxDTO.getTaxId() == null) {
+      throw new InvalidDataException("When updating, data entity must have ID");
+    }
 
-      if (bindingResult.hasErrors()) {
-        String collect =
-            bindingResult.getAllErrors().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        throw new InvalidDataException(collect);
-      }
-      if (taxDTO.getTaxId() == null) {
-        throw new InvalidDataException("When updating, data entity must have ID");
-      }
+    List<TaxEntity> entities =
+        taxService.save(taxTransformer.transformDTOToEntity(taxDTO, TaxEntity.class));
+    result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
 
-      List<TaxEntity> entities =
-          taxService.save(taxTransformer.transformDTOToEntity(taxDTO, TaxEntity.class));
-      result = taxTransformer.transformEntityToDTO(entities, TaxDTO.class);
-
-      if (CollectionUtils.isEmpty(result)) {
-        throw new InvalidResultDataException("Data not saved");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(TaxDTO.class, e);
+    if (CollectionUtils.isEmpty(result)) {
+      throw new InvalidResultDataException("Data not saved");
     }
 
     DefaultResponse<TaxDTO> defaultResponse = new DefaultResponse<>(TaxDTO.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<DefaultResponse<Boolean>> delete(@PathVariable("id") @NotNull Integer id) {
 
-    try {
-      Assert.notNull(
-          id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
-      taxService.delete(id);
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(Boolean.class, e, false);
-    }
+    Assert.notNull(
+        id, getMessageSource().getMessage(ENTITY_ID_CANNOT_BE_NULL, null, getContextLocale()));
+    taxService.delete(id);
 
     DefaultResponse<Boolean> defaultResponse = new DefaultResponse<>(Boolean.class);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
-    defaultResponse.setOperationMessage("Deleted entity with id: " + id);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setMessage("Deleted entity with id: " + id);
     defaultResponse.setDetails(Collections.singletonList(true));
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }

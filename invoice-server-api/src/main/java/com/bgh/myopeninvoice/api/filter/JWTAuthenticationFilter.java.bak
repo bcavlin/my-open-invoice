@@ -1,8 +1,8 @@
 package com.bgh.myopeninvoice.api.filter;
 
 import com.bgh.myopeninvoice.api.domain.dto.UserDTO;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
 import com.bgh.myopeninvoice.api.security.TokenAuthenticationService;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.common.util.Constants;

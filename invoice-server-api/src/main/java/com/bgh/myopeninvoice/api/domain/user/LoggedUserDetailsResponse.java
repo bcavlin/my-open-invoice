@@ -16,7 +16,7 @@
 
 package com.bgh.myopeninvoice.api.domain.user;
 
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

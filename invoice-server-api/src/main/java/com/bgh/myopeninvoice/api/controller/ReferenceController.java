@@ -1,10 +1,9 @@
 package com.bgh.myopeninvoice.api.controller;
 
 import com.bgh.myopeninvoice.api.controller.spec.ReferencesAPI;
-import com.bgh.myopeninvoice.api.domain.response.DefaultResponse;
-import com.bgh.myopeninvoice.api.domain.response.OperationResponse;
-import com.bgh.myopeninvoice.api.exception.InvalidParameterException;
-import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidParameterException;
 import com.bgh.myopeninvoice.common.util.RateType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class ReferenceController extends AbstractController implements Reference
     DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
     defaultResponse.setCount(1L);
     defaultResponse.setDetails(types);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
@@ -40,31 +39,26 @@ public class ReferenceController extends AbstractController implements Reference
 
     List result = new ArrayList<>();
 
-    try {
-      Assert.notNull(
-          type, getMessageSource().getMessage("type.cannot.be.null", null, getContextLocale()));
-      Assert.isTrue(
-          !types.contains(type),
-          getMessageSource().getMessage("type.does.not.exist", null, getContextLocale()));
+    Assert.notNull(
+        type, getMessageSource().getMessage("type.cannot.be.null", null, getContextLocale()));
+    Assert.isTrue(
+        !types.contains(type),
+        getMessageSource().getMessage("type.does.not.exist", null, getContextLocale()));
 
-      if ("RATE".equalsIgnoreCase(type)) {
-        result =
-            Arrays.stream(RateType.values())
-                .map(v -> v.name().toUpperCase())
-                .collect(Collectors.toList());
+    if ("RATE".equalsIgnoreCase(type)) {
+      result =
+          Arrays.stream(RateType.values())
+              .map(v -> v.name().toUpperCase())
+              .collect(Collectors.toList());
 
-      } else {
-        throw new InvalidParameterException("Type does not exist");
-      }
-
-    } catch (Exception e) {
-      return Utils.getErrorResponse(String.class, e);
+    } else {
+      throw new InvalidParameterException("Type does not exist");
     }
 
     DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
     defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
-    defaultResponse.setOperationStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 }

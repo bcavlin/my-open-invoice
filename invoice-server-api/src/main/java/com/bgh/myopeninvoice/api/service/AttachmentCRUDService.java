@@ -1,6 +1,7 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class AttachmentService implements CommonService<AttachmentEntity> {
+public class AttachmentCRUDService implements CommonCRUDService<AttachmentEntity> {
 
   @Autowired private AttachmentRepository attachmentRepository;
 
@@ -88,6 +89,10 @@ public class AttachmentService implements CommonService<AttachmentEntity> {
       Integer id, ContentEntity.ContentEntityTable table) {
     log.info("Find content for attachment {}", id);
     return contentRepository.findContentByAttachmentId(id, table.name());
+  }
+
+  @Override
+  public void validate(AttachmentEntity entity, Action action) throws InvalidDataException {
   }
 
   @SuppressWarnings("unchecked")

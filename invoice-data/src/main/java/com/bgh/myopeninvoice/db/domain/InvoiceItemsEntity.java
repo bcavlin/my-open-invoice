@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.db.domain;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Data
 @Entity
 @Table(name = "INVOICE_ITEMS", schema = "INVOICE")
+@ToString(exclude = {"invoiceByInvoiceId"})
 public class InvoiceItemsEntity implements java.io.Serializable {
 
   @Id

@@ -1,7 +1,7 @@
 package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.Formula;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Data
 @Entity
@@ -106,22 +107,33 @@ public class InvoiceEntity implements java.io.Serializable {
   @OneToMany(mappedBy = "invoiceByInvoiceId")
   private Collection<ReportEntity> reportsByInvoiceId;
 
-  @Formula(
-      "(select sum(e.quantity * case when e.unit <> 'TOTAL' then rate else 1 end) "
-          + "from invoice.invoice_items e where e.invoice_id = invoice_id)")
-  private BigDecimal totalValue;
-
-  @Formula(
-      "(select sum(e.quantity * case when e.unit <> 'TOTAL' then rate else 1 end) * (tax_percent + 1) "
-          + "from invoice.invoice_items e where e.invoice_id = invoice_id)")
-  private BigDecimal totalValueWithTax;
-
   public BigDecimal getTotalValue() {
-    return totalValue == null ? BigDecimal.valueOf(0) : totalValue;
+    BigDecimal totalQuantity = null;
+
+    if (CollectionUtils.isNotEmpty(invoiceItemsByInvoiceId)) {
+      Function<InvoiceItemsEntity, BigDecimal> totalMapper =
+          (ii) ->
+              ii.getQuantity().compareTo(BigDecimal.valueOf(0)) != 0
+                  ? ii.getQuantity()
+                  : (ii.getTimesheetsByInvoiceItemId().stream()
+                      .map(TimesheetEntity::getHoursWorked)
+                      .reduce(BigDecimal.ZERO, BigDecimal::add));
+
+      totalQuantity =
+          invoiceItemsByInvoiceId.stream()
+              .map(totalMapper)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      if (!getRateUnit().equalsIgnoreCase("TOTAL")) {
+        totalQuantity = totalQuantity.multiply(getRate());
+      }
+    }
+
+    return totalQuantity == null ? BigDecimal.valueOf(0) : totalQuantity;
   }
 
   public BigDecimal getTotalValueWithTax() {
-    return totalValueWithTax == null ? BigDecimal.valueOf(0) : totalValueWithTax;
+    return getTotalValue().multiply(taxPercent.add(BigDecimal.valueOf(1)));
   }
 
   @Transient

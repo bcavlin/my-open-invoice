@@ -27,7 +27,7 @@
         <appender-ref ref="STDOUT"/>
     </appender>
 
-    <root level="INFO">
+    <root level="info">
         <appender-ref ref="ASYNC"/>
     </root>
 
