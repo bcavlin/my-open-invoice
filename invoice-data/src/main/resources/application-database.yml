@@ -7,12 +7,25 @@ spring:
       connection-test-query: SELECT 1 FROM DUAL
       minimum-idle: 1
       maximum-pool-size: 5
+    type: com.zaxxer.hikari.HikariDataSource
+    continue-on-error: true
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: America/Toronto
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+---
+spring:
+  profiles: dev
+  datasource:
     url: jdbc:p6spy:h2:tcp://localhost:1521/default;INIT=CREATE SCHEMA IF NOT EXISTS INVOICE
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     platform: h2
     username: sa
-    type: com.zaxxer.hikari.HikariDataSource
-    continue-on-error: true
   h2:
     console:
       enabled: false
@@ -20,8 +33,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-        jdbc:
-          time_zone: America/Toronto
-    hibernate:
-      ddl-auto: none
-    show-sql: false
+
+---
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/invoice?createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
+    username: root
+    password: letmein
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+

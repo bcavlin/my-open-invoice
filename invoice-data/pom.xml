@@ -11,14 +11,9 @@
     <artifactId>invoice-data</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -28,7 +23,6 @@
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
         </dependency>
-
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -57,6 +51,14 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>mysql</groupId>-->
+        <!--<artifactId>mysql-connector-java</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.h2database</groupId>-->
+        <!--<artifactId>h2</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -100,7 +102,10 @@
                 <dependency>
                     <groupId>p6spy</groupId>
                     <artifactId>p6spy</artifactId>
-                    <version>3.8.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
                 </dependency>
             </dependencies>
             <build>
@@ -112,11 +117,12 @@
                         <configuration>
                             <changeLogFile>target/classes/config/liquibase/invoice-master.xml</changeLogFile>
                             <driver>org.h2.Driver</driver>
-                            <url>jdbc:h2:tcp://localhost:1521/default;INIT=CREATE SCHEMA IF NOT EXISTS INVOICE</url>
+                            <url>jdbc:h2:tcp://localhost:1521/default;SCHEMA=INVOICE</url>
                             <username>sa</username>
-                            <password/>
-                            <defaultSchemaName>INVOICE</defaultSchemaName>
                             <emptyPassword>true</emptyPassword>
+                            <defaultSchemaName>invoice</defaultSchemaName>
+                            <changelogSchemaName>invoice</changelogSchemaName>
+                            <referenceDefaultSchemaName>invoice</referenceDefaultSchemaName>
                             <referenceUrl>
                                 hibernate:com.bgh.myopeninvoice.db.domain?
                                 dialect=org.hibernate.dialect.H2Dialect&amp;
@@ -126,28 +132,46 @@
                             <verbose>true</verbose>
                             <logging>debug</logging>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.javassist</groupId>
-                                <artifactId>javassist</artifactId>
-                                <version>${javassist.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.liquibase.ext</groupId>
-                                <artifactId>liquibase-hibernate5</artifactId>
-                                <version>${liquibase-hibernate5.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.springframework.boot</groupId>
-                                <artifactId>spring-boot-starter-data-jpa</artifactId>
-                                <version>${spring-boot.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>javax.validation</groupId>
-                                <artifactId>validation-api</artifactId>
-                                <version>${validation-api.version}</version>
-                            </dependency>
-                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <version>${liquibase-core.version}</version>
+                        <configuration>
+                            <changeLogFile>target/classes/config/liquibase/invoice-master.xml</changeLogFile>
+                            <driver>com.mysql.cj.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306/invoice</url>
+                            <username>root</username>
+                            <password>letmein</password>
+                            <emptyPassword>false</emptyPassword>
+                            <defaultSchemaName>invoice</defaultSchemaName>
+                            <changelogSchemaName>invoice</changelogSchemaName>
+                            <referenceDefaultSchemaName>invoice</referenceDefaultSchemaName>
+                            <referenceUrl>
+                                hibernate:com.bgh.myopeninvoice.db.domain?
+                                dialect=org.hibernate.dialect.MySQLDialect&amp;
+                                hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;
+                                hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+                            </referenceUrl>
+                            <verbose>true</verbose>
+                            <logging>debug</logging>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

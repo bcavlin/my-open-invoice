@@ -9,6 +9,11 @@
       "name": "app.jwtSecret",
       "type": "java.lang.String",
       "description": "Description for app.jwtSecret."
+    },
+    {
+      "name": "rss.links",
+      "type": "java.lang.String",
+      "description": "Links to RSS feeds."
     }
   ]
 }

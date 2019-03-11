@@ -3,6 +3,8 @@ package com.bgh.myopeninvoice.db.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
@@ -21,4 +23,12 @@ public class CurrencyEntity implements java.io.Serializable {
   @Basic
   @Column(name = "DESCRIPTION", nullable = false, length = 100)
   private String description;
+
+  @Basic
+  @Column(name = "RATE_TO_CAD", nullable = true, precision = 0)
+  private BigDecimal rateToCAD;
+
+  @Basic
+  @Column(name = "UPDATED_AT")
+  private ZonedDateTime updatedAt;
 }

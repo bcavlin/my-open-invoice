@@ -15,6 +15,9 @@ spring:
     date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
 jasypt:
   encryptor:
     password: mypassword
@@ -22,3 +25,12 @@ jasypt:
 app:
   jwtSecret: secret
   jwtExpirationInMs: 604800000
+rss:
+  links: >
+    https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/bsnsss-eng.xml,
+    https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/mdrm-eng.xml,
+    https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/t1gtrdy-eng.xml,
+    https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/chrts-eng.xml,
+    https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/xcsgsthst-eng.xml,
+    https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/pyrll-eng.xml,
+    https://www.canada.ca/en/revenue-agency.atom.xml

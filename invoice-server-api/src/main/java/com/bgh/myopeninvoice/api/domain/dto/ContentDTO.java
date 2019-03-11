@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -22,5 +22,6 @@ public class ContentDTO implements java.io.Serializable {
   @Setter(AccessLevel.NONE)
   private byte[] content;
 
-  @NotNull private LocalDateTime dateCreated;
+    @NotNull
+    private ZonedDateTime createdAt;
 }

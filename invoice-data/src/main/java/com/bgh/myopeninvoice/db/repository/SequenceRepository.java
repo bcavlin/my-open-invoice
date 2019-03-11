@@ -16,21 +16,25 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.domain.ContractEntity;
-import org.springframework.data.jpa.repository.Query;
+import com.bgh.myopeninvoice.db.domain.SequenceEntity;
+import com.querydsl.core.types.Predicate;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.LockModeType;
 import java.util.Optional;
 
-/** Created by bcavlin on 14/03/17. */
+/**
+ * Created by bcavlin on 14/03/17.
+ */
 @Repository
-public interface ContractRepository
-    extends PagingAndSortingRepository<ContractEntity, Integer>,
-        QuerydslPredicateExecutor<ContractEntity> {
+public interface SequenceRepository
+        extends CrudRepository<SequenceEntity, Integer>, QuerydslPredicateExecutor<SequenceEntity> {
 
-  @Query("select e from ContractEntity e where e.contractId=:id")
-  Optional<ContractEntity> findCustomById(@Param("id") Integer id);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Override
+    Optional<SequenceEntity> findOne(Predicate predicate);
+
 }
