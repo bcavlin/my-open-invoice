@@ -1,15 +1,19 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.db.domain.ContactEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
+import com.bgh.myopeninvoice.db.domain.QCompanyContactEntity;
 import com.bgh.myopeninvoice.db.domain.QContactEntity;
+import com.bgh.myopeninvoice.db.repository.CompanyContactRepository;
 import com.bgh.myopeninvoice.db.repository.ContactRepository;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +27,9 @@ import java.util.Optional;
 public class ContactCRUDService implements CommonCRUDService<ContactEntity> {
 
   @Autowired private ContactRepository contactRepository;
+
+    @Autowired
+    private CompanyContactRepository companyContactRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -102,10 +109,6 @@ public class ContactCRUDService implements CommonCRUDService<ContactEntity> {
     throw new org.apache.commons.lang.NotImplementedException();
   }
 
-  @Override
-  public void validate(ContactEntity entity, Action action) throws InvalidDataException {
-  }
-
   @SuppressWarnings("unchecked")
   @Transactional
   @Override
@@ -129,6 +132,32 @@ public class ContactCRUDService implements CommonCRUDService<ContactEntity> {
   public void delete(Integer id) {
     log.info("Deleting ContactDTO with id [{}]", id);
     Assert.notNull(id, "ID cannot be empty when deleting data");
+      ContactEntity entity = new ContactEntity();
+      entity.setContactId(id);
+      validate(entity, Action.D);
     contactRepository.deleteById(id);
   }
+
+    @Override
+    public void validate(ContactEntity entity, Action action) throws InvalidDataException {
+        List<String> errors = new ArrayList<>();
+        if (Action.D.equals(action)) {
+            validateCompanyContact(entity, errors);
+        }
+        if (CollectionUtils.isNotEmpty(errors)) {
+            throw new InvalidDataException("Validation exceptions detected", errors);
+        }
+    }
+
+    private void validateCompanyContact(ContactEntity entity, List<String> errors) {
+        BooleanBuilder b = new BooleanBuilder();
+        b.and(QCompanyContactEntity.companyContactEntity.contactId.eq(entity.getContactId()));
+        long count = companyContactRepository.count(b);
+        if (count > 0) {
+            errors.add(
+                    String.format(
+                            "Contact %d is used in other tables. Please clear contact from other tables first.",
+                            entity.getContactId()));
+        }
+    }
 }

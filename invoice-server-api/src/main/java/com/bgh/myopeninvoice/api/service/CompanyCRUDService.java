@@ -1,8 +1,8 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.db.domain.CompanyEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QCompanyEntity;
@@ -118,10 +118,6 @@ public class CompanyCRUDService implements CommonCRUDService<CompanyEntity> {
     return contentRepository.findContentByCompanyId(id, table.name());
   }
 
-    @Override
-    public void validate(CompanyEntity entity, Action action) throws InvalidDataException {
-    }
-
     @SuppressWarnings("unchecked")
   @Transactional
   @Override
@@ -138,7 +134,7 @@ public class CompanyCRUDService implements CommonCRUDService<CompanyEntity> {
         companyEntity.setContentByContentId(content);
       } else {
         log.debug("Updating content: {}", companyEntity.getContentByContentId().getContentId());
-        companyEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+          companyEntity.getContentByContentId().setCreatedAt(content.getCreatedAt());
         companyEntity.getContentByContentId().setContentTable(content.getContentTable());
         companyEntity.getContentByContentId().setContent(content.getContent());
         companyEntity.getContentByContentId().setFilename(content.getFilename());
@@ -175,4 +171,10 @@ public class CompanyCRUDService implements CommonCRUDService<CompanyEntity> {
     Assert.notNull(id, "ID cannot be empty when deleting data");
     companyRepository.deleteById(id);
   }
+
+    @Override
+    public void validate(CompanyEntity entity, Action action) throws InvalidDataException {
+        // TODO cannot be in contract
+        // TODO cannot be in contact
+    }
 }

@@ -6,9 +6,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Collection;
 
 @Data
@@ -45,11 +43,9 @@ public class ContractEntity implements java.io.Serializable {
   @Column(name = "CCY_ID", nullable = false)
   private Integer ccyId;
 
-//  @Temporal(TemporalType.DATE)
   @Column(name = "VALID_FROM", nullable = false)
   private LocalDate validFrom;
 
-  //  @Temporal(TemporalType.DATE)
   @Column(name = "VALID_TO")
   private LocalDate validTo;
 

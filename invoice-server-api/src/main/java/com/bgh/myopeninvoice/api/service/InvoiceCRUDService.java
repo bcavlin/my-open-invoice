@@ -1,17 +1,18 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
-import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.InvoiceEntity;
-import com.bgh.myopeninvoice.db.domain.QInvoiceEntity;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.db.domain.*;
 import com.bgh.myopeninvoice.db.repository.InvoiceRepository;
+import com.bgh.myopeninvoice.db.repository.SequenceRepository;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ import java.util.Optional;
 public class InvoiceCRUDService implements CommonCRUDService<InvoiceEntity> {
 
   @Autowired private InvoiceRepository invoiceRepository;
+
+  @Autowired
+  private SequenceRepository sequenceRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -40,7 +44,7 @@ public class InvoiceCRUDService implements CommonCRUDService<InvoiceEntity> {
                   .stringValue()
                   .containsIgnoreCase(searchParameters.getFilter()),
               QInvoiceEntity.invoiceEntity
-                  .createdDate
+                      .createdAt
                   .stringValue()
                   .containsIgnoreCase(searchParameters.getFilter()),
               QInvoiceEntity.invoiceEntity
@@ -156,8 +160,17 @@ public class InvoiceCRUDService implements CommonCRUDService<InvoiceEntity> {
     invoiceRepository.deleteById(id);
   }
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Integer getNextCounter() {
-    return invoiceRepository.getNextSequence();
+    BooleanBuilder b = new BooleanBuilder();
+    b.and(QSequenceEntity.sequenceEntity.sequenceName.eq("INVOICE"));
+    Optional<SequenceEntity> entity = sequenceRepository.findOne(b);
+    if (entity.isPresent()) {
+      SequenceEntity sequenceEntity = entity.get();
+      sequenceEntity.setSequenceValue(sequenceEntity.getSequenceValue() + 1);
+      SequenceEntity save = sequenceRepository.save(sequenceEntity);
+      return save.getSequenceValue();
+    }
+    return null;
   }
 }

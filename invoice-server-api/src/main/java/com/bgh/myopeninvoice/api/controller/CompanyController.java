@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -240,7 +240,7 @@ public class CompanyController extends AbstractController implements CompanyAPI 
     ContentEntity content = new ContentEntity();
     content.setContent(file.getBytes());
     content.setFilename(file.getOriginalFilename());
-    content.setDateCreated(LocalDateTime.now());
+    content.setCreatedAt(ZonedDateTime.now());
     content.setContentTable(ContentEntity.ContentEntityTable.COMPANY.name());
 
     List<CompanyEntity> entities = companyService.saveContent(id, content);

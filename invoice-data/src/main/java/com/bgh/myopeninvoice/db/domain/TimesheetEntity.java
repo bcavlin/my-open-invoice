@@ -1,19 +1,16 @@
 package com.bgh.myopeninvoice.db.domain;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 @Data
 @Entity
-@Table(name = "TIME_SHEET", schema = "INVOICE")
+@Table(name = "TIMESHEET", schema = "INVOICE")
 @ToString(exclude = {"invoiceItemsByInvoiceItemId"})
 public class TimesheetEntity implements java.io.Serializable {
 

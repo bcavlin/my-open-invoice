@@ -1,9 +1,7 @@
 package com.bgh.myopeninvoice.api.domain.dto;
 
-import com.bgh.myopeninvoice.api.domain.CustomJsonDateTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -34,7 +32,7 @@ public class InvoiceDTO implements java.io.Serializable {
   private Long fromToDays;
 
   @NotNull
-  private ZonedDateTime createdDate;
+  private ZonedDateTime createdAt;
 
   @NotNull private String title;
 

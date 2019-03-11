@@ -24,7 +24,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 
 /** Created by bcavlin on 14/03/17. */
@@ -32,9 +31,6 @@ import java.util.List;
 public interface InvoiceRepository
     extends PagingAndSortingRepository<InvoiceEntity, Integer>,
         QuerydslPredicateExecutor<InvoiceEntity> {
-
-  @Query(value = "SELECT INVOICE.INVOICE_COUNTER_SEQ.NEXTVAL FROM DUAL", nativeQuery = true)
-  Integer getNextSequence();
 
   @Query(
       value =

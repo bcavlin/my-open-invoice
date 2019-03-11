@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Data
@@ -22,8 +21,8 @@ public class ReportEntity implements java.io.Serializable {
   @Column(name = "INVOICE_ID", nullable = false)
   private Integer invoiceId;
 
-  @Column(name = "DATE_CREATED", nullable = false)
-  private ZonedDateTime dateCreated;
+    @Column(name = "CREATED_AT", nullable = false)
+    private ZonedDateTime createdAt;
 
   @Basic
   @Column(name = "REPORT_NAME", nullable = false, length = 255)

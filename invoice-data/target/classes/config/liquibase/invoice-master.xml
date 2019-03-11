@@ -5,10 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
 
     <changeSet id="1" author="bcavlin">
-
         <createTable tableName="user" schemaName="invoice">
             <column name="user_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -54,7 +54,7 @@
             <column name="role_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="assigned_date" type="timestamp" defaultValue="${now}">
+            <column name="assigned_at" type="timestamp" defaultValue="${now}">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -72,20 +72,24 @@
             <column name="content" type="blob">
                 <constraints nullable="true"/>
             </column>
-            <column name="date_created" type="timestamp" defaultValueDate="${now}">
+            <column name="created_at" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableSchemaName="invoice"
                                  baseTableName="user_role"
                                  constraintName="fk_user_role_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="user_id"
                                  referencedTableName="user"/>
 
         <addForeignKeyConstraint baseColumnNames="role_id"
                                  baseTableName="user_role"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_user_role_2"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="role_id"
                                  referencedTableName="role"/>
 
@@ -118,7 +122,9 @@
 
         <addForeignKeyConstraint baseColumnNames="content_id"
                                  baseTableName="company"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_company_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="content_id"
                                  referencedTableName="content"/>
 
@@ -146,7 +152,9 @@
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="contact"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_contact_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="user_id"
                                  referencedTableName="user"/>
 
@@ -163,13 +171,17 @@
 
         <addForeignKeyConstraint baseColumnNames="contact_id"
                                  baseTableName="company_contact"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_company_contact_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="contact_id"
                                  referencedTableName="contact"/>
 
         <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="company_contact"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_company_contact_2"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="company_id"
                                  referencedTableName="company"/>
 
@@ -233,31 +245,40 @@
 
         <addForeignKeyConstraint baseColumnNames="company_contact_id"
                                  baseTableName="contract"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_contract_cc"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="company_contact_id"
                                  referencedTableName="company_contact"/>
 
         <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="contract"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_contract_c"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="company_id"
                                  referencedTableName="company"/>
 
         <addForeignKeyConstraint baseColumnNames="company_id_subcontract"
                                  baseTableName="contract"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_contract_sc"
                                  referencedColumnNames="company_id"
                                  referencedTableName="company"/>
 
         <addForeignKeyConstraint baseColumnNames="ccy_id"
                                  baseTableName="contract"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_contract_ccy"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="ccy_id"
                                  referencedTableName="currency"/>
 
         <addForeignKeyConstraint baseColumnNames="content_id"
                                  baseTableName="contract"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_contract_cnt"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="content_id"
                                  referencedTableName="content"/>
 
@@ -292,7 +313,7 @@
             <column name="to_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+            <column name="created_at" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
             <column name="title" type="varchar(255)" defaultValue="invoice">
@@ -319,19 +340,25 @@
 
         <addForeignKeyConstraint baseColumnNames="company_contact_from"
                                  baseTableName="invoice"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_invoice_ccfrom"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="company_contact_id"
                                  referencedTableName="company_contact"/>
 
         <addForeignKeyConstraint baseColumnNames="ccy_id"
                                  baseTableName="invoice"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_invoice_ccy"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="ccy_id"
                                  referencedTableName="currency"/>
 
         <addForeignKeyConstraint baseColumnNames="company_contract_to"
                                  baseTableName="invoice"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_invoice_ccto"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="contract_id"
                                  referencedTableName="contract"/>
     </changeSet>
@@ -352,13 +379,17 @@
 
         <addForeignKeyConstraint baseColumnNames="invoice_id"
                                  baseTableName="attachment"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_attachment_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="invoice_id"
                                  referencedTableName="invoice"/>
 
         <addForeignKeyConstraint baseColumnNames="content_id"
                                  baseTableName="attachment"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_attachment_2"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="content_id"
                                  referencedTableName="content"/>
 
@@ -384,7 +415,9 @@
 
         <addForeignKeyConstraint baseColumnNames="invoice_id"
                                  baseTableName="invoice_items"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_invoice_items_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="invoice_id"
                                  referencedTableName="invoice"/>
 
@@ -405,8 +438,10 @@
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="invoice_item_id"
-                                 baseTableName="time_sheet"
-                                 constraintName="fk_time_sheet_1"
+                                 baseTableName="timesheet"
+                                 baseTableSchemaName="invoice"
+                                 constraintName="fk_timesheet_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="invoice_item_id"
                                  referencedTableName="invoice_items"/>
 
@@ -420,7 +455,7 @@
             <column name="content_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="date_created" type="timestamp" defaultValueDate="${now}">
+            <column name="created_at" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
             <column name="report_name" type="varchar(255)">
@@ -430,12 +465,16 @@
 
         <addForeignKeyConstraint baseColumnNames="invoice_id"
                                  baseTableName="reports"
+                                 baseTableSchemaName="invoice"
                                  constraintName="fk_reports_1"
+                                 referencedTableSchemaName="invoice"
                                  referencedColumnNames="invoice_id"
                                  referencedTableName="invoice"/>
 
         <addForeignKeyConstraint baseColumnNames="content_id"
                                  baseTableName="reports"
+                                 baseTableSchemaName="invoice"
+                                 referencedTableSchemaName="invoice"
                                  constraintName="fk_reports_2"
                                  referencedColumnNames="content_id"
                                  referencedTableName="content"/>
@@ -443,15 +482,26 @@
 
     </changeSet>
 
-    <changeSet id="4" author="bcavlin">
-        <createSequence sequenceName="invoice_counter_seq"
-                        schemaName="invoice"
-                        startValue="1"/>
+    <changeSet id="4" author="bcavlin" labels="sequences">
+        <createTable tableName="sequence" schemaName="invoice">
+            <column name="sequence_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sequence_value" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence_name" type="varchar(10)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
 
-        <createSequence sequenceName="contract_counter_seq"
-                        schemaName="invoice"
-                        startValue="4"
-                        incrementBy="2"/>
+        <insert tableName="sequence" schemaName="invoice">
+            <column name="sequence_name" type="varchar(10)" value="INVOICE"/>
+            <column name="sequence_value" type="int" valueNumeric="0"/>
+        </insert>
     </changeSet>
 
     <changeSet id="5" author="bcavlin">
@@ -460,7 +510,11 @@
                   quotchar="'"
                   separator=","
                   file="config/liquibase/user.csv"
-                  encoding="UTF-8"/>
+                  encoding="UTF-8">
+            <column name="enabled" type="boolean"/>
+        </loadData>
+    </changeSet>
+    <changeSet id="6" author="bcavlin">
 
         <loadData tableName="role"
                   schemaName="invoice"
@@ -468,6 +522,9 @@
                   separator=","
                   file="config/liquibase/role.csv"
                   encoding="UTF-8"/>
+    </changeSet>
+
+    <changeSet id="7" author="bcavlin">
 
         <loadData tableName="user_role"
                   schemaName="invoice"
@@ -475,34 +532,46 @@
                   separator=","
                   file="config/liquibase/user_role.csv"
                   encoding="UTF-8"/>
+    </changeSet>
 
+    <changeSet id="8" author="bcavlin">
         <loadData tableName="currency"
                   schemaName="invoice"
                   quotchar="'"
                   separator=","
                   file="config/liquibase/currency.csv"
                   encoding="UTF-8"/>
+    </changeSet>
 
+    <changeSet id="9" author="bcavlin">
         <loadData tableName="tax"
                   schemaName="invoice"
                   quotchar="'"
                   separator=","
                   file="config/liquibase/tax.csv"
                   encoding="UTF-8"/>
+    </changeSet>
 
+    <changeSet id="10" author="bcavlin">
         <loadData tableName="contact"
                   schemaName="invoice"
                   quotchar="'"
                   separator=","
                   file="config/liquibase/contact.csv"
-                  encoding="UTF-8"/>
+                  encoding="UTF-8">
+            <column name="user_id" type="numeric"/>
+        </loadData>
 
         <loadData tableName="company"
                   schemaName="invoice"
                   quotchar="'"
                   separator=","
                   file="config/liquibase/company.csv"
-                  encoding="UTF-8"/>
+                  encoding="UTF-8">
+            <column name="owned_by_me" type="boolean"/>
+        </loadData>
+
     </changeSet>
+
 
 </databaseChangeLog>

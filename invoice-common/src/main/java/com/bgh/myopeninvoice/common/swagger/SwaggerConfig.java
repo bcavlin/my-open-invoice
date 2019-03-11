@@ -3,6 +3,7 @@ package com.bgh.myopeninvoice.common.swagger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -15,6 +16,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @Slf4j
 @EnableSwagger2
 @Configuration
+@Profile("!prod")
 public class SwaggerConfig {
 
   @Bean

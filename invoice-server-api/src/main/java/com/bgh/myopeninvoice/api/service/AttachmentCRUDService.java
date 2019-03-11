@@ -1,8 +1,8 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.repository.AttachmentRepository;
@@ -110,7 +110,7 @@ public class AttachmentCRUDService implements CommonCRUDService<AttachmentEntity
         attachmentEntity.setContentByContentId(content);
       } else {
         log.debug("Updating content: {}", attachmentEntity.getContentByContentId().getContentId());
-        attachmentEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+          attachmentEntity.getContentByContentId().setCreatedAt(content.getCreatedAt());
         attachmentEntity.getContentByContentId().setContentTable(content.getContentTable());
         attachmentEntity.getContentByContentId().setContent(content.getContent());
         attachmentEntity.getContentByContentId().setFilename(content.getFilename());

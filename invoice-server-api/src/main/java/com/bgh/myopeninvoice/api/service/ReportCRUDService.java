@@ -1,8 +1,8 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.api.util.Utils;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QReportEntity;
 import com.bgh.myopeninvoice.db.domain.ReportEntity;
@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -45,7 +44,7 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
           .andAnyOf(
               QReportEntity.reportEntity.reportName.contains(searchParameters.getFilter()),
               QReportEntity.reportEntity
-                  .dateCreated
+                      .createdAt
                   .stringValue()
                   .contains(searchParameters.getFilter()));
     }
@@ -131,7 +130,7 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
             reportsEntity.setContentByContentId(content);
           } else {
             log.debug("Updating content: {}", reportsEntity.getContentByContentId().getContentId());
-            reportsEntity.getContentByContentId().setDateCreated(content.getDateCreated());
+              reportsEntity.getContentByContentId().setCreatedAt(content.getCreatedAt());
             reportsEntity.getContentByContentId().setContentTable(content.getContentTable());
             reportsEntity.getContentByContentId().setContent(content.getContent());
             reportsEntity.getContentByContentId().setFilename(content.getFilename());
@@ -165,11 +164,11 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
     ContentEntity contentEntity = new ContentEntity();
     contentEntity.setContent(reportContent.toByteArray());
     contentEntity.setContentTable(ContentEntity.ContentEntityTable.REPORTS.toString());
-    contentEntity.setDateCreated(LocalDateTime.now());
+      contentEntity.setCreatedAt(ZonedDateTime.now());
     contentEntity.setFilename(entity.getReportName() + ".pdf");
 
     entity.setContentByContentId(contentEntity);
-    entity.setDateCreated(ZonedDateTime.now());
+      entity.setCreatedAt(ZonedDateTime.now());
 
     ReportEntity saved = reportsRepository.save(entity);
     log.info("Saved entity: {}", entity);

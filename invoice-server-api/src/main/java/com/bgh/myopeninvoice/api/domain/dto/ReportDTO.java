@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +19,7 @@ public class ReportDTO implements java.io.Serializable {
   @JsonIgnoreProperties("content")
   private ContentDTO content;
 
-  private ZonedDateTime dateCreated;
+    private ZonedDateTime createdAt;
 
   @NotNull
   private String reportName;

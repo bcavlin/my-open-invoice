@@ -1,2 +1,2 @@
-USER_ID,USERNAME,PASSWORD_HASH                                               ,FIRST_NAME,LAST_NAME,ENABLED,EMAIL
-1      ,testuser,$2a$04$9zstEuOp8vOahWWhuop2M.m8BDBYe267W5PLs8On8Feod6qQfKUZ6,Test      ,User     ,true   ,test@test.com
+USER_ID,USERNAME,PASSWORD_HASH,FIRST_NAME,LAST_NAME,ENABLED,EMAIL
+1,testuser,$2a$04$9zstEuOp8vOahWWhuop2M.m8BDBYe267W5PLs8On8Feod6qQfKUZ6,Test,User,true,test@test.com

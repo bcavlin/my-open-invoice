@@ -38,8 +38,8 @@ public class InvoiceEntity implements java.io.Serializable {
   @Column(name = "TO_DATE", nullable = false)
   private LocalDate toDate;
 
-  @Column(name = "CREATED_DATE", nullable = false)
-  private ZonedDateTime createdDate;
+    @Column(name = "CREATED_AT", nullable = false)
+    private ZonedDateTime createdAt;
 
   @Basic
   @Column(name = "TITLE", nullable = false)

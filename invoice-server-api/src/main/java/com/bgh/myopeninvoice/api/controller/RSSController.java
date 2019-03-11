@@ -7,6 +7,7 @@ import com.bgh.myopeninvoice.common.domain.OperationResponse;
 import com.rometools.rome.feed.synd.SyndFeed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,15 +21,20 @@ public class RSSController extends AbstractController implements RSSAPI {
 
   @Autowired private RSSService rssService;
 
+  @Value("${rss.links}")
+  private String[] urls;
+
+
   @Override
   public ResponseEntity<DefaultResponse<SyndFeed>> getRSSFeed() {
     List<SyndFeed> result = new ArrayList<>();
-    long count;
 
-    result.add(rssService.getBSNSSSFeed());
-    result.add(rssService.getMDRMFeed());
+    for (String s : urls) {
+      result.add(rssService.getRSSFeed(s));
+    }
 
     DefaultResponse<SyndFeed> defaultResponse = new DefaultResponse<>(SyndFeed.class);
+    defaultResponse.setCount((long) result.size());
     defaultResponse.setDetails(result);
     defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
