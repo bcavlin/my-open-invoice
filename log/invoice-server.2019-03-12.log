@@ -1,0 +1,605 @@
+2019-03-12 11:10:56,644 ERROR [http-nio-8080-exec-8] c.b.m.a.s.JwtTokenProvider: Expired JWT token
+2019-03-12 11:10:56,659 ERROR [http-nio-8080-exec-7] c.b.m.a.s.JwtTokenProvider: Expired JWT token
+2019-03-12 11:10:56,683 ERROR [http-nio-8080-exec-8] c.b.m.a.s.JwtAuthenticationEntryPoint: Responding with unauthorized error. Message - Full authentication is required to access this resource
+2019-03-12 11:10:56,684 ERROR [http-nio-8080-exec-7] c.b.m.a.s.JwtAuthenticationEntryPoint: Responding with unauthorized error. Message - Full authentication is required to access this resource
+2019-03-12 11:12:45,466 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.login
+2019-03-12 11:12:45,472 INFO  [http-nio-8080-exec-1] c.b.m.a.c.UserController: Logging in user: testuser
+2019-03-12 11:12:45,665 INFO  [http-nio-8080-exec-1] c.b.m.d.s.s.CustomUserDetailsService: Verifying username [testuser]
+2019-03-12 11:12:45,673 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:12:45,673 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:12:45,711 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.login - 0.245s
+2019-03-12 11:12:45,756 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:12:45,756 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:12:45,763 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.getUserRoles
+2019-03-12 11:12:46,463 DEBUG [http-nio-8080-exec-3] c.b.m.a.c.UserController: Returning: <200 OK,DefaultResponse(type=RoleDTO, count=2, details=[RoleDTO(roleId=1, roleName=ROLE_ADMIN), RoleDTO(roleId=2, roleName=ROLE_USER)]),{}>
+2019-03-12 11:12:46,463 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.getUserRoles - 0.7s
+2019-03-12 11:12:47,290 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:12:47,290 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:12:47,294 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics
+2019-03-12 11:12:47,298 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:12:47,298 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:12:47,302 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed
+2019-03-12 11:12:47,311 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics - 0.017s
+2019-03-12 11:12:48,386 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed - 1.084s
+2019-03-12 11:13:47,125 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:13:47,125 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:13:47,127 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:13:47,128 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:13:47,129 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed
+2019-03-12 11:13:47,130 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed - 0.001s
+2019-03-12 11:13:47,131 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics
+2019-03-12 11:13:47,146 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics - 0.015s
+2019-03-12 11:14:16,980 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:14:16,980 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:14:16,981 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:14:16,981 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:14:16,983 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics
+2019-03-12 11:14:16,984 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed
+2019-03-12 11:14:16,984 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed - 0.0s
+2019-03-12 11:14:16,998 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics - 0.015s
+2019-03-12 11:17:25,100 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:17:25,100 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:17:25,105 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-12 11:17:25,129 INFO  [http-nio-8080-exec-3] c.b.m.a.s.ContactCRUDService: count
+2019-03-12 11:17:25,200 INFO  [http-nio-8080-exec-3] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-12 11:17:25,577 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.472s
+2019-03-12 11:18:09,859 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:18:09,859 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:18:09,861 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-12 11:18:09,861 INFO  [http-nio-8080-exec-6] c.b.m.a.s.ContactCRUDService: count
+2019-03-12 11:18:09,864 INFO  [http-nio-8080-exec-6] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-12 11:18:09,949 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.088s
+2019-03-12 11:20:22,851 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:20:22,851 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:20:22,855 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.delete
+2019-03-12 11:20:22,856 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContactCRUDService: Deleting ContactDTO with id [3]
+2019-03-12 11:20:22,865 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.delete - 0.01s
+2019-03-12 11:20:22,869 ERROR [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exception in com.bgh.myopeninvoice.api.controller.ContactController.delete() with cause = 'NULL' and exception = 'Validation exceptions detected'
+com.bgh.myopeninvoice.common.exception.InvalidDataException: Validation exceptions detected
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService.validate(ContactCRUDService.java:148)
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService.delete(ContactCRUDService.java:137)
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService$$FastClassBySpringCGLIB$$62585233.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:294)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService$$EnhancerBySpringCGLIB$$91eb7099.delete(<generated>)
+	at com.bgh.myopeninvoice.api.controller.ContactController.delete(ContactController.java:150)
+	at com.bgh.myopeninvoice.api.controller.ContactController$$FastClassBySpringCGLIB$$f42675ed.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)
+	at com.bgh.myopeninvoice.common.aop.logging.LoggingAspect.logAround(LoggingAspect.java:95)
+	at jdk.internal.reflect.GeneratedMethodAccessor548.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:62)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:92)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
+	at com.bgh.myopeninvoice.api.controller.ContactController$$EnhancerBySpringCGLIB$$1815bcfb.delete(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.doDelete(FrameworkServlet.java:899)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:667)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter.doFilterInternal(HttpTraceFilter.java:90)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:320)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:127)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:91)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:137)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:111)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:170)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at com.bgh.myopeninvoice.api.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:66)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.filterAndRecordMetrics(WebMvcMetricsFilter.java:155)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.filterAndRecordMetrics(WebMvcMetricsFilter.java:123)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:108)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+2019-03-12 11:20:22,873 ERROR [http-nio-8080-exec-8] c.b.m.c.u.Utils: com.bgh.myopeninvoice.common.exception.InvalidDataException: Validation exceptions detected
+com.bgh.myopeninvoice.common.exception.InvalidDataException: Validation exceptions detected
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService.validate(ContactCRUDService.java:148)
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService.delete(ContactCRUDService.java:137)
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService$$FastClassBySpringCGLIB$$62585233.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:294)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
+	at com.bgh.myopeninvoice.api.service.ContactCRUDService$$EnhancerBySpringCGLIB$$91eb7099.delete(<generated>)
+	at com.bgh.myopeninvoice.api.controller.ContactController.delete(ContactController.java:150)
+	at com.bgh.myopeninvoice.api.controller.ContactController$$FastClassBySpringCGLIB$$f42675ed.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)
+	at com.bgh.myopeninvoice.common.aop.logging.LoggingAspect.logAround(LoggingAspect.java:95)
+	at jdk.internal.reflect.GeneratedMethodAccessor548.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:62)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:92)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
+	at com.bgh.myopeninvoice.api.controller.ContactController$$EnhancerBySpringCGLIB$$1815bcfb.delete(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.doDelete(FrameworkServlet.java:899)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:667)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter.doFilterInternal(HttpTraceFilter.java:90)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:320)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:127)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:91)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:137)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:111)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:170)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at com.bgh.myopeninvoice.api.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:66)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.filterAndRecordMetrics(WebMvcMetricsFilter.java:155)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.filterAndRecordMetrics(WebMvcMetricsFilter.java:123)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:108)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+2019-03-12 11:20:22,875 WARN  [http-nio-8080-exec-8] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver: Resolved [com.bgh.myopeninvoice.common.exception.InvalidDataException: Validation exceptions detected]
+2019-03-12 11:20:32,822 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:20:32,823 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:20:32,827 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.getUsers
+2019-03-12 11:20:33,282 DEBUG [http-nio-8080-exec-10] c.b.m.a.c.UserController: Returning: <200 OK,DefaultResponse(type=UserDTO, count=1, details=[UserDTO(userId=1, username=testuser, passwordHash=null, firstName=Test, lastName=User, enabled=true, email=test@test.com, createdAt=2019-03-11T07:50:36.061Z, updatedAt=2019-03-11T07:50:36.061Z, createdBy=null, updatedBy=null, userRoles=null)]),{}>
+2019-03-12 11:20:33,284 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.getUsers - 0.457s
+2019-03-12 11:20:45,218 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:20:45,218 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:20:45,225 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.getUsers
+2019-03-12 11:20:45,493 DEBUG [http-nio-8080-exec-2] c.b.m.a.c.UserController: Returning: <200 OK,DefaultResponse(type=UserDTO, count=1, details=[UserDTO(userId=1, username=testuser, passwordHash=null, firstName=Test, lastName=User, enabled=true, email=test@test.com, createdAt=2019-03-11T07:50:36.061Z, updatedAt=2019-03-11T07:50:36.061Z, createdBy=null, updatedBy=null, userRoles=null)]),{}>
+2019-03-12 11:20:45,494 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.getUsers - 0.269s
+2019-03-12 11:20:53,291 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:20:53,291 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:20:53,312 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.update
+2019-03-12 11:20:53,327 INFO  [http-nio-8080-exec-4] c.b.m.a.s.ContactCRUDService: Saving entity
+2019-03-12 11:20:53,343 INFO  [http-nio-8080-exec-4] c.b.m.a.s.ContactCRUDService: Saved entity: ContactEntity(contactId=3, firstName=Test 3, lastName=Contact 3, middleName=null, email=test@email.com, address1=Addr3, phone1=, userId=null)
+2019-03-12 11:20:53,802 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.update - 0.49s
+2019-03-12 11:20:53,857 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:20:53,858 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:20:53,862 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-12 11:20:53,863 INFO  [http-nio-8080-exec-3] c.b.m.a.s.ContactCRUDService: count
+2019-03-12 11:20:53,870 INFO  [http-nio-8080-exec-3] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-12 11:20:53,976 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.114s
+2019-03-12 11:21:16,848 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:21:16,848 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:21:16,853 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.getUsers
+2019-03-12 11:21:17,097 DEBUG [http-nio-8080-exec-6] c.b.m.a.c.UserController: Returning: <200 OK,DefaultResponse(type=UserDTO, count=1, details=[UserDTO(userId=1, username=testuser, passwordHash=null, firstName=Test, lastName=User, enabled=true, email=test@test.com, createdAt=2019-03-11T07:50:36.061Z, updatedAt=2019-03-11T07:50:36.061Z, createdBy=null, updatedBy=null, userRoles=null)]),{}>
+2019-03-12 11:21:17,098 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.getUsers - 0.245s
+2019-03-12 11:21:20,592 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:21:20,593 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:21:20,600 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.update
+2019-03-12 11:21:20,630 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContactCRUDService: Saving entity
+2019-03-12 11:21:20,633 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContactCRUDService: Saved entity: ContactEntity(contactId=3, firstName=Test 3, lastName=Contact 3, middleName=null, email=test3@email.com, address1=Addr3, phone1=, userId=null)
+2019-03-12 11:21:20,673 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.update - 0.073s
+2019-03-12 11:21:20,732 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:21:20,733 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:21:20,745 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-12 11:21:20,745 INFO  [http-nio-8080-exec-7] c.b.m.a.s.ContactCRUDService: count
+2019-03-12 11:21:20,753 INFO  [http-nio-8080-exec-7] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-12 11:21:20,924 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.179s
+2019-03-12 11:25:59,865 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:25:59,865 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:25:59,865 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:25:59,865 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:25:59,870 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-12 11:25:59,870 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findAll
+2019-03-12 11:25:59,905 INFO  [http-nio-8080-exec-2] c.b.m.a.s.CompanyCRUDService: count
+2019-03-12 11:25:59,907 INFO  [http-nio-8080-exec-1] c.b.m.a.s.ContractCRUDService: count
+2019-03-12 11:25:59,913 INFO  [http-nio-8080-exec-2] c.b.m.a.s.CompanyCRUDService: findAll
+2019-03-12 11:25:59,913 INFO  [http-nio-8080-exec-1] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-12 11:26:00,168 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findAll - 0.298s
+2019-03-12 11:26:00,215 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.345s
+2019-03-12 11:35:27,666 WARN  [http-nio-8080-exec-5] c.z.h.p.PoolBase: HikariPool-1 - Failed to validate connection com.p6spy.engine.wrapper.ConnectionWrapper@55196f11 (Connection is broken: "session closed" [90067-193])
+2019-03-12 11:35:27,672 WARN  [http-nio-8080-exec-5] c.z.h.p.PoolBase: HikariPool-1 - Failed to validate connection com.p6spy.engine.wrapper.ConnectionWrapper@77ee61eb (Connection is broken: "session closed" [90067-193])
+2019-03-12 11:35:57,667 WARN  [http-nio-8080-exec-5] o.h.e.j.s.SqlExceptionHelper: SQL Error: 0, SQLState: 90067
+2019-03-12 11:35:57,667 ERROR [http-nio-8080-exec-5] o.h.e.j.s.SqlExceptionHelper: HikariPool-1 - Connection is not available, request timed out after 30001ms.
+2019-03-12 11:35:57,667 WARN  [http-nio-8080-exec-5] o.h.e.j.s.SqlExceptionHelper: SQL Error: 90067, SQLState: 90067
+2019-03-12 11:35:57,668 ERROR [http-nio-8080-exec-5] o.h.e.j.s.SqlExceptionHelper: Connection is broken: "java.net.ConnectException: Connection refused (Connection refused): localhost:1521" [90067-193]
+2019-03-12 11:35:57,676 ERROR [http-nio-8080-exec-5] c.b.m.a.f.JwtAuthenticationFilter: Could not set user authentication in security context
+org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is org.hibernate.exception.JDBCConnectionException: Unable to acquire JDBC Connection
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:450)
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:378)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:474)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:289)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
+	at com.bgh.myopeninvoice.db.service.security.CustomUserDetailsService$$EnhancerBySpringCGLIB$$41f460a9.loadUserById(<generated>)
+	at com.bgh.myopeninvoice.api.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:39)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:66)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.filterAndRecordMetrics(WebMvcMetricsFilter.java:155)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.filterAndRecordMetrics(WebMvcMetricsFilter.java:123)
+	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:108)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: org.hibernate.exception.JDBCConnectionException: Unable to acquire JDBC Connection
+	at org.hibernate.exception.internal.SQLExceptionTypeDelegate.convert(SQLExceptionTypeDelegate.java:48)
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:111)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:97)
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:109)
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:254)
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.begin(LogicalConnectionManagedImpl.java:262)
+	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.begin(JdbcResourceLocalTransactionCoordinatorImpl.java:214)
+	at org.hibernate.engine.transaction.internal.TransactionImpl.begin(TransactionImpl.java:56)
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:162)
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:400)
+	... 67 common frames omitted
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30001ms.
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:669)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:183)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:148)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:128)
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122)
+	at org.hibernate.internal.NonContextualJdbcConnectionAccess.obtainConnection(NonContextualJdbcConnectionAccess.java:35)
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:106)
+	... 74 common frames omitted
+Caused by: org.h2.jdbc.JdbcSQLException: Connection is broken: "java.net.ConnectException: Connection refused (Connection refused): localhost:1521" [90067-193]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:345)
+	at org.h2.message.DbException.get(DbException.java:168)
+	at org.h2.engine.SessionRemote.connectServer(SessionRemote.java:452)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:329)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:115)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:99)
+	at org.h2.Driver.connect(Driver.java:69)
+	at com.p6spy.engine.spy.P6SpyDriver.connect(P6SpyDriver.java:102)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:117)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:123)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:365)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:194)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:460)
+	at com.zaxxer.hikari.pool.HikariPool.access$100(HikariPool.java:71)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:699)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:685)
+	at java.base/java.util.concurrent.FutureTask.run$$$capture(FutureTask.java:264)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	... 1 common frames omitted
+Caused by: java.net.ConnectException: Connection refused (Connection refused)
+	at java.base/java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:400)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:243)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:225)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:402)
+	at java.base/java.net.Socket.connect(Socket.java:591)
+	at org.h2.util.NetUtils.createSocket(NetUtils.java:122)
+	at org.h2.util.NetUtils.createSocket(NetUtils.java:102)
+	at org.h2.engine.SessionRemote.initTransfer(SessionRemote.java:114)
+	at org.h2.engine.SessionRemote.connectServer(SessionRemote.java:448)
+	... 18 common frames omitted
+2019-03-12 11:35:57,678 ERROR [http-nio-8080-exec-5] c.b.m.a.s.JwtAuthenticationEntryPoint: Responding with unauthorized error. Message - Full authentication is required to access this resource
+2019-03-12 11:38:01,946 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.login
+2019-03-12 11:38:01,946 INFO  [http-nio-8080-exec-9] c.b.m.a.c.UserController: Logging in user: testuser
+2019-03-12 11:38:01,957 INFO  [http-nio-8080-exec-9] c.b.m.d.s.s.CustomUserDetailsService: Verifying username [testuser]
+2019-03-12 11:38:01,983 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:01,984 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:02,021 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.login - 0.075s
+2019-03-12 11:38:02,087 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:02,087 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:02,096 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.UserController.getUserRoles
+2019-03-12 11:38:02,493 DEBUG [http-nio-8080-exec-2] c.b.m.a.c.UserController: Returning: <200 OK,DefaultResponse(type=RoleDTO, count=2, details=[RoleDTO(roleId=1, roleName=ROLE_ADMIN), RoleDTO(roleId=2, roleName=ROLE_USER)]),{}>
+2019-03-12 11:38:02,493 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.UserController.getUserRoles - 0.397s
+2019-03-12 11:38:03,148 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:03,148 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:03,157 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:03,157 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:03,158 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics
+2019-03-12 11:38:03,160 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed
+2019-03-12 11:38:03,160 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed - 0.0s
+2019-03-12 11:38:03,214 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics - 0.056s
+2019-03-12 11:38:05,271 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:05,271 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:05,274 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-12 11:38:05,289 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-12 11:38:05,297 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-12 11:38:05,641 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.367s
+2019-03-12 11:38:07,765 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:07,765 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:07,770 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll
+2019-03-12 11:38:07,788 INFO  [http-nio-8080-exec-8] c.b.m.a.s.InvoiceItemsCRUDService: count
+2019-03-12 11:38:07,796 INFO  [http-nio-8080-exec-8] c.b.m.a.s.InvoiceItemsCRUDService: findAll
+2019-03-12 11:38:08,006 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll - 0.236s
+2019-03-12 11:38:10,239 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:38:10,239 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:38:10,247 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll
+2019-03-12 11:38:10,277 INFO  [http-nio-8080-exec-10] c.b.m.a.s.TimesheetCRUDService: count
+2019-03-12 11:38:10,294 INFO  [http-nio-8080-exec-10] c.b.m.a.s.TimesheetCRUDService: findAll
+2019-03-12 11:38:10,592 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll - 0.345s
+2019-03-12 11:39:41,079 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:39:41,079 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:39:41,082 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-12 11:39:41,083 INFO  [http-nio-8080-exec-4] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-12 11:39:41,087 INFO  [http-nio-8080-exec-4] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-12 11:39:41,194 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.112s
+2019-03-12 11:40:44,107 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:40:44,108 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:40:44,112 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-12 11:40:44,112 INFO  [http-nio-8080-exec-3] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-12 11:40:44,116 INFO  [http-nio-8080-exec-3] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-12 11:40:44,230 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.118s
+2019-03-12 11:41:07,216 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 11:41:07,216 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 11:41:07,220 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-12 11:41:07,220 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-12 11:41:07,223 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-12 11:41:07,333 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.113s
+2019-03-12 12:20:41,057 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 12:20:41,058 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 12:20:41,069 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-12 12:20:41,069 INFO  [http-nio-8080-exec-9] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-12 12:20:41,074 INFO  [http-nio-8080-exec-9] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-12 12:20:41,199 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.13s
+2019-03-12 12:20:47,511 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 12:20:47,511 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 12:20:47,515 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll
+2019-03-12 12:20:47,516 INFO  [http-nio-8080-exec-2] c.b.m.a.s.InvoiceItemsCRUDService: count
+2019-03-12 12:20:47,520 INFO  [http-nio-8080-exec-2] c.b.m.a.s.InvoiceItemsCRUDService: findAll
+2019-03-12 12:20:47,572 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll - 0.057s
+2019-03-12 12:20:52,563 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 12:20:52,564 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 12:20:52,569 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll
+2019-03-12 12:20:52,570 INFO  [http-nio-8080-exec-4] c.b.m.a.s.TimesheetCRUDService: count
+2019-03-12 12:20:52,576 INFO  [http-nio-8080-exec-4] c.b.m.a.s.TimesheetCRUDService: findAll
+2019-03-12 12:20:52,647 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll - 0.077s
+2019-03-12 12:21:37,964 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 12:21:37,964 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 12:21:37,967 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-12 12:21:37,967 INFO  [http-nio-8080-exec-6] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-12 12:21:37,970 INFO  [http-nio-8080-exec-6] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-12 12:21:38,067 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.1s
+2019-03-12 12:22:51,966 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 12:22:51,966 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 12:22:51,974 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll
+2019-03-12 12:22:51,976 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceItemsCRUDService: count
+2019-03-12 12:22:51,987 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceItemsCRUDService: findAll
+2019-03-12 12:22:52,077 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll - 0.103s
+2019-03-12 12:22:53,475 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-12 12:22:53,475 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-12 12:22:53,480 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll
+2019-03-12 12:22:53,480 INFO  [http-nio-8080-exec-7] c.b.m.a.s.TimesheetCRUDService: count
+2019-03-12 12:22:53,486 INFO  [http-nio-8080-exec-7] c.b.m.a.s.TimesheetCRUDService: findAll
+2019-03-12 12:22:53,560 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll - 0.08s

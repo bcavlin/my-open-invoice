@@ -1,0 +1,240 @@
+2019-03-14 21:52:09,188 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:09,193 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:09,197 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed
+2019-03-14 21:52:09,200 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:09,200 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:09,204 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics
+2019-03-14 21:52:09,236 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics - 0.032s
+2019-03-14 21:52:10,802 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed - 1.605s
+2019-03-14 21:52:17,863 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:17,863 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:17,867 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.TaxController.findAll
+2019-03-14 21:52:17,880 INFO  [http-nio-8080-exec-6] c.b.m.a.s.TaxCRUDService: count
+2019-03-14 21:52:17,887 INFO  [http-nio-8080-exec-6] c.b.m.a.s.TaxCRUDService: findAll
+2019-03-14 21:52:18,265 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.TaxController.findAll - 0.398s
+2019-03-14 21:52:22,439 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:22,439 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:22,443 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-14 21:52:22,443 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContactCRUDService: count
+2019-03-14 21:52:22,446 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-14 21:52:22,521 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.079s
+2019-03-14 21:52:27,082 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:27,082 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:27,082 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:27,083 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:27,087 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findAll
+2019-03-14 21:52:27,087 INFO  [http-nio-8080-exec-10] c.b.m.a.s.CompanyCRUDService: count
+2019-03-14 21:52:27,087 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:52:27,088 INFO  [http-nio-8080-exec-9] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:52:27,091 INFO  [http-nio-8080-exec-10] c.b.m.a.s.CompanyCRUDService: findAll
+2019-03-14 21:52:27,092 INFO  [http-nio-8080-exec-9] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:52:27,155 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findAll - 0.068s
+2019-03-14 21:52:27,170 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.083s
+2019-03-14 21:52:37,336 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:37,336 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:37,339 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:52:37,341 INFO  [http-nio-8080-exec-2] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:52:37,346 INFO  [http-nio-8080-exec-2] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:52:37,351 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.012s
+2019-03-14 21:52:39,573 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:39,574 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:39,578 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:52:39,579 INFO  [http-nio-8080-exec-6] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:52:39,585 INFO  [http-nio-8080-exec-6] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:52:40,093 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.515s
+2019-03-14 21:52:44,951 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:44,951 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:44,955 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-14 21:52:44,955 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-14 21:52:44,960 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-14 21:52:45,057 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.102s
+2019-03-14 21:52:48,928 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:48,928 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:48,933 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll
+2019-03-14 21:52:48,934 INFO  [http-nio-8080-exec-8] c.b.m.a.s.InvoiceItemsCRUDService: count
+2019-03-14 21:52:48,942 INFO  [http-nio-8080-exec-8] c.b.m.a.s.InvoiceItemsCRUDService: findAll
+2019-03-14 21:52:49,001 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceItemsController.findAll - 0.068s
+2019-03-14 21:52:54,369 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:54,370 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:54,374 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll
+2019-03-14 21:52:54,375 INFO  [http-nio-8080-exec-9] c.b.m.a.s.TimesheetCRUDService: count
+2019-03-14 21:52:54,379 INFO  [http-nio-8080-exec-9] c.b.m.a.s.TimesheetCRUDService: findAll
+2019-03-14 21:52:54,427 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.TimesheetController.findAll - 0.053s
+2019-03-14 21:52:59,313 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:52:59,313 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:52:59,318 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.AttachmentController.findAll
+2019-03-14 21:52:59,350 INFO  [http-nio-8080-exec-2] c.b.m.a.s.AttachmentCRUDService: count
+2019-03-14 21:52:59,361 INFO  [http-nio-8080-exec-2] c.b.m.a.s.AttachmentCRUDService: findAll
+2019-03-14 21:52:59,710 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.AttachmentController.findAll - 0.392s
+2019-03-14 21:53:05,488 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:05,488 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:05,493 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.AttachmentController.findContentByAttachmentId
+2019-03-14 21:53:05,495 INFO  [http-nio-8080-exec-6] c.b.m.a.s.AttachmentCRUDService: Find content for attachment 1
+2019-03-14 21:53:05,792 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.AttachmentController.findContentByAttachmentId - 0.299s
+2019-03-14 21:53:14,877 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:14,877 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:14,881 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ReportController.findAll
+2019-03-14 21:53:14,898 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ReportCRUDService: count
+2019-03-14 21:53:14,905 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ReportCRUDService: findAll
+2019-03-14 21:53:14,913 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ReportController.findAll - 0.032s
+2019-03-14 21:53:18,666 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:18,666 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:18,697 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ReportController.save
+2019-03-14 21:53:18,847 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ReportCRUDService: Saving entity
+2019-03-14 21:53:22,583 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ReportCRUDService: Saved entity: ReportEntity(reportId=1, invoiceId=1, createdAt=2019-03-14T21:53:22.237100-04:00[America/Toronto], reportName=INVOICE-TC2-2019-1-20190314205318, contentByContentId=ContentEntity(contentId=4, contentTable=REPORTS, filename=INVOICE-TC2-2019-1-20190314205318.pdf, createdAt=2019-03-14T21:53:22.237014-04:00[America/Toronto]))
+2019-03-14 21:53:22,623 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ReportController.save - 3.926s
+2019-03-14 21:53:22,663 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:22,663 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:22,665 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ReportController.findAll
+2019-03-14 21:53:22,666 INFO  [http-nio-8080-exec-10] c.b.m.a.s.ReportCRUDService: count
+2019-03-14 21:53:22,669 INFO  [http-nio-8080-exec-10] c.b.m.a.s.ReportCRUDService: findAll
+2019-03-14 21:53:22,710 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:22,710 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:22,714 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findById
+2019-03-14 21:53:22,715 INFO  [http-nio-8080-exec-1] c.b.m.a.s.InvoiceCRUDService: findById: 1
+2019-03-14 21:53:22,773 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ReportController.findAll - 0.108s
+2019-03-14 21:53:22,818 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findById - 0.104s
+2019-03-14 21:53:31,024 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:31,024 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:31,034 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ReportController.findContentByReportId
+2019-03-14 21:53:31,035 INFO  [http-nio-8080-exec-4] c.b.m.a.s.ReportCRUDService: Find content for reports 1
+2019-03-14 21:53:31,082 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ReportController.findContentByReportId - 0.048s
+2019-03-14 21:53:52,881 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:52,881 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:52,884 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:53:52,884 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:53:52,885 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics
+2019-03-14 21:53:52,889 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed
+2019-03-14 21:53:52,890 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.RSSController.getRSSFeed - 0.001s
+2019-03-14 21:53:52,987 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.StatisticsController.allStatistics - 0.102s
+2019-03-14 21:54:31,151 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:54:31,152 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:54:31,157 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-14 21:54:31,158 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-14 21:54:31,165 INFO  [http-nio-8080-exec-5] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-14 21:54:31,331 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.174s
+2019-03-14 21:54:40,562 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:54:40,562 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:54:40,572 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findAll
+2019-03-14 21:54:40,572 INFO  [http-nio-8080-exec-7] c.b.m.a.s.CompanyCRUDService: count
+2019-03-14 21:54:40,580 INFO  [http-nio-8080-exec-7] c.b.m.a.s.CompanyCRUDService: findAll
+2019-03-14 21:54:40,581 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:54:40,582 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:54:40,587 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:54:40,588 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:54:40,594 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:54:40,708 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findAll - 0.136s
+2019-03-14 21:54:40,757 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.17s
+2019-03-14 21:54:57,833 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:54:57,834 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:54:57,854 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.update
+2019-03-14 21:54:57,889 INFO  [http-nio-8080-exec-10] c.b.m.a.s.CompanyCRUDService: Saving entity
+2019-03-14 21:54:57,912 INFO  [http-nio-8080-exec-10] c.b.m.a.s.CompanyCRUDService: Saved entity: CompanyEntity(companyId=1, companyName=My Company 1, shortName=MC1, address1=Address 1, phone1=905-321-2233, ownedByMe=true, businessNumber=ABC234, weekStart=7, contentByContentId=ContentEntity(contentId=null, contentTable=COMPANY, filename=Bran-Image-Front.png, createdAt=2019-03-14T21:54:57.305-04:00[America/Toronto]), companyContactsByCompanyId=null, contractsByCompanyId=null, contractsByCompanyId_0=null, numberOfContacts=null, numberOfContracts=null)
+2019-03-14 21:54:57,947 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.update - 0.093s
+2019-03-14 21:54:57,991 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:54:57,991 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:54:57,995 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findAll
+2019-03-14 21:54:57,995 INFO  [http-nio-8080-exec-2] c.b.m.a.s.CompanyCRUDService: count
+2019-03-14 21:54:58,000 INFO  [http-nio-8080-exec-2] c.b.m.a.s.CompanyCRUDService: findAll
+2019-03-14 21:54:58,142 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findAll - 0.147s
+2019-03-14 21:54:58,149 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:54:58,150 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:54:58,174 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.saveContentByCompanyId
+2019-03-14 21:54:58,184 INFO  [http-nio-8080-exec-4] c.b.m.a.s.CompanyCRUDService: Save content to company 1, file Bran-Image-Front.png
+2019-03-14 21:54:58,199 DEBUG [http-nio-8080-exec-4] c.b.m.a.s.CompanyCRUDService: Updating content: 5
+2019-03-14 21:54:58,647 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.saveContentByCompanyId - 0.473s
+2019-03-14 21:55:02,184 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:02,224 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:02,236 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findContentByCompanyId
+2019-03-14 21:55:02,237 INFO  [http-nio-8080-exec-3] c.b.m.a.s.CompanyCRUDService: Find content for company 1
+2019-03-14 21:55:02,285 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findContentByCompanyId - 0.049s
+2019-03-14 21:55:11,748 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:11,749 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:11,753 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-14 21:55:11,753 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContactCRUDService: count
+2019-03-14 21:55:11,757 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-14 21:55:11,854 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.101s
+2019-03-14 21:55:21,325 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:21,325 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:21,329 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:21,329 INFO  [http-nio-8080-exec-7] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:21,334 INFO  [http-nio-8080-exec-7] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:21,647 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.318s
+2019-03-14 21:55:21,655 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:21,655 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:21,657 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:21,658 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:21,661 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:21,828 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.17s
+2019-03-14 21:55:22,859 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:22,859 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:22,866 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContactController.findAll
+2019-03-14 21:55:22,866 INFO  [http-nio-8080-exec-9] c.b.m.a.s.ContactCRUDService: count
+2019-03-14 21:55:22,874 INFO  [http-nio-8080-exec-9] c.b.m.a.s.ContactCRUDService: findAll
+2019-03-14 21:55:23,070 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContactController.findAll - 0.205s
+2019-03-14 21:55:30,326 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:30,326 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:30,332 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll
+2019-03-14 21:55:30,332 INFO  [http-nio-8080-exec-10] c.b.m.a.s.InvoiceCRUDService: count
+2019-03-14 21:55:30,338 INFO  [http-nio-8080-exec-10] c.b.m.a.s.InvoiceCRUDService: findAll
+2019-03-14 21:55:30,636 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.InvoiceController.findAll - 0.304s
+2019-03-14 21:55:34,333 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:34,333 INFO  [http-nio-8080-exec-1] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:34,340 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findAll
+2019-03-14 21:55:34,341 INFO  [http-nio-8080-exec-1] c.b.m.a.s.CompanyCRUDService: count
+2019-03-14 21:55:34,346 INFO  [http-nio-8080-exec-1] c.b.m.a.s.CompanyCRUDService: findAll
+2019-03-14 21:55:34,353 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:34,353 INFO  [http-nio-8080-exec-2] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:34,361 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:34,362 INFO  [http-nio-8080-exec-2] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:34,370 INFO  [http-nio-8080-exec-2] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:34,610 DEBUG [http-nio-8080-exec-1] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findAll - 0.27s
+2019-03-14 21:55:34,660 DEBUG [http-nio-8080-exec-2] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.299s
+2019-03-14 21:55:39,357 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:39,357 INFO  [http-nio-8080-exec-4] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:39,361 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:39,361 INFO  [http-nio-8080-exec-4] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:39,366 INFO  [http-nio-8080-exec-4] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:39,592 DEBUG [http-nio-8080-exec-4] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.231s
+2019-03-14 21:55:39,600 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:39,600 INFO  [http-nio-8080-exec-3] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:39,603 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:39,603 INFO  [http-nio-8080-exec-3] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:39,607 INFO  [http-nio-8080-exec-3] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:39,757 DEBUG [http-nio-8080-exec-3] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.154s
+2019-03-14 21:55:39,765 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:39,766 INFO  [http-nio-8080-exec-6] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:39,768 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:39,768 INFO  [http-nio-8080-exec-6] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:39,771 INFO  [http-nio-8080-exec-6] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:39,950 DEBUG [http-nio-8080-exec-6] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.182s
+2019-03-14 21:55:41,058 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:41,059 INFO  [http-nio-8080-exec-5] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:41,062 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:41,062 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:41,067 INFO  [http-nio-8080-exec-5] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:41,740 DEBUG [http-nio-8080-exec-5] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.678s
+2019-03-14 21:55:41,750 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:41,750 INFO  [http-nio-8080-exec-7] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:41,754 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:41,754 INFO  [http-nio-8080-exec-7] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:41,757 INFO  [http-nio-8080-exec-7] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:41,997 DEBUG [http-nio-8080-exec-7] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.243s
+2019-03-14 21:55:42,017 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:42,018 INFO  [http-nio-8080-exec-8] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:42,024 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.ContractController.findAll
+2019-03-14 21:55:42,024 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContractCRUDService: count
+2019-03-14 21:55:42,030 INFO  [http-nio-8080-exec-8] c.b.m.a.s.ContractCRUDService: findAll
+2019-03-14 21:55:42,281 DEBUG [http-nio-8080-exec-8] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.ContractController.findAll - 0.257s
+2019-03-14 21:55:59,395 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:59,396 INFO  [http-nio-8080-exec-9] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:59,403 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.update
+2019-03-14 21:55:59,434 INFO  [http-nio-8080-exec-9] c.b.m.a.s.CompanyCRUDService: Saving entity
+2019-03-14 21:55:59,489 INFO  [http-nio-8080-exec-9] c.b.m.a.s.CompanyCRUDService: Saved entity: CompanyEntity(companyId=2, companyName=Test Company 2, shortName=TC2, address1=Addr22, phone1=6667777555, ownedByMe=false, businessNumber=BN2, weekStart=6, contentByContentId=null, companyContactsByCompanyId=null, contractsByCompanyId=null, contractsByCompanyId_0=null, numberOfContacts=null, numberOfContracts=null)
+2019-03-14 21:55:59,517 DEBUG [http-nio-8080-exec-9] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.update - 0.115s
+2019-03-14 21:55:59,564 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_ADMIN] added for user [testuser]
+2019-03-14 21:55:59,565 INFO  [http-nio-8080-exec-10] c.b.m.d.d.s.UserPrincipal: Authority [ROLE_USER] added for user [testuser]
+2019-03-14 21:55:59,569 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Enter - com.bgh.myopeninvoice.api.controller.CompanyController.findAll
+2019-03-14 21:55:59,569 INFO  [http-nio-8080-exec-10] c.b.m.a.s.CompanyCRUDService: count
+2019-03-14 21:55:59,575 INFO  [http-nio-8080-exec-10] c.b.m.a.s.CompanyCRUDService: findAll
+2019-03-14 21:55:59,826 DEBUG [http-nio-8080-exec-10] c.b.m.c.a.l.LoggingAspect: Exit - com.bgh.myopeninvoice.api.controller.CompanyController.findAll - 0.257s
