@@ -8,20 +8,20 @@
 # Should-Stop:       $named
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start Tomcat invoice-server-0.1.1-SNAPSHOT.
-# Description:       Start the Tomcat invoice-server-0.1.1-SNAPSHOT servlet engine.
+# Short-Description: Start invoice service
+# Description:       Start invoice service.
 ### END INIT INFO
 
-PROJECT_VERSION=0.1.2-SNAPSHOT
-SERVICE_NAME=invoice-server-jsf-$PROJECT_VERSION
-PATH_TO_JAR=./invoice-server-jsf-$PROJECT_VERSION.jar
+PROJECT_VERSION=0.3.0-SNAPSHOT
+SERVICE_NAME=invoice-server-api-$PROJECT_VERSION
+PATH_TO_JAR=./invoice-server-api-$PROJECT_VERSION.jar
 OPTS="-Xmx512m"
-PID_PATH_NAME=/tmp/invoice-server-jsf-$PROJECT_VERSION-pid
+PID_PATH_NAME=/tmp/invoice-server-api-$PROJECT_VERSION-pid
 case $1 in
     start)
         echo "Starting $SERVICE_NAME ..."
         if [ ! -f $PID_PATH_NAME ]; then
-            nohup java -jar $OPTS $PATH_TO_JAR /tmp 2>> /dev/null >> /dev/null &
+            nohup java -Dspring.profiles.active=prod -jar $OPTS $PATH_TO_JAR /tmp 2>> /dev/null >> /dev/null &
                         echo $! > $PID_PATH_NAME
             echo "$SERVICE_NAME started ..."
         else
