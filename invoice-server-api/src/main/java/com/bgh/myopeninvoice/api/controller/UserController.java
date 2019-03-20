@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Branislav Cavlin
+ * Copyright 2018 Branislav Cavlin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,70 +16,115 @@
 
 package com.bgh.myopeninvoice.api.controller;
 
-import com.bgh.myopeninvoice.api.model.user.LoggedUserDetailsResponse;
-import com.bgh.myopeninvoice.api.model.user.LogoutRespose;
-import com.bgh.myopeninvoice.api.utils.CommonUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.bgh.myopeninvoice.api.controller.spec.UserAPI;
+import com.bgh.myopeninvoice.api.domain.dto.RoleDTO;
+import com.bgh.myopeninvoice.api.domain.dto.UserDTO;
+import com.bgh.myopeninvoice.api.security.AccountCredentials;
+import com.bgh.myopeninvoice.api.security.JwtAuthenticationResponse;
+import com.bgh.myopeninvoice.api.security.JwtTokenProvider;
+import com.bgh.myopeninvoice.api.service.UserService;
+import com.bgh.myopeninvoice.api.transformer.RoleTransformer;
+import com.bgh.myopeninvoice.api.transformer.UserTransformer;
+import com.bgh.myopeninvoice.common.domain.DefaultResponse;
+import com.bgh.myopeninvoice.common.domain.OperationResponse;
+import com.bgh.myopeninvoice.common.exception.InvalidDataException;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.bgh.myopeninvoice.api.model.response.OperationResponse.ResponseStatusEnum.ERROR;
-import static com.bgh.myopeninvoice.api.model.response.OperationResponse.ResponseStatusEnum.SUCCESS;
-
-@RestController
-@Api(tags = {"Users"})
 @Slf4j
-public class UserController {
+@RestController
+public class UserController extends AbstractController implements UserAPI {
 
-    private TokenStore tokenStore;
+  @Autowired JwtTokenProvider tokenProvider;
 
-    @Autowired
-    @Qualifier("customTokenStore")
-    public void setTokenStore(TokenStore tokenStore) {
-        this.tokenStore = tokenStore;
+  @Autowired AuthenticationManager authenticationManager;
+
+  @Autowired private UserService userService;
+
+  @Autowired private RoleTransformer roleTransformer;
+
+  @Autowired private UserTransformer userTransformer;
+
+  @Override
+  public ResponseEntity<DefaultResponse<RoleDTO>> getUserRoles(
+      @PathVariable("username") String username) {
+    List<RoleDTO> result = new ArrayList<>();
+
+    List<RoleEntity> userRoles = userService.findUserRoles(username);
+    result = roleTransformer.transformEntityToDTO(userRoles, RoleDTO.class);
+
+    DefaultResponse<RoleDTO> defaultResponse = new DefaultResponse<>(RoleDTO.class);
+    defaultResponse.setDetails(result);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    ResponseEntity<DefaultResponse<RoleDTO>> responseEntity =
+        new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+
+    log.debug("Returning: {}", responseEntity);
+
+    return responseEntity;
+  }
+
+  @Override
+  public ResponseEntity<?> login(
+      @Valid @RequestBody AccountCredentials credentials, BindingResult bindingResult) {
+
+    if (bindingResult.hasErrors()) {
+      String collect =
+          bindingResult.getAllErrors().stream()
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
     }
 
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Will return details of a logged user", response =
-            LoggedUserDetailsResponse.class)})
-    @RequestMapping(value = "/me", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public LoggedUserDetailsResponse currentLoggedUser() {
-        final SecurityContext context = SecurityContextHolder.getContext();
-        final Authentication authentication = context.getAuthentication();
-        LoggedUserDetailsResponse resp = new LoggedUserDetailsResponse(authentication);
-        resp.setOperationStatus(SUCCESS);
-        resp.setOperationMessage("Dummy me Success");
-        return resp;
-    }
+    log.info("Logging in user: {}", credentials.getUsername());
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                credentials.getUsername(), credentials.getPassword()));
 
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Will remove token from the token store", response =
-            LogoutRespose.class)})
-    @RequestMapping(value = "/oauth/revoke-token", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public LogoutRespose logout(HttpServletRequest request) {
-        LogoutRespose resp = new LogoutRespose();
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer")) {
-            CommonUtils.removeToken(authHeader, tokenStore);
-            log.info("Token removed: " + authHeader);
-            resp.setOperationStatus(SUCCESS);
-            resp.setOperationMessage("Auth header removed: " + authHeader);
-        } else {
-            resp.setOperationStatus(ERROR);
-            resp.setOperationMessage("There was a problem in removing the authHeader: " + authHeader);
-        }
-        return resp;
-    }
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    String jwt = tokenProvider.generateToken(authentication);
+
+    userService.updateLastLoggedDate(credentials.getUsername());
+
+    return ResponseEntity.ok(JwtAuthenticationResponse.builder().accessToken(jwt).build());
+  }
+
+  @Override
+  public ResponseEntity<DefaultResponse<UserDTO>> getUsers() {
+    List<UserDTO> result = new ArrayList<>();
+
+    List<UserEntity> users = userService.getUsers();
+    result = userTransformer.transformEntityToDTO(users, UserDTO.class);
+
+    DefaultResponse<UserDTO> defaultResponse = new DefaultResponse<>(UserDTO.class);
+    defaultResponse.setDetails(result);
+    defaultResponse.setCount((long) result.size());
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    ResponseEntity<DefaultResponse<UserDTO>> responseEntity =
+        new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+
+    log.debug("Returning: {}", responseEntity);
+
+    return responseEntity;
+  }
 }

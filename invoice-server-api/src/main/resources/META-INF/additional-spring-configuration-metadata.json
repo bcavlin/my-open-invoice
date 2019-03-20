@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "app.jwtExpirationInMs",
+      "type": "java.lang.Long",
+      "description": "Description for app.jwtExpirationInMs."
+    },
+    {
+      "name": "app.jwtSecret",
+      "type": "java.lang.String",
+      "description": "Description for app.jwtSecret."
+    },
+    {
+      "name": "rss.links",
+      "type": "java.lang.String",
+      "description": "Links to RSS feeds."
+    }
+  ]
+}

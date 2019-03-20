@@ -10,7 +10,7 @@
     <property name="imageDPI">96</property>
     <parameters>
         <scalar-parameter name="p_invoice_id" id="9">
-            <property name="valueType">static</property>
+            <property name="valueType">templates</property>
             <property name="isRequired">true</property>
             <property name="dataType">integer</property>
             <property name="distinct">true</property>
@@ -462,10 +462,10 @@ FROM (
          INV.TAX_PERCENT,
          INV.NOTE,
          TOC.COMPANY_NAME                              AS TO_NAME,
-         TOC.ADDRESS_LINE1 || ' ' || TOC.ADDRESS_LINE2 AS TO_ADDRESS,
+         TOC.ADDRESS_LINE_1 || ' ' || TOC.ADDRESS_LINE2 AS TO_ADDRESS,
          TOC.PHONE1                                    AS TO_PHONE,
          CFR.COMPANY_NAME                              AS FROM_NAME,
-         CFR.ADDRESS_LINE1 || ' ' || CFR.ADDRESS_LINE2 AS FROM_ADDRESS,
+         CFR.ADDRESS_LINE_1 || ' ' || CFR.ADDRESS_LINE2 AS FROM_ADDRESS,
          CFR.PHONE1                                    AS FROM_PHONE,
          CFR.CONTENT                                   AS FROM_LOGO,
          CFR.BUSINESS_NUMBER                           AS FROM_BN,

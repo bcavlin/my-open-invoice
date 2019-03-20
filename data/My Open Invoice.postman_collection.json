@@ -1,0 +1,1154 @@
+{
+	"info": {
+		"_postman_id": "9b2008dc-325a-4c26-a5a8-1cdab861404f",
+		"name": "My Open Invoice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tax",
+			"item": [
+				{
+					"name": "/api/v1/tax",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax/2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax?page=1&size=5&sortField=percent&sortOrder=NONE&filter=T",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax?page=1&size=5&sortField=percent&sortOrder=NONE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sortField",
+									"value": "percent"
+								},
+								{
+									"key": "sortOrder",
+									"value": "NONE"
+								},
+								{
+									"key": "filter",
+									"value": "T",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"percent\": 0.55,\n            \"identifier\": \"Test 55\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \n            \"percent\": 0.14,\n            \"identifier\": \"Test 146\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v1/tax/7",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Company",
+			"item": [
+				{
+					"name": "/api/v1/company",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/company",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/company/2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/company/2/content",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/company/1/content",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"company",
+								"1",
+								"content"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax?page=1&size=5&sortField=percent&sortOrder=NONE&filter=T",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax?page=1&size=5&sortField=percent&sortOrder=NONE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sortField",
+									"value": "percent"
+								},
+								{
+									"key": "sortOrder",
+									"value": "NONE"
+								},
+								{
+									"key": "filter",
+									"value": "T",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"percent\": 0.55,\n            \"identifier\": \"Test 55\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/tax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \n            \"percent\": 0.14,\n            \"identifier\": \"Test 146\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v1/tax/7",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tax/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tax",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contact",
+			"item": [
+				{
+					"name": "/api/v1/contact",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contact",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contact"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/contact/2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contact/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contact",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/contact?page=1&size=5&sortField=percent&sortOrder=NONE&filter=T",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"disabled": false,
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contact?page=1&size=5&sortField=percent&sortOrder=NONE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contact"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sortField",
+									"value": "percent"
+								},
+								{
+									"key": "sortOrder",
+									"value": "NONE"
+								},
+								{
+									"key": "filter",
+									"value": "T",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"firstName\": \"Test2\",\n            \"lastName\": \"Contact2\",\n            \"middleName\": \"\",\n            \"email\": \"test2@contact.com\",\n            \"addressLine1\": \"Address1\",\n            \"addressLine2\": \"\",\n            \"phone1\": \"905-123-3456\",\n            \"userId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contact",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contact"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"contactId\": 4,\n            \"firstName\": \"Test24\",\n            \"lastName\": \"Contact2\",\n            \"middleName\": \"\",\n            \"email\": \"test2@contact.com\",\n            \"addressLine1\": \"Address1\",\n            \"addressLine2\": \"\",\n            \"phone1\": \"905-123-3456\",\n            \"userId\": 1,\n            \"companiesList\": \"\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contact",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contact"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v1/contact/7",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contact/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contact",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Currency",
+			"item": [
+				{
+					"name": "/api/v1/currency",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/currency",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/currency/2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/currency/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currency",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/currency?page=1&size=5&sortField=percent&sortOrder=NONE&filter=T",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"disabled": false,
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/currency?page=0&size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currency"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/currency",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"name\": \"ABC\",\n            \"description\": \"Canadian Dollar 2\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/currency",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/currency",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"ccyId\": 3,\n            \"name\": \"ABC\",\n            \"description\": \"Canadian Dollar 76\"\n        }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/currency",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/currency/3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI2NjAxOTZ9.fiX00Hr9cWsrqjW5p3xpiZ4QnSTAXxJpKBKd716BjBvnoXSqjUA5ao7VluSZwgRTAE7pV54M1ze-EjH8EUpk1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/currency/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currency",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "/api/v1/user/testuser/roles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjp7ImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn0seyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWUsInByaW5jaXBhbCI6InRlc3R1c2VyIiwiY3JlZGVudGlhbHMiOm51bGwsIm5hbWUiOiJ0ZXN0dXNlciJ9LCJleHAiOjE1NDI1MTIzMjh9.siZzTKB8qxUqkrm3ONQuRRh1fHxWPgQYlyDNv3nEmW6WMy1ODRBz3tHQoD-V_srMVHiQ7HHW4RSUQDA4fZ5xlw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user/testuser/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"testuser",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"testuser\",\"password\":\"letmein\"}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -16,13 +16,13 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.AttachmentEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface AttachmentRepository extends PagingAndSortingRepository<AttachmentEntity, Integer>, QueryDslPredicateExecutor<AttachmentEntity> {
-
-}
+/** Created by bcavlin on 14/03/17. */
+@Repository
+public interface AttachmentRepository
+    extends PagingAndSortingRepository<AttachmentEntity, Integer>,
+        QuerydslPredicateExecutor<AttachmentEntity> {}

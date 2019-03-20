@@ -16,20 +16,31 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.UsersEntity;
+import com.bgh.myopeninvoice.db.domain.UserEntity;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface UsersRepository extends PagingAndSortingRepository<UsersEntity, Integer>, QueryDslPredicateExecutor<UsersEntity> {
+/** Created by bcavlin on 14/03/17. */
+@Repository
+public interface UsersRepository
+    extends PagingAndSortingRepository<UserEntity, Integer>, QuerydslPredicateExecutor<UserEntity> {
 
-    @Query("select e from UsersEntity e where e.username = :username")
-    Optional<UsersEntity> findByUsername(@Param("username") String username);
+  @Query("select e from UserEntity e where e.username = :username")
+  Optional<UserEntity> findByUsername(@Param("username") String username);
 
+  @Modifying(clearAutomatically = true)
+  @Query("update UserEntity e set e.lastLoggedDate = :date where e.username = :username")
+  void updateLastLoggedDateByUsername(
+      @Param("username") String username, @Param("date") LocalDateTime date);
+
+  @Query("select e.enabled from UserEntity e where e.username = :username")
+  Optional<Boolean> isUserValid(@Param("username") String username);
 }

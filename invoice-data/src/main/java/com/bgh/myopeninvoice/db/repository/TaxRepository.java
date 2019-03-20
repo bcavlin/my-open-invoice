@@ -16,13 +16,12 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.TaxEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import com.bgh.myopeninvoice.db.domain.TaxEntity;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface TaxRepository extends PagingAndSortingRepository<TaxEntity, Integer>, QueryDslPredicateExecutor<TaxEntity> {
-
-}
+/** Created by bcavlin on 14/03/17. */
+@Repository
+public interface TaxRepository
+    extends PagingAndSortingRepository<TaxEntity, Integer>, QuerydslPredicateExecutor<TaxEntity> {}

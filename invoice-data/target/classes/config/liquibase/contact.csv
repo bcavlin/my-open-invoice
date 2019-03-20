@@ -1,0 +1,4 @@
+CONTACT_ID,FIRST_NAME,LAST_NAME,MIDDLE_NAME,EMAIL,ADDRESS_1,PHONE_1,USER_ID
+1,Me,Contact,,test@contact.com,Address1,905-123-3456,1
+2,Test 2,Contact 2,,test2@email.com,Address2,'',null
+3,Test 3,Contact 3,,test3@email.com,Addr3,'',null
