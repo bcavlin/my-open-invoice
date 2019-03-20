@@ -158,7 +158,7 @@
                             <driver>org.postgresql.Driver</driver>
                             <url>jdbc:postgresql://localhost:5432/defaultdb</url>
                             <username>postgres</username>
-                            <password>***REMOVED***</password>
+                            <password>Letmein321</password>
                             <emptyPassword>false</emptyPassword>
                             <defaultSchemaName>invoice</defaultSchemaName>
                             <changelogSchemaName>invoice</changelogSchemaName>

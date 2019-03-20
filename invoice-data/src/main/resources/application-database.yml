@@ -48,7 +48,7 @@ spring:
     url: ${INVOICE_DB_LOCATION}
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: ***REMOVED***
+    password: ${PROD_PWD}
   jpa:
     properties:
       hibernate:
