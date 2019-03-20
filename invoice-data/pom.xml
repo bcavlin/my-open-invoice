@@ -51,14 +51,14 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>mysql</groupId>-->
-        <!--<artifactId>mysql-connector-java</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.h2database</groupId>-->
-        <!--<artifactId>h2</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -143,8 +143,8 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
                 </dependency>
             </dependencies>
             <build>
@@ -155,17 +155,17 @@
                         <version>${liquibase-core.version}</version>
                         <configuration>
                             <changeLogFile>target/classes/config/liquibase/invoice-master.xml</changeLogFile>
-                            <driver>com.mysql.cj.jdbc.Driver</driver>
-                            <url>jdbc:mysql://localhost:3306/invoice</url>
-                            <username>root</username>
-                            <password>letmein</password>
+                            <driver>org.postgresql.Driver</driver>
+                            <url>jdbc:postgresql://localhost:5432/defaultdb</url>
+                            <username>postgres</username>
+                            <password>Letmein321</password>
                             <emptyPassword>false</emptyPassword>
                             <defaultSchemaName>invoice</defaultSchemaName>
                             <changelogSchemaName>invoice</changelogSchemaName>
                             <referenceDefaultSchemaName>invoice</referenceDefaultSchemaName>
                             <referenceUrl>
                                 hibernate:com.bgh.myopeninvoice.db.domain?
-                                dialect=org.hibernate.dialect.MySQLDialect&amp;
+                                dialect=org.hibernate.dialect.PostgreSQLDialect&amp;
                                 hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;
                                 hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
                             </referenceUrl>

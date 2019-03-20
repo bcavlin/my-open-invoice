@@ -2,6 +2,7 @@ package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -26,6 +27,7 @@ public class ContentEntity implements java.io.Serializable {
   private String filename;
 
   @Lob
+  @Type(type = "org.hibernate.type.BinaryType")
   @Column(name = "CONTENT")
   private byte[] content;
 

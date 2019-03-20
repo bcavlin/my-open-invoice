@@ -5,7 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    <property name="now" value="now()" dbms="mysql"/>
+    <property name="now" value="now()" dbms="postgresql"/>
+    <property name="blob_type" value="bytea" dbms="postgresql"/>
+    <property name="blob_type" value="blob" dbms="h2"/>
     <property name="autoIncrement" value="true"/>
     <property name="invoiceCounter" value="0"/>
 
@@ -70,7 +72,7 @@
             <column name="filename" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="content" type="blob">
+            <column name="content" type="${blob_type}">
                 <constraints nullable="true"/>
             </column>
             <column name="created_at" type="timestamp" defaultValueDate="${now}">
@@ -200,7 +202,7 @@
             <column name="description" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="rate_to_cad" type="decimal">
+            <column name="rate_to_cad" type="decimal(10,2)">
             </column>
             <column name="updated_at" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
@@ -219,7 +221,7 @@
             </column>
             <column name="company_id_subcontract" type="int">
             </column>
-            <column name="rate" type="decimal">
+            <column name="rate" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
             <column name="rate_unit" type="varchar(10)">
@@ -290,7 +292,7 @@
             <column name="tax_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="percent" type="decimal">
+            <column name="percent" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
             <column name="identifier" type="varchar(50)">
@@ -323,14 +325,14 @@
             <column name="due_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="tax_percent" type="decimal">
+            <column name="tax_percent" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
             <column name="note" type="varchar(2000)">
             </column>
             <column name="paid_date" type="date">
             </column>
-            <column name="rate" type="decimal">
+            <column name="rate" type="decimal(10,2)">
             </column>
             <column name="rate_unit" type="varchar(10)">
             </column>
@@ -406,7 +408,7 @@
             </column>
             <column name="code" type="varchar(255)">
             </column>
-            <column name="quantity" type="decimal" defaultValueNumeric="0">
+            <column name="quantity" type="decimal(10,2)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
             <column name="unit" type="varchar(20)" defaultValue="HOUR">
@@ -433,7 +435,7 @@
             <column name="item_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="hours_worked" type="decimal">
+            <column name="hours_worked" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

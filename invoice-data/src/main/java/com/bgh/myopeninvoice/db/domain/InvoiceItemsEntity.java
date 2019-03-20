@@ -68,11 +68,6 @@ public class InvoiceItemsEntity implements java.io.Serializable {
   @Setter(AccessLevel.NONE)
   private Long timesheetTotalDays;
 
-  // this did not wor as we need to update total hours upfront - new entries cannot be calcualted
-  // until they are in the database
-  //    @Formula("(select sum(e.hours_worked) from invoice.time_sheet e where e.invoice_item_id =
-  // invoice_item_id)")
-
   public BigDecimal getTimesheetTotal() {
     if (getTimesheetsByInvoiceItemId() != null) {
       timesheetTotal =

@@ -37,6 +37,7 @@
         <class>com.bgh.myopeninvoice.db.domain2.TimeSheetEntity</class>
         <class>com.bgh.myopeninvoice.db.domain2.UserEntity</class>
         <class>com.bgh.myopeninvoice.db.domain2.UserRoleEntity</class>
+        <class>com.bgh.myopeninvoice.db.domain.SequenceEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
