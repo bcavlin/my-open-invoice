@@ -18,16 +18,14 @@ package com.bgh.myopeninvoice.reporting;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * Created by bcavlin on 07/05/17.
- */
+/** Created by bcavlin on 07/05/17. */
 public interface ReportRunner {
 
-    /**
-     * Changed version of the http://stackoverflow.com/questions/32069938/birt-in-spring-boot-app
-     *
-     * @param report
-     * @return
-     */
-    ByteArrayOutputStream runReport(Report report);
+  /**
+   * Changed version of the http://stackoverflow.com/questions/32069938/birt-in-spring-boot-app
+   *
+   * @param report
+   * @return
+   */
+  ByteArrayOutputStream runReport(Report report);
 }

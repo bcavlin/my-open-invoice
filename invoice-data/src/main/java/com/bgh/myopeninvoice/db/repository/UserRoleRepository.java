@@ -16,13 +16,23 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.UserRoleEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import com.bgh.myopeninvoice.db.domain.RoleEntity;
+import com.bgh.myopeninvoice.db.domain.UserRoleEntity;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface UserRoleRepository extends PagingAndSortingRepository<UserRoleEntity, Integer>, QueryDslPredicateExecutor<UserRoleEntity> {
+import java.util.List;
 
+/** Created by bcavlin on 14/03/17. */
+@Repository
+public interface UserRoleRepository
+    extends PagingAndSortingRepository<UserRoleEntity, Integer>,
+        QuerydslPredicateExecutor<UserRoleEntity> {
+
+  @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
+  @Query("select r.roleByRoleId from UserRoleEntity r where r.userByUserId.username = :username")
+  List<RoleEntity> findRolesByUsername(@Param("username") String username);
 }

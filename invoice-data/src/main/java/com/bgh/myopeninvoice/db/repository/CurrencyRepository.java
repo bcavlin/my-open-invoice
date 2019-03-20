@@ -16,13 +16,13 @@
 
 package com.bgh.myopeninvoice.db.repository;
 
-import com.bgh.myopeninvoice.db.model.CurrencyEntity;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Created by bcavlin on 14/03/17.
- */
-public interface CurrencyRepository extends PagingAndSortingRepository<CurrencyEntity, Integer>, QueryDslPredicateExecutor<CurrencyEntity> {
-
-}
+/** Created by bcavlin on 14/03/17. */
+@Repository
+public interface CurrencyRepository
+    extends PagingAndSortingRepository<CurrencyEntity, Integer>,
+        QuerydslPredicateExecutor<CurrencyEntity> {}
