@@ -45,6 +45,7 @@
         <ehcache.version>2.10.6</ehcache.version>
         <orika-core.version>1.5.2</orika-core.version>
         <tika-core.version>1.19.1</tika-core.version>
+        <postgresql.version>42.2.5</postgresql.version>
     </properties>
 
     <dependencies>
@@ -191,6 +192,11 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.ulisesbocchio</groupId>

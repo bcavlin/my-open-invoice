@@ -3,8 +3,6 @@ management:
     shutdown:
       enabled: true
 spring:
-  liquibase:
-    enabled: false
   profiles:
     include: database
     active: database

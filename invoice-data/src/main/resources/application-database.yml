@@ -1,10 +1,9 @@
 spring:
   liquibase:
     change-log: classpath:config/liquibase/invoice-master.xml
-    default-schema: INVOICE
   datasource:
     hikari:
-      connection-test-query: SELECT 1 FROM DUAL
+      connection-test-query: SELECT 1
       minimum-idle: 1
       maximum-pool-size: 5
     type: com.zaxxer.hikari.HikariDataSource
@@ -17,12 +16,18 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
+jasypt:
+  encryptor:
+    algorithm: PBEWITHHMACSHA256ANDAES_256
+    password: ${JASYPT_PWD}
 
 ---
 spring:
   profiles: dev
+  liquibase:
+    default-schema: invoice
   datasource:
-    url: jdbc:p6spy:h2:tcp://localhost:1521/default;INIT=CREATE SCHEMA IF NOT EXISTS INVOICE
+    url: jdbc:p6spy:h2:tcp://localhost:1521/default
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     platform: h2
     username: sa
@@ -37,14 +42,18 @@ spring:
 ---
 spring:
   profiles: prod
+  liquibase:
+    default-schema: invoice
   datasource:
-    url: jdbc:mysql://localhost:3306/invoice?createDatabaseIfNotExist=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    platform: mysql
-    username: root
+    url: ${INVOICE_DB_LOCATION}
+    driver-class-name: org.postgresql.Driver
+    username: postgres
     password: ***REMOVED***
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
