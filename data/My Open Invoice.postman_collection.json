@@ -1132,7 +1132,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"testuser\",\"password\":\"letmein\"}"
+							"raw": "{\"username\":\"testuser\",\"password\":\"<pass>\"}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/login",

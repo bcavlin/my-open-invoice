@@ -158,7 +158,7 @@
                             <driver>org.postgresql.Driver</driver>
                             <url>jdbc:postgresql://localhost:5432/defaultdb</url>
                             <username>postgres</username>
-                            <password>Letmein321</password>
+                            <password>{j7aJF64U/wIHk0wZQ4ZxKOimLz3R1ZcX7tX3GhNwWvg=}</password>
                             <emptyPassword>false</emptyPassword>
                             <defaultSchemaName>invoice</defaultSchemaName>
                             <changelogSchemaName>invoice</changelogSchemaName>
