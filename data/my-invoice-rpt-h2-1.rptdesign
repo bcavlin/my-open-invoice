@@ -52,7 +52,7 @@
         </scalar-parameter>
     </parameters>
     <data-sources>
-        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source" id="5">
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source H2" id="5">
             <list-property name="privateDriverProperties">
                 <ex-property>
                     <name>contentBidiFormatStr</name>
@@ -330,7 +330,7 @@
 vars["BusinessNumber"]=row["FROM_BN"];
 vars["DataCCY"]=row["CCY"];
 vars["Notes"]=row["NOTE"];]]></method>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">Data Source H2</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
@@ -505,7 +505,7 @@ FROM (
        WHERE INV.INVOICE_ID = ?
      ) DS1
        LEFT JOIN INVOICE.INVOICE_ITEMS II ON II.INVOICE_ID = DS1.INVOICE_ID
-       LEFT JOIN INVOICE.TIMESHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID]]></xml-property>
+       LEFT JOIN INVOICE.TIME_SHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -993,7 +993,7 @@ FROM (
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">Data Source H2</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
@@ -1060,7 +1060,7 @@ FROM (
     ELSE 1 END AS RATE
   FROM INVOICE.INVOICE INV
     LEFT JOIN INVOICE.INVOICE_ITEMS II ON INV.INVOICE_ID = II.INVOICE_ID
-    LEFT JOIN INVOICE.TIMESHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID
+    LEFT JOIN INVOICE.TIME_SHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID
   WHERE INV.INVOICE_ID = ?  
   GROUP BY II.CODE,
     II.DESCRIPTION,
@@ -1288,7 +1288,7 @@ FROM (
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">Data Source H2</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>

@@ -52,7 +52,7 @@
         </scalar-parameter>
     </parameters>
     <data-sources>
-        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source" id="5">
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source Postgres" id="5">
             <list-property name="privateDriverProperties">
                 <ex-property>
                     <name>contentBidiFormatStr</name>
@@ -69,9 +69,10 @@
                     <value>ILYNN</value>
                 </ex-property>
             </list-property>
-            <property name="odaDriverClass">org.h2.Driver</property>
-            <property name="odaURL">jdbc:h2:tcp://localhost:1521/default</property>
-            <property name="odaUser">sa</property>
+            <property name="odaDriverClass">org.postgresql.Driver</property>
+            <property name="odaURL">jdbc:postgresql://localhost:5432/defaultdb</property>
+            <property name="odaUser">postgres</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">TGV0bWVpbjMyMQ==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -103,10 +104,10 @@
                     <text-property name="heading">TO_DATE</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CREATED_DATE</property>
+                    <property name="columnName">CREATED_AT</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">CREATED_DATE</text-property>
-                    <text-property name="heading">CREATED_DATE</text-property>
+                    <text-property name="displayName">CREATED_AT</text-property>
+                    <text-property name="heading">CREATED_AT</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">TITLE</property>
@@ -236,7 +237,7 @@
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">CREATED_DATE</property>
+                        <property name="name">CREATED_AT</property>
                         <property name="dataType">date-time</property>
                     </structure>
                     <structure>
@@ -252,7 +253,7 @@
                     <structure>
                         <property name="position">7</property>
                         <property name="name">TAX_PERCENT</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">8</property>
@@ -330,7 +331,7 @@
 vars["BusinessNumber"]=row["FROM_BN"];
 vars["DataCCY"]=row["CCY"];
 vars["Notes"]=row["NOTE"];]]></method>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">Data Source Postgres</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
@@ -355,8 +356,8 @@ vars["Notes"]=row["NOTE"];]]></method>
                 </structure>
                 <structure>
                     <property name="position">4</property>
-                    <property name="name">CREATED_DATE</property>
-                    <property name="nativeName">CREATED_DATE</property>
+                    <property name="name">CREATED_AT</property>
+                    <property name="nativeName">CREATED_AT</property>
                     <property name="dataType">date-time</property>
                     <property name="nativeDataType">93</property>
                 </structure>
@@ -378,8 +379,8 @@ vars["Notes"]=row["NOTE"];]]></method>
                     <property name="position">7</property>
                     <property name="name">TAX_PERCENT</property>
                     <property name="nativeName">TAX_PERCENT</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
@@ -473,39 +474,74 @@ vars["Notes"]=row["NOTE"];]]></method>
                     <property name="nativeDataType">91</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[SELECT DS1.*,
-       min(TS.ITEM_DATE) AS FROM_TS_DATE,
-       max(TS.ITEM_DATE) AS TO_TS_DATE
-FROM (
-       SELECT INV.INVOICE_ID,
-              INV.FROM_DATE,
-              INV.TO_DATE,
-              INV.CREATED_DATE,
-              INV.TITLE,
-              INV.DUE_DATE,
-              INV.TAX_PERCENT,
-              INV.NOTE,
-              TOC.COMPANY_NAME    AS TO_NAME,
-              TOC.ADDRESS_1       AS TO_ADDRESS,
-              TOC.PHONE_1         AS TO_PHONE,
-              CC.NAME             AS CCY,
-              CT.CONTRACT_NUMBER,
-              frc.COMPANY_NAME    AS FROM_NAME,
-              frc.ADDRESS_1       AS FROM_ADDRESS,
-              frc.PHONE_1         AS FROM_PHONE,
-              cont.CONTENT        AS FROM_LOGO,
-              frc.BUSINESS_NUMBER AS FROM_BN
-       FROM INVOICE.INVOICE INV
-              LEFT JOIN INVOICE.CURRENCY CC ON INV.CCY_ID = CC.CCY_ID
-              LEFT JOIN INVOICE.CONTRACT CT on inv.COMPANY_CONTRACT_TO = ct.CONTRACT_ID
-              LEFT JOIN INVOICE.COMPANY TOC ON CT.COMPANY_ID = TOC.COMPANY_ID
-              left join invoice.COMPANY_CONTACT comc on inv.COMPANY_CONTACT_FROM = comc.COMPANY_CONTACT_ID
-              left join invoice.COMPANY frc on comc.COMPANY_ID = frc.COMPANY_ID
-              left outer join invoice.CONTENT cont on frc.CONTENT_ID = cont.CONTENT_ID
-       WHERE INV.INVOICE_ID = ?
-     ) DS1
-       LEFT JOIN INVOICE.INVOICE_ITEMS II ON II.INVOICE_ID = DS1.INVOICE_ID
-       LEFT JOIN INVOICE.TIME_SHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID]]></xml-property>
+            <xml-property name="queryText"><![CDATA[select ds1.invoice_id,
+       ds1.from_date,
+       ds1.to_date,
+       ds1.created_at,
+       ds1.title,
+       ds1.due_date,
+       ds1.tax_percent,
+       ds1.note,
+       ds1.to_name,
+       ds1.to_address,
+       ds1.to_phone,
+       ds1.ccy,
+       ds1.contract_number,
+       ds1.from_name,
+       ds1.from_address,
+       ds1.from_phone,
+       ds1.from_logo,
+       ds1.from_bn,
+       min(ts.item_date) as from_ts_date,
+       max(ts.item_date) as to_ts_date
+from (
+       select inv.invoice_id,
+              inv.from_date,
+              inv.to_date,
+              inv.created_at,
+              inv.title,
+              inv.due_date,
+              inv.tax_percent,
+              inv.note,
+              toc.company_name    as to_name,
+              toc.address_1       as to_address,
+              toc.phone_1         as to_phone,
+              cc.name             as ccy,
+              ct.contract_number,
+              frc.company_name    as from_name,
+              frc.address_1       as from_address,
+              frc.phone_1         as from_phone,
+              cont.content        as from_logo,
+              frc.business_number as from_bn
+       from invoice.invoice inv
+              left join invoice.currency cc on inv.ccy_id = cc.ccy_id
+              left join invoice.contract ct on inv.company_contract_to = ct.contract_id
+              left join invoice.company toc on ct.company_id = toc.company_id
+              left join invoice.company_contact comc on inv.company_contact_from = comc.company_contact_id
+              left join invoice.company frc on comc.company_id = frc.company_id
+              left outer join invoice.content cont on frc.content_id = cont.content_id
+       where inv.invoice_id = ?
+     ) ds1
+       left join invoice.invoice_items ii on ii.invoice_id = ds1.invoice_id
+       left join invoice.timesheet ts on ii.invoice_item_id = ts.invoice_item_id
+group by ds1.invoice_id,
+         ds1.from_date,
+         ds1.to_date,
+         ds1.created_at,
+         ds1.title,
+         ds1.due_date,
+         ds1.tax_percent,
+         ds1.note,
+         ds1.to_name,
+         ds1.to_address,
+         ds1.to_phone,
+         ds1.ccy,
+         ds1.contract_number,
+         ds1.from_name,
+         ds1.from_address,
+         ds1.from_phone,
+         ds1.from_logo,
+         ds1.from_bn]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -964,7 +1000,7 @@ FROM (
                     <structure>
                         <property name="position">2</property>
                         <property name="name">TOTAL</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
@@ -979,7 +1015,7 @@ FROM (
                     <structure>
                         <property name="position">5</property>
                         <property name="name">QUANTITY</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -989,11 +1025,11 @@ FROM (
                     <structure>
                         <property name="position">7</property>
                         <property name="name">RATE</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">Data Source Postgres</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
@@ -1006,8 +1042,8 @@ FROM (
                     <property name="position">2</property>
                     <property name="name">TOTAL</property>
                     <property name="nativeName">TOTAL</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
@@ -1027,8 +1063,8 @@ FROM (
                     <property name="position">5</property>
                     <property name="name">QUANTITY</property>
                     <property name="nativeName">QUANTITY</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
@@ -1041,31 +1077,34 @@ FROM (
                     <property name="position">7</property>
                     <property name="name">RATE</property>
                     <property name="nativeName">RATE</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[SELECT
-  rownum() RN,
-  (Q1.QUANTITY * Q1.RATE) AS TOTAL,
-  Q1.*
-FROM (
-  SELECT
-    II.CODE,
-    II.DESCRIPTION,
-    II.QUANTITY,
-    II.UNIT,
-    CASE WHEN II.UNIT <> 'TOTAL'
-      THEN INV.RATE
-    ELSE 1 END AS RATE
-  FROM INVOICE.INVOICE INV
-    LEFT JOIN INVOICE.INVOICE_ITEMS II ON INV.INVOICE_ID = II.INVOICE_ID
-    LEFT JOIN INVOICE.TIME_SHEET TS ON II.INVOICE_ITEM_ID = TS.INVOICE_ITEM_ID
-  WHERE INV.INVOICE_ID = ?  
-  GROUP BY II.CODE,
-    II.DESCRIPTION,
-    II.QUANTITY,
-    II.UNIT) Q1]]></xml-property>
+            <xml-property name="queryText"><![CDATA[select row_number() over ()                   rn,
+       (q1.quantity * q1.rate) as total,
+       q1.*
+from (
+       select ii.code,
+              ii.description,
+              ii.quantity,
+              ii.unit,
+              case
+                when ii.unit <> 'TOTAL'
+                  then inv.rate
+                else 1 end as rate
+       from invoice.invoice inv
+              left join invoice.invoice_items ii on inv.invoice_id = ii.invoice_id
+              left join invoice.timesheet ts on ii.invoice_item_id = ts.invoice_item_id
+       where inv.invoice_id = ?
+       group by ii.code,
+                ii.description,
+                ii.quantity,
+                ii.unit,
+                case
+                  when ii.unit <> 'TOTAL'
+                    then inv.rate
+                  else 1 end) q1]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -1288,7 +1327,7 @@ FROM (
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">Data Source Postgres</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
@@ -1319,12 +1358,12 @@ FROM (
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[SELECT IA.ATTACHMENT_ID, ia.INVOICE_ID, c.CONTENT, c.FILENAME
-FROM INVOICE.ATTACHMENT IA
-       inner join invoice.CONTENT C on IA.CONTENT_ID = C.CONTENT_ID
-WHERE IA.INVOICE_ID = ?
-  AND (upper(c.FILENAME) LIKE '%.PNG' OR upper(c.FILENAME) LIKE '%.JPG' OR upper(c.FILENAME) LIKE '%.JPEG' OR
-       upper(c.FILENAME) LIKE '%.BMP')]]></xml-property>
+            <xml-property name="queryText"><![CDATA[select ia.attachment_id, ia.invoice_id, c.content, c.filename
+from invoice.attachment ia
+       inner join invoice.content c on ia.content_id = c.content_id
+where ia.invoice_id = ?
+  and (upper(c.filename) like '%.PNG' or upper(c.filename) like '%.JPG' or upper(c.filename) like '%.JPEG' or
+       upper(c.filename) like '%.BMP')]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -2094,8 +2133,8 @@ WHERE IA.INVOICE_ID = ?
                         <list-property name="boundDataColumns">
                             <structure>
                                 <property name="name">DUE_DATE</property>
-                                <text-property name="displayName">CREATED_DATE</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["CREATED_DATE"]</expression>
+                                <text-property name="displayName">CREATED_AT</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["CREATED_AT"]</expression>
                                 <property name="dataType">date</property>
                                 <property name="allowExport">true</property>
                             </structure>

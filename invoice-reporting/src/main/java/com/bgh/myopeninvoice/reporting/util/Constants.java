@@ -18,6 +18,8 @@ package com.bgh.myopeninvoice.reporting.util;
 
 /** Created by bcavlin on 04/08/17. */
 public class Constants {
-  public static final String REPORT_1 = "bgh-invoice-v1.rptdesign";
-  public static final String REPORT_3 = "my-invoice-rpt-3.rptdesign";
+
+  public static final String REPORT_h2 = "my-invoice-rpt-h2-1.rptdesign";
+
+  public static final String REPORT_postgres = "my-invoice-rpt-postgres-1.rptdesign";
 }

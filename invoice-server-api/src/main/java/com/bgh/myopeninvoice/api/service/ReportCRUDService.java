@@ -16,6 +16,7 @@ import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,9 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
   @Autowired private ContentRepository contentRepository;
 
   @Autowired private ReportRunner reportRunner;
+
+  @Autowired
+  private Environment environment;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -130,7 +134,7 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
             reportsEntity.setContentByContentId(content);
           } else {
             log.debug("Updating content: {}", reportsEntity.getContentByContentId().getContentId());
-              reportsEntity.getContentByContentId().setCreatedAt(content.getCreatedAt());
+            reportsEntity.getContentByContentId().setCreatedAt(content.getCreatedAt());
             reportsEntity.getContentByContentId().setContentTable(content.getContentTable());
             reportsEntity.getContentByContentId().setContent(content.getContent());
             reportsEntity.getContentByContentId().setFilename(content.getFilename());
@@ -147,7 +151,16 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
     log.info("Saving entity");
     List<ReportEntity> entities = new ArrayList<>();
 
-    ClassPathResource report1 = new ClassPathResource(Constants.REPORT_3);
+    String[] activeProfiles = this.environment.getActiveProfiles();
+
+    ClassPathResource report1 = null;
+
+    if (Arrays.asList(activeProfiles).contains("prod")) {
+      report1 = new ClassPathResource(Constants.REPORT_postgres);
+    } else {
+      report1 = new ClassPathResource(Constants.REPORT_h2);
+    }
+
     byte[] bytes = new byte[0];
     try {
       bytes = IOUtils.toByteArray(report1.getInputStream());
@@ -164,11 +177,11 @@ public class ReportCRUDService implements CommonCRUDService<ReportEntity> {
     ContentEntity contentEntity = new ContentEntity();
     contentEntity.setContent(reportContent.toByteArray());
     contentEntity.setContentTable(ContentEntity.ContentEntityTable.REPORTS.toString());
-      contentEntity.setCreatedAt(ZonedDateTime.now());
+    contentEntity.setCreatedAt(ZonedDateTime.now());
     contentEntity.setFilename(entity.getReportName() + ".pdf");
 
     entity.setContentByContentId(contentEntity);
-      entity.setCreatedAt(ZonedDateTime.now());
+    entity.setCreatedAt(ZonedDateTime.now());
 
     ReportEntity saved = reportsRepository.save(entity);
     log.info("Saved entity: {}", entity);

@@ -8,3 +8,4 @@
 !.elasticbeanstalk/*.global.yml
 ..bfg-report/*
 .bfg/*
+pom.xml.versionsBackup
