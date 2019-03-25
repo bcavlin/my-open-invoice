@@ -61,7 +61,7 @@ public class InvoiceDTO implements java.io.Serializable {
 
   private CurrencyDTO currency;
 
-  @JsonIgnoreProperties({"content", "companyContact"})
+  @JsonIgnoreProperties({"content", "companyContact", "invoicesSize"})
   private ContractDTO contract;
 
   private Integer invoiceItemsSize;

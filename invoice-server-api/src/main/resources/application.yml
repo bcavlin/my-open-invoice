@@ -2,6 +2,9 @@ management:
   endpoint:
     shutdown:
       enabled: true
+    health:
+      show-details: when_authorized
+      roles: ADMIN
 spring:
   profiles:
     include: database
@@ -16,12 +19,11 @@ spring:
   cache:
     ehcache:
       config: classpath:ehcache.xml
-jasypt:
-  encryptor:
-    password: mypassword
-    algorithm: PBEWITHMD5ANDDES
+
+
+
 app:
-  jwtSecret: secret
+  jwtSecret: ${JWT_SECRET}
   jwtExpirationInMs: 604800000
 rss:
   links: >
@@ -32,3 +34,4 @@ rss:
     https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/xcsgsthst-eng.xml,
     https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/esrvc-srvce/rss/pyrll-eng.xml,
     https://www.canada.ca/en/revenue-agency.atom.xml
+

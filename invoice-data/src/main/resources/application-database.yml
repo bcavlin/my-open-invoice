@@ -45,10 +45,10 @@ spring:
   liquibase:
     default-schema: invoice
   datasource:
-    url: ${INVOICE_DB_LOCATION}
+    url: ${JDBC_CONNECTION_STRING}
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: ${PROD_PWD}
+    password: ${DATASOURCE_PWD}
   jpa:
     properties:
       hibernate:
@@ -56,4 +56,3 @@ spring:
           lob:
             non_contextual_creation: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-

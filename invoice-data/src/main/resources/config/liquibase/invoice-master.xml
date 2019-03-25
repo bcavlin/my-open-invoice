@@ -511,9 +511,7 @@
         <loadData tableName="user"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/user.csv"
-                  encoding="UTF-8">
+                  file="config/liquibase/user.csv">
             <column name="enabled" type="boolean"/>
         </loadData>
     </changeSet>
@@ -522,9 +520,7 @@
         <loadData tableName="role"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/role.csv"
-                  encoding="UTF-8"/>
+                  file="config/liquibase/role.csv"/>
     </changeSet>
 
     <changeSet id="7" author="bcavlin">
@@ -532,48 +528,47 @@
         <loadData tableName="user_role"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/user_role.csv"
-                  encoding="UTF-8"/>
+                  file="config/liquibase/user_role.csv"/>
     </changeSet>
 
     <changeSet id="8" author="bcavlin">
         <loadData tableName="currency"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/currency.csv"
-                  encoding="UTF-8"/>
+                  file="config/liquibase/currency.csv"/>
     </changeSet>
 
     <changeSet id="9" author="bcavlin">
         <loadData tableName="tax"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/tax.csv"
-                  encoding="UTF-8"/>
+                  file="config/liquibase/tax.csv"/>
     </changeSet>
 
     <changeSet id="10" author="bcavlin">
         <loadData tableName="contact"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/contact.csv"
-                  encoding="UTF-8">
+                  file="config/liquibase/contact.csv">
             <column name="user_id" type="numeric"/>
         </loadData>
 
         <loadData tableName="company"
                   schemaName="invoice"
                   quotchar="'"
-                  separator=","
-                  file="config/liquibase/company.csv"
-                  encoding="UTF-8">
+                  file="config/liquibase/company.csv">
             <column name="owned_by_me" type="boolean"/>
         </loadData>
+    </changeSet>
 
+    <changeSet id="11" author="bcavlin" dbms="postgresql" labels="alter sequences">
+        <sql>select setval('invoice.company_company_id_seq', (select max(company_id)+1 from invoice.company), false)
+        </sql>
+        <sql>select setval('invoice.contact_contact_id_seq', (select max(contact_id)+1 from invoice.contact), false)
+        </sql>
+        <sql>select setval('invoice.currency_ccy_id_seq', (select max(ccy_id)+1 from invoice.currency), false)</sql>
+        <sql>select setval('invoice.user_user_id_seq', (select max(user_id)+1 from invoice.user), false)</sql>
+        <sql>select setval('invoice.tax_tax_id_seq', (select max(tax_id)+1 from invoice.tax), false)</sql>
     </changeSet>
 
 

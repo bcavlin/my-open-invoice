@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -118,4 +120,9 @@ public class ContractEntity implements java.io.Serializable {
       return false;
     }
   }
+
+    @Transient
+    public Integer getInvoicesByContractIdSize() {
+        return Optional.ofNullable(invoicesByContractId).orElse(Collections.emptyList()).size();
+    }
 }

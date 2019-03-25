@@ -3,32 +3,6 @@
     <property name="author">Branislav Cavlin</property>
     <property name="createdBy">Eclipse BIRT Designer Version 4.6.0.v201606072122</property>
     <text-property name="title">My Open Invoice</text-property>
-    <list-property name="propertyBindings">
-        <structure>
-            <property name="name">queryText</property>
-            <property name="id">342</property>
-        </structure>
-        <structure>
-            <property name="name">queryTimeOut</property>
-            <property name="id">342</property>
-        </structure>
-        <structure>
-            <property name="name">rowFetchSize</property>
-            <property name="id">342</property>
-        </structure>
-        <structure>
-            <property name="name">queryText</property>
-            <property name="id">8</property>
-        </structure>
-        <structure>
-            <property name="name">queryTimeOut</property>
-            <property name="id">8</property>
-        </structure>
-        <structure>
-            <property name="name">rowFetchSize</property>
-            <property name="id">8</property>
-        </structure>
-    </list-property>
     <property name="units">pt</property>
     <text-property name="displayName">My Open Invoice</text-property>
     <property name="iconFile">/templates/blank_report.gif</property>
@@ -79,131 +53,131 @@
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Data Set Main" id="368">
             <list-property name="computedColumns">
                 <structure>
-                    <property name="name">REPORT_TEXT</property>
-                    <expression name="expression">"This invoice is for the period from " + Formatter.format(row["FROM_DATE"],"yyyy-MM-dd") + " to " + Formatter.format(row["TO_DATE"],"yyyy-MM-dd") + "."</expression>
+                    <property name="name">report_text</property>
+                    <expression name="expression">"This invoice is for the period from " + Formatter.format(row["from_date"],"yyyy-MM-dd") + " to " + Formatter.format(row["to_date"],"yyyy-MM-dd") + "."</expression>
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">INVOICE_ID</property>
+                    <property name="columnName">invoice_id</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">INVOICE_ID</text-property>
-                    <text-property name="heading">INVOICE_ID</text-property>
+                    <text-property name="displayName">invoice_id</text-property>
+                    <text-property name="heading">invoice_id</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_DATE</property>
+                    <property name="columnName">from_date</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FROM_DATE</text-property>
-                    <text-property name="heading">FROM_DATE</text-property>
+                    <text-property name="displayName">from_date</text-property>
+                    <text-property name="heading">from_date</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TO_DATE</property>
+                    <property name="columnName">to_date</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">TO_DATE</text-property>
-                    <text-property name="heading">TO_DATE</text-property>
+                    <text-property name="displayName">to_date</text-property>
+                    <text-property name="heading">to_date</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CREATED_AT</property>
+                    <property name="columnName">created_at</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">CREATED_AT</text-property>
-                    <text-property name="heading">CREATED_AT</text-property>
+                    <text-property name="displayName">created_at</text-property>
+                    <text-property name="heading">created_at</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TITLE</property>
+                    <property name="columnName">title</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">TITLE</text-property>
-                    <text-property name="heading">TITLE</text-property>
+                    <text-property name="displayName">title</text-property>
+                    <text-property name="heading">title</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">DUE_DATE</property>
+                    <property name="columnName">due_date</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">DUE_DATE</text-property>
-                    <text-property name="heading">DUE_DATE</text-property>
+                    <text-property name="displayName">due_date</text-property>
+                    <text-property name="heading">due_date</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TAX_PERCENT</property>
+                    <property name="columnName">tax_percent</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">TAX_PERCENT</text-property>
-                    <text-property name="heading">TAX_PERCENT</text-property>
+                    <text-property name="displayName">tax_percent</text-property>
+                    <text-property name="heading">tax_percent</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">NOTE</property>
+                    <property name="columnName">note</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">NOTE</text-property>
-                    <text-property name="heading">NOTE</text-property>
+                    <text-property name="displayName">note</text-property>
+                    <text-property name="heading">note</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TO_NAME</property>
+                    <property name="columnName">to_name</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">TO_NAME</text-property>
-                    <text-property name="heading">TO_NAME</text-property>
+                    <text-property name="displayName">to_name</text-property>
+                    <text-property name="heading">to_name</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TO_ADDRESS</property>
+                    <property name="columnName">to_address</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">TO_ADDRESS</text-property>
-                    <text-property name="heading">TO_ADDRESS</text-property>
+                    <text-property name="displayName">to_address</text-property>
+                    <text-property name="heading">to_address</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TO_PHONE</property>
+                    <property name="columnName">to_phone</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">TO_PHONE</text-property>
-                    <text-property name="heading">TO_PHONE</text-property>
+                    <text-property name="displayName">to_phone</text-property>
+                    <text-property name="heading">to_phone</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CCY</property>
+                    <property name="columnName">ccy</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">CCY</text-property>
-                    <text-property name="heading">CCY</text-property>
+                    <text-property name="displayName">ccy</text-property>
+                    <text-property name="heading">ccy</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CONTRACT_NUMBER</property>
+                    <property name="columnName">contract_number</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">CONTRACT_NUMBER</text-property>
-                    <text-property name="heading">CONTRACT_NUMBER</text-property>
+                    <text-property name="displayName">contract_number</text-property>
+                    <text-property name="heading">contract_number</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_NAME</property>
+                    <property name="columnName">from_name</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FROM_NAME</text-property>
-                    <text-property name="heading">FROM_NAME</text-property>
+                    <text-property name="displayName">from_name</text-property>
+                    <text-property name="heading">from_name</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_ADDRESS</property>
+                    <property name="columnName">from_address</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FROM_ADDRESS</text-property>
-                    <text-property name="heading">FROM_ADDRESS</text-property>
+                    <text-property name="displayName">from_address</text-property>
+                    <text-property name="heading">from_address</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_PHONE</property>
+                    <property name="columnName">from_phone</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FROM_PHONE</text-property>
-                    <text-property name="heading">FROM_PHONE</text-property>
+                    <text-property name="displayName">from_phone</text-property>
+                    <text-property name="heading">from_phone</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_LOGO</property>
+                    <property name="columnName">from_logo</property>
                     <property name="analysis">attribute</property>
-                    <text-property name="displayName">FROM_LOGO</text-property>
-                    <text-property name="heading">FROM_LOGO</text-property>
+                    <text-property name="displayName">from_logo</text-property>
+                    <text-property name="heading">from_logo</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_BN</property>
+                    <property name="columnName">from_bn</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FROM_BN</text-property>
-                    <text-property name="heading">FROM_BN</text-property>
+                    <text-property name="displayName">from_bn</text-property>
+                    <text-property name="heading">from_bn</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FROM_TS_DATE</property>
+                    <property name="columnName">from_ts_date</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FROM_TS_DATE</text-property>
-                    <text-property name="heading">FROM_TS_DATE</text-property>
+                    <text-property name="displayName">from_ts_date</text-property>
+                    <text-property name="heading">from_ts_date</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TO_TS_DATE</property>
+                    <property name="columnName">to_ts_date</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">TO_TS_DATE</text-property>
-                    <text-property name="heading">TO_TS_DATE</text-property>
+                    <text-property name="displayName">to_ts_date</text-property>
+                    <text-property name="heading">to_ts_date</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters">
@@ -212,7 +186,7 @@
                     <property name="paramName">p_invoice_id</property>
                     <property name="nativeName"></property>
                     <property name="dataType">integer</property>
-                    <property name="nativeDataType">12</property>
+                    <property name="nativeDataType">4</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
@@ -222,254 +196,254 @@
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">INVOICE_ID</property>
+                        <property name="name">invoice_id</property>
                         <property name="dataType">integer</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">FROM_DATE</property>
+                        <property name="name">from_date</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
-                        <property name="name">TO_DATE</property>
+                        <property name="name">to_date</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">CREATED_AT</property>
+                        <property name="name">created_at</property>
                         <property name="dataType">date-time</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
-                        <property name="name">TITLE</property>
+                        <property name="name">title</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
-                        <property name="name">DUE_DATE</property>
+                        <property name="name">due_date</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
-                        <property name="name">TAX_PERCENT</property>
-                        <property name="dataType">float</property>
+                        <property name="name">tax_percent</property>
+                        <property name="dataType">decimal</property>
                     </structure>
                     <structure>
                         <property name="position">8</property>
-                        <property name="name">NOTE</property>
+                        <property name="name">note</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">9</property>
-                        <property name="name">TO_NAME</property>
+                        <property name="name">to_name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">10</property>
-                        <property name="name">TO_ADDRESS</property>
+                        <property name="name">to_address</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">11</property>
-                        <property name="name">TO_PHONE</property>
+                        <property name="name">to_phone</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">12</property>
-                        <property name="name">CCY</property>
+                        <property name="name">ccy</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">13</property>
-                        <property name="name">CONTRACT_NUMBER</property>
+                        <property name="name">contract_number</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">14</property>
-                        <property name="name">FROM_NAME</property>
+                        <property name="name">from_name</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">15</property>
-                        <property name="name">FROM_ADDRESS</property>
+                        <property name="name">from_address</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">16</property>
-                        <property name="name">FROM_PHONE</property>
+                        <property name="name">from_phone</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">17</property>
-                        <property name="name">FROM_LOGO</property>
+                        <property name="name">from_logo</property>
                         <property name="dataType">blob</property>
                     </structure>
                     <structure>
                         <property name="position">18</property>
-                        <property name="name">FROM_BN</property>
+                        <property name="name">from_bn</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">19</property>
-                        <property name="name">FROM_TS_DATE</property>
+                        <property name="name">from_ts_date</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
                         <property name="position">20</property>
-                        <property name="name">TO_TS_DATE</property>
+                        <property name="name">to_ts_date</property>
                         <property name="dataType">date</property>
                     </structure>
                     <structure>
                         <property name="position">21</property>
-                        <property name="name">REPORT_TEXT</property>
+                        <property name="name">report_text</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
             </structure>
-            <method name="onFetch"><![CDATA[vars["TaxPercent"]=row["TAX_PERCENT"];
-vars["BusinessNumber"]=row["FROM_BN"];
-vars["DataCCY"]=row["CCY"];
-vars["Notes"]=row["NOTE"];]]></method>
+            <method name="onFetch"><![CDATA[vars["TaxPercent"]=row["tax_percent"];
+vars["BusinessNumber"]=row["from_bn"];
+vars["DataCCY"]=row["ccy"];
+vars["Notes"]=row["note"];]]></method>
             <property name="dataSource">Data Source Postgres</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">INVOICE_ID</property>
-                    <property name="nativeName">INVOICE_ID</property>
+                    <property name="name">invoice_id</property>
+                    <property name="nativeName">invoice_id</property>
                     <property name="dataType">integer</property>
                     <property name="nativeDataType">4</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
-                    <property name="name">FROM_DATE</property>
-                    <property name="nativeName">FROM_DATE</property>
+                    <property name="name">from_date</property>
+                    <property name="nativeName">from_date</property>
                     <property name="dataType">date</property>
                     <property name="nativeDataType">91</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
-                    <property name="name">TO_DATE</property>
-                    <property name="nativeName">TO_DATE</property>
+                    <property name="name">to_date</property>
+                    <property name="nativeName">to_date</property>
                     <property name="dataType">date</property>
                     <property name="nativeDataType">91</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
-                    <property name="name">CREATED_AT</property>
-                    <property name="nativeName">CREATED_AT</property>
+                    <property name="name">created_at</property>
+                    <property name="nativeName">created_at</property>
                     <property name="dataType">date-time</property>
                     <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
-                    <property name="name">TITLE</property>
-                    <property name="nativeName">TITLE</property>
+                    <property name="name">title</property>
+                    <property name="nativeName">title</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
-                    <property name="name">DUE_DATE</property>
-                    <property name="nativeName">DUE_DATE</property>
+                    <property name="name">due_date</property>
+                    <property name="nativeName">due_date</property>
                     <property name="dataType">date</property>
                     <property name="nativeDataType">91</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
-                    <property name="name">TAX_PERCENT</property>
-                    <property name="nativeName">TAX_PERCENT</property>
-                    <property name="dataType">float</property>
-                    <property name="nativeDataType">8</property>
+                    <property name="name">tax_percent</property>
+                    <property name="nativeName">tax_percent</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
-                    <property name="name">NOTE</property>
-                    <property name="nativeName">NOTE</property>
+                    <property name="name">note</property>
+                    <property name="nativeName">note</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">9</property>
-                    <property name="name">TO_NAME</property>
-                    <property name="nativeName">TO_NAME</property>
+                    <property name="name">to_name</property>
+                    <property name="nativeName">to_name</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">10</property>
-                    <property name="name">TO_ADDRESS</property>
-                    <property name="nativeName">TO_ADDRESS</property>
+                    <property name="name">to_address</property>
+                    <property name="nativeName">to_address</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">11</property>
-                    <property name="name">TO_PHONE</property>
-                    <property name="nativeName">TO_PHONE</property>
+                    <property name="name">to_phone</property>
+                    <property name="nativeName">to_phone</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">12</property>
-                    <property name="name">CCY</property>
-                    <property name="nativeName">CCY</property>
+                    <property name="name">ccy</property>
+                    <property name="nativeName">ccy</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">13</property>
-                    <property name="name">CONTRACT_NUMBER</property>
-                    <property name="nativeName">CONTRACT_NUMBER</property>
+                    <property name="name">contract_number</property>
+                    <property name="nativeName">contract_number</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">14</property>
-                    <property name="name">FROM_NAME</property>
-                    <property name="nativeName">FROM_NAME</property>
+                    <property name="name">from_name</property>
+                    <property name="nativeName">from_name</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">15</property>
-                    <property name="name">FROM_ADDRESS</property>
-                    <property name="nativeName">FROM_ADDRESS</property>
+                    <property name="name">from_address</property>
+                    <property name="nativeName">from_address</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">16</property>
-                    <property name="name">FROM_PHONE</property>
-                    <property name="nativeName">FROM_PHONE</property>
+                    <property name="name">from_phone</property>
+                    <property name="nativeName">from_phone</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">17</property>
-                    <property name="name">FROM_LOGO</property>
-                    <property name="nativeName">FROM_LOGO</property>
+                    <property name="name">from_logo</property>
+                    <property name="nativeName">from_logo</property>
                     <property name="dataType">blob</property>
-                    <property name="nativeDataType">2004</property>
+                    <property name="nativeDataType">-2</property>
                 </structure>
                 <structure>
                     <property name="position">18</property>
-                    <property name="name">FROM_BN</property>
-                    <property name="nativeName">FROM_BN</property>
+                    <property name="name">from_bn</property>
+                    <property name="nativeName">from_bn</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">19</property>
-                    <property name="name">FROM_TS_DATE</property>
-                    <property name="nativeName">FROM_TS_DATE</property>
+                    <property name="name">from_ts_date</property>
+                    <property name="nativeName">from_ts_date</property>
                     <property name="dataType">date</property>
                     <property name="nativeDataType">91</property>
                 </structure>
                 <structure>
                     <property name="position">20</property>
-                    <property name="name">TO_TS_DATE</property>
-                    <property name="nativeName">TO_TS_DATE</property>
+                    <property name="name">to_ts_date</property>
+                    <property name="nativeName">to_ts_date</property>
                     <property name="dataType">date</property>
                     <property name="nativeDataType">91</property>
                 </structure>
@@ -614,7 +588,7 @@ group by ds1.invoice_id,
         <design:resultColumnDefinitions>
           <design:attributes>
             <design:identifier>
-              <design:name>CREATED_DATE</design:name>
+              <design:name>CREATED_AT</design:name>
               <design:position>4</design:position>
             </design:identifier>
             <design:nativeDataTypeCode>91</design:nativeDataTypeCode>
@@ -622,11 +596,11 @@ group by ds1.invoice_id,
             <design:scale>0</design:scale>
             <design:nullability>Nullable</design:nullability>
             <design:uiHints>
-              <design:displayName>CREATED_DATE</design:displayName>
+              <design:displayName>CREATED_AT</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>CREATED_DATE</design:label>
+            <design:label>CREATED_AT</design:label>
             <design:formattingHints>
               <design:displaySize>10</design:displaySize>
             </design:formattingHints>
@@ -936,46 +910,46 @@ group by ds1.invoice_id,
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">RN</property>
+                    <property name="columnName">rn</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">RN</text-property>
-                    <text-property name="heading">RN</text-property>
+                    <text-property name="displayName">rn</text-property>
+                    <text-property name="heading">rn</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">TOTAL</property>
+                    <property name="columnName">total</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">TOTAL</text-property>
-                    <text-property name="heading">TOTAL</text-property>
+                    <text-property name="displayName">total</text-property>
+                    <text-property name="heading">total</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CODE</property>
+                    <property name="columnName">code</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">CODE</text-property>
-                    <text-property name="heading">CODE</text-property>
+                    <text-property name="displayName">code</text-property>
+                    <text-property name="heading">code</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">DESCRIPTION</property>
+                    <property name="columnName">description</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">DESCRIPTION</text-property>
-                    <text-property name="heading">DESCRIPTION</text-property>
+                    <text-property name="displayName">description</text-property>
+                    <text-property name="heading">description</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">QUANTITY</property>
+                    <property name="columnName">quantity</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">QUANTITY</text-property>
-                    <text-property name="heading">QUANTITY</text-property>
+                    <text-property name="displayName">quantity</text-property>
+                    <text-property name="heading">quantity</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">UNIT</property>
+                    <property name="columnName">unit</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">UNIT</text-property>
-                    <text-property name="heading">UNIT</text-property>
+                    <text-property name="displayName">unit</text-property>
+                    <text-property name="heading">unit</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">RATE</property>
+                    <property name="columnName">rate</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">RATE</text-property>
-                    <text-property name="heading">RATE</text-property>
+                    <text-property name="displayName">rate</text-property>
+                    <text-property name="heading">rate</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters">
@@ -984,7 +958,7 @@ group by ds1.invoice_id,
                     <property name="paramName">p_invoice_id</property>
                     <property name="nativeName"></property>
                     <property name="dataType">integer</property>
-                    <property name="nativeDataType">12</property>
+                    <property name="nativeDataType">4</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
@@ -994,38 +968,38 @@ group by ds1.invoice_id,
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">RN</property>
-                        <property name="dataType">integer</property>
+                        <property name="name">rn</property>
+                        <property name="dataType">decimal</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">TOTAL</property>
-                        <property name="dataType">float</property>
+                        <property name="name">total</property>
+                        <property name="dataType">decimal</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
-                        <property name="name">CODE</property>
+                        <property name="name">code</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">DESCRIPTION</property>
+                        <property name="name">description</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
-                        <property name="name">QUANTITY</property>
-                        <property name="dataType">float</property>
+                        <property name="name">quantity</property>
+                        <property name="dataType">decimal</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
-                        <property name="name">UNIT</property>
+                        <property name="name">unit</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
-                        <property name="name">RATE</property>
-                        <property name="dataType">float</property>
+                        <property name="name">rate</property>
+                        <property name="dataType">decimal</property>
                     </structure>
                 </list-property>
             </structure>
@@ -1033,52 +1007,52 @@ group by ds1.invoice_id,
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">RN</property>
-                    <property name="nativeName">RN</property>
-                    <property name="dataType">integer</property>
-                    <property name="nativeDataType">4</property>
+                    <property name="name">rn</property>
+                    <property name="nativeName">rn</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
-                    <property name="name">TOTAL</property>
-                    <property name="nativeName">TOTAL</property>
-                    <property name="dataType">float</property>
-                    <property name="nativeDataType">8</property>
+                    <property name="name">total</property>
+                    <property name="nativeName">total</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
-                    <property name="name">CODE</property>
-                    <property name="nativeName">CODE</property>
+                    <property name="name">code</property>
+                    <property name="nativeName">code</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
-                    <property name="name">DESCRIPTION</property>
-                    <property name="nativeName">DESCRIPTION</property>
+                    <property name="name">description</property>
+                    <property name="nativeName">description</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
-                    <property name="name">QUANTITY</property>
-                    <property name="nativeName">QUANTITY</property>
-                    <property name="dataType">float</property>
-                    <property name="nativeDataType">8</property>
+                    <property name="name">quantity</property>
+                    <property name="nativeName">quantity</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
-                    <property name="name">UNIT</property>
-                    <property name="nativeName">UNIT</property>
+                    <property name="name">unit</property>
+                    <property name="nativeName">unit</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
-                    <property name="name">RATE</property>
-                    <property name="nativeName">RATE</property>
-                    <property name="dataType">float</property>
-                    <property name="nativeDataType">8</property>
+                    <property name="name">rate</property>
+                    <property name="nativeName">rate</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select row_number() over ()                   rn,
@@ -1087,7 +1061,7 @@ group by ds1.invoice_id,
 from (
        select ii.code,
               ii.description,
-              ii.quantity,
+              ii.quantity + coalesce(sum(ts.hours_worked),0) as quantity,
               ii.unit,
               case
                 when ii.unit <> 'TOTAL'
@@ -1267,28 +1241,28 @@ from (
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Data Set Attachment" id="342">
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">ATTACHMENT_ID</property>
+                    <property name="columnName">attachment_id</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">ATTACHMENT_ID</text-property>
-                    <text-property name="heading">ATTACHMENT_ID</text-property>
+                    <text-property name="displayName">attachment_id</text-property>
+                    <text-property name="heading">attachment_id</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">INVOICE_ID</property>
+                    <property name="columnName">invoice_id</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">INVOICE_ID</text-property>
-                    <text-property name="heading">INVOICE_ID</text-property>
+                    <text-property name="displayName">invoice_id</text-property>
+                    <text-property name="heading">invoice_id</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CONTENT</property>
+                    <property name="columnName">content</property>
                     <property name="analysis">attribute</property>
-                    <text-property name="displayName">CONTENT</text-property>
-                    <text-property name="heading">CONTENT</text-property>
+                    <text-property name="displayName">content</text-property>
+                    <text-property name="heading">content</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">FILENAME</property>
+                    <property name="columnName">filename</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="displayName">FILENAME</text-property>
-                    <text-property name="heading">FILENAME</text-property>
+                    <text-property name="displayName">filename</text-property>
+                    <text-property name="heading">filename</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters">
@@ -1307,22 +1281,22 @@ from (
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">ATTACHMENT_ID</property>
+                        <property name="name">attachment_id</property>
                         <property name="dataType">integer</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">INVOICE_ID</property>
+                        <property name="name">invoice_id</property>
                         <property name="dataType">integer</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
-                        <property name="name">CONTENT</property>
+                        <property name="name">content</property>
                         <property name="dataType">blob</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">FILENAME</property>
+                        <property name="name">filename</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
@@ -1331,29 +1305,29 @@ from (
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">ATTACHMENT_ID</property>
-                    <property name="nativeName">ATTACHMENT_ID</property>
+                    <property name="name">attachment_id</property>
+                    <property name="nativeName">attachment_id</property>
                     <property name="dataType">integer</property>
                     <property name="nativeDataType">4</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
-                    <property name="name">INVOICE_ID</property>
-                    <property name="nativeName">INVOICE_ID</property>
+                    <property name="name">invoice_id</property>
+                    <property name="nativeName">invoice_id</property>
                     <property name="dataType">integer</property>
                     <property name="nativeDataType">4</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
-                    <property name="name">CONTENT</property>
-                    <property name="nativeName">CONTENT</property>
+                    <property name="name">content</property>
+                    <property name="nativeName">content</property>
                     <property name="dataType">blob</property>
-                    <property name="nativeDataType">2004</property>
+                    <property name="nativeDataType">-2</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
-                    <property name="name">FILENAME</property>
-                    <property name="nativeName">FILENAME</property>
+                    <property name="name">filename</property>
+                    <property name="nativeName">filename</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
@@ -1495,102 +1469,102 @@ where ia.invoice_id = ?
                                 <list-property name="boundDataColumns">
                                     <structure>
                                         <property name="name">INVOICE_ID</property>
-                                        <expression name="expression" type="javascript">dataSetRow["INVOICE_ID"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["invoice_id"]</expression>
                                         <property name="dataType">integer</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_DATE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_DATE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_date"]</expression>
                                         <property name="dataType">date</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TO_DATE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TO_DATE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["to_date"]</expression>
                                         <property name="dataType">date</property>
                                     </structure>
                                     <structure>
-                                        <property name="name">CREATED_DATE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["CREATED_DATE"]</expression>
+                                        <property name="name">CREATED_AT</property>
+                                        <expression name="expression" type="javascript">dataSetRow["created_at"]</expression>
                                         <property name="dataType">date</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TITLE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TITLE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["title"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">DUE_DATE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["DUE_DATE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["due_date"]</expression>
                                         <property name="dataType">date</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TAX_PERCENT</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TAX_PERCENT"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["tax_percent"]</expression>
                                         <property name="dataType">decimal</property>
                                     </structure>
                                     <structure>
                                         <property name="name">NOTE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["NOTE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["note"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TO_NAME</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TO_NAME"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["to_name"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TO_ADDRESS</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TO_ADDRESS"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["to_address"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TO_PHONE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TO_PHONE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["to_phone"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_NAME</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_NAME"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_name"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_ADDRESS</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_ADDRESS"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_address"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_PHONE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_PHONE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_phone"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_LOGO</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_LOGO"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_logo"]</expression>
                                         <property name="dataType">blob</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_BN</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_BN"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_bn"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">CCY</property>
-                                        <expression name="expression" type="javascript">dataSetRow["CCY"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["ccy"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                     <structure>
                                         <property name="name">FROM_TS_DATE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_TS_DATE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_ts_date"]</expression>
                                         <property name="dataType">date</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TO_TS_DATE</property>
-                                        <expression name="expression" type="javascript">dataSetRow["TO_TS_DATE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["to_ts_date"]</expression>
                                         <property name="dataType">date</property>
                                     </structure>
                                     <structure>
                                         <property name="name">REPORT_TEXT</property>
-                                        <expression name="expression" type="javascript">dataSetRow["REPORT_TEXT"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["report_text"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                 </list-property>
@@ -1615,7 +1589,7 @@ where ia.invoice_id = ?
                                     <structure>
                                         <property name="name">FROM_NAME</property>
                                         <text-property name="displayName">FROM_NAME</text-property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_NAME"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_name"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                 </list-property>
@@ -1632,7 +1606,7 @@ where ia.invoice_id = ?
                                     <structure>
                                         <property name="name">FROM_ADDRESS</property>
                                         <text-property name="displayName">FROM_ADDRESS</text-property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_ADDRESS"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_address"]</expression>
                                         <property name="dataType">string</property>
                                         <property name="allowExport">true</property>
                                     </structure>
@@ -1693,7 +1667,7 @@ where ia.invoice_id = ?
                                     <structure>
                                         <property name="name">FROM_PHONE</property>
                                         <text-property name="displayName">FROM_PHONE</text-property>
-                                        <expression name="expression" type="javascript">dataSetRow["FROM_PHONE"]</expression>
+                                        <expression name="expression" type="javascript">dataSetRow["from_phone"]</expression>
                                         <property name="dataType">string</property>
                                     </structure>
                                 </list-property>
@@ -1852,7 +1826,7 @@ where ia.invoice_id = ?
                             <structure>
                                 <property name="name">TO_NAME</property>
                                 <text-property name="displayName">TO_NAME</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["TO_NAME"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["to_name"]</expression>
                                 <property name="dataType">string</property>
                             </structure>
                         </list-property>
@@ -1869,7 +1843,7 @@ where ia.invoice_id = ?
                             <structure>
                                 <property name="name">TO_ADDRESS</property>
                                 <text-property name="displayName">TO_ADDRESS</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["TO_ADDRESS"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["to_address"]</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>
@@ -2046,7 +2020,7 @@ where ia.invoice_id = ?
                             <structure>
                                 <property name="name">TITLE</property>
                                 <text-property name="displayName">TITLE</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["TITLE"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["title"]</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>
@@ -2108,14 +2082,14 @@ where ia.invoice_id = ?
                         <property name="dataSet">Data Set Main</property>
                         <list-property name="boundDataColumns">
                             <structure>
-                                <property name="name">CREATED_DATE</property>
+                                <property name="name">DUE_DATE</property>
                                 <text-property name="displayName">DUE_DATE</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["DUE_DATE"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["due_date"]</expression>
                                 <property name="dataType">date</property>
                                 <property name="allowExport">true</property>
                             </structure>
                         </list-property>
-                        <property name="resultSetColumn">CREATED_DATE</property>
+                        <property name="resultSetColumn">DUE_DATE</property>
                     </data>
                     <data id="177">
                         <property name="fontFamily">"Consolas"</property>
@@ -2132,14 +2106,14 @@ where ia.invoice_id = ?
                         <property name="dataSet">Data Set Main</property>
                         <list-property name="boundDataColumns">
                             <structure>
-                                <property name="name">DUE_DATE</property>
+                                <property name="name">CREATED_AT</property>
                                 <text-property name="displayName">CREATED_AT</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["CREATED_AT"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["created_at"]</expression>
                                 <property name="dataType">date</property>
                                 <property name="allowExport">true</property>
                             </structure>
                         </list-property>
-                        <property name="resultSetColumn">DUE_DATE</property>
+                        <property name="resultSetColumn">CREATED_AT</property>
                     </data>
                     <data id="285">
                         <property name="fontFamily">"Consolas"</property>
@@ -2154,7 +2128,7 @@ where ia.invoice_id = ?
                             <structure>
                                 <property name="name">FROM_BN</property>
                                 <text-property name="displayName">FROM_BN</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["FROM_BN"]==null?"N/A":dataSetRow["FROM_BN"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["from_bn"]==null?"N/A":dataSetRow["from_bn"]</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>
@@ -2214,7 +2188,7 @@ where ia.invoice_id = ?
                             <structure>
                                 <property name="name">CONTRACT_NUMBER</property>
                                 <text-property name="displayName">CONTRACT_NUMBER</text-property>
-                                <expression name="expression" type="javascript">dataSetRow["CONTRACT_NUMBER"]==null?"N/A":dataSetRow["CONTRACT_NUMBER"]</expression>
+                                <expression name="expression" type="javascript">dataSetRow["contract_number"]==null?"N/A":dataSetRow["contract_number"]</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>
@@ -2232,44 +2206,44 @@ where ia.invoice_id = ?
                 <structure>
                     <property name="name">RN</property>
                     <text-property name="displayName">RN</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["RN"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["rn"]</expression>
                     <property name="dataType">integer</property>
                 </structure>
                 <structure>
                     <property name="name">TOTAL</property>
                     <text-property name="displayName">TOTAL</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["TOTAL"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["total"]</expression>
                     <property name="dataType">float</property>
                     <property name="allowExport">true</property>
                 </structure>
                 <structure>
                     <property name="name">CODE</property>
                     <text-property name="displayName">CODE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["CODE"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["code"]</expression>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
                     <property name="name">DESCRIPTION</property>
                     <text-property name="displayName">DESCRIPTION</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["DESCRIPTION"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["description"]</expression>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
                     <property name="name">QUANTITY</property>
                     <text-property name="displayName">QUANTITY</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["QUANTITY"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["quantity"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
                 <structure>
                     <property name="name">UNIT</property>
                     <text-property name="displayName">UNIT</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["UNIT"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["unit"]</expression>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
                     <property name="name">RATE</property>
                     <text-property name="displayName">RATE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["RATE"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["rate"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
                 <structure>
@@ -2280,7 +2254,7 @@ where ia.invoice_id = ?
                     <list-property name="arguments">
                         <structure>
                             <property name="name">Expression</property>
-                            <expression name="value" type="javascript">dataSetRow["TOTAL"]</expression>
+                            <expression name="value" type="javascript">dataSetRow["total"]</expression>
                         </structure>
                     </list-property>
                     <property name="allowExport">true</property>
@@ -2293,7 +2267,7 @@ where ia.invoice_id = ?
                     <list-property name="arguments">
                         <structure>
                             <property name="name">Expression</property>
-                            <expression name="value" type="javascript">dataSetRow["TOTAL"]*(vars["TaxPercent"]+1)</expression>
+                            <expression name="value" type="javascript">dataSetRow["total"]*(vars["TaxPercent"]+1)</expression>
                         </structure>
                     </list-property>
                     <property name="allowExport">true</property>
@@ -2337,6 +2311,7 @@ where ia.invoice_id = ?
                     </cell>
                     <cell id="192">
                         <label id="193">
+                            <structure name="toc"/>
                             <text-property name="text">DESCRIPTION</text-property>
                         </label>
                     </cell>
@@ -2696,7 +2671,7 @@ where ia.invoice_id = ?
                             <structure>
                                 <property name="name">NOTE</property>
                                 <text-property name="displayName">NOTE</text-property>
-                                <expression name="expression" type="javascript">"Note: " + dataSetRow["REPORT_TEXT"] + " " + dataSetRow["NOTE"]</expression>
+                                <expression name="expression" type="javascript">"Note: " + dataSetRow["report_text"] + " " + dataSetRow["note"]</expression>
                                 <property name="dataType">string</property>
                                 <property name="allowExport">true</property>
                             </structure>
@@ -2728,7 +2703,7 @@ where ia.invoice_id = ?
                 <structure>
                     <property name="name">CONTENT</property>
                     <text-property name="displayName">CONTENT</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["CONTENT"]</expression>
+                    <expression name="expression" type="javascript">dataSetRow["content"]</expression>
                     <property name="dataType">blob</property>
                 </structure>
             </list-property>
@@ -2746,8 +2721,31 @@ where ia.invoice_id = ?
             <detail>
                 <image id="358">
                     <property name="width">100%</property>
+                    <property name="dataSet">Data Set Attachment</property>
+                    <list-property name="boundDataColumns">
+                        <structure>
+                            <property name="name">attachment_id</property>
+                            <expression name="expression" type="javascript">dataSetRow["attachment_id"]</expression>
+                            <property name="dataType">integer</property>
+                        </structure>
+                        <structure>
+                            <property name="name">invoice_id</property>
+                            <expression name="expression" type="javascript">dataSetRow["invoice_id"]</expression>
+                            <property name="dataType">integer</property>
+                        </structure>
+                        <structure>
+                            <property name="name">content</property>
+                            <expression name="expression" type="javascript">dataSetRow["content"]</expression>
+                            <property name="dataType">blob</property>
+                        </structure>
+                        <structure>
+                            <property name="name">filename</property>
+                            <expression name="expression" type="javascript">dataSetRow["filename"]</expression>
+                            <property name="dataType">string</property>
+                        </structure>
+                    </list-property>
                     <property name="source">expr</property>
-                    <expression name="valueExpr">row["CONTENT"]</expression>
+                    <expression name="valueExpr">row["content"]</expression>
                 </image>
             </detail>
         </list>

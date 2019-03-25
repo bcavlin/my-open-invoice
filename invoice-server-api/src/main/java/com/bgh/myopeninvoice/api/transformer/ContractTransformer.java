@@ -23,6 +23,7 @@ public class ContractTransformer extends CustomAbstractTransformer<ContractEntit
         .field("company", "companyByCompanyId")
         .field("companySubcontract", "companyByCompanyIdSubcontract")
         .field("currency", "currencyByCcyId")
+            .field("invoicesSize", "invoicesByContractIdSize")
         .byDefault()
         .register();
     return mapperFactory;

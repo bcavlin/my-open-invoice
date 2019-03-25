@@ -12,7 +12,7 @@
 # Description:       Start invoice service.
 ### END INIT INFO
 
-PROJECT_VERSION=0.3.0-SNAPSHOT
+PROJECT_VERSION=1.0.0-SNAPSHOT
 SERVICE_NAME=invoice-server-api-$PROJECT_VERSION
 PATH_TO_JAR=./invoice-server-api-$PROJECT_VERSION.jar
 OPTS="-Xmx512m"
