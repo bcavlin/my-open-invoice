@@ -16,6 +16,7 @@ import com.bgh.myopeninvoice.db.domain.QCompanyEntity;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,8 +81,12 @@ public class CompanyController extends AbstractController implements CompanyAPI 
         String[] split = matcher.group(1).split(":");
         if ("owned".equalsIgnoreCase(split[0])) {
           searchParameters
-              .getBuilder()
-              .and(QCompanyEntity.companyEntity.ownedByMe.eq(Boolean.valueOf(split[1])));
+                  .getBuilder()
+                  .and(QCompanyEntity.companyEntity.ownedByMe.eq(Boolean.valueOf(split[1])));
+        } else if ("companyId".equalsIgnoreCase(split[0])) {
+          searchParameters
+                  .getBuilder()
+                  .and(QCompanyEntity.companyEntity.companyId.eq(NumberUtils.toInt(split[1])));
         } else {
           log.info("Skipping search parameter: " + matcher.group(1));
         }

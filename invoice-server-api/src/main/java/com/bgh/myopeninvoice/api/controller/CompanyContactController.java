@@ -79,10 +79,16 @@ public class CompanyContactController extends AbstractController implements Comp
                       Boolean.valueOf(split[1])));
         } else if ("companyId".equalsIgnoreCase(split[0])) {
           searchParameters
-              .getBuilder()
-              .and(
-                  QCompanyContactEntity.companyContactEntity.companyId.eq(
-                      NumberUtils.toInt(split[1])));
+                  .getBuilder()
+                  .and(
+                          QCompanyContactEntity.companyContactEntity.companyId.eq(
+                                  NumberUtils.toInt(split[1])));
+        } else if ("companyContactId".equalsIgnoreCase(split[0])) {
+          searchParameters
+                  .getBuilder()
+                  .and(
+                          QCompanyContactEntity.companyContactEntity.companyContactId.eq(
+                                  NumberUtils.toInt(split[1])));
         }
       }
 

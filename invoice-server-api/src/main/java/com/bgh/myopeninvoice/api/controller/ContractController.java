@@ -81,8 +81,12 @@ public class ContractController extends AbstractController implements ContractAP
         String[] split = matcher.group(1).split(":");
         if ("companyId".equalsIgnoreCase(split[0])) {
           searchParameters
-              .getBuilder()
-              .and(QContractEntity.contractEntity.companyId.eq(NumberUtils.toInt(split[1])));
+                  .getBuilder()
+                  .and(QContractEntity.contractEntity.companyId.eq(NumberUtils.toInt(split[1])));
+        } else if ("companyContactId".equalsIgnoreCase(split[0])) {
+          searchParameters
+                  .getBuilder()
+                  .and(QContractEntity.contractEntity.companyContactId.eq(NumberUtils.toInt(split[1])));
         } else {
           log.info("Skipping search parameter: " + matcher.group(1));
         }
