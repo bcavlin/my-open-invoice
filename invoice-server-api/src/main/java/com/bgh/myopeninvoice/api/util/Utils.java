@@ -1,19 +1,14 @@
 package com.bgh.myopeninvoice.api.util;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.common.domain.DefaultResponse;
-import com.bgh.myopeninvoice.common.domain.OperationResponse;
 import com.bgh.myopeninvoice.common.exception.InvalidParameterException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.NumberUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +45,7 @@ public class Utils {
   private static void parseFilter(
       Map<String, String> queryParameters, SearchParameters searchParameters)
       throws InvalidParameterException {
-    if (queryParameters.get("filter") != null) {
+    if (StringUtils.isNotEmpty(queryParameters.get("filter"))) {
       String filter = queryParameters.get("filter");
       if (filter.length() > 100) {
         throw new InvalidParameterException(
@@ -64,7 +59,8 @@ public class Utils {
   private static void parsePage(
       Map<String, String> queryParameters, SearchParameters searchParameters)
       throws InvalidParameterException {
-    if (queryParameters.get("page") != null && queryParameters.get("size") != null) {
+    if (StringUtils.isNotEmpty(queryParameters.get("page"))
+            && StringUtils.isNotEmpty(queryParameters.get("size"))) {
       int page = NumberUtils.parseNumber(queryParameters.get("page"), Integer.class);
       int size = NumberUtils.parseNumber(queryParameters.get("size"), Integer.class);
       if (page < 0 || size > 1000) {
@@ -86,7 +82,7 @@ public class Utils {
   private static void parseSort(
       Map<String, String> queryParameters, SearchParameters searchParameters)
       throws InvalidParameterException {
-    if (queryParameters.get("sort") != null) {
+    if (StringUtils.isNotEmpty(queryParameters.get("sort"))) {
       String[] fields = queryParameters.get("sort").trim().split("\\s*,\\s*");
       Sort finalSort = null;
       for (String field : fields) {
@@ -120,5 +116,4 @@ public class Utils {
     finalSort = finalSort == null ? sort : finalSort.and(sort);
     return finalSort;
   }
-
 }
