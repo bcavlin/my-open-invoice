@@ -9,3 +9,4 @@ log/*
 ..bfg-report/*
 .bfg/*
 pom.xml.versionsBackup
+**/ebextensions/nginx/*
