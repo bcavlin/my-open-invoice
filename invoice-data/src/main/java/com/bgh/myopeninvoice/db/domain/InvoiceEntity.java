@@ -2,6 +2,8 @@ package com.bgh.myopeninvoice.db.domain;
 
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -104,6 +106,7 @@ public class InvoiceEntity implements java.io.Serializable {
   @OneToMany(mappedBy = "invoiceByInvoiceId")
   private Collection<InvoiceItemsEntity> invoiceItemsByInvoiceId;
 
+  @LazyCollection(LazyCollectionOption.TRUE)
   @OneToMany(mappedBy = "invoiceByInvoiceId")
   private Collection<ReportEntity> reportsByInvoiceId;
 

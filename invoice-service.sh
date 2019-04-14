@@ -12,16 +12,21 @@
 # Description:       Start invoice service.
 ### END INIT INFO
 
-PROJECT_VERSION=1.0.0-SNAPSHOT
+PROJECT_VERSION=1.0.6-SNAPSHOT
 SERVICE_NAME=invoice-server-api-$PROJECT_VERSION
 PATH_TO_JAR=./invoice-server-api-$PROJECT_VERSION.jar
 OPTS="-Xmx512m"
 PID_PATH_NAME=/tmp/invoice-server-api-$PROJECT_VERSION-pid
+
+export JASYPT_PWD=postgres
+export JWT_SECRET=secret
+export SPRING_PROFILES_ACTIVE=localprod
+
 case $1 in
     start)
         echo "Starting $SERVICE_NAME ..."
         if [ ! -f $PID_PATH_NAME ]; then
-            nohup java -Dspring.profiles.active=prod -jar $OPTS $PATH_TO_JAR /tmp 2>> /dev/null >> /dev/null &
+            nohup java -jar $OPTS $PATH_TO_JAR /tmp 2>> /dev/null >> /dev/null &
                         echo $! > $PID_PATH_NAME
             echo "$SERVICE_NAME started ..."
         else

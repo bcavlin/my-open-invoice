@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-@Profile("dev")
+@Profile({"dev", "localprod"})
 public interface StatisticsH2Repository extends CrudRepository<InvoiceEntity, Integer>, InvoiceMarker {
 
     @Query(
