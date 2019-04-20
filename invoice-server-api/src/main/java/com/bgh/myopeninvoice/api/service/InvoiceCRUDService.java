@@ -25,8 +25,8 @@ public class InvoiceCRUDService implements CommonCRUDService<InvoiceEntity> {
 
   @Autowired private InvoiceRepository invoiceRepository;
 
-  @Autowired
-  private SequenceRepository sequenceRepository;
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -53,14 +53,6 @@ public class InvoiceCRUDService implements CommonCRUDService<InvoiceEntity> {
                   .containsIgnoreCase(searchParameters.getFilter()),
               QInvoiceEntity.invoiceEntity
                   .paidDate
-                  .stringValue()
-                  .containsIgnoreCase(searchParameters.getFilter()),
-              QInvoiceEntity.invoiceEntity
-                  .totalValue
-                  .stringValue()
-                  .containsIgnoreCase(searchParameters.getFilter()),
-              QInvoiceEntity.invoiceEntity
-                  .totalValue
                   .stringValue()
                   .containsIgnoreCase(searchParameters.getFilter()),
               QInvoiceEntity.invoiceEntity

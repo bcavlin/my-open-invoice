@@ -24,4 +24,6 @@ public class ContentDTO implements java.io.Serializable {
 
     @NotNull
     private ZonedDateTime createdAt;
+
+    private int sizeInBytes;
 }
