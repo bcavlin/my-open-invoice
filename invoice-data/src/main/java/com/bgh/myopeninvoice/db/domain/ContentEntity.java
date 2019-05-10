@@ -34,10 +34,10 @@ public class ContentEntity implements java.io.Serializable {
   @Column(name = "CREATED_AT", nullable = false)
   private ZonedDateTime createdAt;
 
-    @Transient
-    public int getSizeInBytes() {
-        return content.length;
-    }
+  @Transient
+  public int getSizeInBytes() {
+    return content != null ? content.length : 0;
+  }
 
   public enum ContentEntityTable {
     COMPANY,

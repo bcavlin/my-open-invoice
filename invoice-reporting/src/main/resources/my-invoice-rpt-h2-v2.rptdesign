@@ -987,7 +987,7 @@ FROM (
                     <structure>
                         <property name="position">2</property>
                         <property name="name">TOTAL</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
@@ -1002,7 +1002,7 @@ FROM (
                     <structure>
                         <property name="position">5</property>
                         <property name="name">QUANTITY</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -1012,7 +1012,7 @@ FROM (
                     <structure>
                         <property name="position">7</property>
                         <property name="name">RATE</property>
-                        <property name="dataType">decimal</property>
+                        <property name="dataType">float</property>
                     </structure>
                 </list-property>
             </structure>
@@ -1029,8 +1029,8 @@ FROM (
                     <property name="position">2</property>
                     <property name="name">TOTAL</property>
                     <property name="nativeName">TOTAL</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
@@ -1050,8 +1050,8 @@ FROM (
                     <property name="position">5</property>
                     <property name="name">QUANTITY</property>
                     <property name="nativeName">QUANTITY</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
@@ -1064,8 +1064,8 @@ FROM (
                     <property name="position">7</property>
                     <property name="name">RATE</property>
                     <property name="nativeName">RATE</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">3</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[SELECT
@@ -1076,7 +1076,7 @@ FROM (
   SELECT
     II.CODE,
     II.DESCRIPTION,
-    II.QUANTITY,
+    CASE WHEN SUM(TS.hours_worked) > 0 THEN SUM(TS.hours_worked) ELSE II.quantity END as QUANTITY,
     II.UNIT,
     CASE WHEN II.UNIT <> 'TOTAL'
       THEN INV.RATE

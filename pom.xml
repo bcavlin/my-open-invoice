@@ -11,7 +11,7 @@
 
     <groupId>com.bgh.myopeninvoice</groupId>
     <artifactId>my-open-invoice-main</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.9-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -38,13 +38,13 @@
         <querydsl.version>4.2.1</querydsl.version>
         <liquibase-core.version>3.5.5</liquibase-core.version>
         <jjwt.version>0.9.0</jjwt.version>
-        <jackson.version>2.9.7</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
         <rome.version>1.12.0</rome.version>
         <apache.httpclient.version>4.5.5</apache.httpclient.version>
         <p6spy.version>3.8.1</p6spy.version>
         <ehcache.version>2.10.6</ehcache.version>
         <orika-core.version>1.5.2</orika-core.version>
-        <tika-core.version>1.19.1</tika-core.version>
+        <tika-core.version>1.20</tika-core.version>
         <postgresql.version>42.2.5</postgresql.version>
     </properties>
 
