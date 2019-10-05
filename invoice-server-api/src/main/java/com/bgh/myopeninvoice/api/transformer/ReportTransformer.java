@@ -1,15 +1,14 @@
 package com.bgh.myopeninvoice.api.transformer;
 
-import com.bgh.myopeninvoice.api.domain.dto.AttachmentDTO;
 import com.bgh.myopeninvoice.api.domain.dto.ReportDTO;
-import com.bgh.myopeninvoice.db.domain.AttachmentEntity;
 import com.bgh.myopeninvoice.db.domain.ReportEntity;
-import ma.glasnost.orika.BoundMapperFacade;
-import ma.glasnost.orika.MapperFacade;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
+@Slf4j
 @Component
 public class ReportTransformer extends CustomAbstractTransformer<ReportEntity, ReportDTO> {
 
@@ -24,9 +23,12 @@ public class ReportTransformer extends CustomAbstractTransformer<ReportEntity, R
     return mapperFactory;
   }
 
+  @PostConstruct
   @Override
-  protected MapperFacade getMapper() {
-    factory = mapFields(factory);
-    return factory.getMapperFacade();
+  protected void init() {
+    log.info("Initializing " + this.getClass().getSimpleName());
+    mapperFactory = mapFields(mapperFactory);
+    mapperFacade = mapperFactory.getMapperFacade();
   }
+
 }

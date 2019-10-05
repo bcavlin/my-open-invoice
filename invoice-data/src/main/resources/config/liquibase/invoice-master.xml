@@ -571,5 +571,40 @@
         <sql>select setval('invoice.tax_tax_id_seq', (select max(tax_id)+1 from invoice.tax), false)</sql>
     </changeSet>
 
+    <changeSet id="12" author="bcavlin" labels="accounts">
+        <createTable tableName="account" schemaName="invoice">
+            <column name="account_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="account_data" schemaName="invoice">
+            <column name="account_item_id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="debit" type="decimal(10,2)"/>
+            <column name="credit" type="decimal(10,2)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="account_data"
+                                 baseTableSchemaName="invoice"
+                                 constraintName="fk_account1"
+                                 referencedTableSchemaName="invoice"
+                                 referencedColumnNames="account_id"
+                                 referencedTableName="account"/>
+    </changeSet>
 
 </databaseChangeLog>

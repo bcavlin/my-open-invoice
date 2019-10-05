@@ -2,19 +2,18 @@ package com.bgh.myopeninvoice.api.transformer;
 
 import com.bgh.myopeninvoice.api.domain.dto.CurrencyDTO;
 import com.bgh.myopeninvoice.db.domain.CurrencyEntity;
-import ma.glasnost.orika.BoundMapperFacade;
-import ma.glasnost.orika.MapperFacade;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class CurrencyTransformer extends CustomAbstractTransformer<CurrencyEntity, CurrencyDTO> {
 
   @Override
-  protected BoundMapperFacade<CurrencyEntity, CurrencyDTO> getBoundMapper() {
-    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-    return mapperFactory.getMapperFacade(CurrencyEntity.class, CurrencyDTO.class);
+  protected void init() {
+    log.info("Initializing " + this.getClass().getSimpleName());
+    boundMapperFacade = mapperFactory.getMapperFacade(CurrencyEntity.class, CurrencyDTO.class);
   }
 
   @Override
@@ -22,8 +21,4 @@ public class CurrencyTransformer extends CustomAbstractTransformer<CurrencyEntit
     return null;
   }
 
-  @Override
-  protected MapperFacade getMapper() {
-    return null;
-  }
 }
