@@ -7,7 +7,6 @@ import com.bgh.myopeninvoice.db.domain.AccountDataEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QAccountDataEntity;
 import com.bgh.myopeninvoice.db.repository.AccountDataRepository;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class AccountDataService implements CommonCRUDService<AccountDataEntity> {
+public class AccountDataCRUDService implements CommonCRUDService<AccountDataEntity> {
 
   @Autowired
   private AccountDataRepository accountdataRepository;
@@ -29,11 +28,12 @@ public class AccountDataService implements CommonCRUDService<AccountDataEntity> 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
 
-    BooleanBuilder builder = new BooleanBuilder();
-
     if (searchParameters.getFilter() != null) {
-      builder.andAnyOf(
-              QAccountDataEntity.accountDataEntity.description.contains(searchParameters.getFilter()),
+      searchParameters
+              .getBuilder()
+              .andAnyOf(
+                      QAccountDataEntity.accountDataEntity.description.contains(
+                              searchParameters.getFilter()),
               QAccountDataEntity.accountDataEntity
                       .itemDate
                       .stringValue()
@@ -47,7 +47,7 @@ public class AccountDataService implements CommonCRUDService<AccountDataEntity> 
                       .stringValue()
                       .contains(searchParameters.getFilter()));
     }
-    return builder;
+    return searchParameters.getBuilder();
   }
 
   @Override
@@ -94,6 +94,11 @@ public class AccountDataService implements CommonCRUDService<AccountDataEntity> 
     return entities;
   }
 
+  public List<AccountDataEntity> findByAccountId(Integer id) {
+    log.info("findByAccountId: {}", id);
+    return accountdataRepository.findAllByAccountId(id);
+  }
+
   @Override
   public List<AccountDataEntity> findById(Integer id) {
     log.info("findById: {}", id);
@@ -138,5 +143,4 @@ public class AccountDataService implements CommonCRUDService<AccountDataEntity> 
     Assert.notNull(id, "ID cannot be empty when deleting data");
     accountdataRepository.deleteById(id);
   }
-
 }

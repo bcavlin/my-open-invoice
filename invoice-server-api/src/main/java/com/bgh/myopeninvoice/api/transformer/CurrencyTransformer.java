@@ -6,10 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Component
 public class CurrencyTransformer extends CustomAbstractTransformer<CurrencyEntity, CurrencyDTO> {
 
+  @PostConstruct
   @Override
   protected void init() {
     log.info("Initializing " + this.getClass().getSimpleName());

@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class AccountDataTransformer extends CustomAbstractTransformer<AccountDataEntity, AccountDataDTO> {
 
+
   @PostConstruct
   @Override
   public void init() {

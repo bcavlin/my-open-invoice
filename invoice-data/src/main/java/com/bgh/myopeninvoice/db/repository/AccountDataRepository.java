@@ -21,6 +21,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by bcavlin on 14/03/17.
  */
@@ -29,4 +31,5 @@ public interface AccountDataRepository
         extends PagingAndSortingRepository<AccountDataEntity, Integer>,
         QuerydslPredicateExecutor<AccountDataEntity> {
 
+  List<AccountDataEntity> findAllByAccountId(Integer accountId);
 }

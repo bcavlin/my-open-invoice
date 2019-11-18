@@ -7,6 +7,8 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Component
 public class ContractTransformer extends CustomAbstractTransformer<ContractEntity, ContractDTO> {
@@ -15,6 +17,7 @@ public class ContractTransformer extends CustomAbstractTransformer<ContractEntit
 
   @Autowired private CompanyTransformer companyTransformer;
 
+  @PostConstruct
   @Override
   protected void init() {
     log.info("Initializing " + this.getClass().getSimpleName());

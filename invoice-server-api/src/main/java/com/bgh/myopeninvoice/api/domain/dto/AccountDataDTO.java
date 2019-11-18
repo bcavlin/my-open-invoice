@@ -21,6 +21,4 @@ public class AccountDataDTO implements Serializable {
 
   private BigDecimal credit;
 
-  private AccountDTO account;
-
 }

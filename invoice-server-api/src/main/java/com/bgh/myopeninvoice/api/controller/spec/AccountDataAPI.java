@@ -37,7 +37,7 @@ public interface AccountDataAPI {
           @RequestParam Map<String, String> queryParameters);
 
   @ApiOperation(
-          value = "Find account-data by ID",
+          value = "Find account-data by account ID",
           notes = "Returns a list of AccountDataDTO",
           response = DefaultResponseAccountDataDTO.class)
   @ApiResponses(
@@ -48,6 +48,21 @@ public interface AccountDataAPI {
                           response = DefaultResponseAccountDataDTO.class)
           })
   @GetMapping(value = "/account-data/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  ResponseEntity<DefaultResponse<AccountDataDTO>> findByAccountId(
+          @PathVariable("id") Integer id, @RequestParam Map<String, String> queryParameters);
+
+  @ApiOperation(
+          value = "Find account-data by account item ID",
+          notes = "Returns a list of AccountDataDTO",
+          response = DefaultResponseAccountDataDTO.class)
+  @ApiResponses(
+          value = {
+                  @ApiResponse(
+                          code = 200,
+                          message = "Successful operation",
+                          response = DefaultResponseAccountDataDTO.class)
+          })
+  @GetMapping(value = "/account-data/item/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   ResponseEntity<DefaultResponse<AccountDataDTO>> findById(@PathVariable("id") Integer id);
 
   @ApiOperation(
@@ -70,8 +85,5 @@ public interface AccountDataAPI {
     public DefaultResponseAccountDataDTO() {
       super(AccountDataDTO.class);
     }
-
   }
-
-
 }
