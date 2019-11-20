@@ -76,9 +76,30 @@ public interface AccountDataAPI {
                           message = "Successful operation",
                           response = DefaultResponseAccountDataDTO.class)
           })
-  @PostMapping(value = "/account-data")
+  @PostMapping(value = "/account-data", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   ResponseEntity<DefaultResponse<AccountDataDTO>> save(
           @Valid @NotNull @RequestBody AccountDataDTO accountDataDTO, BindingResult bindingResult);
+
+  @ApiOperation(
+          value = "Parse account-data",
+          notes = "Parse AccountDataDTO",
+          response = String.class)
+  @ApiResponses(
+          value = {
+                  @ApiResponse(
+                          code = 200,
+                          message = "Successful operation",
+                          response = DefaultResponseAccountDataDTO.class)
+          })
+  @PostMapping(value = "/account-data/parse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  ResponseEntity<DefaultResponse<String>> parse(
+          @Valid @NotNull @RequestBody String data,
+          @RequestParam(value = "firstRowHeader", required = false, defaultValue = "false")
+                  Boolean firstRowHeader,
+          @RequestParam(value = "separator", required = false, defaultValue = "CSV") String separator,
+          @RequestParam(value = "lineSeparator", required = false, defaultValue = "CRLF") String lineSeparator,
+          @RequestParam(value = "provider", required = false) Integer provider,
+          BindingResult bindingResult);
 
   class DefaultResponseAccountDataDTO extends DefaultResponse<AccountDataDTO> {
 

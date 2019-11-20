@@ -10,11 +10,15 @@ import com.bgh.myopeninvoice.db.repository.AccountDataRepository;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,5 +146,64 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
     log.info("Deleting AccountDataDTO with id [{}]", id);
     Assert.notNull(id, "ID cannot be empty when deleting data");
     accountdataRepository.deleteById(id);
+  }
+
+  @Transactional
+  public Integer parse(
+          String data, Boolean firstRowHeader, String format, String lineSeparator, Integer provider) {
+    assert data != null;
+    List<AccountDataEntity> accountDataEntityList = new ArrayList<>();
+
+    if ("CSV".equals(format)) {
+      accountDataEntityList = processCSVData(data, firstRowHeader, lineSeparator, provider);
+      log.info(accountDataEntityList.toString());
+    }
+
+    if (accountDataEntityList.size() > 0) {
+      accountdataRepository.saveAll(accountDataEntityList);
+    }
+
+    return accountDataEntityList.size();
+  }
+
+  private List<AccountDataEntity> processCSVData(
+          String data, Boolean firstRowHeader, String lineSeparator, Integer provider) {
+    final List<AccountDataEntity> accountDataEntityList = new ArrayList<>();
+    String[] rows = new String[0];
+
+    if ("CRLF".equalsIgnoreCase(lineSeparator)) {
+      rows = data.split("\n");
+    }
+
+    if (rows.length > 0) {
+      if (firstRowHeader) {
+        rows = (String[]) ArrayUtils.remove(rows, 0);
+      }
+      List<String> rowsList = Arrays.asList(rows);
+
+      rowsList.forEach(
+              i -> {
+                String[] col = i.split(",");
+                if (col.length == 5) {
+                  AccountDataEntity ent = new AccountDataEntity();
+                  ent.setAccountId(Integer.valueOf(col[0]));
+                  ent.setItemDate(LocalDate.parse(col[1]));
+                  ent.setDescription(col[2]);
+                  ent.setDebit(new BigDecimal(col[3]));
+                  ent.setCredit(new BigDecimal(col[4]));
+                  accountDataEntityList.add(ent);
+                } else if (col.length == 4 && provider != null) {
+                  AccountDataEntity ent = new AccountDataEntity();
+                  ent.setAccountId(provider);
+                  ent.setItemDate(LocalDate.parse(col[0]));
+                  ent.setDescription(col[1]);
+                  ent.setDebit(new BigDecimal(col[2]));
+                  ent.setCredit(new BigDecimal(col[3]));
+                  accountDataEntityList.add(ent);
+                }
+              });
+    }
+
+    return accountDataEntityList;
   }
 }

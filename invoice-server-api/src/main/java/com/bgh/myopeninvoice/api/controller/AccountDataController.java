@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -64,7 +65,8 @@ public class AccountDataController extends AbstractController implements Account
   }
 
   @Override
-  protected void validateSpecialFilter(Map<String, String> queryParameters, SearchParameters searchParameters) {
+  protected void validateSpecialFilter(
+          Map<String, String> queryParameters, SearchParameters searchParameters) {
     if (StringUtils.isNotEmpty(queryParameters.get(FILTER_FIELD))) {
       Matcher matcher = filterPattern.matcher(queryParameters.get(FILTER_FIELD));
       BooleanBuilder builder = searchParameters.getBuilder();
@@ -163,4 +165,37 @@ public class AccountDataController extends AbstractController implements Account
     return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
   }
 
+  @Override
+  public ResponseEntity<DefaultResponse<String>> parse(
+          @Valid @NotNull @RequestBody String data,
+          @RequestParam(value = "firstRowHeader", required = false, defaultValue = "false")
+                  Boolean firstRowHeader,
+          @RequestParam(value = "separator", required = false, defaultValue = "CSV") String separator,
+          @RequestParam(value = "lineSeparator", required = false, defaultValue = "CRLF") String lineSeparator,
+          @RequestParam(value = "provider", required = false) Integer provider,
+          BindingResult bindingResult) {
+
+    if (bindingResult.hasErrors()) {
+      String collect =
+              bindingResult.getAllErrors().stream()
+                      .map(Object::toString)
+                      .collect(Collectors.joining(", "));
+      throw new InvalidDataException(collect);
+    }
+
+    Integer parse = null;
+    try {
+      parse = accountDataCRUDService.parse(data, firstRowHeader, separator, lineSeparator, provider);
+    } catch (Exception e) {
+      log.error(e.toString(), e);
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    DefaultResponse<String> defaultResponse = new DefaultResponse<>(String.class);
+    defaultResponse.setCount((long) 0);
+    defaultResponse.setDetails(
+            Collections.singletonList(String.format("Processed %d line(s) of code", parse)));
+    defaultResponse.setStatus(OperationResponse.OperationResponseStatus.SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.OK);
+  }
 }
