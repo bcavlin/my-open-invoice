@@ -5,7 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -45,4 +47,13 @@ public class AccountDataEntity implements Serializable {
           updatable = false)
   private AccountEntity accountByAccountId;
 
+  @Transient
+  public int hash() {
+    return Objects.hash(
+            accountId,
+            itemDate,
+            description,
+            debit != null ? debit.setScale(2, RoundingMode.HALF_UP) : null,
+            credit != null ? credit.setScale(2, RoundingMode.HALF_UP) : null);
+  }
 }

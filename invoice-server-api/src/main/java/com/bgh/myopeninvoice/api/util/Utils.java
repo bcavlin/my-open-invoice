@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.NumberUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -115,5 +116,9 @@ public class Utils {
 
     finalSort = finalSort == null ? sort : finalSort.and(sort);
     return finalSort;
+  }
+
+  public static boolean isDateBetween(LocalDate current, LocalDate from, LocalDate to) {
+    return current.isAfter(from) && current.isBefore(to);
   }
 }

@@ -607,4 +607,12 @@
                                  referencedTableName="account"/>
     </changeSet>
 
+    <changeSet id="13" author="bcavlin">
+
+        <loadData tableName="account"
+                  schemaName="invoice"
+                  quotchar="'"
+                  file="config/liquibase/accounts.csv"/>
+    </changeSet>
+
 </databaseChangeLog>

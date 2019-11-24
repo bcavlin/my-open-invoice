@@ -1,11 +1,8 @@
 package com.bgh.myopeninvoice.api.service;
 
 import com.bgh.myopeninvoice.api.domain.SearchParameters;
-import com.bgh.myopeninvoice.api.util.Utils;
 import com.bgh.myopeninvoice.common.exception.InvalidDataException;
-import com.bgh.myopeninvoice.db.domain.AccountDataEntity;
-import com.bgh.myopeninvoice.db.domain.ContentEntity;
-import com.bgh.myopeninvoice.db.domain.QAccountDataEntity;
+import com.bgh.myopeninvoice.db.domain.*;
 import com.bgh.myopeninvoice.db.repository.AccountDataRepository;
 import com.bgh.myopeninvoice.db.repository.InvoiceRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -16,8 +13,10 @@ import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -180,11 +179,13 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
                       .max(Comparator.comparing(AccountDataEntity::getItemDate))
                       .orElseThrow(Exception::new)
                       .getItemDate();
+
       List<AccountDataEntity> accountDataEntityListDB = loadRecordsFromDB(provider, from, to);
+
       accountDataEntityList =
               removeProcessedRecords(accountDataEntityList, accountDataEntityListDB);
 
-      loadAndProcessInvoiceUpdates(accountDataEntityList);
+      loadAndProcessInvoiceUpdates(accountDataEntityList, from, to);
 
       accountdataRepository.saveAll(accountDataEntityList);
     }
@@ -192,44 +193,96 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
     return accountDataEntityList.size();
   }
 
-  private void loadAndProcessInvoiceUpdates(List<AccountDataEntity> accountDataEntityList) {
+  private void loadAndProcessInvoiceUpdates(
+          List<AccountDataEntity> accountDataEntityList, LocalDate from, LocalDate to) {
+
+    log.info(
+            String.format(
+                    "Loading data from date %s to date %s, count %d",
+                    from, to, accountDataEntityList.size()));
+
+    Predicate predicate = new BooleanBuilder().and(QInvoiceEntity.invoiceEntity.paidDate.isNull());
+
+    List<InvoiceEntity> entities = convertIterableToList(invoiceRepository.findAll(predicate));
+
+    log.info(String.format("Loaded %d invoice records", entities.size()));
+
+    for (InvoiceEntity entity : entities) {
+      Optional<AccountDataEntity> first =
+              accountDataEntityList.stream()
+                      .filter(
+                              o -> {
+                                System.out.println(
+                                        String.format(
+                                                "Value 1: %s, Value 2: %s",
+                                                entity.getTotalValueWithTax().setScale(2, RoundingMode.HALF_UP),
+                                                o.getCredit().setScale(2, RoundingMode.HALF_UP)));
+                                return entity
+                                        .getTotalValueWithTax()
+                                        .setScale(2, RoundingMode.HALF_UP)
+                                        .compareTo(o.getCredit().setScale(2, RoundingMode.HALF_UP))
+                                        == 0;
+                              })
+                      .findFirst();
+      first.ifPresent(d -> entity.setPaidDate(d.getItemDate()));
+    }
+
+    List<InvoiceEntity> collect =
+            entities.stream().filter(o -> o.getPaidDate() != null).collect(Collectors.toList());
+
+    if (!CollectionUtils.isEmpty(collect)) {
+
+      log.info(String.format("Updating %d invoices with matched paid data", collect.size()));
+
+      invoiceRepository.saveAll(collect);
+    }
   }
 
   private List<AccountDataEntity> removeProcessedRecords(
           List<AccountDataEntity> accountDataEntityList,
           List<AccountDataEntity> accountDataEntityListDB) {
 
-    return accountDataEntityList.stream()
+    List<AccountDataEntity> collect =
+            accountDataEntityList.stream()
             .filter(
                     o ->
                             accountDataEntityListDB.stream()
                                     .noneMatch(
-                                            m ->
-                                                    m.getItemDate().equals(o.getItemDate())
-                                                            && m.getAccountId().equals(o.getAccountId())
-                                                            && m.getDescription().equalsIgnoreCase(o.getDescription())
-                                                            && m.getCredit().compareTo(o.getCredit()) == 0
-                                                            && m.getDebit().compareTo(o.getDebit()) == 0))
+                                            m -> {
+                                              return m.hash() == o.hash();
+                                            }))
             .collect(Collectors.toList());
+
+    log.info(
+            String.format(
+                    "Filtering data that is already loaded. Remaining to load: %d", collect.size()));
+
+    return collect;
   }
 
   private List<AccountDataEntity> loadRecordsFromDB(
           Integer provider, LocalDate from, LocalDate to) {
-    //    Predicate predicate =
-    //        new BooleanBuilder()
-    //            .and(QInvoiceEntity.invoiceEntity.createdAt.before(ZonedDateTime.from(to)))
-    //            .and(QInvoiceEntity.invoiceEntity.createdAt.after(ZonedDateTime.from(from)));
-    //
-    //    return Utils.convertIterableToList(invoiceRepository.findAll(predicate));
+
+    log.info(
+            String.format(
+                    "Loading records from database from %s to %s for provider %d", from, to, provider));
+
     Predicate predicate =
             new BooleanBuilder()
                     .and(QAccountDataEntity.accountDataEntity.itemDate.between(from, to))
                     .and(QAccountDataEntity.accountDataEntity.accountId.eq(provider));
-    return Utils.convertIterableToList(accountdataRepository.findAll(predicate));
+
+    List<AccountDataEntity> accountDataEntityList =
+            convertIterableToList(accountdataRepository.findAll(predicate));
+
+    log.info(String.format("Found %d records with given criteria", accountDataEntityList.size()));
+
+    return accountDataEntityList;
   }
 
   private List<AccountDataEntity> processCSVData(
           String data, Boolean firstRowHeader, String lineSeparator, Integer provider) {
+
     final List<AccountDataEntity> accountDataEntityList = new ArrayList<>();
     String[] rows = new String[0];
 
