@@ -91,13 +91,17 @@ public interface AccountDataAPI {
                           message = "Successful operation",
                           response = DefaultResponseAccountDataDTO.class)
           })
-  @PostMapping(value = "/account-data/parse", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @PostMapping(
+          value = "/account-data/parse",
+          produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+          consumes = "text/plain;charset=UTF-8")
   ResponseEntity<DefaultResponse<String>> parse(
           @Valid @NotNull @RequestBody String data,
           @RequestParam(value = "firstRowHeader", required = false, defaultValue = "false")
                   Boolean firstRowHeader,
           @RequestParam(value = "separator", required = false, defaultValue = "CSV") String separator,
-          @RequestParam(value = "lineSeparator", required = false, defaultValue = "CRLF") String lineSeparator,
+          @RequestParam(value = "lineSeparator", required = false, defaultValue = "CRLF")
+                  String lineSeparator,
           @RequestParam(value = "provider", required = false) Integer provider,
           BindingResult bindingResult);
 

@@ -7,6 +7,8 @@ import com.bgh.myopeninvoice.db.domain.AccountDataEntity;
 import com.bgh.myopeninvoice.db.domain.ContentEntity;
 import com.bgh.myopeninvoice.db.domain.QAccountDataEntity;
 import com.bgh.myopeninvoice.db.repository.AccountDataRepository;
+import com.bgh.myopeninvoice.db.repository.InvoiceRepository;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.bgh.myopeninvoice.api.util.Utils.convertIterableToList;
 
 @Slf4j
 @Service
@@ -28,6 +30,9 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
 
   @Autowired
   private AccountDataRepository accountdataRepository;
+
+  @Autowired
+  private InvoiceRepository invoiceRepository;
 
   @Override
   public Predicate getPredicate(SearchParameters searchParameters) {
@@ -80,18 +85,17 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
     if (searchParameters.getPageRequest() != null) {
       if (predicate != null) {
         entities =
-                Utils.convertIterableToList(
+                convertIterableToList(
                         accountdataRepository.findAll(predicate, searchParameters.getPageRequest()));
       } else {
         entities =
-                Utils.convertIterableToList(
-                        accountdataRepository.findAll(searchParameters.getPageRequest()));
+                convertIterableToList(accountdataRepository.findAll(searchParameters.getPageRequest()));
       }
     } else {
       if (predicate != null) {
-        entities = Utils.convertIterableToList(accountdataRepository.findAll(predicate));
+        entities = convertIterableToList(accountdataRepository.findAll(predicate));
       } else {
-        entities = Utils.convertIterableToList(accountdataRepository.findAll());
+        entities = convertIterableToList(accountdataRepository.findAll());
       }
     }
 
@@ -150,7 +154,8 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
 
   @Transactional
   public Integer parse(
-          String data, Boolean firstRowHeader, String format, String lineSeparator, Integer provider) {
+          String data, Boolean firstRowHeader, String format, String lineSeparator, Integer provider)
+          throws Exception {
     assert data != null;
     List<AccountDataEntity> accountDataEntityList = new ArrayList<>();
 
@@ -160,10 +165,67 @@ public class AccountDataCRUDService implements CommonCRUDService<AccountDataEnti
     }
 
     if (accountDataEntityList.size() > 0) {
+
+      if (provider == null) {
+        provider = accountDataEntityList.get(0).getAccountId();
+      }
+
+      LocalDate from =
+              accountDataEntityList.stream()
+                      .min(Comparator.comparing(AccountDataEntity::getItemDate))
+                      .orElseThrow(Exception::new)
+                      .getItemDate();
+      LocalDate to =
+              accountDataEntityList.stream()
+                      .max(Comparator.comparing(AccountDataEntity::getItemDate))
+                      .orElseThrow(Exception::new)
+                      .getItemDate();
+      List<AccountDataEntity> accountDataEntityListDB = loadRecordsFromDB(provider, from, to);
+      accountDataEntityList =
+              removeProcessedRecords(accountDataEntityList, accountDataEntityListDB);
+
+      loadAndProcessInvoiceUpdates(accountDataEntityList);
+
       accountdataRepository.saveAll(accountDataEntityList);
     }
 
     return accountDataEntityList.size();
+  }
+
+  private void loadAndProcessInvoiceUpdates(List<AccountDataEntity> accountDataEntityList) {
+  }
+
+  private List<AccountDataEntity> removeProcessedRecords(
+          List<AccountDataEntity> accountDataEntityList,
+          List<AccountDataEntity> accountDataEntityListDB) {
+
+    return accountDataEntityList.stream()
+            .filter(
+                    o ->
+                            accountDataEntityListDB.stream()
+                                    .noneMatch(
+                                            m ->
+                                                    m.getItemDate().equals(o.getItemDate())
+                                                            && m.getAccountId().equals(o.getAccountId())
+                                                            && m.getDescription().equalsIgnoreCase(o.getDescription())
+                                                            && m.getCredit().compareTo(o.getCredit()) == 0
+                                                            && m.getDebit().compareTo(o.getDebit()) == 0))
+            .collect(Collectors.toList());
+  }
+
+  private List<AccountDataEntity> loadRecordsFromDB(
+          Integer provider, LocalDate from, LocalDate to) {
+    //    Predicate predicate =
+    //        new BooleanBuilder()
+    //            .and(QInvoiceEntity.invoiceEntity.createdAt.before(ZonedDateTime.from(to)))
+    //            .and(QInvoiceEntity.invoiceEntity.createdAt.after(ZonedDateTime.from(from)));
+    //
+    //    return Utils.convertIterableToList(invoiceRepository.findAll(predicate));
+    Predicate predicate =
+            new BooleanBuilder()
+                    .and(QAccountDataEntity.accountDataEntity.itemDate.between(from, to))
+                    .and(QAccountDataEntity.accountDataEntity.accountId.eq(provider));
+    return Utils.convertIterableToList(accountdataRepository.findAll(predicate));
   }
 
   private List<AccountDataEntity> processCSVData(
