@@ -1,6 +1,8 @@
 package com.bgh.myopeninvoice.db.domain;
 
+import com.bgh.myopeninvoice.common.util.Utils;
 import lombok.Data;
+import lombok.ToString;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -9,8 +11,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -19,6 +19,7 @@ import java.util.function.Function;
 @Data
 @Entity
 @Table(name = "INVOICE", schema = "INVOICE")
+@ToString(exclude = {"contractByCompanyContractTo"})
 public class InvoiceEntity implements java.io.Serializable {
 
   @Id
@@ -40,8 +41,8 @@ public class InvoiceEntity implements java.io.Serializable {
   @Column(name = "TO_DATE", nullable = false)
   private LocalDate toDate;
 
-    @Column(name = "CREATED_AT", nullable = false)
-    private ZonedDateTime createdAt;
+  @Column(name = "CREATED_AT", nullable = false)
+  private ZonedDateTime createdAt;
 
   @Basic
   @Column(name = "TITLE", nullable = false)
@@ -157,14 +158,8 @@ public class InvoiceEntity implements java.io.Serializable {
   @Transient
   public LocalDate getFromDateAdjusted() {
     if (this.getContractByCompanyContractTo() != null) {
-      int weekStart = this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart();
-      LocalDate d = fromDate;
-
-      if (d.getDayOfWeek().getValue() - weekStart < 0) {
-        return d.minusWeeks(1).with(ChronoField.DAY_OF_WEEK, weekStart);
-      } else {
-        return d.with(ChronoField.DAY_OF_WEEK, weekStart);
-      }
+      return Utils.getFromDateAdjusted(
+              this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart(), fromDate);
     }
     return null;
   }
@@ -172,27 +167,14 @@ public class InvoiceEntity implements java.io.Serializable {
   @Transient
   public LocalDate getToDateAdjusted() {
     if (this.getContractByCompanyContractTo() != null) {
-      int weekStart = this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart();
-      int weekEnd = weekStart == 1 ? 7 : weekStart;
-
-      LocalDate d = toDate;
-
-      if (d.getDayOfWeek().getValue() - weekEnd <= 0) {
-        return d.with(ChronoField.DAY_OF_WEEK, weekEnd);
-      } else {
-        return d.plusWeeks(1).with(ChronoField.DAY_OF_WEEK, weekEnd);
-      }
+      return Utils.getToDateAdjusted(
+              this.getContractByCompanyContractTo().getCompanyByCompanyId().getWeekStart(), toDate);
     }
     return null;
   }
 
   @Transient
   public Long getFromToDays() {
-    if (getFromDateAdjusted() != null && getToDateAdjusted() != null) {
-      long between = ChronoUnit.DAYS.between(getFromDateAdjusted(), getToDateAdjusted());
-      return between % 7 != 0 ? between + 1 : between;
-    } else {
-      return null;
-    }
+    return Utils.getFromToDays(getFromDateAdjusted(), getToDateAdjusted());
   }
 }

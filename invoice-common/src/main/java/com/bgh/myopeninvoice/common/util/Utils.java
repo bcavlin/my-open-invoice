@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,5 +85,36 @@ public class Utils {
         "Authorization, x-xsrf-token, "
             + "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, "
             + "Content-Type, Access-Control-Request-Method, Custom-Filter-Header");
+  }
+
+  public static boolean isDateBetween(LocalDate current, LocalDate from, LocalDate to) {
+    return current.isAfter(from) && current.isBefore(to);
+  }
+
+  public static LocalDate getFromDateAdjusted(int weekStart, LocalDate fromDate) {
+    if (fromDate.getDayOfWeek().getValue() - weekStart < 0) {
+      return fromDate.minusWeeks(1).with(ChronoField.DAY_OF_WEEK, weekStart);
+    } else {
+      return fromDate.with(ChronoField.DAY_OF_WEEK, weekStart);
+    }
+  }
+
+  public static LocalDate getToDateAdjusted(int weekStart, LocalDate toDate) {
+    int weekEnd = weekStart == 1 ? 7 : weekStart - 1;
+
+    if (toDate.getDayOfWeek().getValue() - weekEnd < 0) {
+      return toDate.with(ChronoField.DAY_OF_WEEK, weekEnd);
+    } else {
+      return toDate.plusWeeks(1).with(ChronoField.DAY_OF_WEEK, weekEnd);
+    }
+  }
+
+  public static Long getFromToDays(LocalDate fromDate, LocalDate toDate) {
+    if (fromDate != null && toDate != null) {
+      long between = ChronoUnit.DAYS.between(fromDate, toDate);
+      return between % 7 != 0 ? between + 1 : between;
+    } else {
+      return null;
+    }
   }
 }
