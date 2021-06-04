@@ -40,7 +40,7 @@
         <jjwt.version>0.9.0</jjwt.version>
         <jackson.version>2.9.8</jackson.version>
         <rome.version>1.12.0</rome.version>
-        <apache.httpclient.version>4.5.5</apache.httpclient.version>
+        <apache.httpclient.version>4.5.13</apache.httpclient.version>
         <p6spy.version>3.8.1</p6spy.version>
         <ehcache.version>2.10.6</ehcache.version>
         <orika-core.version>1.5.2</orika-core.version>
