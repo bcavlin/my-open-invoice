@@ -36,7 +36,7 @@
         <commons-io.version>2.7</commons-io.version>
         <HikariCP.version>2.7.9</HikariCP.version>
         <querydsl.version>4.2.1</querydsl.version>
-        <liquibase-core.version>3.5.5</liquibase-core.version>
+        <liquibase-core.version>4.8.0</liquibase-core.version>
         <jjwt.version>0.9.0</jjwt.version>
         <jackson.version>2.12.1</jackson.version>
         <rome.version>1.12.0</rome.version>
