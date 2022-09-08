@@ -45,7 +45,7 @@
         <ehcache.version>2.10.6</ehcache.version>
         <orika-core.version>1.5.2</orika-core.version>
         <tika-core.version>1.22</tika-core.version>
-        <postgresql.version>42.2.5</postgresql.version>
+        <postgresql.version>42.4.1</postgresql.version>
     </properties>
 
     <dependencies>
